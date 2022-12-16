@@ -1,0 +1,11 @@
+development:
+  adapter: redis
+  url: <%= AppConf.redis_url %>
+
+test:
+  adapter: test
+
+production:
+  adapter: redis
+  url: <%= AppConf.redis_url %>
+  channel_prefix: rails7_stimulus_reflex_esbuild_production
