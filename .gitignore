@@ -23,3 +23,6 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+
+# Ignore local settings file (which might contain secrets)
+app_conf.local.rb

@@ -1,5 +1,8 @@
 require_relative "boot"
 
+# Read ENV variables and make AppConf settings available
+require_relative "app_conf"
+
 require "rails"
 # Pick the frameworks you want:
 require "active_model/railtie"
