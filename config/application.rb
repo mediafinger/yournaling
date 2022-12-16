@@ -38,9 +38,6 @@ module Rantanlog
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
 
-    # Don't generate system test files.
-    config.generators.system_tests = nil
-
     # Middleware configuration:
 
     # Rack::RequestID ensures that every request has HTTP_X_REQUEST_ID set
@@ -64,5 +61,24 @@ module Rantanlog
       ActionDispatch::RequestId,
       ::ErrorsMiddleware
     )
+
+    # These setting are used when running `rails generate ...`
+    #
+    config.generators do |g|
+      g.orm :active_record, primary_key_type: :uuid
+
+      g.helper false
+      # g.javascripts true # StimulusJS
+      # g.stylesheets true # TailwindCSS
+      # g.template_engine :erb
+
+      g.test_framework :rspec, fixture: false
+      g.controller_specs false
+      g.factory_bot suffix: "factory"
+      g.helper_specs false
+      g.routing_specs false
+      g.system_tests true
+      g.view_specs true
+    end
   end
 end
