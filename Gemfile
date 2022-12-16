@@ -11,6 +11,7 @@ gem "importmap-rails" # Use JavaScript with ESM import maps [https://github.com/
 gem "pg", "~> 1.1"
 gem "puma", "~> 5.0"
 gem "redis", "~> 4.0" # Use Redis for Action Cable / Turbo-Reflex
+gem "resque", "~> 2.4" # Use Resque for background jobs
 gem "sprockets-rails" # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "stimulus-rails" # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
 gem "tailwindcss-rails" # Use Tailwind CSS [https://github.com/rails/tailwindcss-rails]

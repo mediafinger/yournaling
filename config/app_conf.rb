@@ -78,7 +78,7 @@ class AppConf
   register :debug, default: false # start console/server/specs with DEBUG=true for more logs and longer timeout
 
   register :rantan_app_host, default: "localhost", required: production_env
-  register :rantan_app_name, default: "api-app"
+  register :rantan_app_name, default: "rantanapp"
   register :rantan_app_port, default: 3000
   register :rantan_app_version, default: env_and_version
 
