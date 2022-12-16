@@ -5,6 +5,7 @@ ruby "3.1.2"
 
 gem "rails", "7.0.4"
 
+gem "bcrypt", "~> 3.1" # Use bcrypt for secure password hashing
 gem "bootsnap", require: false
 gem "dry-validation", "~> 1.10" # Use dry-validation for validations [https://dry-rb.org/gems/dry-validation]
 gem "importmap-rails" # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]

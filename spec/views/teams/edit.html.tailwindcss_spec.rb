@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe "teams/edit", type: :view do
   let(:team) {
@@ -7,7 +7,7 @@ RSpec.describe "teams/edit", type: :view do
     )
   }
 
-  before(:each) do
+  before do
     assign(:team, team)
   end
 
