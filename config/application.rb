@@ -21,6 +21,10 @@ require "action_cable/engine"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+require "rack/requestid"
+
+require_relative File.expand_path("../app/errors/errors_middleware", __dir__)
+
 module Rantanlog
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
@@ -36,5 +40,29 @@ module Rantanlog
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+
+    # Middleware configuration:
+
+    # Rack::RequestID ensures that every request has HTTP_X_REQUEST_ID set
+    # It needs to reside in the callchain before ActionDispatch::RequestId
+    # ActionDispatch::RequestId creates a request_id or uses HTTP_X_REQUEST_ID
+    # but it will not change the request header (only sets the response header)
+    config.middleware.insert_before(
+      ActionDispatch::RequestId,
+      ::Rack::RequestID, include_response_header: true, overwrite: false
+    )
+
+    # # set rack-timeout / test in production to not set it to low
+    config.middleware.insert_after(
+      ActionDispatch::RequestId,
+      Rack::Timeout, service_timeout: AppConf.rack_timeout # seconds
+    )
+    Rack::Timeout::Logger.disable # we only log the errors, not the verbose status messages
+
+    # handle all thrown exceptions with proper logging and responding with JSONAPI errors or nice HTML pages / flashes
+    config.middleware.insert_after(
+      ActionDispatch::RequestId,
+      ::ErrorsMiddleware
+    )
   end
 end

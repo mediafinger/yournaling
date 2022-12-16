@@ -10,6 +10,8 @@ gem "dry-validation", "~> 1.10" # Use dry-validation for validations [https://dr
 gem "importmap-rails" # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
 gem "pg", "~> 1.1"
 gem "puma", "~> 5.0"
+gem "rack-requestid", "~> 0.2" # always set a request_id with this middleware
+gem "rack-timeout", "~> 0.6", require: "rack/timeout/base" # set a custom timeout in the middleware
 gem "redis", "~> 4.0" # Use Redis for Action Cable / Turbo-Reflex
 gem "resque", "~> 2.4" # Use Resque for background jobs
 gem "sprockets-rails" # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
