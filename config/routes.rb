@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  root to: proc { [200, {}, [""]] } # TODO: render a real home page, not just a blank page
 
-  # Defines the root path route ("/")
-  # root "articles#index"
+  # catch all unknown routes to NOT throw a FATAL ActionController::RoutingError
+  match "*path", to: "application#error_404", via: :all,
+    constraints: ->(request) { !request.path_parameters[:path].start_with?("rails/") }
 end
