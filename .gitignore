@@ -26,3 +26,6 @@
 
 # Ignore local settings file (which might contain secrets)
 app_conf.local.rb
+
+/app/assets/builds/*
+!/app/assets/builds/.keep
