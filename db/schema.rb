@@ -10,10 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_16_225837) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_16_234332) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
+
+  create_table "members", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.uuid "team_id", null: false
+    t.text "roles", default: [], null: false, array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["team_id"], name: "index_members_on_team_id"
+    t.index ["user_id"], name: "index_members_on_user_id"
+  end
 
   create_table "teams", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
@@ -33,4 +43,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_16_225837) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  add_foreign_key "members", "teams"
+  add_foreign_key "members", "users"
 end

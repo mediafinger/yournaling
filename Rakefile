@@ -20,10 +20,16 @@ if %w(development test).include? Rails.env
       puts "Building all factories and traits to ensure they are valid"
       FactoryBot.lint traits: true, strategy: :build, verbose: true
     end
+
+    # better linter
+    desc "Verify that all FactoryBot factories are valid"
+    task awesome_lint: :environment do
+      abort unless FactoryBot::AwesomeLinter.lint! traits: true, strategy: :build
+    end
   end
 
   desc "Run test suite"
-  task ci: %w(factory_bot:lint rspec bundle:audit)
+  task ci: %w(factory_bot:awesome_lint rspec bundle:audit)
 
   task default: :ci
 end

@@ -3,6 +3,9 @@ class User < ApplicationRecord
 
   has_secure_password :password, validations: false
 
+  has_many :memberships, class_name: "Member", inverse_of: :user, dependent: :destroy
+  has_many :teams, through: :memberships
+
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP, message: "not valid" }
   validates :password, length: { in: 10..72 }, on: %i(create reset_password) # 72 is a has_secure_password limitation
   validates :name, length: { in: 3..255 }

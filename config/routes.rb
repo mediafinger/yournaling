@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
-  resources :users
+  resources :members
   resources :teams
+  resources :users
 
   root to: "teams#index"
 

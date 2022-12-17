@@ -118,6 +118,9 @@ GEM
     erubi (1.11.0)
     factory_bot (6.2.1)
       activesupport (>= 5.0.0)
+    factory_bot-awesome_linter (1.0.5)
+      factory_bot (>= 6.1.0)
+      ruby-progressbar (>= 1.11.0)
     factory_bot_rails (6.2.0)
       factory_bot (~> 6.2.0)
       railties (>= 5.0.0)
@@ -225,6 +228,7 @@ GEM
       rspec-mocks (~> 3.11)
       rspec-support (~> 3.11)
     rspec-support (3.12.0)
+    ruby-progressbar (1.11.0)
     ruby2_keywords (0.0.5)
     sinatra (3.0.4)
       mustermann (~> 3.0)
@@ -274,6 +278,7 @@ DEPENDENCIES
   bootsnap
   bundler-audit (~> 0.9)
   dry-validation (~> 1.10)
+  factory_bot-awesome_linter
   factory_bot_rails (~> 6.2)
   faker (~> 2.19)
   importmap-rails
