@@ -244,8 +244,6 @@ GEM
       sprockets (>= 3.0.0)
     stimulus-rails (1.2.1)
       railties (>= 6.0.0)
-    tailwindcss-rails (2.0.21-arm64-darwin)
-      railties (>= 6.0.0)
     thor (1.2.1)
     tilt (2.0.11)
     timeout (0.3.1)
@@ -292,7 +290,6 @@ DEPENDENCIES
   rspec-rails (~> 6.0)
   sprockets-rails
   stimulus-rails
-  tailwindcss-rails
   turbo-rails
   web-console
   webmock (~> 3.14)
