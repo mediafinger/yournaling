@@ -11,7 +11,7 @@ gem "bootsnap", require: false
 gem "dry-validation", "~> 1.10" # Use dry-validation for validations [https://dry-rb.org/gems/dry-validation]
 gem "importmap-rails" # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
 # gem "logstasher" # better formatted JSON logs for Logstash
-# gem "pagy", "~> 5.10" # fast and lightweight pagination solution # TODO: require 'pagy/extras/navs' & https://ddnexus.github.io/pagy/extras/tailwind#gsc.tab=0
+# gem "pagy", "~> 5.10" # fast and lightweight pagination solution # TODO: require "pagy/extras/navs"
 gem "pg", "~> 1.1"
 gem "puma", "~> 5.0"
 # gem "pundit", "~> 2.2" # Authorize actions by admin role
@@ -21,7 +21,6 @@ gem "redis", "~> 4.0" # Use Redis for Action Cable / Turbo-Reflex
 gem "resque", "~> 2.4" # Use Resque for background jobs
 gem "sprockets-rails" # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "stimulus-rails" # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
-gem "tailwindcss-rails" # Use Tailwind CSS [https://github.com/rails/tailwindcss-rails]
 gem "turbo-rails" # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
 
 group :development do

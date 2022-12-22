@@ -69,7 +69,7 @@ module Rantanlog
 
       g.helper false
       # g.javascripts true # StimulusJS
-      # g.stylesheets true # TailwindCSS
+      # g.stylesheets true
       # g.template_engine :erb
 
       g.test_framework :rspec, fixture: false
