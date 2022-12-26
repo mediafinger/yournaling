@@ -25,10 +25,13 @@ if %w(development test).include? Rails.env
   end
 
   # setup db:doctor, using the rake task defined above
+  # running on the development DB to not interfere other tasks on the test DB on GitHub Actions CI
   namespace :db do
     desc "Check the integrity of the database schema"
     task doctor: :environment do
-      Rake::Task["active_record_doctor"].invoke
+      puts "DB Doctor is running..."
+      # Rake::Task["active_record_doctor"].invoke
+      `RAILS_ENV=development bundle exec rake active_record_doctor` # to make it work on GitHub Actions CI
       check_status = $?.exitstatus # rubocop:disable Style/SpecialGlobalVars
       exit check_status unless check_status.zero?
     end
@@ -46,9 +49,10 @@ if %w(development test).include? Rails.env
       FactoryBot.lint traits: true, strategy: :build, verbose: true
     end
 
-    # better linter
+    # better linter output
     desc "Verify that all FactoryBot factories are valid"
     task awesome_lint: :environment do
+      puts "Building all factories and traits to ensure they are valid"
       abort unless FactoryBot::AwesomeLinter.lint! traits: true, strategy: :build
     end
   end
