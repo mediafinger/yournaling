@@ -1,0 +1,85 @@
+name: ci-push-pull-main
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  setup-ruby:
+    name: Setup Ruby
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout app repo
+        uses: actions/checkout@v3
+
+      - name: Setup Ruby and install gems
+        uses: ruby/setup-ruby@v1
+        env:
+          BUNDLE_GITHUB__COM: x-access-token:${{ secrets.REPO_SCOPED_TOKEN }}
+          BUNDLE_WITH: test
+          BUNDLE_WITHOUT: development:staging:production
+        with:
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+          cache-version: 1 # increment this number when you have to empty the cache manually
+
+  tests:
+    name: Run specs
+    runs-on: ubuntu-latest
+    needs: [ setup-ruby ]
+
+    env:
+      DISABLE_SPRING: true
+      # RAILS_ENV: test # do NOT set this, as db:doctor runs in development env
+      RAILS_MAX_THREADS: 5
+      OSTYPE: linux
+      YOURNALING_DB_HOST: localhost
+      YOURNALING_DB_NAME: yournaling_ci # for db:doctor
+      YOURNALING_DB_NAME_TEST: yournaling_test # for the specs
+      YOURNALING_DB_PASSWORD: ci_db_user_password
+      YOURNALING_DB_PORT: 5432
+      YOURNALING_DB_USERNAME: postgres-ci
+
+    services:
+      postgres:
+        image: postgres # Docker Hub image
+        env:
+          POSTGRES_USER: postgres-ci
+          POSTGRES_PASSWORD: ci_db_user_password
+          POSTGRES_DB: yournaling_test
+        ports:
+          - 5432:5432
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 8
+
+    steps:
+      - name: Checkout app repo
+        uses: actions/checkout@v3
+
+      - name: Copy Secrets
+        run: |
+          # cp config/secrets.yml config/secrets.yml
+
+      - name: Setup Ruby and install gems
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+          cache-version: 1
+
+      - name: Setup DB
+        env:
+          POSTGRES_HOST: localhost # use 'postgres' when running the app in Docker as well
+          POSTGRES_PORT: 5432
+        run: |
+          bundle exec rake db:drop db:create db:migrate
+
+      # this could be parallelized by running the individual jobs in different workflows
+      - name: Run rake:ci
+        run: |
+          bundle exec rake ci
