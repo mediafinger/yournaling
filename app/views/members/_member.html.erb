@@ -1,22 +1,21 @@
-<div id="<%= dom_id member %>">
-  <p class="my-5">
-    <strong class="block font-medium mb-1">User:</strong>
+<article id="<%= dom_id member %>">
+  <p>
+    <strong>User:</strong>
     <%= member.user_id %>
   </p>
 
-  <p class="my-5">
-    <strong class="block font-medium mb-1">Team:</strong>
+  <p>
+    <strong>Team:</strong>
     <%= member.team_id %>
   </p>
 
-  <p class="my-5">
-    <strong class="block font-medium mb-1">Roles:</strong>
+  <p>
+    <strong>Roles:</strong>
     <%= member.roles %>
   </p>
 
   <% if action_name != "show" %>
-    <%= link_to "Show this member", member, class: "rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
-    <%= link_to 'Edit this member', edit_member_path(member), class: "rounded-lg py-3 ml-2 px-5 bg-gray-100 inline-block font-medium" %>
-    <hr class="mt-6">
+    <%= link_to "Show this member", member, role: "button"  %>
+    <%= link_to 'Edit this member', edit_member_path(member), role: "button"  %>
   <% end %>
-</div>
+</article>

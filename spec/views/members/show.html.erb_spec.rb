@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe "members/show", type: :view do
   let(:member) { FactoryBot.create(:member) }
