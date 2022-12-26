@@ -46,6 +46,8 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
+    active_record_doctor (1.10.0)
+      activerecord (>= 4.2.0)
     activejob (7.0.4)
       activesupport (= 7.0.4)
       globalid (>= 0.3.6)
@@ -271,12 +273,13 @@ PLATFORMS
   arm64-darwin-21
 
 DEPENDENCIES
+  active_record_doctor (~> 1.10)
   amazing_print (~> 1.4)
   bcrypt (~> 3.1)
   bootsnap
   bundler-audit (~> 0.9)
   dry-validation (~> 1.10)
-  factory_bot-awesome_linter
+  factory_bot-awesome_linter (~> 1.0)
   factory_bot_rails (~> 6.2)
   faker (~> 2.19)
   importmap-rails

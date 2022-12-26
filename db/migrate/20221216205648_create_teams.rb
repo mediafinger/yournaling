@@ -5,6 +5,8 @@ class CreateTeams < ActiveRecord::Migration[7.0]
       t.jsonb :preferences, null: false, default: {}
 
       t.timestamps
+
+      t.index :name, unique: true
     end
   end
 end

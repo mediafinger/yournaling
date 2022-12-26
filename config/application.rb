@@ -25,7 +25,7 @@ require "rack/requestid"
 
 require_relative File.expand_path("../app/errors/errors_middleware", __dir__)
 
-module Rantanlog
+module Yournaling
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0

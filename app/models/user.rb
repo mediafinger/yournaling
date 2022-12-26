@@ -6,9 +6,11 @@ class User < ApplicationRecord
   has_many :memberships, class_name: "Member", inverse_of: :user, dependent: :destroy
   has_many :teams, through: :memberships
 
-  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP, message: "not valid" }
+  validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP, message: "not valid" }
   validates :password, length: { in: 10..72 }, on: %i(create reset_password) # 72 is a has_secure_password limitation
-  validates :name, length: { in: 3..255 }
+  validates :password_digest, presence: true
+  validates :name, presence: true, length: { in: 3..72 }
+  validates :nickname, allow_nil: true, uniqueness: true, length: { in: 3..72 }
 
   class << self
     def authenticate_temp_auth_token!(base64)

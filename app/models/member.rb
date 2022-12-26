@@ -18,6 +18,7 @@ class Member < ApplicationRecord
   belongs_to :team, inverse_of: :members
   belongs_to :user, inverse_of: :memberships
 
+  validates :team_id, presence: true, uniqueness: { scope: :user_id }
   validates :user_id, presence: true, uniqueness: { scope: :team_id }
   validates :roles, array_inclusion: {
     in: VALID_ROLES, message: "%{rejected_values} not allowed, roles must be in #{VALID_ROLES}"

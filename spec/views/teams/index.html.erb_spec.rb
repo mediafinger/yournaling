@@ -4,10 +4,10 @@ RSpec.describe "teams/index", type: :view do
   before do
     assign(:teams, [
       Team.create!(
-        name: "Name"
+        name: Faker::Name.name
       ),
       Team.create!(
-        name: "Name"
+        name: Faker::Name.name
       )
     ])
   end

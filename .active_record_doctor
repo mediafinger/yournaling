@@ -1,0 +1,44 @@
+ActiveRecordDoctor.configure do
+  # Global settings affect all detectors.
+  global :ignore_tables, [
+    # Ignore internal Rails-related tables.
+    "ar_internal_metadata",
+    "schema_migrations",
+    "active_storage_blobs",
+    "active_storage_attachments",
+    "action_text_rich_texts",
+
+    # Add project-specific tables here.
+  ]
+
+  global :ignore_models, [
+    "ActiveStorage::Attachment",
+    "ActiveStorage::Blob",
+    "ApplicationRecord",
+    "PaperTrail::Version",
+  ]
+  # Detector-specific settings affect only one specific detector.
+  # detector :extraneous_indexes, ignore_tables: ["users"], ignore_indexes: ["accounts_on_email_organization_id"]
+
+  detector :incorrect_length_validation, ignore_attributes: [
+    # app only validation sufficient, no need to enforce length in DB
+    "Team.name",
+    "User.email",
+    "User.name",
+    "User.nickname",
+    "User.password_digest",
+
+    "User.temp_auth_token", # for some reason DB Doctor complains about a (non) existing validation on this column?!
+  ]
+
+  detector :missing_presence_validation, ignore_attributes: [
+    "Member.roles",
+    "Team.preferences",
+    "User.preferences",
+  ]
+
+  detector :unindexed_foreign_keys, ignore_columns: [
+    "members.team_id",
+    "members.user_id",
+  ]
+end
