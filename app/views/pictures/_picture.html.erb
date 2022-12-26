@@ -1,0 +1,11 @@
+<article id="<%= dom_id picture %>">
+  <p>
+    <strong>Name:</strong>
+    <%= picture.name %>
+  </p>
+
+  <% if action_name != "show" %>
+    <%= link_to "Show this picture", picture, role: "button"  %>
+  <% end %>
+  <%= link_to 'Edit this picture', edit_picture_path(picture), role: "button", class: "secondary" %>
+</article>
