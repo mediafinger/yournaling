@@ -31,7 +31,7 @@ if %w(development test).include? Rails.env
     task doctor: :environment do
       puts "DB Doctor is running..."
       # Rake::Task["active_record_doctor"].invoke
-      `RAILS_ENV=development bundle exec rake active_record_doctor` # to make it work on GitHub Actions CI
+      puts `RAILS_ENV=development bundle exec rake active_record_doctor` # to make it work on GitHub Actions CI
       check_status = $?.exitstatus # rubocop:disable Style/SpecialGlobalVars
       exit check_status unless check_status.zero?
     end

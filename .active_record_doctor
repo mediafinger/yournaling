@@ -14,6 +14,8 @@ ActiveRecordDoctor.configure do
   global :ignore_models, [
     "ActiveStorage::Attachment",
     "ActiveStorage::Blob",
+    "ActiveStorage::Record",
+    "ActiveStorage::VariantRecord",
     "ApplicationRecord",
     "PaperTrail::Version",
   ]
