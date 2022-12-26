@@ -1,0 +1,18 @@
+<article>
+  <%= form_with(model: picture) do |form| %>
+    <%= render partial: "shared_partials/form_validation_errors", locals: { record: picture } %>
+
+    <fieldset>
+      <h3><legend><%= form_legend %></legend></h3>
+
+      <div>
+        <%= form.label :name %>
+        <%= form.text_field :name %>
+      </div>
+
+      <div>
+        <%= form.submit %>
+      </div>
+    </fieldset>
+  <% end %>
+</article>
