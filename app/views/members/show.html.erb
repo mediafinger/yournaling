@@ -1,13 +1,1 @@
-<div>
-  <div>
-    <% if notice.present? %>
-      <p id="notice"><%= notice %></p>
-    <% end %>
-
-    <%= render @member %>
-
-    <%= link_to 'Edit this member', edit_member_path(@member), role: "button"  %>
-    <%= button_to 'Destroy this member', member_path(@member), method: :delete %>
-    <%= link_to 'Back to members', members_path, role: "button"  %>
-  </div>
-</div>
+<%= render @member %>

@@ -1,8 +1,4 @@
-<div>
-  <h1>Editing user</h1>
+<%= render partial: "form", locals: { user: @user, form_legend: "Edit user"} %>
 
-  <%= render "form", user: @user %>
-
-  <%= link_to "Show this user", @user, role: "button" %>
-  <%= link_to "Back to users", users_path, role: "button" %>
-</div>
+<%= link_to "Show this user", @user, role: "button" %>
+<%= button_to "Destroy this user", user_path(@user), method: :delete, class: "secondary" %>

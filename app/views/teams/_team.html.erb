@@ -6,6 +6,6 @@
 
   <% if action_name != "show" %>
     <%= link_to "Show this team", team, role: "button"  %>
-    <%= link_to 'Edit this team', edit_team_path(team), class: "secondary", role: "button"  %>
   <% end %>
+  <%= link_to 'Edit this team', edit_team_path(team), role: "button", class: "secondary" %>
 </article>

@@ -1,24 +1,18 @@
 <article>
   <%= form_with(model: team) do |form| %>
-    <% if team.errors.any? %>
-      <div id="error_explanation">
-        <h2><%= pluralize(team.errors.count, "error") %> prohibited this team from being saved:</h2>
+    <%= render partial: "shared_partials/form_validation_errors", locals: { record: team } %>
 
-        <ul>
-          <% team.errors.each do |error| %>
-            <li><%= error.full_message %></li>
-          <% end %>
-        </ul>
+    <fieldset>
+      <h3><legend><%= form_legend %></legend></h3>
+
+      <div>
+        <%= form.label :name %>
+        <%= form.text_field :name %>
       </div>
-    <% end %>
 
-    <div>
-      <%= form.label :name %>
-      <%= form.text_field :name %>
-    </div>
-
-    <div>
-      <%= form.submit %>
-    </div>
+      <div>
+        <%= form.submit %>
+      </div>
+    </fieldset>
   <% end %>
 </article>

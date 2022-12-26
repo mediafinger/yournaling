@@ -1,14 +1,5 @@
-<div>
-  <% if notice.present? %>
-    <p id="notice"><%= notice %></p>
-  <% end %>
+<%= link_to 'New member', new_member_path, role: "button" %>
 
-  <div>
-    <h1>Members</h1>
-    <%= link_to 'New member', new_member_path, role: "button" %>
-  </div>
-
-  <div id="members">
-    <%= render @members %>
-  </div>
+<div id="members">
+  <%= render @members %>
 </div>

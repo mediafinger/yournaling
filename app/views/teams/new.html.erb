@@ -1,7 +1,1 @@
-<div>
-  <h1>New team</h1>
-
-  <%= render "form", team: @team %>
-
-  <%= link_to 'Back to teams', teams_path, role: "button" %>
-</div>
+<%= render partial: "form", locals: { team: @team, form_legend: "Create team"} %>

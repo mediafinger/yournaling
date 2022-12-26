@@ -1,13 +1,1 @@
-<div>
-  <div>
-    <% if notice.present? %>
-      <p id="notice"><%= notice %></p>
-    <% end %>
-
-    <%= render @team %>
-
-    <%= link_to 'Edit this team', edit_team_path(@team), role: "button" %>
-    <%= button_to 'Destroy this team', team_path(@team), method: :delete, class: "secondary" %>
-    <%= link_to 'Back to teams',  teams_path, role: "button" %>
-  </div>
-</div>
+<%= render @team %>

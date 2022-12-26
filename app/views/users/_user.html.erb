@@ -11,6 +11,6 @@
 
   <% if action_name != "show" %>
     <%= link_to "Show this user", user, role: "button" %>
-    <%= link_to 'Edit this user', edit_user_path(user), role: "button" %>
   <% end %>
+  <%= link_to "Edit this user", edit_user_path(user), role: "button", class: "secondary" %>
 </article>

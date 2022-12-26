@@ -1,7 +1,1 @@
-<div>
-  <h1>New user</h1>
-
-  <%= render "form", user: @user %>
-
-  <%= link_to 'Back to users', users_path, role: "button" %>
-</div>
+<%= render partial: "form", locals: { user: @user, form_legend: "Create user"} %>

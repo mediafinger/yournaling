@@ -1,34 +1,28 @@
 <article>
   <%= form_with(model: member) do |form| %>
-    <% if member.errors.any? %>
-      <div id="error_explanation">
-        <h2><%= pluralize(member.errors.count, "error") %> prohibited this member from being saved:</h2>
+    <%= render partial: "shared_partials/form_validation_errors", locals: { record: member } %>
 
-        <ul>
-          <% member.errors.each do |error| %>
-            <li><%= error.full_message %></li>
-          <% end %>
-        </ul>
+    <fieldset>
+      <h3><legend><%= form_legend %></legend></h3>
+
+      <div>
+        <%= form.label :user_id %>
+        <%= form.text_field :user_id %>
       </div>
-    <% end %>
 
-    <div>
-      <%= form.label :user_id %>
-      <%= form.text_field :user_id %>
-    </div>
+      <div>
+        <%= form.label :team_id %>
+        <%= form.text_field :team_id %>
+      </div>
 
-    <div>
-      <%= form.label :team_id %>
-      <%= form.text_field :team_id %>
-    </div>
+      <div>
+        <%= form.label :roles %>
+        <%= form.text_area :roles, rows: 4 %>
+      </div>
 
-    <div>
-      <%= form.label :roles %>
-      <%= form.text_area :roles, rows: 4 %>
-    </div>
-
-    <div>
-      <%= form.submit %>
-    </div>
+      <div>
+        <%= form.submit %>
+      </div>
+    </fieldset>
   <% end %>
 </article>
