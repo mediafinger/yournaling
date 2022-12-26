@@ -1,18 +1,18 @@
 default: &default
   adapter: postgresql
-  connect_timeout: <%= AppConf.rantan_app_db_timeout_seconds.to_i * 1000 %>
-  database: <%= AppConf.rantan_app_db_name %>
+  connect_timeout: <%= AppConf.yournaling_db_timeout_seconds.to_i * 1000 %>
+  database: <%= AppConf.yournaling_db_name %>
   encoding: unicode
-  host: <%= AppConf.rantan_app_db_host %>
-  password: <%= AppConf.rantan_app_db_password %>
+  host: <%= AppConf.yournaling_db_host %>
+  password: <%= AppConf.yournaling_db_password %>
   pool: <%= AppConf.rails_max_threads.to_i * AppConf.web_concurrency.to_i + 10 %>
-  port: <%= AppConf.rantan_app_db_port.to_i %>
-  read_timeout: <%= AppConf.rantan_app_db_timeout_seconds.to_i * 1000 %>
+  port: <%= AppConf.yournaling_db_port.to_i %>
+  read_timeout: <%= AppConf.yournaling_db_timeout_seconds.to_i * 1000 %>
   reconnect: true
-  timeout: <%= AppConf.rantan_app_db_timeout_seconds.to_i * 1000 %>
-  username: <%= AppConf.rantan_app_db_username %>
+  timeout: <%= AppConf.yournaling_db_timeout_seconds.to_i * 1000 %>
+  username: <%= AppConf.yournaling_db_username %>
   variables:
-    statement_timeout: <%= AppConf.rantan_app_db_timeout_seconds.to_i * 1000 %>
+    statement_timeout: <%= AppConf.yournaling_db_timeout_seconds.to_i * 1000 %>
 
 development:
   <<: *default
@@ -20,7 +20,7 @@ development:
 test:
   <<: *default
   # unfortunately necessary, as some `rake db:` commands work against dev & test env
-  database: <%= AppConf.rantan_app_db_name_test %>
+  database: <%= AppConf.yournaling_db_name_test %>
 
 production:
   <<: *default

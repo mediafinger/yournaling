@@ -13,7 +13,7 @@ worker_timeout 3600 if AppConf.is?(:environment, "development")
 
 # Specifies the `port` that Puma will listen on to receive requests; default is 3000.
 #
-port AppConf.rantan_app_port.to_i
+port AppConf.yournaling_port.to_i
 
 # Specifies the `environment` that Puma will run in.
 #

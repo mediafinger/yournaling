@@ -3,5 +3,5 @@ class IdContract < ApplicationContract
     required(:id).filled(:string)
   end
 
-  rule(:uuid).validate(:uuid)
+  rule(:id).validate(:uuid)
 end

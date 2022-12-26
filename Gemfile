@@ -28,10 +28,11 @@ group :development do
 end
 
 group :development, :test do
+  gem "active_record_doctor", "~> 1.10", require: false
   gem "amazing_print", "~> 1.4"
   gem "bundler-audit", "~> 0.9"
+  gem "factory_bot-awesome_linter", "~> 1.0"
   gem "factory_bot_rails", "~> 6.2"
-  gem "factory_bot-awesome_linter"
   gem "faker", "~> 2.19"
   gem "rspec-rails", "~> 6.0"
 end

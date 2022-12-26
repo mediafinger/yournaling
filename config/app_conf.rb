@@ -2,7 +2,7 @@
 #   read them at startup and store them in this AppConf object.
 # This allows to:
 # - work with default values,
-# - overwrite some values in a config/rantan_app_conf.local.rb file,
+# - overwrite some values in a config/yournaling_conf.local.rb file,
 # - compare values type agnostic with the `.is?` method,
 # - ensure that typos in the variable names are detected at 'compile' time
 # - see all keys of externaly set values in one file
@@ -77,19 +77,19 @@ class AppConf
 
   register :debug, default: false # start console/server/specs with DEBUG=true for more logs and longer timeout
 
-  register :rantan_app_host, default: "localhost", required: production_env
-  register :rantan_app_name, default: "rantanapp"
-  register :rantan_app_port, default: 3000
-  register :rantan_app_version, default: env_and_version
+  register :yournaling_host, default: "localhost", required: production_env
+  register :yournaling_name, default: "yournaling"
+  register :yournaling_port, default: 3000
+  register :yournaling_version, default: env_and_version
 
   # Database setup
-  register :rantan_app_db_host, default: "localhost", required: production_env
-  register :rantan_app_db_name, default: "rantan_app_#{environment}", required: production_env
-  register :rantan_app_db_name_test, default: "rantan_app_test"
-  register :rantan_app_db_password, default: "", required: production_env
-  register :rantan_app_db_port, default: 5432, required: production_env
-  register :rantan_app_db_timeout_seconds, default: 5, required: production_env
-  register :rantan_app_db_username, default: "postgres", required: production_env
+  register :yournaling_db_host, default: "localhost", required: production_env
+  register :yournaling_db_name, default: "yournaling_#{environment}", required: production_env
+  register :yournaling_db_name_test, default: "yournaling_test"
+  register :yournaling_db_password, default: "", required: production_env
+  register :yournaling_db_port, default: 5432, required: production_env
+  register :yournaling_db_timeout_seconds, default: 5, required: production_env
+  register :yournaling_db_username, default: "postgres", required: production_env
 
   # determines the size of the DB connection pool and the puma threads
   register :rails_max_threads, default: 10
