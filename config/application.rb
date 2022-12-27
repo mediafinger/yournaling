@@ -57,10 +57,12 @@ module Yournaling
     Rack::Timeout::Logger.disable # we only log the errors, not the verbose status messages
 
     # handle all thrown exceptions with proper logging and responding with JSONAPI errors or nice HTML pages / flashes
-    config.middleware.insert_after(
-      ActionDispatch::RequestId,
-      ::ErrorsMiddleware
-    )
+    unless AppConf.is?(:debug, true)
+      config.middleware.insert_after(
+        ActionDispatch::PermissionsPolicy::Middleware,
+        ::ErrorsMiddleware
+      )
+    end
 
     # These setting are used when running `rails generate ...`
     #

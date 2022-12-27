@@ -116,10 +116,18 @@ class AppConf
   register :log_target, default: production_env ? $stdout : "log/#{environment}.log"
 
   # rack-timeout in seconds
-  register :rack_timeout, default: is?(:debug, true) ? 300 : 6 # seconds
+  register :rack_timeout, default: is?(:debug, true) ? 300 : 60 # seconds
 
   # configure Redis for ActionCable / TurboReflex
   register :redis_url, default: "redis://localhost:6379/1", required: production_env
+  register :redis_password, default: nil, required: production_env
+
+  # external service configuration
+
+  # Amazon S3
+  register :amazon_s3_access_key_id, default: "access_key_id", required: production_env
+  register :amazon_s3_secret_access_key, default: "secret_access_key", required: production_env
+  register :amazon_s3_bucket_name, default: "yournaling", required: production_env
 
   # Don't add secrets as 'default' values in this file!
   #

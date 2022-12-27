@@ -63,7 +63,11 @@ class ErrorsMiddleware
         },
       }
 
-      [mapped_error.status, headers, [error_body.to_json]]
+      # [mapped_error.status, headers, [error_body.to_json]] # TODO: render HTML error page or JSONAPI error object
+
+      raise mapped_error
+
+      # error_flash(mapped_error, default_message: "Oops, something went wrong.")
     end
 
     def custom_error(error, request_id)
@@ -77,7 +81,11 @@ class ErrorsMiddleware
         },
       }
 
-      [error.status, headers, [error_body.to_json]] # TODO: render HTML error page or JSONAPI error object
+      # [error.status, headers, [error_body.to_json]] # TODO: render HTML error page or JSONAPI error object
+
+      raise error
+
+      # error_flash(error, default_message: "Oops, something went wrong.")
     end
 
     def headers
