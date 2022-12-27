@@ -21,6 +21,20 @@
           <li><%= link_to "Users", users_path, role: active_path?(users_path) ? "button" : nil %></li>
           <li><%= link_to "Members", members_path, role: active_path?(members_path) ? "button" : nil %></li>
         </ul>
+
+        <ul>
+          <li>
+          <% if active_path?(pictures_path) %>
+            <%= render partial: "pictures/action_buttons" %>
+          <% elsif active_path?(teams_path) %>
+            <%= render partial: "teams/action_buttons" %>
+          <% elsif active_path?(users_path) %>
+            <%= render partial: "users/action_buttons" %>
+          <% elsif active_path?(members_path) %>
+            <%= render partial: "members/action_buttons" %>
+          <% end %>
+          </li>
+        </ul>
       </nav>
 
       <%= render partial: "shared_partials/flash_notifications" %>
