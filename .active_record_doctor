@@ -24,6 +24,7 @@ ActiveRecordDoctor.configure do
 
   detector :incorrect_length_validation, ignore_attributes: [
     # app only validation sufficient, no need to enforce length in DB
+    "Picture.name",
     "Team.name",
     "User.email",
     "User.name",

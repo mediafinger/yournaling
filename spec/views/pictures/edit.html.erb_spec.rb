@@ -1,13 +1,9 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe "pictures/edit", type: :view do
-  let(:picture) {
-    Picture.create!(
-      name: "MyString"
-    )
-  }
+  let(:picture) { FactoryBot.create(:picture, :with_image) }
 
-  before(:each) do
+  before do
     assign(:picture, picture)
   end
 
@@ -15,7 +11,6 @@ RSpec.describe "pictures/edit", type: :view do
     render
 
     assert_select "form[action=?][method=?]", picture_path(picture), "post" do
-
       assert_select "input[name=?]", "picture[name]"
     end
   end

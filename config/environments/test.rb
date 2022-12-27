@@ -40,6 +40,12 @@ Rails.application.configure do
   # ActionMailer::Base.deliveries array.
   # config.action_mailer.delivery_method = :test
 
+  # Store files locally under tmp/storage
+  config.active_storage.service = :dev
+
+  # Resize images using vips
+  config.active_storage.variant_processor = :vips # :mini_magick
+
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
 

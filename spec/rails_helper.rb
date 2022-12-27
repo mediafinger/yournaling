@@ -27,6 +27,10 @@ rescue ActiveRecord::PendingMigrationError => e
   puts "******************** WARNING: Pending migrations: #{e.to_s.strip} *********************************"
 end
 
+FactoryBot::SyntaxRunner.class_eval do
+  include ActionDispatch::TestProcess::FixtureFile # to test active_storage file uploads
+end
+
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"

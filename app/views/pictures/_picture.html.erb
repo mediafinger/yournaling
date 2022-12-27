@@ -1,7 +1,27 @@
 <article id="<%= dom_id picture %>">
   <p>
-    <strong>Name:</strong>
-    <%= picture.name %>
+    <strong><%= picture.name %></strong>
+  </p>
+
+  <% if action_name == "show" %>
+  <p>
+    Original:
+    <%= picture.width %> x <%= picture.height %> |
+    <%= number_to_human_size(picture.megabytes.megabytes) %> |
+    <%= picture.content_type %> |
+    <%= picture.filename %>
+  </p>
+  <% end %>
+
+  <p>
+    <% if action_name != "show" %>
+    <%# Render our 4:3 thumbnails in 3:2 format %>
+    <%= link_to image_tag(picture.thumbnail, style: "width: 400px; height: 266px; object-fit: cover;"), picture_path(picture) %>
+    <% elsif %>
+    <%# TODO: hide real URL / use expiring token to access image in fullsize %>
+    <%# image_tag(picture.file, style: "max-height: 40rem; width: auto;") %>
+    <%= link_to image_tag(picture.megasize, style: "max-height: 30rem; width: auto;"), picture.megasize, target: "_blank" %>
+    <% end %>
   </p>
 
   <% if action_name != "show" %>

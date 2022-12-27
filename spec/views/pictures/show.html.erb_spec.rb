@@ -1,14 +1,15 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe "pictures/show", type: :view do
-  before(:each) do
-    assign(:picture, Picture.create!(
-      name: "Name"
-    ))
-  end
+  let(:picture) { FactoryBot.create(:picture, :with_image) }
 
   it "renders attributes in <p>" do
+    expect(picture.valid?).to be true
+
+    assign(:picture, picture)
+
     render
-    expect(rendered).to match(/Name/)
+
+    expect(rendered).to match(/#{picture.name}/)
   end
 end

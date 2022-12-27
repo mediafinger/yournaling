@@ -2,19 +2,17 @@ require 'rails_helper'
 
 RSpec.describe "pictures/index", type: :view do
   before(:each) do
-    assign(:pictures, [
-      Picture.create!(
-        name: "Name"
-      ),
-      Picture.create!(
-        name: "Name"
-      )
-    ])
+    assign(:pictures,
+      [
+        FactoryBot.create(:picture, :with_image, name: "test-pic"),
+        FactoryBot.create(:picture, :with_image, name: "test-pic"),
+      ]
+    )
   end
 
   it "renders a list of pictures" do
     render
-    cell_selector = Rails::VERSION::STRING >= '7' ? 'div>p' : 'tr>td'
-    assert_select cell_selector, text: Regexp.new("Name".to_s), count: 2
+
+    assert_select "img", src: /macbookair_stickered.jpg/, count: 2
   end
 end
