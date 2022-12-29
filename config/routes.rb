@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   resources :teams
   resources :users
 
-  root to: "teams#index"
+  root to: "pages#home"
 
   # catch all unknown routes to NOT throw a FATAL ActionController::RoutingError
   match "*path", to: "application#error_404", via: :all,
