@@ -119,6 +119,17 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_01_185110) do
     t.index ["scheduled_at"], name: "index_good_jobs_on_scheduled_at", where: "(finished_at IS NULL)"
   end
 
+  create_table "locations", primary_key: "yid", id: :string, force: :cascade do |t|
+    t.text "address"
+    t.decimal "lat", precision: 12, scale: 9
+    t.decimal "long", precision: 12, scale: 9
+    t.string "name"
+    t.text "link"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["lat", "long"], name: "index_locations_on_lat_and_long"
+  end
+
   create_table "members", primary_key: "yid", id: :string, force: :cascade do |t|
     t.text "roles", default: [], null: false, array: true
     t.datetime "created_at", null: false

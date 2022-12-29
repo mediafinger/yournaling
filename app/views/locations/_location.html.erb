@@ -1,0 +1,31 @@
+<article id="<%= dom_id location %>">
+  <p>
+    <% if location.name %>
+    <strong><%= location.name %></strong> /
+    <% end %>
+
+    <%= location.address %>
+  </p>
+
+  <% if action_name == "show" %>
+  <p>
+    <strong>Link:</strong>
+    <%= link_to location.link, location.link, target: "_blank" %>
+  </p>
+
+  <p>
+    <strong>Latitude:</strong>
+    <%= location.lat.to_s %>
+  </p>
+
+  <p>
+    <strong>Longitude:</strong>
+    <%= location.long.to_s %>
+  </p>
+  <% end %>
+
+  <% if action_name != "show" %>
+    <%= link_to "Show this location", location, role: "button"  %>
+  <% end %>
+  <%= link_to 'Edit this location', edit_location_path(location), role: "button", class: "secondary" %>
+</article>
