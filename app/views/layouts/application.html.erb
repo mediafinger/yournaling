@@ -17,6 +17,7 @@
       <nav>
         <ul>
           <li><%= link_to "Pictures", pictures_path, role: active_path?(pictures_path) ? "button" : nil %></li>
+          <li><%= link_to "Locations", locations_path, role: active_path?(locations_path) ? "button" : nil %></li>
           <li><%= link_to "Teams", teams_path, role: active_path?(teams_path) ? "button" : nil %></li>
           <li><%= link_to "Users", users_path, role: active_path?(users_path) ? "button" : nil %></li>
           <li><%= link_to "Members", members_path, role: active_path?(members_path) ? "button" : nil %></li>
@@ -28,6 +29,8 @@
             <%= render partial: "pictures/action_buttons" %>
           <% elsif active_path?(teams_path) %>
             <%= render partial: "teams/action_buttons" %>
+          <% elsif active_path?(locations_path) %>
+            <%= render partial: "locations/action_buttons" %>
           <% elsif active_path?(users_path) %>
             <%= render partial: "users/action_buttons" %>
           <% elsif active_path?(members_path) %>

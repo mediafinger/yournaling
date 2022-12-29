@@ -1,0 +1,38 @@
+<article>
+  <%= form_with(model: location) do |form| %>
+    <%= render partial: "shared_partials/form_validation_errors", locals: { record: location } %>
+
+    <fieldset>
+      <h3><legend><%= form_legend %></legend></h3>
+
+      <div>
+        <%= form.label :name %>
+        <%= form.text_field :name %>
+      </div>
+
+      <div>
+        <%= form.label :address %>
+        <%= form.text_field :address %>
+      </div>
+
+      <div>
+        <%= form.label :link %>
+        <%= form.url_field :link %>
+      </div>
+
+      <div>
+        <%= form.label :lat %>
+        <%= form.number_field :lat, in: -90.0..90.0, step: 0.000000001 %>
+      </div>
+
+      <div>
+        <%= form.label :long %>
+        <%= form.number_field :long, in: -180.0..180.0, step: 0.000000001 %>
+      </div>
+
+      <div>
+        <%= form.submit %>
+      </div>
+    </fieldset>
+  <% end %>
+</article>
