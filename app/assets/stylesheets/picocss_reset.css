@@ -1,21 +1,9 @@
+html[aria-busy="true"]::before {
+  all: unset;
+}
+
 body>header, body>main, div>article {
   margin-top: -1rem;
   padding-top: 1rem;
   padding-bottom: 1rem;
 }
-
-/* see: https://github.com/picocss/pico/discussions/215 */
-/* html[aria-busy=true]::before {
-  display: inline-block;
-  width: 0;
-  height: 0;
-  border: 0;
-  border-radius: 0;
-  border-right-color: transparent;
-  content: "";
-  vertical-align: 0;
-  animation: none;
-  opacity: 0;
-  margin: 0;
-  margin-inline-end: 0;
-} */
