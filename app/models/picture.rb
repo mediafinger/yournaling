@@ -64,4 +64,24 @@ class Picture < ApplicationRecord
   # def square_bw
   #   file.variant(resize_to_fill: [400, 400], format: :jpeg, saver: { quality: 80 }, colourspace: "b-w").processed
   # end
+
+  # private
+
+  def path
+    ActiveStorage::Blob.service.path_for(file.key)
+  end
+
+  # date_time is completely off, gps is nil :-/
+  def exif
+    EXIFR::JPEG.new(Picture.last.path) # if JPEG
+  end
+
+  def vips
+    image = Vips::Image.new_from_file(path)
+
+    {
+      width: image.width,
+      height: image.height,
+    }
+  end
 end
