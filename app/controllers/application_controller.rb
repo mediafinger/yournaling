@@ -3,6 +3,9 @@ class ApplicationController < ActionController::Base
 
   before_action :ensure_html_safe_flash
 
+  # Detailed error pages must only be used in development! By default use our custom (less informative) error pages
+  include ErrorHandler unless AppConf.is?(:debug, true) && !AppConf.production_env
+
   # dry-validates the dry-contract against the given params
   # which can be either a hash or an ActionController::Parameters object
   #

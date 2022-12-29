@@ -23,8 +23,6 @@ Bundler.require(*Rails.groups)
 
 require "rack/requestid"
 
-require_relative File.expand_path("../app/errors/errors_middleware", __dir__)
-
 module Yournaling
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
@@ -55,14 +53,6 @@ module Yournaling
       Rack::Timeout, service_timeout: AppConf.rack_timeout # seconds
     )
     Rack::Timeout::Logger.disable # we only log the errors, not the verbose status messages
-
-    # handle all thrown exceptions with proper logging and responding with JSONAPI errors or nice HTML pages / flashes
-    unless AppConf.is?(:debug, true)
-      config.middleware.insert_after(
-        ActionDispatch::PermissionsPolicy::Middleware,
-        ::ErrorsMiddleware
-      )
-    end
 
     # These setting are used when running `rails generate ...`
     #
