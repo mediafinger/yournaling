@@ -3,7 +3,7 @@ class MembersController < ApplicationController
 
   # GET /members
   def index
-    @members = Member.includes(:user, :team).all
+    @members = Member.includes(:user, :team).recent
   end
 
   # GET /members/1

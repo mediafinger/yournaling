@@ -3,7 +3,7 @@ class LocationsController < ApplicationController
 
   # GET /locations
   def index
-    @locations = Location.all
+    @locations = Location.recent.all
   end
 
   # GET /locations/1
