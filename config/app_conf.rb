@@ -108,6 +108,8 @@ class AppConf
   # Logs & Logging
   register :log_level, default: if is?(:debug, true)
                                   :debug
+                                elsif is?(:environment, :development)
+                                  :debug
                                 elsif is?(:environment, :test)
                                   :warn
                                 else
