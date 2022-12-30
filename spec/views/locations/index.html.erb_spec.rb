@@ -28,6 +28,7 @@ RSpec.describe "locations/index", type: :view do
     cell_selector = Rails::VERSION::STRING >= "7" ? "article>p" : "tr>td"
     assert_select cell_selector, text: Regexp.new("a Name"), count: 2
     assert_select cell_selector, text: Regexp.new("an address"), count: 2
+    assert_select cell_selector, text: Regexp.new("Germany"), count: 2
     # assert_select cell_selector, text: Regexp.new("9.99".to_s), count: 2
     # assert_select cell_selector, text: Regexp.new("9.99".to_s), count: 2
     # assert_select cell_selector, text: Regexp.new("http://example.com"), count: 2

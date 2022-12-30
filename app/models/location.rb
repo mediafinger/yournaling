@@ -14,6 +14,8 @@ class Location < ApplicationRecordYidEnabled
   validates :lat, presence: true, if: :long?
   validates :long, presence: true, if: :lat?
 
+  # TODO: when coordinates are given, check against ISO3166::Country min/max_latitude/_longitude if country makes sense
+
   validate :ensure_some_info_given
   validate :ensure_valid_link, if: :link?
 

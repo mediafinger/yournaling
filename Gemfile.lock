@@ -92,6 +92,8 @@ GEM
       thor (~> 1.0)
     concurrent-ruby (1.2.2)
     connection_pool (2.4.1)
+    countries (5.2.1)
+      unaccent (~> 0.3)
     crack (0.4.5)
       rexml
     crass (1.0.6)
@@ -338,6 +340,7 @@ GEM
       railties (>= 6.0.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
+    unaccent (0.4.0)
     unicode-display_width (2.5.0)
     web-console (4.2.1)
       actionview (>= 6.0.0)
@@ -364,6 +367,7 @@ DEPENDENCIES
   bcrypt (~> 3.1)
   bootsnap
   bundler-audit (~> 0.9)
+  countries (~> 5.2)
   dry-validation (~> 1.10)
   factory_bot-awesome_linter (~> 1.0)
   factory_bot_rails (~> 6.2)

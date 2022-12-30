@@ -11,6 +11,12 @@
       </div>
 
       <div>
+        <%= form.label :country %>
+        <%= form.select :country, EnglishCountriesForSelectService.call.map { |k,v| [v, k] }, selected: "de" %>
+        <%# TODO: use select2 or other searchable drop-down %>
+      </div>
+
+      <div>
         <%= form.label :address %>
         <%= form.text_field :address %>
       </div>
