@@ -133,12 +133,21 @@ class AppConf
   register :amazon_s3_secret_access_key, default: "secret_access_key", required: production_env
   register :amazon_s3_bucket_name, default: "yournaling", required: production_env
 
+  # Geoapify API
+  register :geoapify_api_key, default: "secret_key", required: production_env
+
+  # Google Maps API
+  register :google_maps_api_key, default: "secret_key", required: production_env
+
+  # Mapbox API
+  register :geocoding_mapbox_api_key, default: "secret_key", required: production_env
+
   # Don't add secrets as 'default' values in this file!
   #
   # Either set ENV vars for secrets on the server
   #   or for local usage add them to the following file, which is in .gitignore:
   #
-  load "config/app_conf.local.rb" if File.exist?("config/app_conf.local.rb")
+  load "config/app_conf.local.rb" if File.exist?("config/app_conf.local.rb") # maybe don't do this in :test env?!
   #
   # inside use this syntax:
   #   AppConf.set :password, "secret"
