@@ -51,6 +51,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_29_211742) do
     t.text "link"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["lat", "long"], name: "index_locations_on_lat_and_long"
   end
 
   create_table "members", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

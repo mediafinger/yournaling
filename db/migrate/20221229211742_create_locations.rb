@@ -8,6 +8,8 @@ class CreateLocations < ActiveRecord::Migration[7.0]
       t.text :link
 
       t.timestamps
+
+      t.index %i[lat long]
     end
   end
 end
