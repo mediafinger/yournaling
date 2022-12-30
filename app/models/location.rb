@@ -6,10 +6,13 @@
 # the idea is to usually have enough information to be able to display the location on a map
 
 class Location < ApplicationRecord
+  validates :country, presence: true, inclusion: { in: EnglishCountriesForSelectService.call.keys }
   validates :lat, allow_nil: true, numericality: { greater_than_or_equal_to: -90.0, less_than_or_equal_to: 90.0 }
   validates :long, allow_nil: true, numericality: { greater_than_or_equal_to: -180.0, less_than_or_equal_to: 180.0 }
   validates :lat, presence: true, if: :long?
   validates :long, presence: true, if: :lat?
+
+  # TODO: when coordinates are given, check against ISO3166::Country min/max_latitude/_longitude if country makes sense
 
   validate :ensure_some_info_given
   validate :ensure_valid_link, if: :link?

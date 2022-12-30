@@ -8,6 +8,7 @@ gem "rails", "7.0.4"
 gem "bcrypt", "~> 3.1" # Use bcrypt for secure password hashing
 gem "bootsnap", require: false
 # gem "chimera_http_client", "~> 1.3" # HTTP client based on Typhoeus / lib_curl
+gem "countries", "~> 5.2" # Lists of countries, their ISO codes, emoji flags and more
 gem "dry-validation", "~> 1.10" # Use dry-validation for validations [https://dry-rb.org/gems/dry-validation]
 gem "exifr", "~> 1.3" # Read EXIF metadata from JPEG images
 gem "image_processing", "~> 1.12" # Use image_processing for image resizing in ActiveStorage variants

@@ -4,6 +4,7 @@ RSpec.describe "locations/edit", type: :view do
   let(:location) do
     Location.create!(
       address: "MyText",
+      country: "de",
       lat: "9.99",
       long: "9.99",
       name: "MyString",
@@ -20,6 +21,7 @@ RSpec.describe "locations/edit", type: :view do
 
     assert_select "form[action=?][method=?]", location_path(location), "post" do
       assert_select "input[name=?]", "location[address]"
+      assert_select "select[name=?]", "location[country]"
       assert_select "input[name=?]", "location[lat]"
       assert_select "input[name=?]", "location[long]"
       assert_select "input[name=?]", "location[name]"

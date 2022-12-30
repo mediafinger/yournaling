@@ -45,12 +45,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_29_211742) do
 
   create_table "locations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.text "address"
+    t.string "country", null: false
     t.decimal "lat", precision: 12, scale: 9
     t.decimal "long", precision: 12, scale: 9
     t.string "name"
     t.text "link"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["country"], name: "index_locations_on_country"
     t.index ["lat", "long"], name: "index_locations_on_lat_and_long"
   end
 

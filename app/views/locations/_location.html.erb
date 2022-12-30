@@ -5,6 +5,8 @@
     <% end %>
 
     <%= location.address %>
+    <% iso_country = ISO3166::Country.find_country_by_alpha2(location.country) %>
+    <%= iso_country.iso_short_name %> <%= iso_country.emoji_flag %>
   </p>
 
   <% if action_name == "show" %>
