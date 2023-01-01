@@ -24,6 +24,8 @@
     <strong>Longitude:</strong>
     <%= location.long.to_s %>
   </p>
+
+  <%= render partial: "locations/embedded_google_maps", locals: { location: location } %>
   <% end %>
 
   <% if action_name != "show" %>
