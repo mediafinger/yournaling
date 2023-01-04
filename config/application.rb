@@ -28,6 +28,9 @@ module Yournaling
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
 
+    # defer loading of all image_tag images until they reach the viewport
+    config.action_view.image_loading = "lazy"
+
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files
