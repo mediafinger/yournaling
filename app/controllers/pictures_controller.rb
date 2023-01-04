@@ -45,6 +45,13 @@ class PicturesController < ApplicationController
   # update filename and content_type to indicate the new file type "image/webp"
   # does not overwrite params
   def process_image(file)
+    # TODO: validate uploaded file first!
+    # is image?
+    # Pictures::ALLOWED_CONTENT_TYPES
+    # file size MByte (min..max)
+    # file size Pixels (min..max)
+    # landscape vs portrait or square?
+
     new_file = file.dup
 
     original_extension = File.extname(file.tempfile)

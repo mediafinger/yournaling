@@ -8,6 +8,9 @@
 class Picture < ApplicationRecord
   has_one_attached :file
 
+  ALLOWED_IMAGE_TYPES = %w[gif jpg jpeg png tiff webp].freeze
+  ALLOWED_CONTENT_TYPES = ALLOWED_IMAGE_TYPES.map { |type| "image/#{type}" }.freeze
+
   # NOTE
   # In PicturesController#create the uploaded files are resized (downsized) to to max of 4000x3000
   # and converted to .webp with a quality of 90% *before* being saved to disk.
