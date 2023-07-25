@@ -11,8 +11,8 @@ RSpec.describe "members/edit", type: :view do
     render
 
     assert_select "form[action=?][method=?]", member_path(member), "post" do
-      assert_select "input[name=?]", "member[user_id]"
-      assert_select "input[name=?]", "member[team_id]"
+      assert_select "input[name=?]", "member[user_yid]"
+      assert_select "input[name=?]", "member[team_yid]"
       assert_select "textarea[name=?]", "member[roles]"
     end
   end

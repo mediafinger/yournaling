@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_27_155442) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_25_150420) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -18,7 +18,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_27_155442) do
   create_table "active_storage_attachments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
-    t.uuid "record_id", null: false
+    t.string "record_id", null: false
     t.uuid "blob_id", null: false
     t.datetime "created_at", null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
@@ -43,22 +43,23 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_27_155442) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "members", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "user_id", null: false
-    t.uuid "team_id", null: false
+  create_table "members", primary_key: "yid", id: :string, force: :cascade do |t|
     t.text "roles", default: [], null: false, array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["team_id", "user_id"], name: "index_members_on_team_id_and_user_id", unique: true
+    t.string "team_yid", null: false
+    t.string "user_yid", null: false
+    t.index ["team_yid", "user_yid"], name: "index_members_on_team_yid_and_user_yid", unique: true
+    t.index ["user_yid"], name: "index_members_on_user_yid"
   end
 
-  create_table "pictures", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "pictures", primary_key: "yid", id: :string, force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "teams", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "teams", primary_key: "yid", id: :string, force: :cascade do |t|
     t.string "name", null: false
     t.jsonb "preferences", default: {}, null: false
     t.datetime "created_at", null: false
@@ -66,7 +67,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_27_155442) do
     t.index ["name"], name: "index_teams_on_name", unique: true
   end
 
-  create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "users", primary_key: "yid", id: :string, force: :cascade do |t|
     t.string "name", null: false
     t.string "nickname"
     t.string "email", null: false
@@ -82,6 +83,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_27_155442) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "members", "teams"
-  add_foreign_key "members", "users"
+  add_foreign_key "members", "teams", column: "team_yid", primary_key: "yid"
+  add_foreign_key "members", "users", column: "user_yid", primary_key: "yid"
 end

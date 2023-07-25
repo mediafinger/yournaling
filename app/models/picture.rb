@@ -5,11 +5,12 @@
 # if deleting the original should not be possible, we should prevent uploading 10 MB files
 # and introduce a smaller limit - at least for non-paying users
 
-class Picture < ApplicationRecord
+class Picture < ApplicationRecordYidEnabled
   has_one_attached :file
 
   ALLOWED_IMAGE_TYPES = %w[gif jpg jpeg png tiff webp].freeze
   ALLOWED_CONTENT_TYPES = ALLOWED_IMAGE_TYPES.map { |type| "image/#{type}" }.freeze
+  YID_MODEL = "pic".freeze
 
   # NOTE
   # In PicturesController#create the uploaded files are resized (downsized) to to max of 4000x3000

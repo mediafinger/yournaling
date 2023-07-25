@@ -55,6 +55,6 @@ class MembersController < ApplicationController
   # TODO: roles handling broken / move to extra endpoint - or add specific logic to create and update
   # Only allow a list of trusted parameters through. // TODO: dry-validation / dry-contract ?!
   def member_params
-    params.require(:member).permit(:user_id, :team_id, :roles)
+    params.require(:member).permit(:user_yid, :team_yid, :roles)
   end
 end
