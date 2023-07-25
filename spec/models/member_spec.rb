@@ -118,7 +118,7 @@ RSpec.describe Member, type: :model do
     # direct usage is discouraged, has to work properly nevertheless
     describe "#roles=" do
       context "when valid" do
-        it "works", :aggregated_failures do
+        it "works as expected", :aggregated_failures do
           member.roles = Array(valid_role)
 
           expect(member.save!).to be_truthy

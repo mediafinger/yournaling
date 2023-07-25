@@ -19,6 +19,11 @@ class Member < ApplicationRecordYidEnabled
   belongs_to :team, inverse_of: :members, foreign_key: "team_yid"
   belongs_to :user, inverse_of: :memberships, foreign_key: "user_yid"
 
+  scope :with_role, ->(role) { with_roles(Array(role)) }
+  scope :with_roles, ->(roles) { where("roles @> ?", "{#{roles.join(',')}}") } # must have all roles
+  scope :without_role, ->(role) { without_roles(Array(role)) }
+  scope :without_roles, ->(roles) { where.not("roles @> ?", "{#{roles.join(',')}}") } # must not have any role
+
   validates :team_yid, presence: true, uniqueness: { scope: :user_yid }
   validates :user_yid, presence: true, uniqueness: { scope: :team_yid }
   validates :roles, presence: true, if: proc { |record| record.roles.to_s == "" }
@@ -51,7 +56,7 @@ class Member < ApplicationRecordYidEnabled
   end
 
   def delete_role(role)
-    self.roles -= Array(role.to_s)
+    self.roles = (roles - Array(role.to_s)).uniq
     self
   end
 
