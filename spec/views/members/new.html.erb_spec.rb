@@ -12,8 +12,8 @@ RSpec.describe "members/new", type: :view do
   it "renders new member form" do
     render
     assert_select "form[action=?][method=?]", members_path, "post" do
-      assert_select "input[name=?]", "member[user_id]"
-      assert_select "input[name=?]", "member[team_id]"
+      assert_select "input[name=?]", "member[user_yid]"
+      assert_select "input[name=?]", "member[team_yid]"
       assert_select "textarea[name=?]", "member[roles]"
     end
   end

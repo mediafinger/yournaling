@@ -25,23 +25,26 @@ ActiveRecordDoctor.configure do
   detector :incorrect_length_validation, ignore_attributes: [
     # app only validation sufficient, no need to enforce length in DB
     "Picture.name",
+    "Picture.yid",
     "Team.name",
+    "Team.yid",
     "User.email",
     "User.name",
     "User.nickname",
     "User.password_digest",
+    "User.yid",
 
     "User.temp_auth_token", # for some reason DB Doctor complains about a (non) existing validation on this column?!
   ]
 
-  detector :missing_presence_validation, ignore_attributes: [
-    "Member.roles",
-    "Team.preferences",
-    "User.preferences",
+  detector :short_primary_key_type, ignore_tables: [
+    "members",
+    "pictures",
+    "teams",
+    "users",
   ]
 
-  detector :unindexed_foreign_keys, ignore_columns: [
-    "members.team_id",
-    "members.user_id",
+  detector :undefined_table_references, ignore_models: [
+    "ApplicationRecordYidEnabled",
   ]
 end

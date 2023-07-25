@@ -1,9 +1,10 @@
-class User < ApplicationRecord
+class User < ApplicationRecordYidEnabled
   SEPARATOR = "::".freeze
+  YID_MODEL = "user".freeze
 
   has_secure_password :password, validations: false
 
-  has_many :memberships, class_name: "Member", inverse_of: :user, dependent: :destroy
+  has_many :memberships, class_name: "Member", foreign_key: "user_yid", inverse_of: :user, dependent: :destroy
   has_many :teams, through: :memberships
 
   validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP, message: "not valid" }
@@ -11,6 +12,7 @@ class User < ApplicationRecord
   validates :password_digest, presence: true
   validates :name, presence: true, length: { in: 3..72 }
   validates :nickname, allow_nil: true, uniqueness: true, length: { in: 3..72 }
+  validates :preferences, presence: true, if: proc { |record| record.preferences.to_s == "" }
 
   class << self
     def authenticate_temp_auth_token!(base64)
