@@ -10,15 +10,20 @@ class Picture < ApplicationRecordYidEnabled
 
   ALLOWED_IMAGE_TYPES = %w[gif jpg jpeg png tiff webp].freeze
   ALLOWED_CONTENT_TYPES = ALLOWED_IMAGE_TYPES.map { |type| "image/#{type}" }.freeze
+  MAX_BYTE_SIZE = 6.megabytes.freeze
+  MIN_BYTE_SIZE = 150.kilobytes.freeze
   YID_CODE = "pic".freeze
 
   # NOTE
   # In PicturesController#create the uploaded files are resized (downsized) to to max of 4000x3000
-  # and converted to .webp with a quality of 90% *before* being saved to disk.
+  # and converted to .webp with a quality of 90% with the ImageUploadConversionService
+  # *before* being saved to disk.
   #
-  validates :file, presence: true, image: { # this is after the original image has been resized and converted to webp
-    content_type: %w[image/webp], size_range: ((150.kilobytes)..(6.megabytes))
-  } # this uses the custom ImageValidator
+  # validation after the original image has been resized and converted to webp
+  # uses the custom ImageValidator
+  # currently allowing all content_types, not only webp which it should be after conversion
+  validates :file, presence: true, image: { content_type: ALLOWED_CONTENT_TYPES, size_range: (MIN_BYTE_SIZE..MAX_BYTE_SIZE) }
+
   validates :name, allow_blank: true, length: { maximum: 255 }
 
   def thumbnail
@@ -33,16 +38,21 @@ class Picture < ApplicationRecordYidEnabled
     create_variant(max_width: 1200, max_height: 900, quality: 90)
   end
 
+  # NOTE: on demand variants, maybe persist a few sizes
   def create_variant(max_width:, max_height:, quality: 80, format: :webp)
     file.variant(resize_to_limit: [max_width, max_height], format:, saver: { quality: }).processed
   end
 
+  def bytes
+    file.blob.byte_size
+  end
+
   def kilobytes
-    file.blob.byte_size / 1024
+    bytes / 1024
   end
 
   def megabytes
-    (file.blob.byte_size / 1024.0 / 1024).round(2)
+    (bytes / 1024.0 / 1024).round(2)
   end
 
   def content_type
@@ -50,17 +60,17 @@ class Picture < ApplicationRecordYidEnabled
   end
 
   def filename
-    file.blob.filename.to_s
+    file.blob.filename.to_s # TODO: should the service store with or without suffix?!
   end
 
   def height
-    file.blob.metadata[:height]
+    file.blob.metadata[:height] # TODO: nil (or only before saving?)
   end
 
   def width
     raise "picture.id: #{id}, file: #{file}" if file.blob.nil?
 
-    file.blob.metadata[:width]
+    file.blob.metadata[:width] # TODO: nil (or only before saving?)
   end
 
   def uploaded_at
@@ -86,7 +96,9 @@ class Picture < ApplicationRecordYidEnabled
   end
 
   def vips
-    image = Vips::Image.new_from_file(path)
+    require "ruby-vips" # TODO: nicefy
+
+    image = ::Vips::Image.new_from_file(path)
 
     {
       width: image.width,
