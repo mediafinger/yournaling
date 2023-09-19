@@ -1,9 +1,10 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.1.2"
+# Read and set Ruby version
+ruby File.read(".ruby-version").strip.delete_prefix("ruby-")
 
-gem "rails", "> 7.0.4", "< 7.1"
+gem "rails", "7.1.0.beta1"
 
 gem "bcrypt", "~> 3.1" # Use bcrypt for secure password hashing
 gem "bootsnap", require: false
@@ -15,7 +16,7 @@ gem "importmap-rails" # Use JavaScript with ESM import maps [https://github.com/
 # gem "logstasher" # better formatted JSON logs for Logstash
 # gem "pagy", "~> 5.10" # fast and lightweight pagination solution # TODO: require "pagy/extras/navs"
 gem "pg", "~> 1.1"
-gem "puma", "~> 5.0"
+gem "puma", "~> 6.3"
 # gem "pundit", "~> 2.2" # Authorize actions by admin role
 gem "rack-requestid", "~> 0.2" # always set a request_id with this middleware
 gem "rack-timeout", "~> 0.6", require: "rack/timeout/base" # set a custom timeout in the middleware
