@@ -240,7 +240,10 @@ GEM
     rake (13.0.6)
     rdoc (6.5.0)
       psych (>= 4.0.0)
-    redis (4.8.1)
+    redis (5.0.7)
+      redis-client (>= 0.9.0)
+    redis-client (0.17.0)
+      connection_pool
     redis-namespace (1.11.0)
       redis (>= 4)
     reline (0.3.8)
@@ -332,7 +335,7 @@ DEPENDENCIES
   rack-requestid (~> 0.2)
   rack-timeout (~> 0.6)
   rails (= 7.1.0.beta1)
-  redis (~> 4.0)
+  redis (~> 5.0)
   resque (~> 2.4)
   rspec-rails (~> 6.0)
   sprockets-rails
