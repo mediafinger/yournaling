@@ -1,0 +1,300 @@
+require:
+  # - rubocop-rspec
+  - rubocop-rails
+  # - rubocop-factory_bot
+  # - rubocop-faker
+  # - rubocop-performance
+  # - rubocop-rake
+
+AllCops:
+  TargetRubyVersion: 3.2
+  DisplayCopNames: true
+  NewCops: enable
+  Exclude:
+    - "**/*.yml"
+    - "**/bin/*"
+    - "**/config.ru"
+    - "**/db/**/*"
+    - "**/schema.rb"
+    - "**/node_modules/**/*"
+    - "**/tmp/**/*"
+    - "**/vendor/**/*"
+    - "config/environments/**/*" # generated files
+    - "config/initializers/new_framework_defaults*" # generated files
+    - "db/schema.rb" # generated file
+    - "spec/rails_helper.rb"
+    - "spec/spec_helper.rb"
+
+################ When adding a new rule, please keep the list in alphabetical order ################
+
+# FactoryBot/CreateList:
+#   Enabled: false
+
+# FactoryBot/FactoryAssociationWithStrategy:
+#   Enabled: false
+
+# FactoryBot/SyntaxMethods:
+#   Enabled: false
+
+Lint/AmbiguousOperatorPrecedence:
+  Enabled: false
+
+Layout/ArgumentAlignment:
+  EnforcedStyle: with_fixed_indentation
+
+Layout/CaseIndentation:
+  EnforcedStyle: case
+
+Layout/EmptyLinesAroundAttributeAccessor:
+  AllowAliasSyntax: true
+  Enabled: true
+
+Layout/EmptyLinesAroundExceptionHandlingKeywords:
+  Enabled: false
+
+Layout/EndAlignment:
+  EnforcedStyleAlignWith: keyword
+
+Layout/FirstHashElementIndentation:
+  EnforcedStyle: consistent
+
+Layout/HashAlignment:
+  Enabled: false
+
+Layout/LineContinuationLeadingSpace:
+  Enabled: false
+
+Layout/LineLength:
+  Max: 125
+
+Layout/MultilineMethodCallBraceLayout:
+  Enabled: false
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+  IndentationWidth: 2
+
+Layout/SpaceAroundMethodCallOperator:
+  Enabled: false
+
+Lint/TrailingCommaInAttributeDeclaration:
+  Description: 'This cop checks for trailing commas in attribute declarations.'
+  Enabled: true
+
+Lint/UnusedMethodArgument:
+  Exclude:
+    - 'lib/middlewares/**/*'
+
+Metrics:
+  Enabled: false
+
+Naming/MethodParameterName:
+  Exclude:
+    - "**/spec/**/*"
+
+Naming/VariableNumber:
+  Enabled: false
+
+# Performance/Casecmp:
+#   Enabled: false
+
+Rails/NegateInclude:
+  Enabled: false
+
+Rails/ResponseParsedBody:
+  Enabled: false
+
+Rails/RenderInline:
+  Enabled: false
+
+Rails/SafeNavigation:
+  ConvertTry: false
+
+Rails/SkipsModelValidations:
+  Exclude:
+    - 'spec/**/*'
+    - 'packages/*/spec/**/*'
+
+Rails/UnknownEnv:
+  Environments:
+    - development
+    - production
+    - staging
+    - test
+
+# RSpec/AlignLeftLetBrace:
+#   Enabled: false
+
+# RSpec/Capybara/FeatureMethods:
+#   Enabled: false
+
+# RSpec/ChangeByZero:
+#   Enabled: false # asking the impossible as there is not "and_not"
+
+# RSpec/ContextWording:
+#   Enabled: false
+
+# RSpec/DescribeClass:
+#   Exclude:
+#     - "**/spec/integration/**/*_spec.rb"
+#     - "**/spec/system/**/*_spec.rb"
+
+# RSpec/EmptyExampleGroup:
+#   Exclude:
+#     - '**/*_swagger_spec.rb'
+
+# # We're testing a JSON API, there have to be many lines per example.
+# RSpec/ExampleLength:
+#   Enabled: false
+
+# RSpec/ExpectChange:
+#   EnforcedStyle: block
+
+# RSpec/IndexedLet:
+#   Enabled: false
+
+# RSpec/LetSetup:
+#   Enabled: false
+
+# RSpec/MetadataStyle:
+#   Enabled: true
+#   EnforcedStyle: hash
+
+# # breaks our specs
+# RSpec/MatchArray:
+#   Enabled: false
+
+# RSpec/MessageSpies:
+#   Enabled: false
+
+# RSpec/MultipleExpectations:
+#   Max: 8
+#   Exclude:
+#     - "**/spec/system/**/*"
+
+# RSpec/MultipleMemoizedHelpers:
+#   Max: 10
+
+# RSpec/NestedGroups:
+#   Max: 4
+
+# RSpec/NoExpectationExample:
+#   Exclude:
+#     - packages/industry_orders/spec/services/rums/base_request_spec.rb
+
+# RSpec/PendingWithoutReason:
+#   Enabled: false
+
+# RSpec/Rails/InferredSpecType:
+#   Enabled: false
+
+# RSpec/ReceiveMessages:
+#   Enabled: false
+
+# RSpec/ScatteredSetup:
+#   Enabled: false
+
+# # It makes still sense to use constants in the RSpec.describe block for request specs,# but the naming does not match those since the files are called `*_request_spec.rb`
+# RSpec/SpecFilePathFormat:
+#   Exclude:
+#     - 'spec/requests/**/*'
+#     - 'packages/*/spec/requests/**/*'
+
+# RSpec/Rails/TravelAround:
+#   Enabled: false
+
+# RSpec/VariableName:
+#   Exclude:
+#     - '**/*_swagger_spec.rb'
+
+Style/AsciiComments:
+  Enabled: false
+
+Style/CommentedKeyword:
+  Enabled: false
+
+Style/DisableCopsWithinSourceCodeDirective:
+  Enabled: false
+  AllowedCops:
+    - Naming/MethodParameterName # bug, that's why we have to list this
+    - Style/InlineComment
+
+Style/Documentation:
+  Enabled: false
+
+Style/FetchEnvVar:
+  Enabled: false
+
+Style/FormatStringToken:
+  EnforcedStyle: template
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/HashSyntax:
+  Exclude:
+    - 'spec/**/*'
+    - 'packages/*/spec/**/*'
+
+Style/InlineComment:
+  Enabled: false
+
+Style/Lambda:
+  Enabled: false
+
+Style/MethodCallWithArgsParentheses:
+  AllowedMethods:
+    - debug # logger
+    - error # logger
+    - info # logger
+    - raise
+    - render
+    - warn # logger
+
+Style/NumericLiterals:
+  Enabled: false
+
+Style/PercentLiteralDelimiters:
+  PreferredDelimiters:
+    default: []
+    "%": []
+    "%i": []
+    "%q": []
+    "%Q": []
+    "%r": "{}"
+    "%s": []
+    "%w": []
+    "%W": []
+    "%x": []
+
+Style/QuotedSymbols:
+  Enabled: false
+
+Style/RaiseArgs:
+  EnforcedStyle: compact
+
+Style/RegexpLiteral:
+  Enabled: false
+
+Style/SelectByRegexp:
+  Enabled: false
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+  Enabled: true
+
+Style/TrailingCommaInArguments:
+  Enabled: false
+  EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInArrayLiteral:
+  Enabled: true
+  EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInBlockArgs:
+  Enabled: false
+  Safe: false
+
+Style/TrailingCommaInHashLiteral:
+  Enabled: true
+  EnforcedStyleForMultiline: comma
