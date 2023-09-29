@@ -328,6 +328,8 @@ GEM
     stimulus-rails (1.2.2)
       railties (>= 6.0.0)
     stringio (3.0.8)
+    strong_migrations (1.6.3)
+      activerecord (>= 5.2)
     thor (1.2.2)
     timeout (0.4.0)
     turbo-rails (1.4.0)
@@ -383,6 +385,7 @@ DEPENDENCIES
   rubocop-rspec (~> 2.6)
   sprockets-rails
   stimulus-rails
+  strong_migrations (~> 1.6)
   turbo-rails
   web-console
   webmock (~> 3.14)

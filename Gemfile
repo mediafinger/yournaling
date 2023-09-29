@@ -25,6 +25,7 @@ gem "rack-timeout", "~> 0.6", require: "rack/timeout/base" # set a custom timeou
 gem "redis", "~> 5.0" # Use Redis for Action Cable / Turbo-Reflex
 gem "sprockets-rails" # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "stimulus-rails" # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
+gem "strong_migrations", "~> 1.6" # Catch unsafe migrations in development
 gem "turbo-rails" # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
 
 group :development do
