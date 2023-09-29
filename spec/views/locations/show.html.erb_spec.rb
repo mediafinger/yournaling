@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "locations/show", type: :view do
-  let(:location) { FactoryBot.create(:location, name: "Remote spot", country: "de") }
+  let(:location) { FactoryBot.create(:location, name: "Remote spot", country_code: "de") }
 
   before do
     assign(:location, location)

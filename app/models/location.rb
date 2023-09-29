@@ -8,7 +8,7 @@
 class Location < ApplicationRecordYidEnabled
   YID_MODEL = "loc".freeze
 
-  validates :country, presence: true, inclusion: { in: EnglishCountriesForSelectService.call.keys }
+  validates :country_code, presence: true, inclusion: { in: EnglishCountriesForSelectService.call.keys }
   validates :lat, allow_nil: true, numericality: { greater_than_or_equal_to: -90.0, less_than_or_equal_to: 90.0 }
   validates :long, allow_nil: true, numericality: { greater_than_or_equal_to: -180.0, less_than_or_equal_to: 180.0 }
   validates :lat, presence: true, if: :long?

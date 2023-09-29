@@ -6,6 +6,7 @@ RSpec.describe "locations/index", type: :view do
       [
         Location.create!(
           address: "an address",
+          country_code: "de",
           lat: "9.99",
           long: "9.99",
           name: "a Name",
@@ -13,6 +14,7 @@ RSpec.describe "locations/index", type: :view do
         ),
         Location.create!(
           address: "an address",
+          country_code: "de",
           lat: "9.99",
           long: "9.99",
           name: "a Name",

@@ -22,7 +22,8 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_01_185110) do
     t.uuid "blob_id", null: false
     t.datetime "created_at", null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
-    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+    t.index %w[record_type record_id name blob_id], name: "index_active_storage_attachments_uniqueness",
+      unique: true
   end
 
   create_table "active_storage_blobs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -40,7 +41,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_01_185110) do
   create_table "active_storage_variant_records", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "blob_id", null: false
     t.string "variation_digest", null: false
-    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+    t.index %w[blob_id variation_digest], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
   create_table "good_job_batches", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -69,7 +70,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_01_185110) do
     t.datetime "finished_at"
     t.text "error"
     t.integer "error_event", limit: 2
-    t.index ["active_job_id", "created_at"], name: "index_good_job_executions_on_active_job_id_and_created_at"
+    t.index %w[active_job_id created_at], name: "index_good_job_executions_on_active_job_id_and_created_at"
   end
 
   create_table "good_job_processes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -107,29 +108,32 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_01_185110) do
     t.integer "executions_count"
     t.text "job_class"
     t.integer "error_event", limit: 2
-    t.index ["active_job_id", "created_at"], name: "index_good_jobs_on_active_job_id_and_created_at"
+    t.index %w[active_job_id created_at], name: "index_good_jobs_on_active_job_id_and_created_at"
     t.index ["batch_callback_id"], name: "index_good_jobs_on_batch_callback_id", where: "(batch_callback_id IS NOT NULL)"
     t.index ["batch_id"], name: "index_good_jobs_on_batch_id", where: "(batch_id IS NOT NULL)"
     t.index ["concurrency_key"], name: "index_good_jobs_on_concurrency_key_when_unfinished", where: "(finished_at IS NULL)"
-    t.index ["cron_key", "created_at"], name: "index_good_jobs_on_cron_key_and_created_at"
-    t.index ["cron_key", "cron_at"], name: "index_good_jobs_on_cron_key_and_cron_at", unique: true
-    t.index ["finished_at"], name: "index_good_jobs_jobs_on_finished_at", where: "((retried_good_job_id IS NULL) AND (finished_at IS NOT NULL))"
-    t.index ["priority", "created_at"], name: "index_good_jobs_jobs_on_priority_created_at_when_unfinished", order: { priority: "DESC NULLS LAST" }, where: "(finished_at IS NULL)"
-    t.index ["queue_name", "scheduled_at"], name: "index_good_jobs_on_queue_name_and_scheduled_at", where: "(finished_at IS NULL)"
+    t.index %w[cron_key created_at], name: "index_good_jobs_on_cron_key_and_created_at"
+    t.index %w[cron_key cron_at], name: "index_good_jobs_on_cron_key_and_cron_at", unique: true
+    t.index ["finished_at"], name: "index_good_jobs_jobs_on_finished_at",
+      where: "((retried_good_job_id IS NULL) AND (finished_at IS NOT NULL))"
+    t.index %w[priority created_at], name: "index_good_jobs_jobs_on_priority_created_at_when_unfinished",
+      order: { priority: "DESC NULLS LAST" }, where: "(finished_at IS NULL)"
+    t.index %w[queue_name scheduled_at], name: "index_good_jobs_on_queue_name_and_scheduled_at",
+      where: "(finished_at IS NULL)"
     t.index ["scheduled_at"], name: "index_good_jobs_on_scheduled_at", where: "(finished_at IS NULL)"
   end
 
   create_table "locations", primary_key: "yid", id: :string, force: :cascade do |t|
     t.text "address"
-    t.string "country", null: false
+    t.string "country_code", null: false
     t.decimal "lat", precision: 12, scale: 9
     t.decimal "long", precision: 12, scale: 9
     t.string "name"
     t.text "link"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["country"], name: "index_locations_on_country"
-    t.index ["lat", "long"], name: "index_locations_on_lat_and_long"
+    t.index ["country_code"], name: "index_locations_on_country_code"
+    t.index %w[lat long], name: "index_locations_on_lat_and_long"
   end
 
   create_table "members", primary_key: "yid", id: :string, force: :cascade do |t|
@@ -138,7 +142,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_01_185110) do
     t.datetime "updated_at", null: false
     t.string "team_yid", null: false
     t.string "user_yid", null: false
-    t.index ["team_yid", "user_yid"], name: "index_members_on_team_yid_and_user_yid", unique: true
+    t.index %w[team_yid user_yid], name: "index_members_on_team_yid_and_user_yid", unique: true
     t.index ["user_yid"], name: "index_members_on_user_yid"
   end
 
