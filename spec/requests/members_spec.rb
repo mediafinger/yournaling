@@ -60,7 +60,7 @@ RSpec.describe "/members", type: :request do
       it "creates a new Member" do
         expect {
           post members_url, params: { member: valid_attributes }
-        }.to change(Member, :count).by(1)
+        }.to change { Member.count }.by(1)
       end
 
       it "redirects to the created member" do
@@ -73,7 +73,7 @@ RSpec.describe "/members", type: :request do
       it "does not create a new Member" do
         expect {
           post members_url, params: { member: invalid_attributes }
-        }.to change(Member, :count).by(0)
+        }.to change { Member.count }.by(0)
       end
 
       it "renders a response with 422 status (i.e. to display the 'new' template)" do
@@ -118,7 +118,7 @@ RSpec.describe "/members", type: :request do
       member = Member.create! valid_attributes
       expect {
         delete member_url(member)
-      }.to change(Member, :count).by(-1)
+      }.to change { Member.count }.by(-1)
     end
 
     it "redirects to the members list" do

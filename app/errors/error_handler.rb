@@ -77,7 +77,7 @@ module ErrorHandler
   def render_error_view(code:, status:, message:)
     # rendered_message = AppConf.production_env ? ERROR_DEFAULTS[:message] : message
 
-    render "pages/error", locals: { code: code, message: message, status: status }, status: status
+    render "pages/error", locals: { code:, message:, status: }, status:
   end
 
   def log_error(error, original_error: nil)
@@ -108,7 +108,7 @@ module ErrorHandler
 
     cleaner = ActiveSupport::BacktraceCleaner.new
     cleaner.add_filter   { |line| line.gsub(Rails.root.to_s, "") } # strip the Rails.root prefix
-    cleaner.add_silencer { |line| /gems/.match?(line) } # skip any lines from gems, including rails
+    cleaner.add_silencer { |line| line.include?("gems") } # skip any lines from gems, including rails
     cleaner.clean(error.backtrace) # perform the cleanup
   end
 end

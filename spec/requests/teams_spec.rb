@@ -60,7 +60,7 @@ RSpec.describe "/teams", type: :request do
       it "creates a new Team" do
         expect {
           post teams_url, params: { team: valid_attributes }
-        }.to change(Team, :count).by(1)
+        }.to change { Team.count }.by(1)
       end
 
       it "redirects to the created team" do
@@ -73,7 +73,7 @@ RSpec.describe "/teams", type: :request do
       it "does not create a new Team" do
         expect {
           post teams_url, params: { team: invalid_attributes }
-        }.to change(Team, :count).by(0)
+        }.to change { Team.count }.by(0)
       end
 
       it "renders a response with 422 status (i.e. to display the 'new' template)" do
@@ -118,7 +118,7 @@ RSpec.describe "/teams", type: :request do
       team = Team.create! valid_attributes
       expect {
         delete team_url(team)
-      }.to change(Team, :count).by(-1)
+      }.to change { Team.count }.by(-1)
     end
 
     it "redirects to the teams list" do

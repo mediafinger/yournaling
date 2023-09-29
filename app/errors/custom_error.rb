@@ -9,6 +9,7 @@
 class CustomError < StandardError
   attr_reader :backtrace, :code, :id, :message, :status
 
+  # rubocop:disable Lint/MissingSuper
   def initialize(message = nil, status: nil, code: nil, id: nil, backtrace: nil)
     @message = message || "Sorry, something went wrong."
     @status = status || 500
@@ -16,6 +17,7 @@ class CustomError < StandardError
     @id = id || SecureRandom.uuid
     @backtrace = backtrace || []
   end
+  # rubocop:enable Lint/MissingSuper
 
   def to_s
     "#{code} #{message}"

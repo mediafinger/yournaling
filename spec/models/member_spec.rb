@@ -34,7 +34,7 @@ RSpec.describe Member, type: :model do
       end
 
       context "when valid" do
-        it "is idempotent, adds the role only once", :aggregated_failures do
+        it "is idempotent, adds the role only once", aggregated_failures: true do
           expect(member.add_role(valid_role)).to be_truthy
 
           member.add_role(valid_role)
@@ -53,7 +53,7 @@ RSpec.describe Member, type: :model do
 
     describe "#add_role!" do
       context "when valid" do
-        it "is idempotent, adds the role only once", :aggregated_failures do
+        it "is idempotent, adds the role only once", aggregated_failures: true do
           expect(member.add_role!(valid_role)).to be_truthy
 
           member.add_role!(valid_role)
@@ -118,7 +118,7 @@ RSpec.describe Member, type: :model do
     # direct usage is discouraged, has to work properly nevertheless
     describe "#roles=" do
       context "when valid" do
-        it "works as expected", :aggregated_failures do
+        it "works as expected", aggregated_failures: true do
           member.roles = Array(valid_role)
 
           expect(member.save!).to be_truthy

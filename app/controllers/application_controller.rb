@@ -57,10 +57,10 @@ class ApplicationController < ActionController::Base
 
     flash.delete(:html_safe)
 
-    flash[:notice] = if flash[:notice].is_a?(Array)
-                      flash[:notice].map(&:html_safe)
-                    else
-                      flash[:notice].html_safe
-                    end
+    flash[:notice] = if flash[:notice].is_a?(Array) # rubocop:disable Rails/ActionControllerFlashBeforeRender
+                       flash[:notice].map(&:html_safe)
+                     else
+                       flash[:notice].html_safe # rubocop:disable Rails/OutputSafety
+                     end
   end
 end

@@ -8,10 +8,10 @@ class UserCreateContract < ApplicationContract
   rule(:email).validate(:email)
 
   rule(:name) do
-    key.failure("name between 3 and 255 characters required") if key? && !(3..255).include?(value.length)
+    key.failure("name between 3 and 255 characters required") if key? && !(3..255).cover?(value.length)
   end
 
   rule(:password) do
-    key.failure("password between 10 and 72 characters required") if key? && !(10..72).include?(value.length)
+    key.failure("password between 10 and 72 characters required") if key? && !(10..72).cover?(value.length)
   end
 end
