@@ -7,6 +7,7 @@ if %w(development test).include? Rails.env
   require "active_record_doctor/rake/task"
   require "bundler/audit/task"
   require "rspec/core/rake_task"
+  require "rubocop/rake_task"
 
   # setup task bundle:audit
   Bundler::Audit::Task.new
@@ -57,8 +58,12 @@ if %w(development test).include? Rails.env
     end
   end
 
+  RuboCop::RakeTask.new do |task|
+    task.requires << "rubocop-rails"
+  end
+
   desc "Run test suite"
-  task ci: %w(factory_bot:awesome_lint db:doctor rspec bundle:audit:update bundle:audit)
+  task ci: %w(rubocop factory_bot:awesome_lint db:doctor rspec bundle:audit:update bundle:audit)
 
   task default: :ci
 end
