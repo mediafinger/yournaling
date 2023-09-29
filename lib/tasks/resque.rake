@@ -1,7 +1,8 @@
 require "resque"
 require "resque/tasks"
 # require "resque/scheduler/tasks"
-# require_relative Rails.root.join + "config/application" # Include this line if you want your workers to have access to your application
+# Include this line if you want your workers to have access to your application:
+# require_relative Rails.root.join + "config/application"
 
 desc "Resque setup"
 task "resque:setup" => :environment

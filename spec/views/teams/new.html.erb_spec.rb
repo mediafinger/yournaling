@@ -11,7 +11,6 @@ RSpec.describe "teams/new", type: :view do
     render
 
     assert_select "form[action=?][method=?]", teams_path, "post" do
-
       assert_select "input[name=?]", "team[name]"
     end
   end

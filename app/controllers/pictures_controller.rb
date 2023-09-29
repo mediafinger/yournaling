@@ -1,8 +1,8 @@
 class PicturesController < ApplicationController
-  before_action :set_picture, only: %i[ show edit update destroy ]
+  before_action :set_picture, only: %i[show edit update destroy]
 
   def index
-    @pictures = Picture.all.order(created_at: :desc)
+    @pictures = Picture.order(created_at: :desc)
   end
 
   def show

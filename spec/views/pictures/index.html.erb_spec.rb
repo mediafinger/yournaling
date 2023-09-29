@@ -1,7 +1,7 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe "pictures/index", type: :view do
-  before(:each) do
+  before do
     assign(:pictures,
       [
         FactoryBot.create(:picture, :with_image, name: "test-pic"),

@@ -108,7 +108,7 @@ class AppConf
   # Logs & Logging
   register :log_level, default: if is?(:debug, true)
                                   :debug
-                                elsif is?(:environment, :development)
+                                elsif is?(:environment, :development) # rubocop:disable Lint/DuplicateBranch
                                   :debug
                                 elsif is?(:environment, :test)
                                   :warn

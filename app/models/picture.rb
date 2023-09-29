@@ -17,7 +17,7 @@ class Picture < ApplicationRecordYidEnabled
   # and converted to .webp with a quality of 90% *before* being saved to disk.
   #
   validates :file, presence: true, image: { # this is after the original image has been resized and converted to webp
-    content_type: %w[image/webp], size_range: (150.kilobytes..6.megabytes)
+    content_type: %w[image/webp], size_range: ((150.kilobytes)..(6.megabytes))
   } # this uses the custom ImageValidator
   validates :name, allow_blank: true, length: { maximum: 255 }
 
@@ -34,7 +34,7 @@ class Picture < ApplicationRecordYidEnabled
   end
 
   def create_variant(max_width:, max_height:, quality: 80, format: :webp)
-    file.variant(resize_to_limit: [max_width, max_height], format: format, saver: { quality: quality }).processed
+    file.variant(resize_to_limit: [max_width, max_height], format:, saver: { quality: }).processed
   end
 
   def kilobytes

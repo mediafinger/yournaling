@@ -2,14 +2,11 @@ require "rails_helper"
 
 RSpec.describe "teams/index", type: :view do
   before do
-    assign(:teams, [
-      Team.create!(
-        name: Faker::Name.name
-      ),
-      Team.create!(
-        name: Faker::Name.name
-      )
-    ])
+    assign(:teams,
+      [
+        Team.create!(name: Faker::Name.name),
+        Team.create!(name: Faker::Name.name),
+      ])
   end
 
   it "renders a list of teams" do

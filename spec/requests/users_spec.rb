@@ -60,7 +60,7 @@ RSpec.describe "/users", type: :request do
       it "creates a new User" do
         expect {
           post users_url, params: { user: valid_attributes }
-        }.to change(User, :count).by(1)
+        }.to change { User.count }.by(1)
       end
 
       it "redirects to the created user" do
@@ -73,7 +73,7 @@ RSpec.describe "/users", type: :request do
       it "does not create a new User" do
         expect {
           post users_url, params: { user: invalid_attributes }
-        }.to change(User, :count).by(0)
+        }.to change { User.count }.by(0)
       end
 
       it "renders a response with 422 status (i.e. to display the 'new' template)" do
@@ -110,7 +110,6 @@ RSpec.describe "/users", type: :request do
         patch user_url(user), params: { user: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_entity)
       end
-
     end
   end
 
@@ -119,7 +118,7 @@ RSpec.describe "/users", type: :request do
       user = User.create! valid_attributes
       expect {
         delete user_url(user)
-      }.to change(User, :count).by(-1)
+      }.to change { User.count }.by(-1)
     end
 
     it "redirects to the users list" do
