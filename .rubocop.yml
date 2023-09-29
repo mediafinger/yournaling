@@ -66,6 +66,8 @@ Layout/LineContinuationLeadingSpace:
 
 Layout/LineLength:
   Max: 125
+  Exclude:
+    - "**/db/migrate/*.rb"
 
 Layout/MultilineMethodCallBraceLayout:
   Enabled: false
