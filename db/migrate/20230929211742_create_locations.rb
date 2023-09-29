@@ -1,6 +1,6 @@
 class CreateLocations < ActiveRecord::Migration[7.0]
   def change
-    create_table :locations, primary_key: "yid", id: :string, force: :cascade do |t|
+    create_table :locations, primary_key: "yid", id: :string do |t|
       t.text :address
       t.string :country_code, null: false
       t.decimal :lat, precision: 12, scale: 9

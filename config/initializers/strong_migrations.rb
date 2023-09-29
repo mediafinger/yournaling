@@ -14,6 +14,8 @@ StrongMigrations.auto_analyze = true
 # so the right checks are run in development
 StrongMigrations.target_version = 15
 
+StrongMigrations.check_down = true
+
 # Add custom checks
 # StrongMigrations.add_check do |method, args|
 #   if method == :add_index && args[0].to_s == "users"

@@ -6,7 +6,7 @@
 # the idea is to usually have enough information to be able to display the location on a map
 
 class Location < ApplicationRecordYidEnabled
-  YID_MODEL = "loc".freeze
+  YID_CODE = "loc".freeze
 
   validates :country_code, presence: true, inclusion: { in: EnglishCountriesForSelectService.call.keys }
   validates :lat, allow_nil: true, numericality: { greater_than_or_equal_to: -90.0, less_than_or_equal_to: 90.0 }
