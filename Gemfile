@@ -12,6 +12,7 @@ gem "bootsnap", require: false
 # gem "chimera_http_client", "~> 1.3" # HTTP client based on Typhoeus / lib_curl
 gem "dry-validation", "~> 1.10" # Use dry-validation for validations [https://dry-rb.org/gems/dry-validation]
 # gem "exifr", "~> 1.3" # Read EXIF metadata from JPEG images
+gem "good_job" # Use good_job as active_job backend for a simpler setup with queueing in postgres
 gem "image_processing", "~> 1.12" # Use image_processing for image resizing in ActiveStorage variants
 gem "importmap-rails" # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
 # gem "logstasher" # better formatted JSON logs for Logstash
@@ -22,7 +23,6 @@ gem "puma", "~> 6.3"
 gem "rack-requestid", "~> 0.2" # always set a request_id with this middleware
 gem "rack-timeout", "~> 0.6", require: "rack/timeout/base" # set a custom timeout in the middleware
 gem "redis", "~> 5.0" # Use Redis for Action Cable / Turbo-Reflex
-gem "resque", "~> 2.4" # Use Resque for background jobs
 gem "sprockets-rails" # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "stimulus-rails" # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
 gem "turbo-rails" # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]

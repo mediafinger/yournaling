@@ -37,22 +37,31 @@ ActiveRecordDoctor.configure do
     "User.temp_auth_token", # for some reason DB Doctor complains about a (non) existing validation on this column?!
   ]
 
-  detector :short_primary_key_type, ignore_tables: %w(
+  detector :missing_foreign_keys, ignore_columns: %w[
+    good_jobs.active_job_id
+    good_jobs.batch_callback_id
+    good_jobs.batch_id
+    good_jobs.retried_good_job_id
+  ]
+
+  detector :missing_presence_validation, ignore_attributes: %w[
+    GoodJob::Job.id
+  ]
+
+  detector :short_primary_key_type, ignore_tables: %w[
     members
     pictures
     teams
     users
-  )
+  ]
 
-  detector :undefined_table_references, ignore_models: [
-    "ApplicationRecordYidEnabled",
+  detector :undefined_table_references, ignore_models: %w[
+    ApplicationRecordYidEnabled,
+    GoodJob::DiscreteExecution
   ]
 
   # # Ignore indexes that are not used in the application
-  # detector :unindexed_foreign_keys, ignore_columns: %w(
-  #   good_jobs.active_job_id
-  #   good_jobs.batch_callback_id
-  #   good_jobs.batch_id
-  #   good_jobs.retried_good_job_id
-  # )
+  detector :unindexed_foreign_keys, ignore_columns: %w[
+    good_jobs.retried_good_job_id
+  ]
 end
