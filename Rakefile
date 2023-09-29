@@ -2,7 +2,7 @@ require_relative "config/application"
 
 Rails.application.load_tasks
 
-if %w(development test).include? Rails.env
+if %w[development test].include? Rails.env
   require "active_record_doctor"
   require "active_record_doctor/rake/task"
   require "bundler/audit/task"
@@ -63,7 +63,7 @@ if %w(development test).include? Rails.env
   end
 
   desc "Run test suite"
-  task ci: %w(rubocop factory_bot:awesome_lint db:doctor rspec bundle:audit:update bundle:audit)
+  task ci: %w[rubocop factory_bot:awesome_lint db:doctor rspec bundle:audit:update bundle:audit]
 
   task default: :ci
 end

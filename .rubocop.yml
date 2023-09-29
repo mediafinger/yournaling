@@ -1,10 +1,10 @@
 require:
-  # - rubocop-rspec
   - rubocop-rails
-  # - rubocop-factory_bot
-  # - rubocop-faker
-  # - rubocop-performance
-  # - rubocop-rake
+  - rubocop-rspec
+  - rubocop-factory_bot
+  - rubocop-faker
+  - rubocop-performance
+  - rubocop-rake
 
 AllCops:
   TargetRubyVersion: 3.2
@@ -27,14 +27,14 @@ AllCops:
 
 ################ When adding a new rule, please keep the list in alphabetical order ################
 
-# FactoryBot/CreateList:
-#   Enabled: false
+FactoryBot/CreateList:
+  Enabled: false
 
-# FactoryBot/FactoryAssociationWithStrategy:
-#   Enabled: false
+FactoryBot/FactoryAssociationWithStrategy:
+  Enabled: false
 
-# FactoryBot/SyntaxMethods:
-#   Enabled: false
+FactoryBot/SyntaxMethods:
+  Enabled: false
 
 Lint/AmbiguousOperatorPrecedence:
   Enabled: false
@@ -95,8 +95,11 @@ Naming/MethodParameterName:
 Naming/VariableNumber:
   Enabled: false
 
-# Performance/Casecmp:
-#   Enabled: false
+Performance/Casecmp:
+  Enabled: false
+
+Rails/I18nLocaleTexts:
+  Enabled: false # for now
 
 Rails/NegateInclude:
   Enabled: false
@@ -122,93 +125,95 @@ Rails/UnknownEnv:
     - staging
     - test
 
-# RSpec/AlignLeftLetBrace:
-#   Enabled: false
+RSpec/AlignLeftLetBrace:
+  Enabled: false
 
-# RSpec/Capybara/FeatureMethods:
-#   Enabled: false
+RSpec/Capybara/FeatureMethods:
+  Enabled: false
 
-# RSpec/ChangeByZero:
-#   Enabled: false # asking the impossible as there is not "and_not"
+RSpec/ChangeByZero:
+  Enabled: false # asking the impossible as there is not "and_not"
 
-# RSpec/ContextWording:
-#   Enabled: false
+RSpec/ContextWording:
+  Enabled: false
 
-# RSpec/DescribeClass:
-#   Exclude:
-#     - "**/spec/integration/**/*_spec.rb"
-#     - "**/spec/system/**/*_spec.rb"
+RSpec/DescribeClass:
+  Exclude:
+    - "**/spec/integration/**/*_spec.rb"
+    - "**/spec/system/**/*_spec.rb"
 
-# RSpec/EmptyExampleGroup:
-#   Exclude:
-#     - '**/*_swagger_spec.rb'
+RSpec/EmptyExampleGroup:
+  Exclude:
+    - '**/*_swagger_spec.rb'
 
-# # We're testing a JSON API, there have to be many lines per example.
-# RSpec/ExampleLength:
-#   Enabled: false
+RSpec/ExampleLength:
+  Enabled: false
 
-# RSpec/ExpectChange:
-#   EnforcedStyle: block
+RSpec/ExpectChange:
+  EnforcedStyle: block
 
-# RSpec/IndexedLet:
-#   Enabled: false
+RSpec/IndexedLet:
+  Enabled: false
 
-# RSpec/LetSetup:
-#   Enabled: false
+RSpec/LetSetup:
+  Enabled: false
 
-# RSpec/MetadataStyle:
-#   Enabled: true
-#   EnforcedStyle: hash
+RSpec/MetadataStyle:
+  Enabled: true
+  EnforcedStyle: hash
 
-# # breaks our specs
-# RSpec/MatchArray:
-#   Enabled: false
+# breaks our specs
+RSpec/MatchArray:
+  Enabled: false
 
-# RSpec/MessageSpies:
-#   Enabled: false
+RSpec/MessageSpies:
+  Enabled: false
 
-# RSpec/MultipleExpectations:
-#   Max: 8
-#   Exclude:
-#     - "**/spec/system/**/*"
+RSpec/MultipleExpectations:
+  Max: 8
+  Exclude:
+    - "**/spec/system/**/*"
 
-# RSpec/MultipleMemoizedHelpers:
-#   Max: 10
+RSpec/MultipleMemoizedHelpers:
+  Max: 10
 
-# RSpec/NestedGroups:
-#   Max: 4
+RSpec/NestedGroups:
+  Max: 4
 
-# RSpec/NoExpectationExample:
-#   Exclude:
-#     - packages/industry_orders/spec/services/rums/base_request_spec.rb
+RSpec/NoExpectationExample:
+  Exclude:
+    - packages/industry_orders/spec/services/rums/base_request_spec.rb
 
-# RSpec/PendingWithoutReason:
-#   Enabled: false
+RSpec/PendingWithoutReason:
+  Enabled: false
 
-# RSpec/Rails/InferredSpecType:
-#   Enabled: false
+RSpec/Rails/InferredSpecType:
+  Enabled: false
 
-# RSpec/ReceiveMessages:
-#   Enabled: false
+RSpec/ReceiveMessages:
+  Enabled: false
 
-# RSpec/ScatteredSetup:
-#   Enabled: false
+RSpec/ScatteredSetup:
+  Enabled: false
 
-# # It makes still sense to use constants in the RSpec.describe block for request specs,# but the naming does not match those since the files are called `*_request_spec.rb`
-# RSpec/SpecFilePathFormat:
-#   Exclude:
-#     - 'spec/requests/**/*'
-#     - 'packages/*/spec/requests/**/*'
+RSpec/SpecFilePathFormat:
+  Exclude:
+    - 'spec/requests/**/*'
+    - 'packages/*/spec/requests/**/*'
 
-# RSpec/Rails/TravelAround:
-#   Enabled: false
+RSpec/Rails/TravelAround:
+  Enabled: false
 
-# RSpec/VariableName:
-#   Exclude:
-#     - '**/*_swagger_spec.rb'
+RSpec/VariableName:
+  Exclude:
+    - '**/*_swagger_spec.rb'
 
 Style/AsciiComments:
   Enabled: false
+
+Style/BlockDelimiters:
+  Exclude:
+    - "**/*_spec.rb"
 
 Style/CommentedKeyword:
   Enabled: false
@@ -220,6 +225,9 @@ Style/DisableCopsWithinSourceCodeDirective:
     - Style/InlineComment
 
 Style/Documentation:
+  Enabled: false
+
+Style/EmptyMethod:
   Enabled: false
 
 Style/FetchEnvVar:
@@ -254,18 +262,18 @@ Style/MethodCallWithArgsParentheses:
 Style/NumericLiterals:
   Enabled: false
 
-Style/PercentLiteralDelimiters:
-  PreferredDelimiters:
-    default: []
-    "%": []
-    "%i": []
-    "%q": []
-    "%Q": []
-    "%r": "{}"
-    "%s": []
-    "%w": []
-    "%W": []
-    "%x": []
+# Style/PercentLiteralDelimiters:
+#   PreferredDelimiters:
+#     default: []
+#     "%": []
+#     "%i": []
+#     "%q": []
+#     "%Q": []
+#     "%r": "{}"
+#     "%s": []
+#     "%w": []
+#     "%W": []
+#     "%x": []
 
 Style/QuotedSymbols:
   Enabled: false
