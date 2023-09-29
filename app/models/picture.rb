@@ -10,7 +10,7 @@ class Picture < ApplicationRecordYidEnabled
 
   ALLOWED_IMAGE_TYPES = %w[gif jpg jpeg png tiff webp].freeze
   ALLOWED_CONTENT_TYPES = ALLOWED_IMAGE_TYPES.map { |type| "image/#{type}" }.freeze
-  YID_MODEL = "pic".freeze
+  YID_CODE = "pic".freeze
 
   # NOTE
   # In PicturesController#create the uploaded files are resized (downsized) to to max of 4000x3000

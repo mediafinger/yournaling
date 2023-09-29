@@ -1,4 +1,13 @@
-# TODO: clear DB before populating it
+# clear DB before populating it
+[
+  User,
+  Team,
+  Member,
+].each do |m|
+  ActiveRecord::Base.connection.execute("TRUNCATE TABLE #{m.table_name} RESTART IDENTITY CASCADE;")
+end
+
+# create records
 
 andy = User.create!(email: "andy@example.com", password: "foobar1234", name: "Andy")
 dodo = User.create!(email: "dodo@example.com", password: "foobar1234", name: "Dodo")

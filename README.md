@@ -24,7 +24,7 @@ YID are:
 YID are constructed like this:
 
 * `photo_2023-02-26T09:20:20.075800Z_6511ee876a86`
-* `object.klass::YID_MODEL_object.created_at.utc.iso8601(6)_SecureRandom.hex(6)`
+* `object.klass::YID_CODE_object.created_at.utc.iso8601(6)_SecureRandom.hex(6)`
 * _Be aware that the "random" UUID part (everything after the 2nd `_`) is rather short and like this not good enough to be used as standalone UUID._
 
 > YID creation is slow compared to integer IDs or UUIDs, they are long and comparing them is more costly than comparing UUIDs. Their benefits are that they directly reveal the type of object (which is a massive bonus when debugging or sharing object identifiers) and that they are sortable at every moment, without additional database queries (which can speed up the app a lot).

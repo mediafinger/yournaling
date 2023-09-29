@@ -1,5 +1,5 @@
 class Team < ApplicationRecordYidEnabled
-  YID_MODEL = "team".freeze
+  YID_CODE = "team".freeze
 
   has_many :members, class_name: "Member", foreign_key: "team_yid", inverse_of: :team, dependent: :destroy
   has_many :users, through: :members

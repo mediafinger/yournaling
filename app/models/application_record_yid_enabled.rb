@@ -4,6 +4,25 @@ class ApplicationRecordYidEnabled < ApplicationRecord
 
   before_create :set_yid_and_timestamps
 
+  class << self
+    def fynd(yid)
+      yid_code_models[yid.split("_").first].find_by(yid:)
+    end
+
+    # rubocop:disable Style/ClassVars
+    def yid_code_models
+      @@yid_code_models ||= yid_enabled_models.each_with_object({}) do |model, hash|
+        hash[model::YID_CODE] = model.name.constantize
+      end
+    end
+
+    def yid_enabled_models
+      # here be dragons
+      @@descendants ||= Rails.application.eager_load! || descendants
+    end
+    # rubocop:enable Style/ClassVars
+  end
+
   private
 
   def decode_from_slug(slug)
@@ -15,7 +34,7 @@ class ApplicationRecordYidEnabled < ApplicationRecord
   end
 
   def generate_yid
-    "#{self.class::YID_MODEL}_#{now_timestamp}_#{SecureRandom.hex(6)}"
+    "#{self.class::YID_CODE}_#{now_timestamp}_#{SecureRandom.hex(6)}"
   end
 
   def now_timestamp

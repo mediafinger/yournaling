@@ -1,6 +1,6 @@
 class User < ApplicationRecordYidEnabled
   SEPARATOR = "::".freeze
-  YID_MODEL = "user".freeze
+  YID_CODE = "user".freeze
 
   has_secure_password :password, validations: false
 
