@@ -22,6 +22,14 @@
           <li><%= link_to "Members", members_path, role: active_path?(members_path) ? "button" : nil %></li>
         </ul>
 
+        <% if current_user %>
+        <ul>
+          <li>
+            <%= button_to "Logout #{current_user.name}", { controller: :sessions, action: :destroy }, { method: :delete, role: "link", class: "logout" } %>
+          </li>
+        </ul>
+        <% end %>
+
         <ul>
           <li>
           <% if active_path?(pictures_path) %>

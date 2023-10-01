@@ -6,7 +6,11 @@ Rails.application.routes.draw do
 
   root to: "pages#home"
 
-  get "/pictures_only/:id", to: "pictures_only#show", as: "picture_only"
+  get "login", to: "sessions#new"
+  post "login", to: "sessions#create"
+  delete "logout", to: "sessions#destroy"
+
+  get "/pictures_only/:id", to: "pictures_only#show", as: "picture_only" # TODO: replace :id (YID) with urlsafe_id ?!
 
   # catch all unknown routes to NOT throw a FATAL ActionController::RoutingError
   match "*path", to: "application#error_404", via: :all,
