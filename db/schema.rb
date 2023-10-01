@@ -131,6 +131,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_01_185110) do
 
   create_table "pictures", primary_key: "yid", id: :string, force: :cascade do |t|
     t.string "name"
+    t.date "date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

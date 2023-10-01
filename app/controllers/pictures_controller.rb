@@ -18,7 +18,8 @@ class PicturesController < ApplicationController
   def create
     @picture = Picture.new(
       file: ImageUploadConversionService.call(file: picture_params[:file], name: picture_params[:name]),
-      name: picture_params[:name] # looks redundant, but image filename is parameterized
+      name: picture_params[:name], # looks redundant, but image filename is parameterized
+      date: picture_params[:date],
     )
 
     if @picture.save
@@ -49,6 +50,6 @@ class PicturesController < ApplicationController
 
   # switch to dry-validation / dry-contract
   def picture_params
-    params.require(:picture).permit(:name, :file)
+    params.require(:picture).permit(:file, :date, :name)
   end
 end
