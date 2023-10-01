@@ -44,7 +44,7 @@ class PicturesController < ApplicationController
   private
 
   def set_picture
-    @picture = Picture.find(params[:id])
+    @picture = Picture.urlsafe_find(params[:id])
   end
 
   # switch to dry-validation / dry-contract

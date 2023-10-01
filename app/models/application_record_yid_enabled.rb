@@ -9,6 +9,10 @@ class ApplicationRecordYidEnabled < ApplicationRecord
       yid_code_models[yid.split("_").first].find_by(yid:)
     end
 
+    def urlsafe_find(urlsafe_id)
+      find(Base64.urlsafe_decode64(urlsafe_id))
+    end
+
     # rubocop:disable Style/ClassVars
     def yid_code_models
       @@yid_code_models ||= yid_enabled_models.each_with_object({}) do |model, hash|
@@ -23,15 +27,25 @@ class ApplicationRecordYidEnabled < ApplicationRecord
     # rubocop:enable Style/ClassVars
   end
 
+  # NOTE: overwriting ActiveRecord functionality!!
+  # to have our urlsafe / Base64 encoded YID in the URLs, instead of the plain-text YID
+  #
+  def to_param
+    return nil unless persisted?
+
+    urlsafe_id
+  end
+
+  # or use OpenSSL::Cipher::AES128 or similar to encode from / decode to yid
+  def urlsafe_id
+    Base64.urlsafe_encode64(yid, padding: false)
+  end
+
+  def to_yid(urlsafe_id)
+    Base64.urlsafe_decode64(urlsafe_id)
+  end
+
   private
-
-  def decode_from_slug(slug)
-    # use OpenSSL::Cipher::AES128 or similar to decode to yid
-  end
-
-  def encode_to_slug
-    # use OpenSSL::Cipher::AES128 or similar to encode yid
-  end
 
   def generate_yid
     "#{self.class::YID_CODE}_#{now_timestamp}_#{SecureRandom.hex(6)}"
