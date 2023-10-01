@@ -41,10 +41,12 @@ ActiveRecordDoctor.configure do
     good_jobs.active_job_id
     good_jobs.batch_callback_id
     good_jobs.batch_id
+    good_job_executions.active_job_id
     good_jobs.retried_good_job_id
   ]
 
   detector :missing_presence_validation, ignore_attributes: %w[
+    GoodJob::DiscreteExecution.active_job_id
     GoodJob::Job.id
   ]
 
