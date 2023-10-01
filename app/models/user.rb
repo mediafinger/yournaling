@@ -7,6 +7,10 @@ class User < ApplicationRecordYidEnabled
   has_many :memberships, class_name: "Member", foreign_key: "user_yid", inverse_of: :user, dependent: :destroy
   has_many :teams, through: :memberships
 
+  normalizes :email, with: ->(email) { email.strip.downcase }
+  normalizes :name, with: ->(name) { name.strip }
+  normalizes :nickname, with: ->(nickname) { nickname.strip }
+
   validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP, message: "not valid" }
   validates :password, length: { in: 10..72 }, on: %i[create reset_password] # 72 is a has_secure_password limitation
   validates :password_digest, presence: true

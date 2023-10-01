@@ -14,6 +14,8 @@ class Picture < ApplicationRecordYidEnabled
   MIN_BYTE_SIZE = 150.kilobytes.freeze
   YID_CODE = "pic".freeze
 
+  normalizes :name, with: ->(name) { name.strip }
+
   # NOTE
   # In PicturesController#create the uploaded files are resized (downsized) to to max of 4000x3000
   # and converted to .webp with a quality of 90% with the ImageUploadConversionService
