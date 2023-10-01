@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe "users/new", type: :view do
   let(:user) { FactoryBot.build(:user) }
 

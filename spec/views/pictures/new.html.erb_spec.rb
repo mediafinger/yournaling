@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe "pictures/new", type: :view do
   before do
     assign(:picture, Picture.new(

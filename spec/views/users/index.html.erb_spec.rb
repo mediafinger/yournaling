@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe "users/index", type: :view do
   let(:users) { FactoryBot.create_list(:user, 2) }
 

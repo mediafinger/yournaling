@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.shared_examples "has_role?" do |role|
   it "#{role}? returns true when role #{role} is set" do
     member.add_role(role.to_sym)

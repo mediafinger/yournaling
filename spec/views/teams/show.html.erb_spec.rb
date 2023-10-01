@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe "teams/show", type: :view do
   before do
     assign(:team, Team.create!(

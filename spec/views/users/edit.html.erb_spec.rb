@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe "users/edit", type: :view do
   let(:user) { FactoryBot.create(:user) }
 

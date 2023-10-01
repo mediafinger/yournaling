@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe "404 request spec", type: :request do
   describe "GET /unknown" do
     it "returns an error" do

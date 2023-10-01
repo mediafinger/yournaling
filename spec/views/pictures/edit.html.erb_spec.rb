@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe "pictures/edit", type: :view do
   let(:picture) { FactoryBot.create(:picture, :with_image) }
 

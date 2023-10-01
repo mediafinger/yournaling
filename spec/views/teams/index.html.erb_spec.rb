@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe "teams/index", type: :view do
   before do
     assign(:teams,
