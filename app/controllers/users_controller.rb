@@ -49,7 +49,7 @@ class UsersController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_user
-    @user = User.find(params[:id])
+    @user = User.urlsafe_find(params[:id])
   end
 
   # TODO: extract user#password handling to extra endpoint

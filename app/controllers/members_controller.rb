@@ -3,7 +3,7 @@ class MembersController < ApplicationController
 
   # GET /members
   def index
-    @members = Member.all
+    @members = Member.includes(:user, :team).all
   end
 
   # GET /members/1
@@ -49,7 +49,7 @@ class MembersController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_member
-    @member = Member.find(params[:id])
+    @member = Member.urlsafe_find(params[:id])
   end
 
   # TODO: roles handling broken / move to extra endpoint - or add specific logic to create and update

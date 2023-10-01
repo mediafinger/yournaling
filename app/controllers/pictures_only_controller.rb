@@ -1,6 +1,6 @@
 class PicturesOnlyController < ApplicationController
   def show
-    @picture = Picture.find(params[:id])
+    @picture = Picture.urlsafe_find(params[:id])
 
     render :show, layout: false
   end
