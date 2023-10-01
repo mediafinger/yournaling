@@ -72,6 +72,13 @@ jobs:
           bundler-cache: true
           cache-version: 1
 
+      # TODO: install optional JPG, EXIF ... dependencies first?
+      # https://github.com/libvips/libvips#optional-dependencies
+      #
+      - name: Install libvips
+        run:
+          sudo apt-get install --fix-missing -qq -o Acquire::Retries=3 libvips
+
       - name: Setup DB
         env:
           POSTGRES_HOST: localhost # use 'postgres' when running the app in Docker as well

@@ -1,11 +1,14 @@
+# NOTE: maybe replace by: https://github.com/igorkasyanchuk/active_storage_validations
+# to validate aspect ratio and others
+#
 # Inspired by: https://github.com/aki77/activestorage-validator/blob/master/lib/activestorage/validator/blob.rb
-
+#
 # Example usage (e.g. in the Picture model):
 #
 # validates :file, presence: true, image: { content_type: :image } # supported options: :image, :audio, :video, :text
 # validates :file, presence: true, image: { content_type: %w[image/png image/jpg image/jpeg], size_range: (1..10.megabytes) }
 # validates :file, presence: true, image: { content_type: %r{^image/}, size_range: (50.kilobytes..10.megabytes) }
-
+#
 class ImageValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, values)
     return unless values.attached?
