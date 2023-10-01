@@ -120,7 +120,7 @@ class AppConf
   register :log_target, default: production_env ? $stdout : "log/#{environment}.log"
 
   # rack-timeout in seconds
-  register :rack_timeout, default: is?(:debug, true) ? 300 : 60 # seconds
+  register :rack_timeout, default: is?(:debug, true) ? 300 : 10 # seconds
 
   # configure Redis for ActionCable / TurboReflex
   register :redis_url, default: "redis://localhost:6379/1", required: production_env

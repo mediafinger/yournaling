@@ -19,6 +19,8 @@ class User < ApplicationRecordYidEnabled
   validates :preferences, presence: true, if: proc { |record| record.preferences.to_s == "" }
 
   class << self
+    # TODO: refactor to use Rails 7.1 generates_token_for ?!
+    #
     def authenticate_temp_auth_token!(base64)
       expires_at, token = Base64.urlsafe_decode64(base64.to_s).split(SEPARATOR)
       raise StandardError.new("Token invalid, please restart your operation") if expires_at.nil? || token.nil?

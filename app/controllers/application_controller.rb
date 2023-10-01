@@ -2,9 +2,24 @@ class ApplicationController < ActionController::Base
   protect_from_forgery prepend: true
 
   before_action :ensure_html_safe_flash
+  before_action :authenticate, unless: -> { AppConf.is?(:debug, true) }
 
   # Detailed error pages must only be used in development! By default use our custom (less informative) error pages
   include ErrorHandler unless AppConf.is?(:debug, true) && !AppConf.production_env
+
+  # TODO: allow guest users via option
+  def authenticate(_allow_guest: false)
+    return if current_user.present?
+
+    session[:return_to] ||= request.referer
+    redirect_to :login
+  end
+
+  # TODO: use guest user as default
+  def current_user
+    @current_user ||= User.urlsafe_find(session[:user_id]) if session[:user_id]
+  end
+  helper_method :current_user
 
   # dry-validates the dry-contract against the given params
   # which can be either a hash or an ActionController::Parameters object
@@ -57,10 +72,10 @@ class ApplicationController < ActionController::Base
 
     flash.delete(:html_safe)
 
-    flash[:notice] = if flash[:notice].is_a?(Array) # rubocop:disable Rails/ActionControllerFlashBeforeRender
-                       flash[:notice].map(&:html_safe)
-                     else
-                       flash[:notice].html_safe # rubocop:disable Rails/OutputSafety
-                     end
+    flash.now[:notice] = if flash[:notice].is_a?(Array)
+                           flash[:notice].map(&:html_safe)
+                         else
+                           flash[:notice].html_safe # rubocop:disable Rails/OutputSafety
+                         end
   end
 end

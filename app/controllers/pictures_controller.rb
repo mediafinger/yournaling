@@ -1,4 +1,5 @@
 class PicturesController < ApplicationController
+  skip_before_action :authenticate, only: %i[index show] # allow everyone to see the pictures
   before_action :set_picture, only: %i[show edit update destroy]
 
   def index
