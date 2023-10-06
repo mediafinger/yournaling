@@ -1,76 +1,86 @@
-# README
+# Yournaling - Your Journey Journal 📔
 
-> **_Journal your journey_**  
-> _... on [yournaling.com](https://yournaling.com)_
+> **_Capture and Share Your Adventures_**  
+> Explore the world on [yournaling.com](https://yournaling.com) 🌟
 
-The Yournaling app will become a place where single people, couples or teams can:
+Yournaling is your all-in-one platform to:
 
-* journal (daily) experiences
-* maintain a blog with separated streams for multiple topics
-* present pictures, with descriptions, dates and locations
-* show locations on maps
-* keep a travel journal, displaying the route taken on a map
-* ...
+* 📝 Journal daily experiences
+* 🗺️ Map locations with photos, coordinates, and dates
+* 🚗 Track your routes and stops
+* 📷 Upload and link photos to your journal
+* 🌐 Combine experiences into journeys and create full journals
+* ✍️ Use an easyMDE editor for markdown text
+* 📜 Render markdown as HTML (GitHub-style)
+* 📤 Quickly upload shared links, Google Maps locations, and notes
+* 🏷️ Organize with tags
+* 🎬 Preview media snippets
+* 👥 Manage content with user roles (admin, editor, support, reader)
+* 🤝 Collaborate with teams
+* 👤 Create user and van profiles
+* 🔐 Allow OAuth sign-up/sign-in for comments
+* 🚨 Report comments or users
+* 🌍 Use geocoder gem with Geoapify or Mapbox-permanent API
+* 🗺️ Embed Google Maps
+* 💾 Enable full backups
 
+**Yournaling Features:**
 
+- 🍽️ Foodie Journal: Document every course of your meals
+- 🚐 Vanlifer Journal: Capture locations and moments
+- 🛠️ Hobbyist Journal: Record your crafting journey
+- 🧠 Mental Health Journal: A classic for self-reflection
 
----
+## Technical Concepts 🧩
 
-> **The points below explain technical concepts of the yournaling app.**
+### Dependencies 🧰
 
-## Dependencies
+* Ruby - [Version Link](https://raw.githubusercontent.com/mediafinger/yournaling/main/.ruby-version) 🐦
+* Postgres v15 🐘
+* Redis 🚀
+* Image manipulation with libvips 🖼️
+* Many Ruby gems - [Gemfile.lock](https://raw.githubusercontent.com/mediafinger/yournaling/main/Gemfile.lock) 💎
 
-* Ruby - for exact version see: https://raw.githubusercontent.com/mediafinger/yournaling/main/.ruby-version
-* Postgres v15
-* Redis
-* libvips library for image manipulation
-* many Ruby gems: https://raw.githubusercontent.com/mediafinger/yournaling/main/Gemfile.lock
+### Installation 🚀
 
-## Installation
+* Clone the repo: `git clone git@github.com:mediafinger/yournaling.git` 🧑‍💻
+* Install dependencies: `bundle install` 🚀
+* Create and seed the database: `bin/rails db:create && db:migrate && db:seed` 🏗️
+* Run the test suite (also on CI): `bundle exec rake ci` 🧪
+* Open a console: `bin/rails c` 💬
+* Start the server: `bin/rails s` 🚀
 
-When you have the dependencies installed:
+### Deployment 🚢
 
-* clone the repo to your machine: `git clone git@github.com:mediafinger/yournaling.git`
-* in the new directory, using the correct ruby version: `bundle install`
-* create the database: `bin/rails db:create && db:migrate && db:seed`
-* run the test suite (same is run on CI): `bundle exec rake ci`
-* open a console: `bin/rails c`
-* start the server: `bin/rails s`
+Deployment plans are pending. Likely to be set up with Kamal on a VM or dedicated server. 🛠️
 
-## Deployment
+### Contribution 👥
 
-Did not happen yet. Will most likely be setup with Kamal to a VM or dedicated server.
+Contributions are welcome! Please contact @mediafinger before opening significant PRs or addressing open issues. 🤝
 
-## Contribution
+### YID - Yournaling ID 🆔
 
-Is welcome. Please get in touch with @mediafinger before opening a PR that would add or change larger parts. This should also be done when picking an open issue, to discuss possible solutions.
+YIDs are unique and sortable IDs that contain object information:
 
-## YID - Yournaling ID
+* Object klass (short unique label) 🏷️
+* Created_at timestamp in ISO8601 with microsecond precision ⏰
+* Short UUID in hex format 🔢
 
-YID are **sortable** **unique** IDs which contain:
+YIDs are used extensively:
 
-* the object klass (short unique label)
-* the created_at timestamp at UTC in ISO8601 form with microsecond precision
-* a short UUID in hex format
+* As primary keys in the database 🔑
+* In serializers to the frontend 📤
+* In associations to other objects ↔️
+* As foreign keys in Rails associations ↔️
+* Ideally created on the Postgres level (currently not implemented) 🗃️
+* For now, created by a Rails hook before object persistence 🔄
+* Stable and never change 🧱
 
-YID are:
+YIDs look like this:
 
-* stored in the database field `yid` as primary key
-* used in serializers to the frontend
-* used in associations to other objects (with DB foreign_key)
-* used as foreign_keys in Rails associations
-* ideally be created on Postgres level (currently not done)
-* for now created by in a Rails hook before persisting a new object
-* stable, they never change
+* `photo_2023-02-26T09:20:20.075800Z_6511ee876a86` 📸
+* `object.klass::YID_CODE_object.created_at.utc.iso8601(6)_SecureRandom.hex(6)` 🌐
 
-YID are constructed like this:
+YIDs are advantageous for debugging and direct object identification. They can be fed into a search, determining the object type before returning the correct object. 🚀
 
-* `photo_2023-02-26T09:20:20.075800Z_6511ee876a86`
-* `object.klass::YID_CODE_object.created_at.utc.iso8601(6)_SecureRandom.hex(6)`
-* _Be aware that the "random" UUID part (everything after the 2nd `_`) is rather short and like this not good enough to be used as standalone UUID._
-
-> YID creation is slow compared to integer IDs or UUIDs, they are long and comparing them is more costly than comparing UUIDs. Their benefits are that they directly reveal the type of object (which is a massive bonus when debugging or sharing object identifiers) and that they are sortable at every moment, without additional database queries (which can speed up the app a lot).
-
-Any YID can be fed to a search, which will determine the object type before returning the correct object. This is mostly useful for debugging and therefore might only be implemented as an internal endpoint or disolver service which will return the actual object (or a 403 or 404 error).
-
-Instead of using the YIDs in URLs directly, we convert them to their Base64 representation to be URL-safe. The controllers use a custom finder method to decode them back to the plain text YID format automatically. Probably other symmetric encoding / decoding encryption algorithms are faster than Base64 and we update the implementation.
+Instead of using YIDs in URLs, they are converted to Base64 for URL safety. The controllers decode them automatically. 🔐
