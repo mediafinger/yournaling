@@ -11,15 +11,19 @@
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
 RSpec.describe "/members", type: :request do
+  let(:user) { FactoryBot.create(:user) }
+  let(:team) { FactoryBot.create(:team) }
+  let(:roles) { Array(Member::VALID_ROLES.sample) }
+
   # This should return the minimal set of attributes required to create a valid
   # Member. As you add validations to Member, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    { user_yid: user.yid, team_yid: team.yid, roles: roles }
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    { user_yid: user.yid, team_yid: team.yid, roles: ["Hausmeister"] }
   }
 
   describe "GET /index" do
@@ -33,7 +37,7 @@ RSpec.describe "/members", type: :request do
   describe "GET /show" do
     it "renders a successful response" do
       member = Member.create! valid_attributes
-      get member_url(member)
+      get member_url(member.urlsafe_id)
       expect(response).to be_successful
     end
   end
@@ -48,7 +52,7 @@ RSpec.describe "/members", type: :request do
   describe "GET /edit" do
     it "renders a successful response" do
       member = Member.create! valid_attributes
-      get edit_member_url(member)
+      get edit_member_url(member.urlsafe_id)
       expect(response).to be_successful
     end
   end
@@ -63,7 +67,8 @@ RSpec.describe "/members", type: :request do
 
       it "redirects to the created member" do
         post members_url, params: { member: valid_attributes }
-        expect(response).to redirect_to(member_url(Member.last))
+
+        expect(response).to redirect_to(member_url(Member.last.urlsafe_id))
       end
     end
 
@@ -84,28 +89,28 @@ RSpec.describe "/members", type: :request do
   describe "PATCH /update" do
     context "with valid parameters" do
       let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
+        { roles: %w[owner editor] }
       }
 
       it "updates the requested member" do
         member = Member.create! valid_attributes
-        patch member_url(member), params: { member: new_attributes }
+        patch member_url(member.urlsafe_id), params: { member: new_attributes }
         member.reload
-        skip("Add assertions for updated state")
+        expect(member.roles).to match_array(%w[owner editor])
       end
 
       it "redirects to the member" do
         member = Member.create! valid_attributes
-        patch member_url(member), params: { member: new_attributes }
+        patch member_url(member.urlsafe_id), params: { member: new_attributes }
         member.reload
-        expect(response).to redirect_to(member_url(member))
+        expect(response).to redirect_to(member_url(member.urlsafe_id))
       end
     end
 
     context "with invalid parameters" do
       it "renders a response with 422 status (i.e. to display the 'edit' template)" do
         member = Member.create! valid_attributes
-        patch member_url(member), params: { member: invalid_attributes }
+        patch member_url(member.urlsafe_id), params: { member: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_entity)
       end
     end
@@ -115,13 +120,13 @@ RSpec.describe "/members", type: :request do
     it "destroys the requested member" do
       member = Member.create! valid_attributes
       expect {
-        delete member_url(member)
+        delete member_url(member.urlsafe_id)
       }.to change { Member.count }.by(-1)
     end
 
     it "redirects to the members list" do
       member = Member.create! valid_attributes
-      delete member_url(member)
+      delete member_url(member.urlsafe_id)
       expect(response).to redirect_to(members_url)
     end
   end

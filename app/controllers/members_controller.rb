@@ -41,7 +41,8 @@ class MembersController < ApplicationController
 
   # DELETE /members/1
   def destroy
-    @member.destroy
+    @member.destroy!
+
     redirect_to members_url, notice: "Member was successfully destroyed."
   end
 
@@ -55,6 +56,6 @@ class MembersController < ApplicationController
   # TODO: roles handling broken / move to extra endpoint - or add specific logic to create and update
   # Only allow a list of trusted parameters through. // TODO: dry-validation / dry-contract ?!
   def member_params
-    params.require(:member).permit(:user_yid, :team_yid, :roles)
+    params.require(:member).permit(:user_yid, :team_yid, roles: [])
   end
 end
