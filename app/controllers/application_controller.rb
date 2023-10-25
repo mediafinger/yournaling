@@ -1,6 +1,8 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery prepend: true
 
+  include RequestContext # sets the Current.objects
+
   # Detailed error pages must only be used in development! By default use our custom (less informative) error pages
   include ErrorHandler unless AppConf.is?(:debug, true) && !AppConf.production_env
 
@@ -18,6 +20,16 @@ class ApplicationController < ActionController::Base
     @current_user ||= session[:user_yid] ? User.urlsafe_find(session[:user_yid]) : User.new(name: "Guest")
   end
   helper_method :current_user
+
+  def current_team
+    Current.team
+  end
+  helper_method :current_team
+
+  def current_member
+    Current.member
+  end
+  helper_method :current_member
 
   # dry-validates the dry-contract against the given params
   # which can be either a hash or an ActionController::Parameters object
