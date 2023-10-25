@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :user do
-    name { Faker::Name.name }
-    email { Faker::Internet.email(domain: "example.com") }
-    password { Faker::Internet.password(min_length: 10, max_length: 72) } # bcrypt will hash this
+    name { Faker::Name.unique.name }
+    email { Faker::Internet.unique.email(domain: "example.com") }
+    password { :foobar1234 } # bcrypt will hash this
   end
 end
