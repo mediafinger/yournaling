@@ -1,0 +1,17 @@
+<article id="<%= dom_id current_team %>">
+  <p>
+    <strong>Name:</strong>
+    <%= current_team.name %>
+  </p>
+
+  <p>
+    <strong>Roles:</strong>
+    <%= current_team.members.find_by(user: current_user).roles %>
+  </p>
+
+  <% if current_team == Current.team %>
+    <i>"Currently selected team"</i>
+  <% else %>
+    <%= button_to "Select this team", current_teams_url({ current_team: { team_yid: current_team.yid} }), method: :post, class: "secondary" %>
+  <% end %>
+</article>

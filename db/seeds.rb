@@ -19,6 +19,8 @@ team = Team.create!(name: "team")
 rtv_owner = Member.create!(user: andy, team: rtv, roles: %w[owner publisher])
 rtv_editor = Member.create!(user: dodo, team: rtv, roles: %w[manager editor])
 
+team_editor = Member.create!(user: andy, team:, roles: %w[editor])
+
 # TODO: create picture
 # TODO: create weblink
 # TODO: create geo-location

@@ -1,10 +1,12 @@
 Rails.application.routes.draw do
+  root to: "pages#home"
+
   resources :pictures
   resources :members
   resources :teams
   resources :users
 
-  root to: "pages#home"
+  resources :current_teams, only: %i[index show create]
 
   get "login", to: "sessions#new"
   post "login", to: "sessions#create"
