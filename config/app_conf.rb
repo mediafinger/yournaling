@@ -98,6 +98,8 @@ class AppConf
   register :web_concurrency, default: 1
   # on production we should use a SecureRandom.hex(64) String with 128 characters
   register :rails_secret_key_base, required: production_env, default: "foofoobar123456"
+  # Enable static file serving from the `/public` folder (turn off if using NGINX/Apache for it).
+  register :rails_serve_static_files, default: true # Rails 7.1 default
   # Error pages, have only an effect in development
   register :display_rails_error_page, default: is?(:debug, true)
   # include full stacktrace in error messages
@@ -113,7 +115,7 @@ class AppConf
                                 elsif is?(:environment, :test)
                                   :warn
                                 else
-                                  :info
+                                  ENV.fetch("RAILS_LOG_LEVEL", :info)
                                 end
   register :log_target, default: production_env ? $stdout : "log/#{environment}.log"
 

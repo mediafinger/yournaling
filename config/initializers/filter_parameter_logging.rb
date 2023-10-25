@@ -1,9 +1,9 @@
 # Be sure to restart your server when you modify this file.
 
-# Configure parameters to be filtered from the log file. Use this to limit dissemination of
-# sensitive information. See the ActiveSupport::ParameterFilter documentation for supported
-# notations and behaviors.
-
+# Configure parameters to be partially matched (e.g. passw matches password) and filtered from the log file.
+# Use this to limit dissemination of sensitive information.
+# See the ActiveSupport::ParameterFilter documentation for supported notations and behaviors.
+#
 if AppConf.is?(:debug, true) && !AppConf.production_env
   # do not filter parameters in development or test environments when DEBUG=true is set
 else
