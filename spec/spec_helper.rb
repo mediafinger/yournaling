@@ -14,6 +14,21 @@
 #
 # See https://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
+  # Add all configuration for your /system specs here
+  config.before(:each, type: :system) do
+    driven_by :rack_test # rack_test does not support JavaScript
+  end
+
+  # Add configuration for your /system specs here, when the tests need JavaScript
+  # selenium_chrome_headless needs chromedriver installed
+  # bin/setup_chrome contains a script to install it in a Docker container or on GitHub-CI
+
+  config.before(:each, js: true, type: :system) do
+    driven_by :selenium, using: :headless_chrome, screen_size: [1400, 1400] do |driver_option|
+      driver_option.add_argument("--no-sandbox")
+    end
+  end
+
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.
