@@ -36,10 +36,12 @@ group :development, :test do
   gem "active_record_doctor", "~> 1.10", require: false
   gem "amazing_print", "~> 1.4"
   gem "bundler-audit", "~> 0.9"
+  gem "capybara", "~> 3.19" # for headless browser tests
   gem "factory_bot-awesome_linter", "~> 1.0"
   gem "factory_bot_rails", "~> 6.2"
   gem "faker", "~> 3.2"
   gem "rspec-rails", "~> 6.0"
+  gem "rubocop-capybara", "~> 2.19", require: false
   gem "rubocop-faker", "~> 1.1", require: false
   gem "rubocop-performance", "~> 1.12", require: false
   gem "rubocop-rails", "~> 2.21", require: false
@@ -48,5 +50,6 @@ group :development, :test do
 end
 
 group :test do
+  gem "selenium-webdriver", "~> 4.14" # for headless browser tests
   gem "webmock", "~> 3.14"
 end

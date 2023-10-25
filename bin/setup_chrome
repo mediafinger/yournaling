@@ -1,0 +1,11 @@
+#!/bin/bash
+
+echo "Setup Chromium..."
+
+set -e
+
+# Install Chromium
+apk add --no-cache chromium harfbuzz nss \
+    freetype ttf-freefont chromium-chromedriver sudo \
+    && rm -rf /var/cache/* \
+    && mkdir /var/cache/apk

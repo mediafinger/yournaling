@@ -1,7 +1,5 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 
-require "spec_helper"
-
 ENV["RAILS_ENV"] ||= "test"
 
 require_relative "../config/environment"
@@ -13,7 +11,18 @@ require "rspec/rails"
 require "webmock/rspec"
 WebMock.disable_net_connect!(allow_localhost: true)
 
-Dir[Rails.root.join("spec", "support", "**", "*.rb")].sort.each { |f| require f }
+require "capybara/rails"
+
+require "spec_helper"
+
+# configure Capybara for system specs
+Capybara.server = :puma, { Silent: true } # To clean up your test output
+# set default driver which is fast, but does not support JavaScript
+Capybara.register_driver :rack_test do |app|
+  Capybara::RackTest::Driver.new(app, headers: { "HTTP_USER_AGENT" => "Capybara" })
+end
+
+Dir[Rails.root.join("spec/support/**/*.rb")].sort.each { |f| require f }
 
 # to use freeze_time and travel_to
 include ActiveSupport::Testing::TimeHelpers
@@ -33,7 +42,7 @@ end
 
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  config.fixture_path = "#{::Rails.root}/spec/fixtures"
+  config.fixture_path = "#{Rails.root.join('spec/fixtures')}"
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
