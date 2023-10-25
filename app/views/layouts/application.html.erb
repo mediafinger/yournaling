@@ -24,6 +24,7 @@
 
         <% if current_user %>
         <ul>
+          <li><%= link_to "Switch team", current_teams_path, role: active_path?(current_teams_path) ? "button" : nil %></li>
           <li>
             <%= button_to "Logout #{current_user.name}", { controller: :sessions, action: :destroy }, { method: :delete, role: "link", class: "logout" } %>
           </li>
