@@ -1,23 +1,21 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery prepend: true
 
-  before_action :ensure_html_safe_flash
-  before_action :authenticate, unless: -> { AppConf.is?(:debug, true) }
-
   # Detailed error pages must only be used in development! By default use our custom (less informative) error pages
   include ErrorHandler unless AppConf.is?(:debug, true) && !AppConf.production_env
 
-  # TODO: allow guest users via option
-  def authenticate(_allow_guest: false)
-    return if current_user.present?
+  before_action :ensure_html_safe_flash
+  before_action :authenticate
+
+  def authenticate(allow_guest: true)
+    return if current_user.present? && (current_user.persisted? || allow_guest)
 
     session[:return_to] ||= request.referer
     redirect_to :login
   end
 
-  # TODO: use guest user as default
   def current_user
-    @current_user ||= User.urlsafe_find(session[:user_id]) if session[:user_id]
+    @current_user ||= session[:user_yid] ? User.urlsafe_find(session[:user_yid]) : User.new(name: "Guest")
   end
   helper_method :current_user
 

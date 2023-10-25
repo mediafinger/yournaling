@@ -9,7 +9,7 @@ class SessionsController < ApplicationController
     user = User.authenticate_by(email: login_params[:email], password: login_params[:password])
 
     if user.present?
-      session[:user_id] = user.urlsafe_id
+      session[:user_yid] = user.urlsafe_id
       redirect_to session.delete(:return_to) || root_path, notice: "Login successful" # TODO: notice shown, but pointless
     else
       render :new, status: :forbidden, notice: "Login failed, please try again" # TODO: notice not shown
