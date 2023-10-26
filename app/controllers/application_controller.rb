@@ -1,35 +1,14 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery prepend: true
 
-  include RequestContext # sets the Current.objects
+  include RequestContext # sets the Current.objects, partly based on current_user and current_team
+  include Authentication # sets current_user, based on the session, provides sign_in / sign_out
+  include TeamScope # sets current_team & current_member, based on the session, provides switch_current_team / go_solo
 
   # Detailed error pages must only be used in development! By default use our custom (less informative) error pages
   include ErrorHandler unless AppConf.is?(:debug, true) && !AppConf.production_env
 
   before_action :ensure_html_safe_flash
-  before_action :authenticate
-
-  def authenticate(allow_guest: true)
-    return if current_user.present? && (current_user.persisted? || allow_guest)
-
-    session[:return_to] ||= request.referer
-    redirect_to :login
-  end
-
-  def current_user
-    @current_user ||= session[:user_yid] ? User.urlsafe_find(session[:user_yid]) : User.new(name: "Guest")
-  end
-  helper_method :current_user
-
-  def current_team
-    Current.team
-  end
-  helper_method :current_team
-
-  def current_member
-    Current.member
-  end
-  helper_method :current_member
 
   # dry-validates the dry-contract against the given params
   # which can be either a hash or an ActionController::Parameters object

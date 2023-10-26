@@ -5,7 +5,7 @@
 #
 # Use Login-Form to login
 #
-def sign_in(user)
+def visit_sign_in(user)
   visit login_url
   fill_in :email, with: user.email
   fill_in :password, with: "foobar1234"
@@ -14,7 +14,7 @@ end
 
 # Click Logout-Button to logout
 #
-def sign_out(user)
+def visit_sign_out(user)
   click_button "Logout #{user.name}"
 end
 
@@ -22,10 +22,10 @@ end
 #
 # RSpec / Rails System spec "get response" methods
 #
-def login(user)
+def sign_in(user)
   post login_path, params: { email: user.email, password: "foobar1234" }
 end
 
-def logout
+def sign_out
   delete logout_path
 end

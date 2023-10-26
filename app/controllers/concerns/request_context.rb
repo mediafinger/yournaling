@@ -10,8 +10,8 @@ module RequestContext
 
   def initialize_request_context
     Current.user = current_user
-    Current.team = Current.user.teams.find(session[:team_yid]) if session[:team_yid]
-    Current.member = Current.user.memberships.find_by!(team: Current.team) if Current.team
+    Current.team = current_team
+    Current.member = current_member
 
     Current.module_name = self.class.module_parent_name
     Current.path = request.path

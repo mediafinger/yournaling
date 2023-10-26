@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   resources :teams
   resources :users
 
-  resources :current_teams, only: %i[index show create]
+  resources :current_teams, only: %i[index show create destroy]
 
   get "login", to: "sessions#new"
   post "login", to: "sessions#create"
