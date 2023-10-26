@@ -3,7 +3,7 @@ RSpec.describe "/current_teams", type: :system do
   let(:user) { member.user }
   let(:team) { member.team }
 
-  before { sign_in(user) }
+  before { visit_sign_in(user) }
 
   describe "GET /index" do
     it "renders a successful response", aggregate_failures: true do
@@ -19,7 +19,7 @@ RSpec.describe "/current_teams", type: :system do
 
   describe "GET /show" do
     it "renders a successful response" do
-      allow(Current).to receive(:team).and_return(team)
+      visit_switch_current_team(team)
 
       visit current_team_url(team.urlsafe_id)
 
@@ -31,7 +31,7 @@ RSpec.describe "/current_teams", type: :system do
   describe "POST /create", aggregate_failures: true do
     context "with valid parameters" do
       it "selects the Team and redirects to its show page" do
-        login(user)
+        sign_in(user)
 
         expect(Current.team).to be_nil
 
@@ -40,6 +40,22 @@ RSpec.describe "/current_teams", type: :system do
         expect(session[:team_yid]).to eq(team.yid)
 
         expect(response).to redirect_to(team_path(team))
+      end
+    end
+  end
+
+  describe "DELETE /destroy", aggregate_failures: true do
+    context "when a team is selected" do
+      it "removes the current Team selection and redirects to the root_path" do
+        sign_in(user)
+        switch_current_team(team)
+
+        expect(session[:team_yid]).to eq(team.yid)
+
+        go_solo(team)
+
+        expect(session[:team_yid]).to be_nil
+        expect(response).to redirect_to(root_path)
       end
     end
   end

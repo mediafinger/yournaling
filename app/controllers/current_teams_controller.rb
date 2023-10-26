@@ -18,12 +18,16 @@ class CurrentTeamsController < ApplicationController
 
   # POST /user/teams
   def create
-    @team = current_user.teams.find_by!(yid: current_team_params[:team_yid])
-
-    session[:team_yid] = @team.yid
-    initialize_request_context # to refresh the Current objects directly
+    @team = switch_current_team(current_team_params[:team_yid])
 
     redirect_to @team, notice: "Team #{@team.name} selected"
+  end
+
+  # DELETE /user/teams
+  def destroy
+    go_solo
+
+    redirect_to root_path, notice: "No Team selected, going solo"
   end
 
   private
