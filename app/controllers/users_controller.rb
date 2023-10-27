@@ -3,6 +3,8 @@ class UsersController < ApplicationController
 
   # GET /users
   def index
+    raise AuthError unless current_user.persisted?
+
     @users = User.all
   end
 
@@ -10,6 +12,7 @@ class UsersController < ApplicationController
   def show
   end
 
+  # TODO: move to a sign_up page?!
   # GET /users/new
   def new
     @user = User.new
@@ -17,8 +20,10 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
+    raise AuthError unless @user == current_user && @user.persisted?
   end
 
+  # TODO: move to a sign_up page?!
   # POST /users
   def create
     @user = User.new(user_params)
@@ -32,6 +37,8 @@ class UsersController < ApplicationController
 
   # PATCH/PUT /users/1
   def update
+    raise AuthError unless @user == current_user && @user.persisted?
+
     if @user.update(user_params)
       redirect_to @user, notice: "User was successfully updated."
     else
@@ -39,9 +46,13 @@ class UsersController < ApplicationController
     end
   end
 
+  # TODO: move to close account page
   # DELETE /users/1
   def destroy
-    @user.destroy
+    raise AuthError unless @user == current_user && @user.persisted?
+
+    @user.destroy # TODO: define what happens with uploaded content
+
     redirect_to users_url, notice: "User was successfully destroyed."
   end
 

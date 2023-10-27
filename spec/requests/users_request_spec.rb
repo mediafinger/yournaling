@@ -15,22 +15,24 @@ RSpec.describe "/users", type: :request do
   let(:email) { "#{name.parameterize.underscore}@example.com" }
   let(:password) { "foobar1234" }
 
-  # This should return the minimal set of attributes required to create a valid
-  # User. As you add validations to User, be sure to
-  # adjust the attributes here as well.
-  let(:valid_attributes) {
-    { name: name, email: email, password: password }
-  }
-
-  let(:invalid_attributes) {
-    { name: name, email: nil }
-  }
+  let(:valid_attributes) { { name: name, email: email, password: password } }
+  let(:invalid_attributes) { { name: name, email: nil } }
 
   describe "GET /index" do
     it "renders a successful response" do
-      User.create! valid_attributes
+      user = User.create! valid_attributes
+
+      sign_in(user)
+
       get users_url
+
       expect(response).to be_successful
+    end
+
+    it "is forbidden for guests" do
+      get users_url
+
+      expect(response).to be_forbidden
     end
   end
 
@@ -50,10 +52,30 @@ RSpec.describe "/users", type: :request do
   end
 
   describe "GET /edit" do
+    let(:user) { User.create! valid_attributes }
+
     it "renders a successful response" do
-      user = User.create! valid_attributes
+      sign_in(user)
+
       get edit_user_url(user)
+
       expect(response).to be_successful
+    end
+
+    it "is forbidden for guests" do
+      get edit_user_url(user)
+
+      expect(response).to be_forbidden
+    end
+
+    it "is forbidden for to edit other users" do
+      other_user = FactoryBot.create(:user)
+
+      sign_in(user)
+
+      get edit_user_url(other_user)
+
+      expect(response).to be_forbidden
     end
   end
 
@@ -86,21 +108,23 @@ RSpec.describe "/users", type: :request do
   end
 
   describe "PATCH /update" do
+    let(:user) { User.create! valid_attributes }
+
     context "with valid parameters" do
-      let(:new_attributes) {
-        { name: "New Name" }
-      }
+      let(:new_attributes) { { name: "New Name" } }
+
+      before { sign_in(user) }
 
       it "updates the requested user" do
-        user = User.create! valid_attributes
         patch user_url(user), params: { user: new_attributes }
+
         user.reload
         expect(user.name).to eq("New Name")
       end
 
       it "redirects to the user" do
-        user = User.create! valid_attributes
         patch user_url(user), params: { user: new_attributes }
+
         user.reload
         expect(response).to redirect_to(user_url(user))
       end
@@ -108,25 +132,70 @@ RSpec.describe "/users", type: :request do
 
     context "with invalid parameters" do
       it "renders a response with 422 status (i.e. to display the 'edit' template)" do
-        user = User.create! valid_attributes
+        sign_in(user)
+
         patch user_url(user), params: { user: invalid_attributes }
+
         expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+
+    context "when trying to update another user" do
+      let(:new_attributes) { { name: "New Name" } }
+
+      it "is forbidden for guests" do
+        patch user_url(user), params: { user: new_attributes }
+
+        expect(response).to be_forbidden
+      end
+
+      it "is forbidden for to edit other users" do
+        other_user = FactoryBot.create(:user)
+
+        sign_in(user)
+
+        patch user_url(other_user), params: { user: new_attributes }
+
+        expect(response).to be_forbidden
       end
     end
   end
 
   describe "DELETE /destroy" do
+    let(:user) { User.create! valid_attributes }
+
+    before { sign_in(user) }
+
     it "destroys the requested user" do
-      user = User.create! valid_attributes
       expect {
         delete user_url(user)
       }.to change { User.count }.by(-1)
     end
 
     it "redirects to the users list" do
-      user = User.create! valid_attributes
       delete user_url(user)
+
       expect(response).to redirect_to(users_url)
+    end
+
+    context "when trying to delete another user" do
+      it "is forbidden for guests" do
+        sign_out
+
+        delete user_url(user)
+
+        expect(response).to be_forbidden
+      end
+
+      it "is forbidden for to edit other users" do
+        other_user = FactoryBot.create(:user)
+
+        sign_in(user)
+
+        delete user_url(other_user)
+
+        expect(response).to be_forbidden
+      end
     end
   end
 end
