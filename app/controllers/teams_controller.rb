@@ -3,6 +3,8 @@ class TeamsController < ApplicationController
 
   # GET /teams
   def index
+    raise AuthError unless current_user.persisted?
+
     @teams = Team.all
   end
 
@@ -12,18 +14,26 @@ class TeamsController < ApplicationController
 
   # GET /teams/new
   def new
+    raise AuthError unless current_user.persisted?
+
     @team = Team.new
   end
 
   # GET /teams/1/edit
   def edit
+    raise AuthError unless @team == current_team && current_member.owner?
   end
 
   # POST /teams
   def create
+    raise AuthError unless current_user.persisted?
+
     @team = Team.new(team_params)
 
     if @team.save
+      member = Member.create!(team: @team, user: current_user, roles: Member::VALID_ROLES)
+      switch_current_team(@team.yid)
+
       redirect_to @team, notice: "Team was successfully created."
     else
       render :new, status: :unprocessable_entity
@@ -32,6 +42,8 @@ class TeamsController < ApplicationController
 
   # PATCH/PUT /teams/1
   def update
+    raise AuthError unless @team == current_team && current_member.owner?
+
     if @team.update(team_params)
       redirect_to @team, notice: "Team was successfully updated."
     else
@@ -41,6 +53,8 @@ class TeamsController < ApplicationController
 
   # DELETE /teams/1
   def destroy
+    raise AuthError unless @team == current_team && current_member.owner?
+
     @team.destroy!
 
     redirect_to teams_url, notice: "Team was successfully destroyed."
