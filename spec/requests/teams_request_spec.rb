@@ -10,121 +10,302 @@
 # of tools you can use to make these specs even more expressive, but we're
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
-RSpec.describe "/teams", type: :request do
+RSpec.describe "/teams", type: :system do
+  let(:user) { FactoryBot.create(:user) }
   let(:name) { Faker::Sports::Football.unique.team }
 
-  # This should return the minimal set of attributes required to create a valid
-  # Team. As you add validations to Team, be sure to adjust the attributes here as well.
-  let(:valid_attributes) {
-    { name: name }
-  }
-
-  let(:invalid_attributes) {
-    { name: nil }
-  }
+  let(:valid_attributes) { { name: name } }
+  let(:invalid_attributes) { { name: nil } }
 
   describe "GET /index" do
-    it "renders a successful response" do
-      Team.create! valid_attributes
-      get teams_url
-      expect(response).to be_successful
+    let(:team) { Team.create! valid_attributes }
+
+    before { FactoryBot.create(:member, user: user, team: team) }
+
+    context "when user logged in" do
+      before { visit_sign_in(user) }
+
+      it "renders a successful response", aggregate_failures: true do
+        visit teams_url
+
+        expect(page).to have_current_path("/teams", ignore_query: true)
+        expect(page.status_code).to eq(200) # not supported by selenium driver
+
+        header = page.find("header")
+        expect(header).not_to have_text("Logout Guest")
+        expect(header).to have_text("Logout #{user.name}")
+
+        main = page.find("main")
+        expect(main).to have_text(team.name)
+      end
+    end
+
+    context "when guest user" do
+      it "is forbidden for guests" do
+        visit teams_url
+
+        expect(page.status_code).to eq(403) # not supported by selenium driver
+      end
     end
   end
 
   describe "GET /show" do
-    it "renders a successful response" do
-      team = Team.create! valid_attributes
-      get team_url(team.urlsafe_id)
-      expect(response).to be_successful
+    let(:team) { Team.create! valid_attributes }
+
+    context "when user logged in" do
+      before { visit_sign_in(user) }
+
+      it "renders a successful response" do
+        visit team_url(team.urlsafe_id)
+
+        expect(page.status_code).to eq(200) # not supported by selenium driver
+      end
+    end
+
+    context "when guest user" do
+      it "is allowed for guests" do
+        visit team_url(team.urlsafe_id)
+
+        expect(page.status_code).to eq(200) # not supported by selenium driver
+      end
     end
   end
 
   describe "GET /new" do
-    it "renders a successful response" do
-      get new_team_url
-      expect(response).to be_successful
+    context "when user logged in" do
+      before { visit_sign_in(user) }
+
+      it "renders a successful response" do
+        visit new_team_url
+
+        expect(page.status_code).to eq(200) # not supported by selenium driver
+      end
+    end
+
+    context "when guest user" do
+      it "is forbidden for guests" do
+        visit new_team_url
+
+        expect(page.status_code).to eq(403) # not supported by selenium driver
+      end
     end
   end
 
   describe "GET /edit" do
-    it "renders a successful response" do
-      team = Team.create! valid_attributes
-      get edit_team_url(team.urlsafe_id)
-      expect(response).to be_successful
+    let(:team) { Team.create! valid_attributes }
+
+    context "when user team member and owner" do
+      before do
+        FactoryBot.create(:member, user: user, team: team, roles: %w[owner])
+        visit_sign_in(user)
+        visit_switch_current_team(team)
+      end
+
+      it "is successful" do
+        visit edit_team_url(team.urlsafe_id)
+
+        expect(page.status_code).to eq(200) # not supported by selenium driver
+      end
+    end
+
+    context "when user team member and has selected team" do
+      before do
+        FactoryBot.create(:member, user: user, team: team, roles: %w[editor])
+        visit_sign_in(user)
+        visit_switch_current_team(team)
+      end
+
+      it "is forbidden when not team owner" do
+        visit edit_team_url(team.urlsafe_id)
+
+        expect(page.status_code).to eq(403) # not supported by selenium driver
+      end
+    end
+
+    context "when user team member" do
+      before do
+        FactoryBot.create(:member, user: user, team: team)
+        visit_sign_in(user)
+      end
+
+      it "is forbidden when not current_team" do
+        visit edit_team_url(team.urlsafe_id)
+
+        expect(page.status_code).to eq(403) # not supported by selenium driver
+      end
+    end
+
+    context "when user logged in" do
+      before { visit_sign_in(user) }
+
+      it "renders a successful response" do
+        visit edit_team_url(team.urlsafe_id)
+
+        expect(page.status_code).to eq(403) # not supported by selenium driver
+      end
+    end
+
+    context "when guest user" do
+      it "is forbidden for guests" do
+        visit edit_team_url(team.urlsafe_id)
+
+        expect(page.status_code).to eq(403) # not supported by selenium driver
+      end
     end
   end
 
-  describe "POST /create" do
+  describe "POST /create", aggregate_failures: true do
     context "with valid parameters" do
+      before { sign_in(user) }
+
       it "creates a new Team" do
         expect {
-          post teams_url, params: { team: valid_attributes }
+          post teams_url({ team: { name: "New Name" } }) # TODO: do NOT test POST create with capybara!
         }.to change { Team.count }.by(1)
+
+        expect(response).to redirect_to(team_url(Team.last))
       end
 
       it "redirects to the created team" do
-        post teams_url, params: { team: valid_attributes }
+        post teams_url({ team: { name: "New Name" } })
+
         expect(response).to redirect_to(team_url(Team.last))
       end
     end
 
-    context "with invalid parameters" do
+    context "with invalid parameters and renders a response with 422 status" do
+      before { sign_in(user) }
+
       it "does not create a new Team" do
         expect {
-          post teams_url, params: { team: invalid_attributes }
+          post teams_url({ team: invalid_attributes })
         }.to change { Team.count }.by(0)
-      end
 
-      it "renders a response with 422 status (i.e. to display the 'new' template)" do
-        post teams_url, params: { team: invalid_attributes }
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response.status).to eq(422)
       end
     end
   end
 
   describe "PATCH /update" do
-    context "with valid parameters" do
-      let(:new_attributes) {
-        { name: "New Name" }
-      }
+    let(:team) { Team.create! valid_attributes }
 
-      it "updates the requested team" do
-        team = Team.create! valid_attributes
-        patch team_url(team.urlsafe_id), params: { team: new_attributes }
-        team.reload
-        expect(team.name).to eq("New Name")
+    before { sign_in(user) }
+
+    context "when user team member and owner of current_team" do
+      before do
+        FactoryBot.create(:member, user: user, team: team, roles: %w[owner])
+        switch_current_team(team)
       end
 
-      it "redirects to the team" do
-        team = Team.create! valid_attributes
-        patch team_url(team.urlsafe_id), params: { team: new_attributes }
-        team.reload
-        expect(response).to redirect_to(team_url(team.urlsafe_id))
+      context "with valid parameters" do
+        let(:new_attributes) { { name: "New Name" } }
+
+        it "updates the requested team and redirects to it" do
+          patch team_url(team.urlsafe_id), params: { team: new_attributes }
+
+          team.reload
+          expect(team.name).to eq("New Name")
+          expect(response).to redirect_to(team_url(team.urlsafe_id))
+        end
+      end
+
+      context "with invalid parameters" do
+        it "renders a response with 422 status (i.e. to display the 'edit' template)" do
+          patch team_url(team.urlsafe_id), params: { team: invalid_attributes }
+
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
       end
     end
 
-    context "with invalid parameters" do
-      it "renders a response with 422 status (i.e. to display the 'edit' template)" do
-        team = Team.create! valid_attributes
-        patch team_url(team.urlsafe_id), params: { team: invalid_attributes }
-        expect(response).to have_http_status(:unprocessable_entity)
+    context "when user team member and owner of team (but did not select it as current_team)" do
+      before do
+        FactoryBot.create(:member, user: user, team: team, roles: %w[owner])
+      end
+
+      context "with valid parameters" do
+        let(:new_attributes) { { name: "New Name" } }
+
+        it "is forbidden" do
+          patch team_url(team.urlsafe_id), params: { team: new_attributes }
+
+          team.reload
+          expect(team.name).to eq(valid_attributes[:name])
+          expect(response).to have_http_status(:forbidden)
+        end
+      end
+    end
+
+    context "when user team member of current_team" do
+      before do
+        FactoryBot.create(:member, user: user, team: team, roles: %w[editor])
+        switch_current_team(team)
+      end
+
+      context "with valid parameters" do
+        let(:new_attributes) { { name: "New Name" } }
+
+        it "is forbidden" do
+          patch team_url(team.urlsafe_id), params: { team: new_attributes }
+
+          team.reload
+          expect(team.name).to eq(valid_attributes[:name])
+          expect(response).to have_http_status(:forbidden)
+        end
+      end
+    end
+
+    context "with current_user" do
+      context "with valid parameters" do
+        let(:new_attributes) { { name: "New Name" } }
+
+        it "is forbidden" do
+          patch team_url(team.urlsafe_id), params: { team: new_attributes }
+
+          team.reload
+          expect(team.name).to eq(valid_attributes[:name])
+          expect(response).to have_http_status(:forbidden)
+        end
+      end
+    end
+
+    context "with guest user" do
+      before do
+        sign_out
+      end
+
+      context "with valid parameters" do
+        let(:new_attributes) { { name: "New Name" } }
+
+        it "is forbidden" do
+          patch team_url(team.urlsafe_id), params: { team: new_attributes }
+
+          team.reload
+          expect(team.name).to eq(valid_attributes[:name])
+          expect(response).to have_http_status(:forbidden)
+        end
       end
     end
   end
 
   describe "DELETE /destroy" do
-    it "destroys the requested team" do
-      team = Team.create! valid_attributes
+    let(:team) { Team.create! valid_attributes }
 
-      expect {
-        delete team_url(team.urlsafe_id)
-      }.to change { Team.count }.to(0)
-    end
+    before { sign_in(user) }
 
-    it "redirects to the teams list" do
-      team = Team.create! valid_attributes
-      delete team_url(team.urlsafe_id)
-      expect(response).to redirect_to(teams_url)
+    context "when user team member and owner of current_team" do
+      before do
+        FactoryBot.create(:member, user: user, team: team, roles: %w[owner])
+        switch_current_team(team)
+      end
+
+      it "destroys the requested team and redirects to the teams index page" do
+        expect {
+          delete team_url(team.urlsafe_id)
+        }.to change { Team.count }.to(0)
+
+        expect(response).to redirect_to(teams_url)
+      end
     end
   end
 end

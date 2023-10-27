@@ -8,6 +8,8 @@ module TeamScope
   end
 
   def switch_current_team(team_yid)
+    return nil unless current_user.persisted?
+
     team = current_user.teams.find(team_yid)
 
     session[:team_yid] = team.yid
