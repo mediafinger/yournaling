@@ -1,8 +1,7 @@
 class CurrentTeamsController < ApplicationController
-  skip_verify_authorized # TODO: REMOVE!
-
-  # GET /user/teams
   def index
+    authorize! current_user, to: :index?, with: CurrentTeamPolicy
+
     @current_teams = current_user.teams
 
     render template: "current_teams/index"
@@ -10,6 +9,7 @@ class CurrentTeamsController < ApplicationController
 
   def show
     @current_team = current_team # == Current.team # == current_user.teams.find_by(yid: session[:team_yid])
+    authorize! @current_team, with: CurrentTeamPolicy
 
     if @current_team
       render partial: "teams/team", locals: { team: @current_team }
@@ -18,15 +18,16 @@ class CurrentTeamsController < ApplicationController
     end
   end
 
-  # POST /user/teams
   def create
     @team = switch_current_team(current_team_params[:team_yid])
+    authorize! @team, with: CurrentTeamPolicy
 
     redirect_to @team, notice: "Team #{@team.name} selected"
   end
 
-  # DELETE /user/teams
   def destroy
+    authorize! current_team, with: CurrentTeamPolicy
+
     go_solo
 
     redirect_to root_path, notice: "No Team selected, going solo"
