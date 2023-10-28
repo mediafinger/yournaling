@@ -2,8 +2,8 @@ RSpec.describe "pictures/index", type: :view do
   before do
     assign(:pictures,
       [
-        FactoryBot.create(:picture, :with_image, name: "test-pic"),
-        FactoryBot.create(:picture, :with_image, name: "test-pic"),
+        FactoryBot.create(:picture, name: "test-pic"),
+        FactoryBot.create(:picture, name: "test-pic"),
       ]
     )
   end

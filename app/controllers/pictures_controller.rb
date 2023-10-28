@@ -10,7 +10,7 @@ class PicturesController < ApplicationController
   end
 
   def new
-    @picture = Picture.new
+    @picture = Picture.new(team: current_team, creator: current_user)
   end
 
   def edit
@@ -25,6 +25,8 @@ class PicturesController < ApplicationController
       file: ImageUploadConversionService.call(file: picture_params[:file], name: picture_params[:name]),
       name: picture_params[:name], # looks redundant, but image filename is parameterized
       date: picture_params[:date],
+      team: current_team,
+      creator: current_user
     )
 
     if @picture.save
@@ -35,7 +37,7 @@ class PicturesController < ApplicationController
   end
 
   def update
-    if @picture.update(picture_params)
+    if @picture.update(picture_params.merge(updater: current_user))
       redirect_to @picture, notice: "Picture was successfully updated."
     else
       render :edit, status: :unprocessable_entity

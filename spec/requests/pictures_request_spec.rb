@@ -12,21 +12,19 @@
 
 RSpec.describe "/pictures", type: :request do
   let(:file_content_type) { "image/jpeg" }
+  # This should return the minimal set of attributes required to create a valid
+  # Picture. As you add validations to Picture, be sure to
+  # adjust the attributes here as well.
+  let(:valid_attributes) { { file: file, date: Time.zone.today, name: name, team: team, creator: user } }
+  let(:invalid_attributes) { { file: nil, date: Time.zone.today, name: name } }
   let(:file_path) { "spec/support/macbookair_stickered.jpg" }
   let(:file) { Rack::Test::UploadedFile.new(file_path, file_content_type) }
   let(:name) { "#{Faker::Address.community}, #{Faker::Address.city}" }
   let(:date) { Time.zone.today.iso8601 }
+  let(:team) { FactoryBot.create(:team) }
+  let(:user) { FactoryBot.create(:user) }
 
-  # This should return the minimal set of attributes required to create a valid
-  # Picture. As you add validations to Picture, be sure to
-  # adjust the attributes here as well.
-  let(:valid_attributes) {
-    { file: file, date: Time.zone.today, name: name }
-  }
-
-  let(:invalid_attributes) {
-    { file: nil, date: Time.zone.today, name: name }
-  }
+  before { Member.create!(team: team, user: user) }
 
   describe "GET /index" do
     it "renders a successful response" do
@@ -61,14 +59,14 @@ RSpec.describe "/pictures", type: :request do
 
   describe "POST /create" do
     context "with valid parameters" do
-      it "creates a new Picture" do
+      it "creates a new Picture and redirects to the created picture" do
+        sign_in(user)
+        switch_current_team(team)
+
         expect {
           post pictures_url, params: { picture: valid_attributes }
         }.to change { Picture.count }.by(1)
-      end
 
-      it "redirects to the created picture" do
-        post pictures_url, params: { picture: valid_attributes }
         expect(response).to redirect_to(picture_url(Picture.last))
       end
     end
@@ -89,21 +87,18 @@ RSpec.describe "/pictures", type: :request do
 
   describe "PATCH /update" do
     context "with valid parameters" do
-      let(:new_attributes) {
-        { name: "New Name" } # TODO: test to replace file
-      }
+      let(:picture) { Picture.create! valid_attributes }
+      let(:new_attributes) { { name: "New Name", updated_by: picture.created_by } }
 
-      it "updates the requested picture" do
-        picture = Picture.create! valid_attributes
+      it "updates the requested picture and redirects to the picture" do
+        sign_in(user)
+        switch_current_team(team)
+
         patch picture_url(picture.urlsafe_id), params: { picture: new_attributes }
+
         picture.reload
+
         expect(picture.name).to eq("New Name")
-      end
-
-      it "redirects to the picture" do
-        picture = Picture.create! valid_attributes
-        patch picture_url(picture.urlsafe_id), params: { picture: new_attributes }
-        picture.reload
         expect(response).to redirect_to(picture_url(picture.urlsafe_id))
       end
     end

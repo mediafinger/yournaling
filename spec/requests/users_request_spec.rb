@@ -166,14 +166,10 @@ RSpec.describe "/users", type: :request do
 
     before { sign_in(user) }
 
-    it "destroys the requested user" do
+    it "destroys the requested user and redirects to the users list" do
       expect {
         delete user_url(user)
       }.to change { User.count }.by(-1)
-    end
-
-    it "redirects to the users list" do
-      delete user_url(user)
 
       expect(response).to redirect_to(users_url)
     end

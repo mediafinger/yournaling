@@ -29,6 +29,10 @@ RSpec.configure do |config|
     end
   end
 
+  config.after(:all) do
+    FileUtils.rm_rf(Dir[Rails.root.join("tmp/storage_test/")])
+  end
+
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.
