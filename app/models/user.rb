@@ -6,10 +6,6 @@ class User < ApplicationRecordYidEnabled
   has_secure_password :password, validations: false
 
   has_many :memberships, class_name: "Member", foreign_key: "user_yid", inverse_of: :user, dependent: :destroy
-  has_many :pictures_created, class_name: "Picture", foreign_key: "created_by", primary_key: "yid",
-    inverse_of: :creator, as: :creator, dependent: :nullify
-  has_many :pictures_updated, class_name: "Picture", foreign_key: "updated_by", primary_key: "yid",
-    inverse_of: :updater, as: :updater, dependent: :nullify
 
   has_many :teams, through: :memberships
 

@@ -1,6 +1,6 @@
 RSpec.describe Picture, type: :model do
   subject(:picture) do
-    described_class.new(file: blob_with_converted_image, name: new_name, team: team, creator: user)
+    described_class.new(file: blob_with_converted_image, name: new_name, team: team)
   end
 
   let(:original_content_type) { "image/jpeg" }
@@ -24,7 +24,7 @@ RSpec.describe Picture, type: :model do
   describe "#update" do
     it "attaches an image" do
       picture.save!
-      picture.reload.update!(name: "Updated Name", updater: user)
+      picture.reload.update!(name: "Updated Name")
 
       expect(picture).to be_valid
       expect(picture.content_type).to eq(new_content_type)

@@ -6,9 +6,8 @@ RSpec.describe PicturePolicy do
   let(:user) { FactoryBot.create(:user) }
   let(:team) { FactoryBot.create(:team) }
   let(:other_team) { FactoryBot.create(:team) }
-  let(:other_user) { FactoryBot.create(:user) }
-  let(:owned_record) { FactoryBot.create(:picture, team: team, creator: user) }
-  let(:unassociated_record) { FactoryBot.create(:picture, team: other_team, creator: other_user) }
+  let(:owned_record) { FactoryBot.create(:picture, team: team) }
+  let(:unassociated_record) { FactoryBot.create(:picture, team: other_team) }
   let(:policy_class) { described_class }
 
   describe "#scope" do
