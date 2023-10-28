@@ -1,12 +1,23 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery prepend: true
 
+  # Detailed error pages must only be used in development! By default use our custom (less informative) error pages
+  include ErrorHandler unless AppConf.is?(:debug, true) && !AppConf.production_env
+
   include RequestContext # sets the Current.objects, partly based on current_user and current_team
   include Authentication # sets current_user, based on the session, provides sign_in / sign_out
   include TeamScope # sets current_team & current_member, based on the session, provides switch_current_team / go_solo
 
-  # Detailed error pages must only be used in development! By default use our custom (less informative) error pages
-  include ErrorHandler unless AppConf.is?(:debug, true) && !AppConf.production_env
+  # see: https://actionpolicy.evilmartians.io/#/rails
+  #
+  # include ActionPolicy::Controller # includes ActionPolicy authorize methods, needed for API only controllers
+  # include ActionPolicy::Behaviour # includes ActionPolicy authorize methods in Service classes
+  #
+  authorize :user, through: :current_user # makes "user" available to the policy classes
+  authorize :team, through: :current_team # makes "team" available to the policy classes
+  authorize :member, through: :current_member # makes "member" available to the policy classes
+  #
+  verify_authorized # ensures all actions are authorized
 
   before_action :ensure_html_safe_flash
 

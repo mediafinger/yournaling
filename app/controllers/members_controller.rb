@@ -1,4 +1,5 @@
 class MembersController < ApplicationController
+  skip_verify_authorized # TODO: REMOVE!
   before_action :set_member, only: %i[show edit update destroy]
 
   # GET /members
@@ -50,7 +51,7 @@ class MembersController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_member
-    @member = Member.urlsafe_find(params[:id])
+    @member = Member.urlsafe_find!(params[:id])
   end
 
   # TODO: roles handling broken / move to extra endpoint - or add specific logic to create and update

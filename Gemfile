@@ -6,7 +6,7 @@ ruby File.read(".ruby-version").strip.delete_prefix("ruby-")
 
 gem "rails", "7.1.1"
 
-# gem "action_policy", "~> 0.6" # Authorization solution based on pundit
+gem "action_policy", "~> 0.6" # Authorization solution based on pundit
 gem "bcrypt", "~> 3.1" # Use bcrypt for secure password hashing
 gem "bootsnap", require: false
 # gem "chimera_http_client", "~> 1.3" # HTTP client based on Typhoeus / lib_curl
@@ -29,6 +29,7 @@ gem "strong_migrations", "~> 1.6" # Catch unsafe migrations in development
 gem "turbo-rails" # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
 
 group :development do
+  # gem "rails-erd"
   gem "web-console"
 end
 

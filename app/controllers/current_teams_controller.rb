@@ -1,4 +1,6 @@
 class CurrentTeamsController < ApplicationController
+  skip_verify_authorized # TODO: REMOVE!
+
   # GET /user/teams
   def index
     @current_teams = current_user.teams
