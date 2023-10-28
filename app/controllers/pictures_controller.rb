@@ -31,6 +31,8 @@ class PicturesController < ApplicationController
     )
 
     if @picture.save
+      RecordHistoryService.call(record: @picture, team: current_team, user: current_user, event: :created)
+
       redirect_to @picture, notice: "Picture was successfully created."
     else
       render :new, status: :unprocessable_entity
@@ -39,6 +41,8 @@ class PicturesController < ApplicationController
 
   def update
     if @picture.update(picture_params.merge(updater: current_user))
+      RecordHistoryService.call(record: @picture, team: current_team, user: current_user, event: :updated)
+
       redirect_to @picture, notice: "Picture was successfully updated."
     else
       render :edit, status: :unprocessable_entity

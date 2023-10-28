@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_10_28_105652) do
+ActiveRecord::Schema[7.1].define(version: 2023_10_28_161740) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -140,6 +140,19 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_28_105652) do
     t.index ["created_by"], name: "index_pictures_on_created_by"
     t.index ["team_yid"], name: "index_pictures_on_team_yid"
     t.index ["updated_by"], name: "index_pictures_on_updated_by"
+  end
+
+  create_table "record_histories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "event", null: false
+    t.string "record_type", null: false
+    t.string "record_yid", null: false
+    t.string "team_yid", null: false
+    t.datetime "updated_at", null: false
+    t.string "user_yid", null: false
+    t.index ["event", "record_type", "team_yid"], name: "index_record_histories_on_event_and_record_type_and_team_yid"
+    t.index ["event", "record_type", "user_yid"], name: "index_record_histories_on_event_and_record_type_and_user_yid"
+    t.index ["team_yid", "record_type", "record_yid"], name: "index_record_histories_by_team_and_record"
   end
 
   create_table "teams", primary_key: "yid", id: :string, force: :cascade do |t|
