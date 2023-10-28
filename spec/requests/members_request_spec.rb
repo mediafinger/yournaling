@@ -13,36 +13,60 @@
 RSpec.describe "/members", type: :request do
   let(:user) { FactoryBot.create(:user) }
   let(:team) { FactoryBot.create(:team) }
-  let(:roles) { Array(Member::VALID_ROLES.sample) }
+  let(:roles) { %w[owner] }
 
-  # This should return the minimal set of attributes required to create a valid
-  # Member. As you add validations to Member, be sure to
-  # adjust the attributes here as well.
-  let(:valid_attributes) {
-    { user_yid: user.yid, team_yid: team.yid, roles: roles }
-  }
-
-  let(:invalid_attributes) {
-    { user_yid: user.yid, team_yid: team.yid, roles: ["Hausmeister"] }
-  }
+  let(:valid_create_attributes) { { user_yid: user.yid, team_yid: team.yid, roles: roles } }
+  let(:invalid_create_attributes) { { user_yid: user.yid, team_yid: team.yid, roles: ["Hausmeister"] } }
 
   describe "GET /index" do
-    it "renders a successful response" do
-      Member.create! valid_attributes
-      get members_url
-      expect(response).to be_successful
+    let!(:member) { Member.create! valid_create_attributes }
+
+    context "when no current_team has been selected" do
+      before do
+        sign_in(user)
+      end
+
+      it "renders a successful response" do
+        get members_url
+        expect(response).to be_successful
+      end
+    end
+
+    context "when the same current_team has been selected already" do
+      before do
+        sign_in(user)
+        switch_current_team(team)
+      end
+
+      it "renders a successful response" do
+        get members_url
+        expect(response).to be_successful
+      end
     end
   end
 
   describe "GET /show" do
+    let!(:member) { Member.create! valid_create_attributes }
+
+    before do
+      sign_in(user)
+      switch_current_team(team)
+    end
+
     it "renders a successful response" do
-      member = Member.create! valid_attributes
       get member_url(member.urlsafe_id)
       expect(response).to be_successful
     end
   end
 
   describe "GET /new" do
+    let!(:member) { FactoryBot.create(:member, team: team, user: user, roles: %w[owner]) }
+
+    before do
+      sign_in(user)
+      switch_current_team(team)
+    end
+
     it "renders a successful response" do
       get new_member_url
       expect(response).to be_successful
@@ -50,23 +74,39 @@ RSpec.describe "/members", type: :request do
   end
 
   describe "GET /edit" do
+    let!(:member) { Member.create! valid_create_attributes }
+
+    before do
+      sign_in(user)
+      switch_current_team(team)
+    end
+
     it "renders a successful response" do
-      member = Member.create! valid_attributes
       get edit_member_url(member.urlsafe_id)
       expect(response).to be_successful
     end
   end
 
   describe "POST /create" do
+    let!(:member) { FactoryBot.create(:member, team: team, user: user, roles: %w[owner]) }
+
+    let(:other_user) { FactoryBot.create(:user) }
+    let(:valid_create_attributes) { { user_yid: other_user.yid, team_yid: team.yid, roles: roles } }
+
+    before do
+      sign_in(user)
+      switch_current_team(team)
+    end
+
     context "with valid parameters" do
       it "creates a new Member" do
         expect {
-          post members_url, params: { member: valid_attributes }
+          post members_url, params: { member: valid_create_attributes }
         }.to change { Member.count }.by(1)
       end
 
       it "redirects to the created member" do
-        post members_url, params: { member: valid_attributes }
+        post members_url, params: { member: valid_create_attributes }
 
         expect(response).to redirect_to(member_url(Member.last.urlsafe_id))
       end
@@ -75,57 +115,70 @@ RSpec.describe "/members", type: :request do
     context "with invalid parameters" do
       it "does not create a new Member" do
         expect {
-          post members_url, params: { member: invalid_attributes }
+          post members_url, params: { member: invalid_create_attributes }
         }.to change { Member.count }.by(0)
       end
 
       it "renders a response with 422 status (i.e. to display the 'new' template)" do
-        post members_url, params: { member: invalid_attributes }
+        post members_url, params: { member: invalid_create_attributes }
         expect(response).to have_http_status(:unprocessable_entity)
       end
     end
   end
 
   describe "PATCH /update" do
-    context "with valid parameters" do
-      let(:new_attributes) {
-        { roles: %w[owner editor] }
-      }
+    let!(:member) { FactoryBot.create(:member, team: team, user: user, roles: %w[owner]) }
+    let!(:other_member) { FactoryBot.create(:member, team: team, user: other_user, roles: %w[editor]) }
 
+    let(:other_user) { FactoryBot.create(:user) }
+    let(:new_attributes) { { roles: %w[manager editor] } }
+
+    before do
+      sign_in(user)
+      switch_current_team(team)
+    end
+
+    context "with valid parameters" do
       it "updates the requested member" do
-        member = Member.create! valid_attributes
-        patch member_url(member.urlsafe_id), params: { member: new_attributes }
-        member.reload
-        expect(member.roles).to match_array(%w[owner editor])
+        patch member_url(other_member.urlsafe_id), params: { member: new_attributes }
+
+        other_member.reload
+
+        expect(other_member.roles).to match_array(%w[manager editor])
       end
 
       it "redirects to the member" do
-        member = Member.create! valid_attributes
-        patch member_url(member.urlsafe_id), params: { member: new_attributes }
-        member.reload
-        expect(response).to redirect_to(member_url(member.urlsafe_id))
+        patch member_url(other_member.urlsafe_id), params: { member: new_attributes }
+
+        other_member.reload
+
+        expect(response).to redirect_to(member_url(other_member.urlsafe_id))
       end
     end
 
     context "with invalid parameters" do
       it "renders a response with 422 status (i.e. to display the 'edit' template)" do
-        member = Member.create! valid_attributes
-        patch member_url(member.urlsafe_id), params: { member: invalid_attributes }
+        patch member_url(member.urlsafe_id), params: { member: invalid_create_attributes }
         expect(response).to have_http_status(:unprocessable_entity)
       end
     end
   end
 
   describe "DELETE /destroy" do
+    let!(:member) { Member.create! valid_create_attributes }
+
+    before do
+      sign_in(user)
+      switch_current_team(team)
+    end
+
     it "destroys the requested member" do
-      member = Member.create! valid_attributes
       expect {
         delete member_url(member.urlsafe_id)
       }.to change { Member.count }.by(-1)
     end
 
     it "redirects to the members list" do
-      member = Member.create! valid_attributes
       delete member_url(member.urlsafe_id)
       expect(response).to redirect_to(members_url)
     end
