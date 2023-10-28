@@ -80,17 +80,16 @@ class ApplicationPolicy < ActionPolicy::Base
   def current_team_owns_record?
     return false if record.nil?
     return false unless logged_in?
-    return false unless team.present?
-    return false unless member.present?
-    return false unless member.user == user
-    return false unless member.team == team
 
-    if record.is_a?(Team)
-      record == team
-    elsif NON_TEAM_OWNED_RECORD_CLASSES.include?(record.class.name)
+    if NON_TEAM_OWNED_RECORD_CLASSES.include?(record.class.name)
       record == user if record.is_a?(User)
     else
-      record.team == team
+      return false unless team.present?
+      return false unless member.present?
+      return false unless member.user == user
+      return false unless member.team == team
+
+      record.is_a?(Team) ? record == team : record.team == team
     end
   end
 

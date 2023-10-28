@@ -30,14 +30,48 @@ RSpec.describe UserPolicy do
   end
 
   describe "#update?" do
+    subject(:allowed_to?) { policy.apply(rule) }
+
+    let(:policy) { policy_class.new(record, user: user, team: nil, member: nil) }
     let(:rule) { :update? }
 
-    it_behaves_like "current team owns record"
+    context "when the user is the current_user" do
+      let(:record) { owned_record }
+
+      it "returns true" do
+        expect(allowed_to?).to be true
+      end
+    end
+
+    context "when the user is not the current_user" do
+      let(:record) { unassociated_record }
+
+      it "returns false" do
+        expect(allowed_to?).to be false
+      end
+    end
   end
 
   describe "#destroy?" do
+    subject(:allowed_to?) { policy.apply(rule) }
+
+    let(:policy) { policy_class.new(record, user: user, team: nil, member: nil) }
     let(:rule) { :destroy? }
 
-    it_behaves_like "current team owns record"
+    context "when the user is the current_user" do
+      let(:record) { owned_record }
+
+      it "returns true" do
+        expect(allowed_to?).to be true
+      end
+    end
+
+    context "when the user is not the current_user" do
+      let(:record) { unassociated_record }
+
+      it "returns false" do
+        expect(allowed_to?).to be false
+      end
+    end
   end
 end
