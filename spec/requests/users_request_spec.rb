@@ -15,12 +15,12 @@ RSpec.describe "/users", type: :request do
   let(:email) { "#{name.parameterize.underscore}@example.com" }
   let(:password) { "foobar1234" }
 
-  let(:valid_attributes) { { name: name, email: email, password: password } }
-  let(:invalid_attributes) { { name: name, email: nil } }
+  let(:valid_create_attributes) { { name: name, email: email, password: password } }
+  let(:invalid_create_attributes) { { name: name, email: nil, password: nil } }
 
   describe "GET /index" do
     it "renders a successful response" do
-      user = User.create! valid_attributes
+      user = User.create! valid_create_attributes
 
       sign_in(user)
 
@@ -29,16 +29,16 @@ RSpec.describe "/users", type: :request do
       expect(response).to be_successful
     end
 
-    it "is forbidden for guests" do
+    it "is allowed for guests" do
       get users_url
 
-      expect(response).to be_forbidden
+      expect(response).to be_successful
     end
   end
 
   describe "GET /show" do
     it "renders a successful response" do
-      user = User.create! valid_attributes
+      user = User.create! valid_create_attributes
       get user_url(user)
       expect(response).to be_successful
     end
@@ -52,7 +52,7 @@ RSpec.describe "/users", type: :request do
   end
 
   describe "GET /edit" do
-    let(:user) { User.create! valid_attributes }
+    let(:user) { User.create! valid_create_attributes }
 
     it "renders a successful response" do
       sign_in(user)
@@ -83,12 +83,12 @@ RSpec.describe "/users", type: :request do
     context "with valid parameters" do
       it "creates a new User" do
         expect {
-          post users_url, params: { user: valid_attributes }
+          post users_url, params: { user: valid_create_attributes }
         }.to change { User.count }.by(1)
       end
 
       it "redirects to the created user" do
-        post users_url, params: { user: valid_attributes }
+        post users_url, params: { user: valid_create_attributes }
         expect(response).to redirect_to(user_url(User.last))
       end
     end
@@ -96,23 +96,23 @@ RSpec.describe "/users", type: :request do
     context "with invalid parameters" do
       it "does not create a new User" do
         expect {
-          post users_url, params: { user: invalid_attributes }
+          post users_url, params: { user: invalid_create_attributes }
         }.to change { User.count }.by(0)
       end
 
       it "renders a response with 422 status (i.e. to display the 'new' template)" do
-        post users_url, params: { user: invalid_attributes }
+        post users_url, params: { user: invalid_create_attributes }
+
         expect(response).to have_http_status(:unprocessable_entity)
       end
     end
   end
 
   describe "PATCH /update" do
-    let(:user) { User.create! valid_attributes }
+    let(:user) { User.create! valid_create_attributes }
+    let(:new_attributes) { { name: "New Name" } }
 
     context "with valid parameters" do
-      let(:new_attributes) { { name: "New Name" } }
-
       before { sign_in(user) }
 
       it "updates the requested user" do
@@ -131,18 +131,18 @@ RSpec.describe "/users", type: :request do
     end
 
     context "with invalid parameters" do
+      let(:invalid_update_attributes) { { nickname: "x" } }
+
       it "renders a response with 422 status (i.e. to display the 'edit' template)" do
         sign_in(user)
 
-        patch user_url(user), params: { user: invalid_attributes }
+        patch user_url(user), params: { user: invalid_update_attributes }
 
         expect(response).to have_http_status(:unprocessable_entity)
       end
     end
 
     context "when trying to update another user" do
-      let(:new_attributes) { { name: "New Name" } }
-
       it "is forbidden for guests" do
         patch user_url(user), params: { user: new_attributes }
 
@@ -162,7 +162,7 @@ RSpec.describe "/users", type: :request do
   end
 
   describe "DELETE /destroy" do
-    let(:user) { User.create! valid_attributes }
+    let(:user) { User.create! valid_create_attributes }
 
     before { sign_in(user) }
 
