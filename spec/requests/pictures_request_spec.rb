@@ -69,6 +69,22 @@ RSpec.describe "/pictures", type: :request do
 
         expect(response).to redirect_to(picture_url(Picture.last))
       end
+
+      it "creates a new Picture and records the event" do
+        sign_in(user)
+        switch_current_team(team)
+
+        expect {
+          post pictures_url, params: { picture: valid_attributes }
+        }.to change { RecordHistory.count }.by(1)
+
+        history = RecordHistory.last
+        expect(history.event).to eq("created")
+        expect(history.record_type).to eq("pic")
+        expect(history.record_yid).to eq(Picture.last.yid)
+        expect(history.team_yid).to eq(team.yid)
+        expect(history.user_yid).to eq(user.yid)
+      end
     end
 
     context "with invalid parameters" do
