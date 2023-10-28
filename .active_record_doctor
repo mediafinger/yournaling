@@ -45,6 +45,11 @@ ActiveRecordDoctor.configure do
     good_jobs.retried_good_job_id
   ]
 
+  detector :missing_non_null_constraint, ignore_columns: %w[
+    pictures.created_by
+    pictures.updated_by
+  ]
+
   detector :missing_presence_validation, ignore_attributes: %w[
     GoodJob::DiscreteExecution.active_job_id
     GoodJob::Job.id

@@ -7,7 +7,13 @@
 
 Rails.application.configure do
   # Store files locally under tmp/storage
-  config.active_storage.service = AppConf.production_env ? :amazon_s3 : :dev
+  config.active_storage.service = if AppConf.production_env
+                                    :amazon_s3
+                                  elsif AppConf.is?(:environment, :development)
+                                    :dev
+                                  else
+                                    :test
+                                  end
 
   # Avoid expensive external existence checks
   config.active_storage.track_variants = true

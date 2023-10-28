@@ -101,6 +101,9 @@ Naming/VariableNumber:
 Performance/Casecmp:
   Enabled: false
 
+Rails/Blank:
+  Enabled: false
+
 Rails/I18nLocaleTexts:
   Enabled: false # for now
 
@@ -178,7 +181,7 @@ RSpec/MultipleExpectations:
     - "**/spec/system/**/*"
 
 RSpec/MultipleMemoizedHelpers:
-  Max: 10
+  Max: 16
 
 RSpec/NestedGroups:
   Max: 4

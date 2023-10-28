@@ -1,5 +1,5 @@
 RSpec.describe "pictures/edit", type: :view do
-  let(:picture) { FactoryBot.create(:picture, :with_image) }
+  let(:picture) { FactoryBot.create(:picture) }
 
   before do
     assign(:picture, picture)

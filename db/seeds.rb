@@ -1,27 +1,35 @@
+exit unless Rails.env.development?
+exit unless AppConf.is?(:environment, :development)
+
+# delete all uploaded files
+FileUtils.rm_rf(Dir[Rails.root.join("tmp/storage/")])
+
 # clear DB before populating it
 [
   User,
   Team,
   Member,
+  Picture,
 ].each do |m|
   ActiveRecord::Base.connection.execute("TRUNCATE TABLE #{m.table_name} RESTART IDENTITY CASCADE;")
 end
 
 # create records
 
-andy = User.create!(email: "andy@example.com", password: "foobar1234", name: "Andy")
-dodo = User.create!(email: "dodo@example.com", password: "foobar1234", name: "Dodo")
-user = User.create!(email: "user@example.com", password: "foobar1234", name: "User")
+andy = User.create!(email: "andy@example.com", password: "foobar1234", name: "Andy Finger")
+dodo = User.create!(email: "dodo@example.com", password: "foobar1234", name: "Dodo Finger")
+user = User.create!(email: "user@example.com", password: "foobar1234", name: "User Account")
 
-rtv = Team.create!(name: "RanTanVan")
-team = Team.create!(name: "team")
+van = Team.create!(name: "RanTanVan")
+team = Team.create!(name: "team two")
 
-rtv_owner = Member.create!(user: andy, team: rtv, roles: %w[owner publisher])
-rtv_editor = Member.create!(user: dodo, team: rtv, roles: %w[manager editor])
+van_owner = Member.create!(user: andy, team: van, roles: %w[owner publisher])
+van_editor = Member.create!(user: dodo, team: van, roles: %w[manager editor])
 
-team_editor = Member.create!(user: andy, team:, roles: %w[editor])
+team_owner = Member.create!(user:, team:, roles: %w[owner editor])
 
-# TODO: create picture
+van_pic = FactoryBot.create(:picture, team: van, creator: andy)
+
 # TODO: create weblink
 # TODO: create geo-location
 # TODO: create memory

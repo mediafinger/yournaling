@@ -181,7 +181,7 @@ RSpec.describe "/teams", type: :system do
           post teams_url({ team: invalid_attributes })
         }.to change { Team.count }.by(0)
 
-        expect(response.status).to eq(422)
+        expect(response).to have_http_status(:unprocessable_entity)
       end
     end
   end
