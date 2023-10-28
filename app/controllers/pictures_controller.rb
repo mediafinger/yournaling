@@ -11,7 +11,7 @@ class PicturesController < ApplicationController
   end
 
   def new
-    @picture = Picture.new(team: current_team, creator: current_user)
+    @picture = Picture.new(team: current_team)
   end
 
   def edit
@@ -26,8 +26,7 @@ class PicturesController < ApplicationController
       file: ImageUploadConversionService.call(file: picture_params[:file], name: picture_params[:name]),
       name: picture_params[:name], # looks redundant, but image filename is parameterized
       date: picture_params[:date],
-      team: current_team,
-      creator: current_user
+      team: current_team
     )
 
     if @picture.save
@@ -40,7 +39,7 @@ class PicturesController < ApplicationController
   end
 
   def update
-    if @picture.update(picture_params.merge(updater: current_user))
+    if @picture.update(picture_params)
       RecordHistoryService.call(record: @picture, team: current_team, user: current_user, event: :updated)
 
       redirect_to @picture, notice: "Picture was successfully updated."

@@ -15,7 +15,7 @@ RSpec.describe "/pictures", type: :request do
   # This should return the minimal set of attributes required to create a valid
   # Picture. As you add validations to Picture, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) { { file: file, date: Time.zone.today, name: name, team: team, creator: user } }
+  let(:valid_attributes) { { file: file, date: Time.zone.today, name: name, team: team } }
   let(:invalid_attributes) { { file: nil, date: Time.zone.today, name: name } }
   let(:file_path) { "spec/support/macbookair_stickered.jpg" }
   let(:file) { Rack::Test::UploadedFile.new(file_path, file_content_type) }
@@ -104,7 +104,7 @@ RSpec.describe "/pictures", type: :request do
   describe "PATCH /update" do
     context "with valid parameters" do
       let(:picture) { Picture.create! valid_attributes }
-      let(:new_attributes) { { name: "New Name", updated_by: picture.created_by } }
+      let(:new_attributes) { { name: "New Name" } }
 
       it "updates the requested picture and redirects to the picture" do
         sign_in(user)

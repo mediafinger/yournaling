@@ -15,13 +15,6 @@ class Picture < ApplicationRecordYidEnabled
   YID_CODE = "pic".freeze
 
   belongs_to :team, foreign_key: "team_yid", primary_key: "yid", inverse_of: :pictures
-  #
-  # user associations created_by and updated_by will be nullifyed when user is deleted
-  #
-  belongs_to :creator, class_name: "User", foreign_key: "created_by", primary_key: "yid", optional: true,
-    inverse_of: :pictures_created, polymorphic: false
-  belongs_to :updater, class_name: "User", foreign_key: "updated_by", primary_key: "yid", optional: true,
-    inverse_of: :pictures_updated, polymorphic: false
 
   normalizes :name, with: ->(name) { name.strip }
 
@@ -35,9 +28,7 @@ class Picture < ApplicationRecordYidEnabled
   # currently allowing all content_types, not only webp which it should be after conversion
   validates :file, presence: true, image: { content_type: ALLOWED_CONTENT_TYPES, size_range: (MIN_BYTE_SIZE..MAX_BYTE_SIZE) }
 
-  validates :created_by, presence: true, on: :create
   validates :name, allow_blank: true, length: { maximum: 255 }
-  validates :updated_by, presence: true, on: :update
 
   def thumbnail
     create_variant(max_width: 160, max_height: 120)

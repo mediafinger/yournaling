@@ -28,7 +28,7 @@ van_editor = Member.create!(user: dodo, team: van, roles: %w[manager editor])
 
 team_owner = Member.create!(user:, team:, roles: %w[owner editor])
 
-van_pic = FactoryBot.create(:picture, team: van, creator: andy)
+van_pic = FactoryBot.create(:picture, team: van)
 
 # TODO: create weblink
 # TODO: create geo-location

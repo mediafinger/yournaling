@@ -5,7 +5,6 @@ RSpec.describe "pictures/show", type: :view do
   # value.blob.content_type => "image/jpeg" - but should be in: ["image/webp"]
 
   it "renders attributes in <p>" do
-    picture.updated_by = picture.created_by # HACK: to ensure valid? does not miss this attribute
     expect(picture.valid?).to be true
 
     assign(:picture, picture)

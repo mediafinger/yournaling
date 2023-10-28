@@ -131,15 +131,11 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_28_161740) do
 
   create_table "pictures", primary_key: "yid", id: :string, force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.string "created_by"
     t.date "date"
     t.string "name"
     t.string "team_yid", null: false
     t.datetime "updated_at", null: false
-    t.string "updated_by"
-    t.index ["created_by"], name: "index_pictures_on_created_by"
     t.index ["team_yid"], name: "index_pictures_on_team_yid"
-    t.index ["updated_by"], name: "index_pictures_on_updated_by"
   end
 
   create_table "record_histories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -182,6 +178,4 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_28_161740) do
   add_foreign_key "members", "teams", column: "team_yid", primary_key: "yid"
   add_foreign_key "members", "users", column: "user_yid", primary_key: "yid"
   add_foreign_key "pictures", "teams", column: "team_yid", primary_key: "yid"
-  add_foreign_key "pictures", "users", column: "created_by", primary_key: "yid"
-  add_foreign_key "pictures", "users", column: "updated_by", primary_key: "yid"
 end
