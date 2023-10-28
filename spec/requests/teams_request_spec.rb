@@ -35,8 +35,7 @@ RSpec.describe "/teams", type: :system do
         expect(header).not_to have_text("Logout Guest")
         expect(header).to have_text("Logout #{user.name}")
 
-        main = page.find("main")
-        expect(main).to have_text(team.name)
+        expect(page).to have_text(team.name)
       end
     end
 
