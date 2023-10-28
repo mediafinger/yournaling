@@ -1,28 +1,30 @@
 class MembersController < ApplicationController
-  skip_verify_authorized # TODO: REMOVE!
-  before_action :set_member, only: %i[show edit update destroy]
-
-  # GET /members
   def index
+    authorize! current_user, to: :index?, with: MemberPolicy
+
+    # members = authorized_scope(Member.all, type: :relation, as: :current_team_scope)
+
     @members = Member.includes(:user, :team).all
   end
 
-  # GET /members/1
   def show
+    @member = Member.urlsafe_find!(params[:id])
+    authorize! @member
   end
 
-  # GET /members/new
   def new
-    @member = Member.new
+    @member = Member.new(team: current_team)
+    authorize! @member
   end
 
-  # GET /members/1/edit
   def edit
+    @member = Member.urlsafe_find!(params[:id])
+    authorize! @member
   end
 
-  # POST /members
   def create
-    @member = Member.new(member_params)
+    @member = Member.new(create_params)
+    authorize! @member
 
     if @member.save
       redirect_to @member, notice: "Member was successfully created."
@@ -31,17 +33,21 @@ class MembersController < ApplicationController
     end
   end
 
-  # PATCH/PUT /members/1
   def update
-    if @member.update(member_params)
+    @member = Member.urlsafe_find!(params[:id])
+    authorize! @member
+
+    if @member.update(update_params)
       redirect_to @member, notice: "Member was successfully updated."
     else
       render :edit, status: :unprocessable_entity
     end
   end
 
-  # DELETE /members/1
   def destroy
+    @member = Member.urlsafe_find!(params[:id])
+    authorize! @member
+
     @member.destroy!
 
     redirect_to members_url, notice: "Member was successfully destroyed."
@@ -49,14 +55,11 @@ class MembersController < ApplicationController
 
   private
 
-  # Use callbacks to share common setup or constraints between actions.
-  def set_member
-    @member = Member.urlsafe_find!(params[:id])
+  def create_params
+    params.require(:member).permit(:user_yid, :team_yid, roles: [])
   end
 
-  # TODO: roles handling broken / move to extra endpoint - or add specific logic to create and update
-  # Only allow a list of trusted parameters through. // TODO: dry-validation / dry-contract ?!
-  def member_params
-    params.require(:member).permit(:user_yid, :team_yid, roles: [])
+  def update_params
+    params.require(:member).permit(roles: [])
   end
 end
