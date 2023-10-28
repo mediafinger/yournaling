@@ -1,20 +1,28 @@
 class PicturesController < ApplicationController
   skip_before_action :authenticate, only: %i[index show] # allow everyone to see the pictures
-  skip_verify_authorized # TODO: REMOVE!
-  before_action :set_picture, only: %i[show edit update destroy]
 
   def index
-    @pictures = Picture.order(created_at: :desc)
+    authorize! current_user, to: :index?, with: PicturePolicy
+
+    # pictures = authorized_scope(Picture.all, type: :relation, as: :current_team_scope)
+    pictures = Picture.all
+
+    @pictures = pictures.order(created_at: :desc)
   end
 
   def show
+    @picture = Picture.urlsafe_find!(params[:id])
+    authorize! @picture
   end
 
   def new
     @picture = Picture.new(team: current_team)
+    authorize! @picture
   end
 
   def edit
+    @picture = Picture.urlsafe_find!(params[:id])
+    authorize! @picture
   end
 
   def create
@@ -29,9 +37,14 @@ class PicturesController < ApplicationController
       team: current_team
     )
 
-    if @picture.save
-      RecordHistoryService.call(record: @picture, team: current_team, user: current_user, event: :created)
+    authorize! @picture
 
+    Picture.transaction do
+      @picture.save
+      RecordHistoryService.call(record: @picture, team: current_team, user: current_user, event: :created)
+    end
+
+    if @picture.persisted?
       redirect_to @picture, notice: "Picture was successfully created."
     else
       render :new, status: :unprocessable_entity
@@ -39,26 +52,34 @@ class PicturesController < ApplicationController
   end
 
   def update
-    if @picture.update(picture_params)
-      RecordHistoryService.call(record: @picture, team: current_team, user: current_user, event: :updated)
+    @picture = Picture.urlsafe_find!(params[:id])
+    authorize! @picture
 
-      redirect_to @picture, notice: "Picture was successfully updated."
-    else
+    Picture.transaction do
+      @picture.update(picture_params)
+      RecordHistoryService.call(record: @picture, team: current_team, user: current_user, event: :updated)
+    end
+
+    if @picture.changed? # == picture still dirty, not saved
       render :edit, status: :unprocessable_entity
+    else
+      redirect_to @picture, notice: "Picture was successfully updated."
     end
   end
 
   def destroy
-    @picture.destroy!
+    @picture = Picture.urlsafe_find!(params[:id])
+    authorize! @picture
+
+    Picture.transaction do
+      RecordHistoryService.call(record: @picture, team: current_team, user: current_user, event: :deleted)
+      @picture.destroy!
+    end
 
     redirect_to pictures_url, notice: "Picture was successfully destroyed."
   end
 
   private
-
-  def set_picture
-    @picture = Picture.urlsafe_find!(params[:id])
-  end
 
   # switch to dry-validation / dry-contract
   def picture_params

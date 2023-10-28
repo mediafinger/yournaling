@@ -12,39 +12,46 @@
 
 RSpec.describe "/pictures", type: :request do
   let(:file_content_type) { "image/jpeg" }
-  # This should return the minimal set of attributes required to create a valid
-  # Picture. As you add validations to Picture, be sure to
-  # adjust the attributes here as well.
-  let(:valid_attributes) { { file: file, date: Time.zone.today, name: name, team: team } }
-  let(:invalid_attributes) { { file: nil, date: Time.zone.today, name: name } }
   let(:file_path) { "spec/support/macbookair_stickered.jpg" }
   let(:file) { Rack::Test::UploadedFile.new(file_path, file_content_type) }
   let(:name) { "#{Faker::Address.community}, #{Faker::Address.city}" }
   let(:date) { Time.zone.today.iso8601 }
   let(:team) { FactoryBot.create(:team) }
   let(:user) { FactoryBot.create(:user) }
+  let(:roles) { %i[owner manager editor] }
+  let(:valid_attributes) { { file: file, date: Time.zone.today, name: name, team: team } }
+  let(:invalid_attributes) { { file: nil, date: Time.zone.today, name: nil, team: team } }
 
-  before { Member.create!(team: team, user: user) }
+  before { Member.create!(team: team, user: user, roles: Array(roles.sample)) }
 
   describe "GET /index" do
     it "renders a successful response" do
       Picture.create! valid_attributes
+
       get pictures_url
+
       expect(response).to be_successful
+      expect(response.body).to match(/#{name}/)
     end
   end
 
   describe "GET /show" do
     it "renders a successful response" do
       picture = Picture.create! valid_attributes
+
       get picture_url(picture.urlsafe_id)
+
       expect(response).to be_successful
     end
   end
 
   describe "GET /new" do
     it "renders a successful response" do
+      sign_in(user)
+      switch_current_team(team)
+
       get new_picture_url
+
       expect(response).to be_successful
     end
   end
@@ -52,17 +59,24 @@ RSpec.describe "/pictures", type: :request do
   describe "GET /edit" do
     it "renders a successful response" do
       picture = Picture.create! valid_attributes
+
+      sign_in(user)
+      switch_current_team(team)
+
       get edit_picture_url(picture.urlsafe_id)
+
       expect(response).to be_successful
     end
   end
 
   describe "POST /create" do
+    before do
+      sign_in(user)
+      switch_current_team(team)
+    end
+
     context "with valid parameters" do
       it "creates a new Picture and redirects to the created picture" do
-        sign_in(user)
-        switch_current_team(team)
-
         expect {
           post pictures_url, params: { picture: valid_attributes }
         }.to change { Picture.count }.by(1)
@@ -71,9 +85,6 @@ RSpec.describe "/pictures", type: :request do
       end
 
       it "creates a new Picture and records the event" do
-        sign_in(user)
-        switch_current_team(team)
-
         expect {
           post pictures_url, params: { picture: valid_attributes }
         }.to change { RecordHistory.count }.by(1)
@@ -102,14 +113,17 @@ RSpec.describe "/pictures", type: :request do
   end
 
   describe "PATCH /update" do
+    let(:picture) { Picture.create! valid_attributes }
+
+    before do
+      sign_in(user)
+      switch_current_team(team)
+    end
+
     context "with valid parameters" do
-      let(:picture) { Picture.create! valid_attributes }
       let(:new_attributes) { { name: "New Name" } }
 
       it "updates the requested picture and redirects to the picture" do
-        sign_in(user)
-        switch_current_team(team)
-
         patch picture_url(picture.urlsafe_id), params: { picture: new_attributes }
 
         picture.reload
@@ -121,25 +135,46 @@ RSpec.describe "/pictures", type: :request do
 
     context "with invalid parameters" do
       it "renders a response with 422 status (i.e. to display the 'edit' template)" do
-        picture = Picture.create! valid_attributes
         patch picture_url(picture.urlsafe_id), params: { picture: invalid_attributes }
+
         expect(response).to have_http_status(:unprocessable_entity)
       end
     end
   end
 
   describe "DELETE /destroy" do
-    it "destroys the requested picture" do
-      picture = Picture.create! valid_attributes
-      expect {
-        delete picture_url(picture.urlsafe_id)
-      }.to change { Picture.count }.by(-1)
+    let(:picture) { Picture.create! valid_attributes }
+    let(:roles) { %i[owner manager] }
+
+    before do
+      sign_in(user)
+      switch_current_team(team)
     end
 
-    it "redirects to the pictures list" do
-      picture = Picture.create! valid_attributes
+    it "destroys the requested picture and redirects to the pictures list" do
+      picture # to create it
+      expect(Picture.count).to eq(1)
+
       delete picture_url(picture.urlsafe_id)
+
+      expect(Picture.count).to eq(0)
       expect(response).to redirect_to(pictures_url)
+    end
+
+    it "deletes a Picture and records the event" do
+      picture # to create it
+      expect(Picture.count).to eq(1)
+
+      delete picture_url(picture.urlsafe_id)
+
+      expect(RecordHistory.count).to eq(1)
+
+      history = RecordHistory.last
+      expect(history.event).to eq("deleted")
+      expect(history.record_type).to eq("pic")
+      expect(history.record_yid).to eq(picture.yid)
+      expect(history.team_yid).to eq(team.yid)
+      expect(history.user_yid).to eq(user.yid)
     end
   end
 end
