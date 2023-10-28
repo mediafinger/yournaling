@@ -8,7 +8,7 @@ module TeamScope
   end
 
   def switch_current_team(team_yid)
-    return nil unless current_user.persisted?
+    raise ActiveRecord::RecordNotFound.new("User not persisted", current_user, :yid) unless current_user.persisted?
 
     team = current_user.teams.find(team_yid)
 

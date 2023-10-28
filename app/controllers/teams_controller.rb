@@ -1,4 +1,5 @@
 class TeamsController < ApplicationController
+  skip_verify_authorized # TODO: REMOVE!
   before_action :set_team, only: %i[show edit update destroy]
 
   # GET /teams
@@ -31,7 +32,7 @@ class TeamsController < ApplicationController
     @team = Team.new(team_params)
 
     if @team.save
-      member = Member.create!(team: @team, user: current_user, roles: Member::VALID_ROLES)
+      Member.create!(team: @team, user: current_user, roles: Member::VALID_ROLES)
       switch_current_team(@team.yid)
 
       redirect_to @team, notice: "Team was successfully created."
@@ -64,7 +65,7 @@ class TeamsController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_team
-    @team = Team.urlsafe_find(params[:id])
+    @team = Team.urlsafe_find!(params[:id])
   end
 
   # Only allow a list of trusted parameters through.

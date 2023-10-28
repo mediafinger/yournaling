@@ -22,6 +22,8 @@ module ErrorHandler
     "ActionController::ParameterMissing"           => { code: :bad_request, status: 400 },
     "Rack::QueryParser::ParameterTypeError"        => { code: :bad_request, status: 400 },
     "Rack::QueryParser::InvalidParameterError"     => { code: :bad_request, status: 400 },
+    "ActionPolicy::Unauthorized"                   => { code: :forbidden, status: 403 },
+    "ActionPolicy::UnauthorizedAction"             => { code: :forbidden, status: 403 },
   }.freeze
 
   def self.included(klass)
@@ -59,6 +61,8 @@ module ErrorHandler
       #   log_error(error, original_error: e)
       #   render_error_view(code: error.code, status: error.status, message: "Could not determine permissions")
       # end
+
+      # return # break execution to avoid AbstractController::DoubleRenderError / TODO: does not work
     end
   end
 
@@ -78,6 +82,8 @@ module ErrorHandler
     # rendered_message = AppConf.production_env ? ERROR_DEFAULTS[:message] : message
 
     render "pages/error", locals: { code:, message:, status: }, status:
+
+    # return redirect_to error_page_path, locals: { code:, message:, status: }, status:
   end
 
   def log_error(error, original_error: nil)

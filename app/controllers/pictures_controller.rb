@@ -1,5 +1,6 @@
 class PicturesController < ApplicationController
   skip_before_action :authenticate, only: %i[index show] # allow everyone to see the pictures
+  skip_verify_authorized # TODO: REMOVE!
   before_action :set_picture, only: %i[show edit update destroy]
 
   def index
@@ -53,7 +54,7 @@ class PicturesController < ApplicationController
   private
 
   def set_picture
-    @picture = Picture.urlsafe_find(params[:id])
+    @picture = Picture.urlsafe_find!(params[:id])
   end
 
   # switch to dry-validation / dry-contract

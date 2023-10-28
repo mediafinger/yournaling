@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  skip_verify_authorized # TODO: REMOVE!
   before_action :set_user, only: %i[show edit update destroy]
 
   # GET /users
@@ -51,7 +52,7 @@ class UsersController < ApplicationController
   def destroy
     raise AuthError unless @user == current_user && @user.persisted?
 
-    @user.destroy # TODO: define what happens with uploaded content
+    @user.delete # TODO: define what happens with uploaded content
 
     redirect_to users_url, notice: "User was successfully destroyed."
   end
@@ -60,7 +61,7 @@ class UsersController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_user
-    @user = User.urlsafe_find(params[:id])
+    @user = User.urlsafe_find!(params[:id])
   end
 
   # TODO: extract user#password handling to extra endpoint

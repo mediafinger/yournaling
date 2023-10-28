@@ -10,7 +10,11 @@ class ApplicationRecordYidEnabled < ApplicationRecord
     end
 
     def urlsafe_find(urlsafe_id)
-      find(Base64.urlsafe_decode64(urlsafe_id))
+      find_by(yid: Base64.urlsafe_decode64(urlsafe_id))
+    end
+
+    def urlsafe_find!(urlsafe_id)
+      find_by!(yid: Base64.urlsafe_decode64(urlsafe_id))
     end
 
     # rubocop:disable Style/ClassVars
