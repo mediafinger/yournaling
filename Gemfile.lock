@@ -180,6 +180,7 @@ GEM
       rdoc
       reline (>= 0.3.8)
     json (2.6.3)
+    jwt (2.7.1)
     language_server-protocol (3.17.0.3)
     loofah (2.21.4)
       crass (~> 1.0.2)
@@ -390,6 +391,7 @@ DEPENDENCIES
   good_job
   image_processing (~> 1.12)
   importmap-rails
+  jwt (~> 2.7)
   pg (~> 1.1)
   puma (~> 6.3)
   rack-requestid (~> 0.2)
