@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_10_28_161740) do
+ActiveRecord::Schema[7.1].define(version: 2023_12_18_220400) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -119,6 +119,18 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_28_161740) do
     t.index ["scheduled_at"], name: "index_good_jobs_on_scheduled_at", where: "(finished_at IS NULL)"
   end
 
+  create_table "locations", primary_key: "yid", id: :string, force: :cascade do |t|
+    t.json "address", default: {}
+    t.datetime "created_at", null: false
+    t.decimal "lat"
+    t.decimal "long"
+    t.string "name", null: false
+    t.string "team_yid", null: false
+    t.datetime "updated_at", null: false
+    t.text "url", null: false
+    t.index ["team_yid", "name"], name: "index_locations_on_team_yid_and_name", unique: true
+  end
+
   create_table "members", primary_key: "yid", id: :string, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "roles", default: [], null: false, array: true
@@ -159,6 +171,11 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_28_161740) do
     t.index ["name"], name: "index_teams_on_name", unique: true
   end
 
+  create_table "tokens", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.text "token", null: false
+    t.index ["token"], name: "index_tokens_on_token", unique: true
+  end
+
   create_table "users", primary_key: "yid", id: :string, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email", null: false
@@ -175,6 +192,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_28_161740) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "locations", "teams", column: "team_yid", primary_key: "yid"
   add_foreign_key "members", "teams", column: "team_yid", primary_key: "yid"
   add_foreign_key "members", "users", column: "user_yid", primary_key: "yid"
   add_foreign_key "pictures", "teams", column: "team_yid", primary_key: "yid"
