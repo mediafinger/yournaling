@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   root to: "pages#home"
 
   resources :pictures
+  resources :locations
   resources :members
   resources :teams
   resources :users
