@@ -8,6 +8,7 @@ class Location < ApplicationRecordYidEnabled
     numericality: { greater_than_or_equal_to: BigDecimal("-90.0"), less_than_or_equal_to: BigDecimal("90.0") }
   validates :long, allow_nil: true,
     numericality: { greater_than_or_equal_to: BigDecimal("-180.0"), less_than_or_equal_to: BigDecimal("180.0") }
+  validates :team_yid, presence: true, uniqueness: { scope: :name }
   validates :name, presence: true, uniqueness: { scope: :team_yid }
   validates :url, presence: true # TODO: ensure URL valid or check for 200 response?
 end

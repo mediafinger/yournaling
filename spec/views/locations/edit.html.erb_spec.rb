@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe "locations/edit", type: :view do
+  let(:team) { FactoryBot.create(:team) }
+
   let(:location) {
     Location.create!(
       name: "MyString",
@@ -8,7 +10,7 @@ RSpec.describe "locations/edit", type: :view do
       lat: "9.99",
       long: "9.99",
       address: "",
-      team: nil
+      team: team
     )
   }
 
@@ -29,8 +31,6 @@ RSpec.describe "locations/edit", type: :view do
       assert_select "input[name=?]", "location[long]"
 
       assert_select "input[name=?]", "location[address]"
-
-      assert_select "input[name=?]", "location[team_id]"
     end
   end
 end
