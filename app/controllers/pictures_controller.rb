@@ -40,8 +40,8 @@ class PicturesController < ApplicationController
     authorize! @picture
 
     Picture.transaction do
-      @picture.save
-      RecordHistoryService.call(record: @picture, team: current_team, user: current_user, event: :created)
+      @picture.save &&
+        RecordHistoryService.call(record: @picture, team: current_team, user: current_user, event: :created)
     end
 
     if @picture.persisted?
@@ -56,8 +56,8 @@ class PicturesController < ApplicationController
     authorize! @picture
 
     Picture.transaction do
-      @picture.update(picture_params)
-      RecordHistoryService.call(record: @picture, team: current_team, user: current_user, event: :updated)
+      @picture.update(picture_params) &&
+        RecordHistoryService.call(record: @picture, team: current_team, user: current_user, event: :updated)
     end
 
     if @picture.changed? # == picture still dirty, not saved

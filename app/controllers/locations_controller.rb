@@ -39,8 +39,8 @@ class LocationsController < ApplicationController
     authorize! @location
 
     Location.transaction do
-      @location.save
-      RecordHistoryService.call(record: @location, team: current_team, user: current_user, event: :created)
+      @location.save &&
+        RecordHistoryService.call(record: @location, team: current_team, user: current_user, event: :created)
     end
 
     if @location.persisted?
@@ -55,8 +55,8 @@ class LocationsController < ApplicationController
     authorize! @location
 
     Location.transaction do
-      @location.update(location_params)
-      RecordHistoryService.call(record: @location, team: current_team, user: current_user, event: :updated)
+      @location.update(location_params) &&
+        RecordHistoryService.call(record: @location, team: current_team, user: current_user, event: :updated)
     end
 
     if @location.changed? # == location still dirty, not saved
@@ -75,7 +75,7 @@ class LocationsController < ApplicationController
       @location.destroy!
     end
 
-    redirect_to pictures_url, notice: "Location was successfully destroyed."
+    redirect_to locations_url, notice: "Location was successfully destroyed."
   end
 
   private
