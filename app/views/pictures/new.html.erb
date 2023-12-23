@@ -1,1 +1,3 @@
-<%= render partial: "form", locals: { picture: @picture, form_legend: "Create picture"} %>
+<% if current_team.present? %>
+  <%= render partial: "form", locals: { picture: @picture, form_legend: "Create picture"} %>
+<% end %>
