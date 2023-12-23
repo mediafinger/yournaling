@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :weblinks
   root to: "pages#home"
 
   resources :pictures
