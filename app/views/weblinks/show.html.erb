@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @weblink %>
+
+<div>
+  <%= link_to "Edit this weblink", edit_weblink_path(@weblink) %> |
+  <%= link_to "Back to weblinks", weblinks_path %>
+
+  <%= button_to "Destroy this weblink", @weblink, method: :delete %>
+</div>
