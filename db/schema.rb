@@ -188,10 +188,22 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_18_104926) do
     t.index ["temp_auth_token"], name: "index_users_on_temp_auth_token", unique: true
   end
 
+  create_table "weblinks", primary_key: "yid", id: :string, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.text "description"
+    t.string "name", null: false
+    t.json "preview_snippet", default: {}
+    t.string "team_yid", null: false
+    t.datetime "updated_at", null: false
+    t.text "url", null: false
+    t.index ["team_yid", "url"], name: "index_weblinks_on_team_yid_and_url", unique: true
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "locations", "teams", column: "team_yid", primary_key: "yid"
   add_foreign_key "members", "teams", column: "team_yid", primary_key: "yid"
   add_foreign_key "members", "users", column: "user_yid", primary_key: "yid"
   add_foreign_key "pictures", "teams", column: "team_yid", primary_key: "yid"
+  add_foreign_key "weblinks", "teams", column: "team_yid", primary_key: "yid"
 end

@@ -1,14 +1,3 @@
-<p style="color: green"><%= notice %></p>
-
-<h1>Weblinks</h1>
-
 <div id="weblinks">
-  <% @weblinks.each do |weblink| %>
-    <%= render weblink %>
-    <p>
-      <%= link_to "Show this weblink", weblink %>
-    </p>
-  <% end %>
+  <%= render @weblinks %>
 </div>
-
-<%= link_to "New weblink", new_weblink_path %>

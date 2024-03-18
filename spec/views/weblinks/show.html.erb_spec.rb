@@ -1,20 +1,19 @@
 require "rails_helper"
 
 RSpec.describe "weblinks/show", type: :view do
-  before do
-    assign(:weblink, Weblink.create!(
-      url: "MyText",
-      name: "Name",
-      description: "MyText",
-      preview_snippet: ""
-    ))
-  end
+  let(:team) { FactoryBot.create(:team) }
+  let(:weblink) { FactoryBot.create(:weblink, team: team) }
 
   it "renders attributes in <p>" do
+    expect(weblink.valid?).to be true
+
+    assign(:weblink, weblink)
+
+    Current.team = team
+
     render
-    expect(rendered).to match(/MyText/)
-    expect(rendered).to match(/Name/)
-    expect(rendered).to match(/MyText/)
-    expect(rendered).to match(//)
+
+    expect(rendered).to match(/#{weblink.name}/)
+    expect(rendered).to match(/#{weblink.url}/)
   end
 end

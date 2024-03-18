@@ -13,16 +13,14 @@ require "rails_helper"
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
 RSpec.describe "/weblinks", type: :request do
-  # This should return the minimal set of attributes required to create a valid
-  # Weblink. As you add validations to Weblink, be sure to
-  # adjust the attributes here as well.
-  let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
-  }
+  let(:team) { FactoryBot.create(:team) }
+  let(:user) { FactoryBot.create(:user) }
+  let(:roles) { %i[owner manager editor] }
 
-  let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
-  }
+  let(:valid_attributes) { { name: "Yournaling", url: "www.yournaling.com", description: "Your Journaling", team: } }
+  let(:invalid_attributes) { { name: nil } }
+
+  before { Member.create!(team: team, user: user, roles: Array(roles.sample)) }
 
   describe "GET /index" do
     it "renders a successful response" do
@@ -42,20 +40,34 @@ RSpec.describe "/weblinks", type: :request do
 
   describe "GET /new" do
     it "renders a successful response" do
+      sign_in(user)
+      switch_current_team(team)
+
       get new_weblink_url
+
       expect(response).to be_successful
     end
   end
 
   describe "GET /edit" do
     it "renders a successful response" do
+      sign_in(user)
+      switch_current_team(team)
+
       weblink = Weblink.create! valid_attributes
+
       get edit_weblink_url(weblink)
+
       expect(response).to be_successful
     end
   end
 
   describe "POST /create" do
+    before do
+      sign_in(user)
+      switch_current_team(team)
+    end
+
     context "with valid parameters" do
       it "creates a new Weblink" do
         expect {
@@ -84,6 +96,11 @@ RSpec.describe "/weblinks", type: :request do
   end
 
   describe "PATCH /update" do
+    before do
+      sign_in(user)
+      switch_current_team(team)
+    end
+
     context "with valid parameters" do
       let(:new_attributes) {
         skip("Add a hash of attributes valid for your model")
@@ -114,6 +131,13 @@ RSpec.describe "/weblinks", type: :request do
   end
 
   describe "DELETE /destroy" do
+    let(:roles) { %i[owner manager] }
+
+    before do
+      sign_in(user)
+      switch_current_team(team)
+    end
+
     it "destroys the requested weblink" do
       weblink = Weblink.create! valid_attributes
       expect {

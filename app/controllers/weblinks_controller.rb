@@ -1,59 +1,84 @@
 class WeblinksController < ApplicationController
-  before_action :set_weblink, only: %i[show edit update destroy]
+  skip_before_action :authenticate, only: %i[index show] # allow everyone to see the weblinks
 
-  # GET /weblinks
   def index
-    @weblinks = Weblink.all
+    authorize! current_user, to: :index?, with: WeblinkPolicy
+
+    # weblinks = authorized_scope(Weblink.all, type: :relation, as: :current_team_scope)
+    weblinks = Weblink.all
+
+    @weblinks = weblinks.order(created_at: :desc)
   end
 
-  # GET /weblinks/1
   def show
+    @weblink = Weblink.urlsafe_find!(params[:id])
+    authorize! @weblink
   end
 
-  # GET /weblinks/new
   def new
-    @weblink = Weblink.new
+    @weblink = Weblink.new(team: current_team)
+    authorize! @weblink
   end
 
-  # GET /weblinks/1/edit
   def edit
+    @weblink = Weblink.urlsafe_find!(params[:id])
+    authorize! @weblink
   end
 
-  # POST /weblinks
+  # TODO: set preview_snippet by calling the URL once to also validate it
   def create
-    @weblink = Weblink.new(weblink_params)
+    @weblink = Weblink.new(
+      url: weblink_params[:url],
+      name: weblink_params[:name],
+      description: weblink_params[:description],
+      team: current_team
+    )
 
-    if @weblink.save
+    authorize! @weblink
+
+    Weblink.transaction do
+      @weblink.save &&
+        RecordHistoryService.call(record: @weblink, team: current_team, user: current_user, event: :created)
+    end
+
+    if @weblink.persisted?
       redirect_to @weblink, notice: "Weblink was successfully created."
     else
       render :new, status: :unprocessable_entity
     end
   end
 
-  # PATCH/PUT /weblinks/1
   def update
-    if @weblink.update(weblink_params)
-      redirect_to @weblink, notice: "Weblink was successfully updated.", status: :see_other
-    else
+    @weblink = Weblink.urlsafe_find!(params[:id])
+    authorize! @weblink
+
+    Weblink.transaction do
+      @weblink.update(weblink_params) &&
+        RecordHistoryService.call(record: @weblink, team: current_team, user: current_user, event: :updated)
+    end
+
+    if @weblink.changed? # == weblink still dirty, not saved
       render :edit, status: :unprocessable_entity
+    else
+      redirect_to @weblink, notice: "Weblink was successfully updated."
     end
   end
 
-  # DELETE /weblinks/1
   def destroy
-    @weblink.destroy!
-    redirect_to weblinks_url, notice: "Weblink was successfully destroyed.", status: :see_other
+    @weblink = Weblink.urlsafe_find!(params[:id])
+    authorize! @weblink
+
+    Weblink.transaction do
+      RecordHistoryService.call(record: @weblink, team: current_team, user: current_user, event: :deleted)
+      @weblink.destroy!
+    end
+
+    redirect_to weblinks_url, notice: "Weblink was successfully destroyed."
   end
 
   private
 
-  # Use callbacks to share common setup or constraints between actions.
-  def set_weblink
-    @weblink = Weblink.find(params[:id])
-  end
-
-  # Only allow a list of trusted parameters through.
   def weblink_params
-    params.require(:weblink).permit(:url, :name, :description, :preview_snippet)
+    params.require(:weblink).permit(:url, :name, :description)
   end
 end

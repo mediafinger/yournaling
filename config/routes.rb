@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   resources :members
   resources :teams
   resources :users
+  resources :weblinks
 
   resources :current_teams, only: %i[index show create destroy]
 

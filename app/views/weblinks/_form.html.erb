@@ -1,37 +1,28 @@
-<%= form_with(model: weblink) do |form| %>
-  <% if weblink.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(weblink.errors.count, "error") %> prohibited this weblink from being saved:</h2>
+<article>
+  <%= form_with(model: weblink) do |form| %>
+    <%= render partial: "shared_partials/form_validation_errors", locals: { record: weblink } %>
 
-      <ul>
-        <% weblink.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
-    </div>
+    <fieldset>
+      <h3><legend><%= form_legend %></legend></h3>
+
+      <div>
+        <%= form.label :name %>
+        <%= form.text_field :name %>
+      </div>
+
+      <div>
+        <%= form.label :url %>
+        <%= form.text_field :url %>
+      </div>
+
+      <div>
+        <%= form.label :description %>
+        <%= form.text_area :description %>
+      </div>
+
+      <div>
+        <%= form.submit %>
+      </div>
+    </fieldset>
   <% end %>
-
-  <div>
-    <%= form.label :url, style: "display: block" %>
-    <%= form.text_area :url %>
-  </div>
-
-  <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
-  </div>
-
-  <div>
-    <%= form.label :description, style: "display: block" %>
-    <%= form.text_area :description %>
-  </div>
-
-  <div>
-    <%= form.label :preview_snippet, style: "display: block" %>
-    <%= form.text_field :preview_snippet %>
-  </div>
-
-  <div>
-    <%= form.submit %>
-  </div>
-<% end %>
+</article>
