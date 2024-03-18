@@ -7,6 +7,7 @@ ruby File.read(".ruby-version").strip.delete_prefix("ruby-")
 gem "rails", "~> 7.1.3"
 
 gem "action_policy", "~> 0.6" # Authorization solution based on pundit
+gem "active_storage_validations" # to validate the content type and size of a file (add ruby-vips for dimensions)
 gem "bcrypt", "~> 3.1" # Use bcrypt for secure password hashing
 gem "bootsnap", require: false
 # gem "chimera_http_client", "~> 1.3" # HTTP client based on Typhoeus / lib_curl

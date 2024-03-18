@@ -1,11 +1,13 @@
 # file uploads are limited to images: content_type: %w[image/gif image/jpg image/webp image/png]
-# in the size of 50.kilobytes to 10.megabytes
+# after conversion to webp the file has to be in the size of 150.kilobytes to 6.megabytes
 # two variants are created: thumbnail (max: 400x300) and megasize (max: 4000x3000)
 # ideally we would delete the original file after the variants are created, but I didn't find a working solution yet
-# if deleting the original should not be possible, we should prevent uploading 10 MB files
+# if deleting the original should not be possible, we should prevent uploading files larger than 10 MB
 # and introduce a smaller limit - at least for non-paying users
 
 class Picture < ApplicationRecordYidEnabled
+  extend ActionView::Helpers::NumberHelper
+
   has_one_attached :file
 
   ALLOWED_IMAGE_TYPES = %w[gif jpg jpeg png tiff webp].freeze
@@ -24,9 +26,28 @@ class Picture < ApplicationRecordYidEnabled
   # *before* being saved to disk.
   #
   # validation after the original image has been resized and converted to webp
-  # uses the custom ImageValidator
+  # uses the active_storage_validations gem
   # currently allowing all content_types, not only webp which it should be after conversion
-  validates :file, presence: true, image: { content_type: ALLOWED_CONTENT_TYPES, size_range: (MIN_BYTE_SIZE..MAX_BYTE_SIZE) }
+  #
+  # TODO: add validations for aspect_ratio and dimensions, see: https://github.com/igorkasyanchuk/active_storage_validations
+  #
+  validates :file, attached: true,
+    size: {
+      between: (MIN_BYTE_SIZE..MAX_BYTE_SIZE),
+      message: I18n.t(
+        "errors.messages.file_size_not_between",
+        max_size: number_to_human_size(MAX_BYTE_SIZE),
+        min_size: number_to_human_size(MIN_BYTE_SIZE),
+        file_size: number_to_human_size(0) # file&.blob&.size) # TODO
+      ),
+    },
+    content_type: {
+      in: ALLOWED_CONTENT_TYPES,
+      message: I18n.t(
+        "errors.messages.content_type_invalid",
+        allowed_types: ALLOWED_IMAGE_TYPES.join(", ")
+      ),
+    }
 
   validates :name, allow_blank: true, length: { maximum: 255 }
 
