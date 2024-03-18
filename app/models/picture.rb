@@ -14,6 +14,10 @@ class Picture < ApplicationRecordYidEnabled
   ALLOWED_CONTENT_TYPES = ALLOWED_IMAGE_TYPES.map { |type| "image/#{type}" }.freeze
   MAX_BYTE_SIZE = 6.megabytes.freeze
   MIN_BYTE_SIZE = 150.kilobytes.freeze
+  MAX_PIXEL_HEIGHT = 4000
+  MIN_PIXEL_HEIGHT = 400
+  MAX_PIXEL_WIDTH = 4000
+  MIN_PIXEL_WIDTH = 400
   YID_CODE = "pic".freeze
 
   belongs_to :team, foreign_key: "team_yid", primary_key: "yid", inverse_of: :pictures
@@ -21,7 +25,7 @@ class Picture < ApplicationRecordYidEnabled
   normalizes :name, with: ->(name) { name.strip }
 
   # NOTE
-  # In PicturesController#create the uploaded files are resized (downsized) to to max of 4000x3000
+  # In PicturesController#create the uploaded files are resized (downsized) to max of MAX_PIXEL_WIDTH x MAX_PIXEL_HEIGHT
   # and converted to .webp with a quality of 90% with the ImageUploadConversionService
   # *before* being saved to disk.
   #
@@ -29,7 +33,7 @@ class Picture < ApplicationRecordYidEnabled
   # uses the active_storage_validations gem
   # currently allowing all content_types, not only webp which it should be after conversion
   #
-  # TODO: add validations for aspect_ratio and dimensions, see: https://github.com/igorkasyanchuk/active_storage_validations
+  # see: https://github.com/igorkasyanchuk/active_storage_validations
   #
   validates :file, attached: true,
     size: {
@@ -47,7 +51,19 @@ class Picture < ApplicationRecordYidEnabled
         "errors.messages.content_type_invalid",
         allowed_types: ALLOWED_IMAGE_TYPES.join(", ")
       ),
+    },
+    dimension: {
+      width: {
+        min: MIN_PIXEL_WIDTH, max: MAX_PIXEL_WIDTH,
+        message: I18n.t("errors.messages.dimension_width_inclusion", min: MIN_PIXEL_WIDTH, max: MAX_PIXEL_WIDTH)
+      },
+      height: {
+        min: MIN_PIXEL_HEIGHT, max: MAX_PIXEL_HEIGHT,
+        message: I18n.t("errors.messages.dimension_height_inclusion", min: MIN_PIXEL_HEIGHT, max: MAX_PIXEL_HEIGHT)
+      },
     }
+  # TODO: add validation to allow range of aspect ratios (e.g. width / height between 2/3 and 3/2)
+  # TODO: or crop original image to fit landscape / square / portrait variants
 
   validates :name, allow_blank: true, length: { maximum: 255 }
 

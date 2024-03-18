@@ -421,6 +421,7 @@ DEPENDENCIES
   rubocop-rails (~> 2.21)
   rubocop-rake (~> 0.6)
   rubocop-rspec (~> 2.6)
+  ruby-vips
   selenium-webdriver (~> 4.14)
   sprockets-rails
   stimulus-rails

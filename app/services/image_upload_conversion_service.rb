@@ -44,12 +44,14 @@ class ImageUploadConversionService
     # inspired by: https://vitobotta.com/2020/09/24/resize-and-optimise-images-on-upload-with-activestorage/
     #
     def resize_and_convert_before_storage(file)
-      # TODO: check file size in pixels and fail when too small? e.g. less than 800x600 pixels
+      # TODO: check file size in pixels and fail when too small? e.g. less than
+      #       Picture::MIN_PIXEL_WIDTH x Picture::MIN_PIXEL_HEIGHT pixels
       # TODO: check conversion to WebP for all images - lossless for PNG and GIF, lossy for JPEG and TIFF ?
       #       or at least keep transparency for PNGs and GIFs? (but no animated GIFs)
       # TODO: only replace when downsized is smaller than original ?! Would need checks on pixel size as well as file size.
 
-      ImageProcessing::Vips.source(file.tempfile).resize_to_limit(4000, 3000).convert("webp").saver(quality: 90).call!
+      ImageProcessing::Vips.source(file.tempfile).resize_to_limit(Picture::MAX_PIXEL_WIDTH,
+        Picture::MAX_PIXEL_HEIGHT).convert("webp").saver(quality: 90).call!
     end
   end
 end
