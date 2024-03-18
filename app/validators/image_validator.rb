@@ -45,7 +45,7 @@ class ImageValidator < ActiveModel::EachValidator
     when Array
       options[:content_type].include?(blob.content_type)
     when Symbol
-      blob.public_send("#{options[:content_type]}?")
+      blob.public_send(:"#{options[:content_type]}?")
     else
       options[:content_type] == blob.content_type
     end

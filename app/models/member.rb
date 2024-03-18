@@ -65,7 +65,7 @@ class Member < ApplicationRecordYidEnabled
   # defines owner?, manager?, editor?, publisher?, reader?  methods
   def define_has_role_methods
     VALID_ROLES.each do |role|
-      self.class.send(:define_method, "#{role}?".to_sym) do
+      self.class.send(:define_method, :"#{role}?") do
         roles.include?(role.to_s)
       end
     end

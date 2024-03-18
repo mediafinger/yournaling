@@ -32,7 +32,7 @@ RSpec.describe "/teams", type: :system do
         expect(page.status_code).to eq(200) # not supported by selenium driver
 
         header = page.find("header")
-        expect(header).not_to have_text("Logout Guest")
+        expect(header).to have_no_text("Logout Guest")
         expect(header).to have_text("Logout #{user.name}")
 
         expect(page).to have_text(team.name)

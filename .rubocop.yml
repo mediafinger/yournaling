@@ -28,6 +28,9 @@ AllCops:
 
 ################ When adding a new rule, please keep the list in alphabetical order ################
 
+Capybara/ClickLinkOrButtonStyle:
+  Enabled: false
+
 FactoryBot/CreateList:
   Enabled: false
 
