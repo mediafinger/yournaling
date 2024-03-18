@@ -4,9 +4,9 @@ class ApplicationController < ActionController::Base
   # Detailed error pages must only be used in development! By default use our custom (less informative) error pages
   include ErrorHandler unless AppConf.is?(:debug, true) && !AppConf.production_env
 
-  include RequestContext # sets the Current.objects, partly based on current_user and current_team
   include Authentication # sets current_user, based on the session, provides sign_in / sign_out
   include TeamScope # sets current_team & current_member, based on the session, provides switch_current_team / go_solo
+  include RequestContext # sets the Current.objects, partly based on current_user and current_team
 
   # see: https://actionpolicy.evilmartians.io/#/rails
   #

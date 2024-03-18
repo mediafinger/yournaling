@@ -2,7 +2,7 @@ class CurrentTeamsController < ApplicationController
   def index
     authorize! current_user, to: :index?, with: CurrentTeamPolicy
 
-    @current_teams = current_user.teams
+    @current_user_teams = current_user.teams
 
     render template: "current_teams/index"
   end

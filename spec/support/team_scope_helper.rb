@@ -2,19 +2,18 @@
 #
 # Capybara "visit page" methods
 #
-def visit_switch_current_team(_team)
+def visit_switch_current_team(team)
   visit current_teams_url
 
-  page.within("#current_teams") do
-    click_button("Select this team") # should have id: _team.urlsafe_id
-    # find("#{_team.urlsafe_id}").click # why thoes this not work?
+  page.within("#current_user_teams") do
+    find(id: team.urlsafe_id).click
   end
 end
 
 def visit_go_solo(_team)
   visit current_teams_url
 
-  page.within("#current_teams") do
+  page.within("#current_user_teams") do
     click_button("Go solo")
   end
 end

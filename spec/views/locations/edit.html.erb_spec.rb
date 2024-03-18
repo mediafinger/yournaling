@@ -1,6 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "locations/edit", type: :view do
+  let(:user) { FactoryBot.create(:user) }
   let(:team) { FactoryBot.create(:team) }
 
   let(:location) {
@@ -19,6 +20,9 @@ RSpec.describe "locations/edit", type: :view do
   end
 
   it "renders the edit location form" do
+    Current.user = user
+    Current.team = team
+
     render
 
     assert_select "form[action=?][method=?]", location_path(location), "post" do

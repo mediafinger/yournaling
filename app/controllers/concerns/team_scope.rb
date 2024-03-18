@@ -2,9 +2,11 @@ module TeamScope
   extend ActiveSupport::Concern
 
   included do
-    helper_method :current_team, :current_member
+    helper_method :current_team
+    helper_method :current_member
 
-    # before_action :...
+    # before_action :current_team
+    # before_action :current_member
   end
 
   def switch_current_team(team_yid)
