@@ -1,8 +1,9 @@
 FactoryBot.define do
   factory :weblink do
-    url { "MyText" }
-    name { "MyString" }
-    description { "MyText" }
-    preview_snippet { "" }
+    # description { "MyText" }
+    name { Faker::Fantasy::Tolkien.unique.location }
+    # preview_snippet { {} }
+    url { "https://example.com/#{Faker::Marketing.buzzwords.parameterize}" }
+    team
   end
 end

@@ -7,6 +7,8 @@ class Team < ApplicationRecordYidEnabled
     dependent: :destroy
   has_many :pictures, class_name: "Picture", foreign_key: "team_yid", primary_key: "yid", inverse_of: :team,
     dependent: :destroy
+  has_many :weblinks, class_name: "Weblink", foreign_key: "team_yid", primary_key: "yid", inverse_of: :team,
+    dependent: :delete_all
 
   has_many :users, through: :members
 

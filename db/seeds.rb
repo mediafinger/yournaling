@@ -10,16 +10,6 @@ ActiveStorage::Blob.all.each(&:purge)
   ActiveRecord::Base.connection.execute("TRUNCATE TABLE #{table} RESTART IDENTITY CASCADE;")
 end
 
-# # clear DB before populating it
-# [
-#   User,
-#   Team,
-#   Member,
-#   Picture,
-# ].each do |m|
-#   ActiveRecord::Base.connection.execute("TRUNCATE TABLE #{m.table_name} RESTART IDENTITY CASCADE;")
-# end
-
 # create records
 
 andy = User.create!(email: "andy@example.com", password: "foobar1234", name: "Andy Finger")
@@ -36,8 +26,11 @@ team_owner = Member.create!(user:, team:, roles: %w[owner editor])
 
 van_pic = FactoryBot.create(:picture, team: van)
 
-# TODO: create weblink
-# TODO: create geo-location
+loc = Location.create!(address: "N-340, Km 79.3, 11380 Tarifa, Cádiz", lat: "36.0523", long: "-5.6487", name: "Tarifa - La Peña", url: "https://www.google.com/maps?q=36.0523,-5.6487", team: van)
+
+weblink = Weblink.create!(name: "Yournaling", url: "www.yournaling.com", description: "Your Journaling", team: van)
+
+
 # TODO: create memory
 # TODO: create chronicle
 # TODO: create experience

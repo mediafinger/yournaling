@@ -1,12 +1,12 @@
-<div id="<%= dom_id weblink %>">
-  <p>
-    <strong>Url:</strong>
-    <%= weblink.url %>
-  </p>
-
+<article id="<%= dom_id weblink %>">
   <p>
     <strong>Name:</strong>
     <%= weblink.name %>
+  </p>
+
+  <p>
+    <strong>Url:</strong>
+    <%= link_to weblink.url, href: weblink.url %>
   </p>
 
   <p>
@@ -15,8 +15,14 @@
   </p>
 
   <p>
-    <strong>Preview snippet:</strong>
-    <%= weblink.preview_snippet %>
+    <strong>Team:</strong>
+    <%= weblink.team_yid %>
   </p>
 
-</div>
+  <% if action_name != "show" %>
+    <%= link_to "Show this weblink", weblink, role: "button"  %>
+  <% end %>
+  <% if Current.team == weblink.team %>
+    <%= link_to "Edit this weblink", edit_weblink_path(weblink), role: "button", class: "secondary" %>
+  <% end %>
+</article>
