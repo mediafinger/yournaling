@@ -16,4 +16,7 @@ class Location < ApplicationRecordYidEnabled
   validates :team_yid, presence: true, uniqueness: { scope: :name }
   validates :name, presence: true, uniqueness: { scope: :team_yid }
   validates :url, presence: true # TODO: ensure URL valid or check for 200 response?
+
+  # Geocoder.search(address, params: {filter: "countrycode:country_code" })
+  # "https://api.geoapify.com/v1/geocode/search?text=#{address}&filter=countrycode:#{country_code}&apiKey=#{AppConf.geoapify_api_key}"
 end

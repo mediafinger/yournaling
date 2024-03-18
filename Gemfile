@@ -14,6 +14,7 @@ gem "bootsnap", require: false
 gem "countries", "~> 6.0" # Lists of countries, their ISO codes, emoji flags and more
 gem "dry-validation", "~> 1.10" # Use dry-validation for validations [https://dry-rb.org/gems/dry-validation]
 # gem "exifr", "~> 1.3" # Read EXIF metadata from JPEG images
+gem "geocoder" # (reverse) geocode addresses and GPS coordinates
 gem "good_job" # Use good_job as active_job backend for a simpler setup with queueing in postgres
 gem "image_processing", "~> 1.12" # Use image_processing for image resizing in ActiveStorage variants
 gem "importmap-rails", "~> 1.2" # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
