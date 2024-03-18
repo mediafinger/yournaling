@@ -3,6 +3,9 @@ class Location < ApplicationRecordYidEnabled
 
   belongs_to :team, inverse_of: :locations, foreign_key: "team_yid"
 
+  normalizes :name, with: ->(name) { name.strip }
+  normalizes :url, with: ->(url) { url.strip }
+
   # validates :address # TODO: with dry-schema
   validates :lat, allow_nil: true,
     numericality: { greater_than_or_equal_to: BigDecimal("-90.0"), less_than_or_equal_to: BigDecimal("90.0") }

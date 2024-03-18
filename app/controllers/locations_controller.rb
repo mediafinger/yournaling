@@ -1,7 +1,6 @@
 class LocationsController < ApplicationController
   skip_before_action :authenticate, only: %i[index show] # allow everyone to see the locations
 
-  # GET /locations
   def index
     authorize! current_user, to: :index?, with: LocationPolicy
 
