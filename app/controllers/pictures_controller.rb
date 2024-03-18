@@ -30,6 +30,15 @@ class PicturesController < ApplicationController
       raise CustomError.new("File not valid", status: 422, code: :unprocessable_entity)
     end
 
+    # IDEA
+    # upload AND validate original picture
+    # store original picture if valid
+    # in a background job, create an XL / 4k variant with up to 4000x4000 pixels
+    # and replace the original file attachment with the webp 4k variant
+    # rely on dependent: :purge_later to delete the original picture
+    # the variants can be cropped to fit the desired aspect ratio for all preview images on the website
+    # create the other variants (consider portrait, square, landscape orginal picture aspect ratios)
+    #
     @picture = Picture.new(
       file: ImageUploadConversionService.call(file: picture_params[:file], name: picture_params[:name]),
       name: picture_params[:name], # looks redundant, but image filename is parameterized
