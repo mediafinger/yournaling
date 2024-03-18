@@ -23,7 +23,7 @@ RSpec.describe "locations/new", type: :view do
 
     assert_select "form[action=?][method=?]", locations_path, "post" do
       assert_select "input[name=?]", "location[name]"
-      assert_select "textarea[name=?]", "location[url]"
+      assert_select "input[name=?]", "location[url]"
       assert_select "input[name=?]", "location[lat]"
       assert_select "input[name=?]", "location[long]"
       assert_select "input[name=?]", "location[address]" # TODO
