@@ -2,11 +2,11 @@ RSpec.shared_examples "has_role?" do |role|
   it "#{role}? returns true when role #{role} is set" do
     member.add_role(role.to_sym)
 
-    expect(member.public_send("#{role}?".to_sym)).to be true
+    expect(member.public_send(:"#{role}?")).to be true
   end
 
   it "#{role}? returns false when role #{role} is not set" do
-    expect(member.public_send("#{role}?")).to be false
+    expect(member.public_send(:"#{role}?")).to be false
   end
 end
 

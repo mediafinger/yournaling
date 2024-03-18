@@ -35,7 +35,7 @@ class AppConf
   class << self
     # sets instance variable with given name and value
     def set(var_name, value)
-      instance_variable_set("@#{var_name}", value)
+      instance_variable_set(:"@#{var_name}", value)
     end
 
     # creates getter method that reads the instance variable with given name
@@ -43,7 +43,7 @@ class AppConf
     #   or `default` value
     # will raise a KeyError on boot when `required: true` but ENV variable not set
     def register(var_name, default: nil, prefix: nil, required: false)
-      define_singleton_method(var_name) { instance_variable_get("@#{var_name}") }
+      define_singleton_method(var_name) { instance_variable_get(:"@#{var_name}") }
 
       env_name = [prefix, var_name].compact.join("_").upcase
       value = required ? ENV.fetch(env_name) : ENV.fetch(env_name, default)
