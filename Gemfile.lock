@@ -109,6 +109,8 @@ GEM
       xpath (~> 3.2)
     concurrent-ruby (1.2.3)
     connection_pool (2.4.1)
+    countries (6.0.0)
+      unaccent (~> 0.3)
     crack (1.0.0)
       bigdecimal
       rexml
@@ -365,6 +367,7 @@ GEM
       railties (>= 6.0.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
+    unaccent (0.4.0)
     unicode-display_width (2.5.0)
     view_component (3.11.0)
       activesupport (>= 5.2.0, < 8.0)
@@ -401,6 +404,7 @@ DEPENDENCIES
   bootsnap
   bundler-audit (~> 0.9)
   capybara (~> 3.19)
+  countries (~> 6.0)
   dry-validation (~> 1.10)
   factory_bot-awesome_linter (~> 1.0)
   factory_bot_rails (~> 6.2)

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_18_104926) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_18_213655) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -124,13 +124,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_18_104926) do
 
   create_table "locations", primary_key: "yid", id: :string, force: :cascade do |t|
     t.json "address", default: {}
+    t.string "country_code", null: false
     t.datetime "created_at", null: false
+    t.string "description"
     t.decimal "lat"
     t.decimal "long"
     t.string "name", null: false
     t.string "team_yid", null: false
     t.datetime "updated_at", null: false
     t.text "url", null: false
+    t.index ["country_code"], name: "index_locations_on_country_code"
     t.index ["team_yid", "name"], name: "index_locations_on_team_yid_and_name", unique: true
   end
 
