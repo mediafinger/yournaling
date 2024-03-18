@@ -26,7 +26,7 @@ team_owner = Member.create!(user:, team:, roles: %w[owner editor])
 
 van_pic = FactoryBot.create(:picture, team: van)
 
-loc = Location.create!(address: "N-340, Km 79.3, 11380 Tarifa, Cádiz", lat: "36.0523", long: "-5.6487", name: "Tarifa - La Peña", url: "https://www.google.com/maps?q=36.0523,-5.6487", team: van)
+loc = Location.create!(country_code: "es", address: "N-340, Km 79.3, 11380 Tarifa, Cádiz", lat: "36.0523", long: "-5.6487", name: "Tarifa - La Peña", url: "https://www.google.com/maps?q=36.0523,-5.6487", team: van)
 
 weblink = Weblink.create!(name: "Yournaling", url: "www.yournaling.com", description: "Your Journaling", team: van)
 

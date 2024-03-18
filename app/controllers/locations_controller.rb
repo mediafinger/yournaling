@@ -25,9 +25,12 @@ class LocationsController < ApplicationController
     authorize! @location
   end
 
+  # TODO: create with either address + geocoding for lat & long coordinates
+  # TODO: or create with lat & long coordinates and reverse geocoding for address
   def create
     @location = Location.new(
       address: location_params[:address] || {}, # TODO: validate Hash / JSON structure
+      country_code: location_params[:country_code],
       lat: location_params[:lat],
       long: location_params[:long],
       name: location_params[:name],
@@ -81,6 +84,6 @@ class LocationsController < ApplicationController
 
   # switch to dry-validation / dry-contract
   def location_params
-    params.require(:location).permit(:name, :url, :lat, :long, :address)
+    params.require(:location).permit(:address, :country_code, :name, :lat, :long, :url)
   end
 end

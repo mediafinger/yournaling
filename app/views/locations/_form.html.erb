@@ -11,9 +11,22 @@
       </div>
 
       <div>
+        <%= form.label :country_code %>
+        <%= form.select :country_code, CountriesEnForSelectService.call.map { |k,v| [v, k] }, selected: form.object.country_code || "de" %>
+        <%# TODO: use select2 or other searchable drop-down %>
+      </div>
+
+      <div>
+        <%= form.label :address %>
+        <%= form.text_field :address %>
+      </div>
+
+      <div>
         <%= form.label :url %>
         <%= form.text_field :url %>
       </div>
+
+      <%# TODO: show either ADDRESS or LAT and LONG fields for either geocoding or reverse-geocoding %>
 
       <div>
         <%= form.label :lat %>
@@ -26,9 +39,10 @@
       </div>
 
       <div>
-        <%= form.label :address %>
-        <%= form.text_field :address %>
+        <%= form.label :description %>
+        <%= form.text_area :description %>
       </div>
+
 
       <div>
         <%= form.submit %>

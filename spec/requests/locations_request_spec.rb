@@ -15,7 +15,7 @@ RSpec.describe "/locations", type: :request do
   let(:user) { FactoryBot.create(:user) }
   let(:roles) { %i[owner manager editor] }
 
-  let(:valid_attributes) { { name: "Camping spot near the beach", url: "www.yournaling.com", team: } }
+  let(:valid_attributes) { { name: "Camping spot near the beach", country_code: "de", url: "www.yournaling.com", team: } }
   let(:invalid_attributes) { { name: nil } }
 
   before { Member.create!(team: team, user: user, roles: Array(roles.sample)) }

@@ -5,6 +5,17 @@
   </p>
 
   <p>
+    <strong>Country:</strong>
+    <% iso_country = ISO3166::Country.find_country_by_alpha2(location.country_code) %>
+    <%= iso_country.iso_short_name %> (<%= iso_country.alpha2 %>) <%= iso_country.emoji_flag %>
+  </p>
+
+  <p>
+    <strong>Address:</strong>
+    <%= location.address %>
+  </p>
+
+  <p>
     <strong>Url:</strong>
     <%= render ExternalLinkComponent.new(url: location.url, text: location.url) %>
   </p>
@@ -20,8 +31,8 @@
   </p>
 
   <p>
-    <strong>Address:</strong>
-    <%= location.address %>
+    <strong>Description:</strong>
+    <%= location.description %>
   </p>
 
   <p>
