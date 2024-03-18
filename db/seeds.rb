@@ -3,16 +3,22 @@ exit unless AppConf.is?(:environment, :development)
 
 # delete all uploaded files
 FileUtils.rm_rf(Dir[Rails.root.join("tmp/storage/")])
+ActiveStorage::Blob.all.each(&:purge)
 
 # clear DB before populating it
-[
-  User,
-  Team,
-  Member,
-  Picture,
-].each do |m|
-  ActiveRecord::Base.connection.execute("TRUNCATE TABLE #{m.table_name} RESTART IDENTITY CASCADE;")
+(ActiveRecord::Base.connection.tables - %w[ar_internal_metadata schema_migrations]).each do |table|
+  ActiveRecord::Base.connection.execute("TRUNCATE TABLE #{table} RESTART IDENTITY CASCADE;")
 end
+
+# # clear DB before populating it
+# [
+#   User,
+#   Team,
+#   Member,
+#   Picture,
+# ].each do |m|
+#   ActiveRecord::Base.connection.execute("TRUNCATE TABLE #{m.table_name} RESTART IDENTITY CASCADE;")
+# end
 
 # create records
 
