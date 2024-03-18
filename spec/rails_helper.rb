@@ -75,4 +75,9 @@ RSpec.configure do |config|
   config.include Authentication, type: :controller
   config.include TeamScope, type: :controller
   config.include RequestContext, type: :controller
+
+  config.include ActiveSupport::Testing::TimeHelpers
+  config.include ViewComponent::TestHelpers, type: :component
+  config.include ViewComponent::SystemTestHelpers, type: :component
+  config.include Capybara::RSpecMatchers, type: :component
 end

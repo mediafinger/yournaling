@@ -83,6 +83,9 @@ Layout/MultilineMethodCallIndentation:
 Layout/SpaceAroundMethodCallOperator:
   Enabled: false
 
+Lint/MissingSuper:
+  Enabled: false
+
 Lint/TrailingCommaInAttributeDeclaration:
   Description: 'This cop checks for trailing commas in attribute declarations.'
   Enabled: true

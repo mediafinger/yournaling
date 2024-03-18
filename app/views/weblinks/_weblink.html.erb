@@ -6,7 +6,7 @@
 
   <p>
     <strong>Url:</strong>
-    <%= link_to weblink.url, href: weblink.url %>
+    <%= render ExternalLinkComponent.new(url: weblink.url, text: weblink.url) %>
   </p>
 
   <p>

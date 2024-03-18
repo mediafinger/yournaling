@@ -8,7 +8,7 @@ RSpec.describe "locations/show", type: :view do
   before do
     assign(:location, Location.create!(
       name: "Flat in Carrer Ferlandina",
-      url: "https://www.google.de/maps/place/#{lat},#{long}",
+      url: "https://www.google.de/maps/place/#{long},#{lat}",
       lat: lat,
       long: long,
       address: {},
@@ -19,7 +19,7 @@ RSpec.describe "locations/show", type: :view do
   it "renders attributes in <p>" do
     render
     expect(rendered).to match(/Flat in Carrer Ferlandina/)
-    expect(rendered).to match(%r{https://www.google.de/maps/place/41.3819253,2.1656894})
+    expect(rendered).to match(%r{https://www.google.de/maps/place/2.1656894,41.3819253})
     expect(rendered).to match(/#{lat}/)
     expect(rendered).to match(/#{long}/)
     expect(rendered).to match(/{}/)

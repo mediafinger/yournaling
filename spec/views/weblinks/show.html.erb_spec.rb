@@ -14,6 +14,6 @@ RSpec.describe "weblinks/show", type: :view do
     render
 
     expect(rendered).to match(/#{weblink.name}/)
-    expect(rendered).to match(/#{weblink.url}/)
+    expect(rendered).to have_link(weblink.url, href: weblink.url)
   end
 end

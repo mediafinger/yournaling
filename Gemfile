@@ -27,6 +27,7 @@ gem "sprockets-rails" # The original asset pipeline for Rails [https://github.co
 gem "stimulus-rails" # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
 gem "strong_migrations", "~> 1.6" # Catch unsafe migrations in development
 gem "turbo-rails" # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
+gem "view_component" # Use view_component for reusable view components [https://viewcomponent.org]
 
 group :development do
   # gem "rails-erd"
