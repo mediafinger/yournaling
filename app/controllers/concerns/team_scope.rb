@@ -34,7 +34,7 @@ module TeamScope
   private
 
   def current_team
-    @current_team ||= current_user.teams.find(session[:team_yid]) if session[:team_yid]
+    @current_team ||= current_user.teams.find_by(yid: session[:team_yid]) if session[:team_yid]
   end
 
   def current_member
