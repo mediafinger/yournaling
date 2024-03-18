@@ -37,7 +37,7 @@ module Authentication
   end
 
   def current_user
-    @current_user ||= session[:user_yid] ? User.urlsafe_find(session[:user_yid]) : guest_user
+    @current_user ||= session[:user_yid] ? (User.urlsafe_find(session[:user_yid]) || guest_user) : guest_user
   end
 
   def guest_user
