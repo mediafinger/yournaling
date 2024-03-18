@@ -32,7 +32,7 @@
   <% if action_name != "show" %>
     <%= link_to "Show this picture", picture, role: "button"  %>
   <% end %>
-  <% if current_team == picture.team %>
+  <% if Current.team == picture.team %>
     <%= link_to "Edit this picture", edit_picture_path(picture), role: "button", class: "secondary" %>
   <% end %>
 </article>
