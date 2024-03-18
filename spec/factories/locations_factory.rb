@@ -7,7 +7,7 @@ FactoryBot.define do
     team
 
     after(:build) do |location, _params|
-      location.url = "https://www.google.de/maps/place/#{location.lat},#{location.long}"
+      location.url = "https://www.google.de/maps/place/#{location.long},#{location.lat}"
     end
   end
 end

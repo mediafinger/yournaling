@@ -112,7 +112,7 @@ RSpec.describe "/locations", type: :request do
         patch location_url(location), params: { location: new_attributes }
 
         location.reload
-        expect(location.url).to eq("www.rantanvan.com")
+        expect(location.url).to eq("https://www.rantanvan.com")
       end
 
       it "redirects to the location" do
