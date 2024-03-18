@@ -4,7 +4,7 @@ class Location < ApplicationRecordYidEnabled
   belongs_to :team, inverse_of: :locations, foreign_key: "team_yid"
 
   normalizes :name, with: ->(name) { name.strip }
-  normalizes :url, with: ->(url) { url.strip }
+  normalizes :url, with: ->(url) { ActionDispatch::Http::URL.full_url_for(host: url.strip, protocol: "https") }
 
   # validates :address # TODO: with dry-schema
   validates :lat, allow_nil: true,

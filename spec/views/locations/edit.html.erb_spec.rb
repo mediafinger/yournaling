@@ -28,7 +28,7 @@ RSpec.describe "locations/edit", type: :view do
     assert_select "form[action=?][method=?]", location_path(location), "post" do
       assert_select "input[name=?]", "location[name]"
 
-      assert_select "textarea[name=?]", "location[url]"
+      assert_select "input[name=?]", "location[url]"
 
       assert_select "input[name=?]", "location[lat]"
 
