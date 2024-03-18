@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 # Read and set Ruby version
 ruby File.read(".ruby-version").strip.delete_prefix("ruby-")
 
-gem "rails", "7.1.2"
+gem "rails", "~> 7.1.3"
 
 gem "action_policy", "~> 0.6" # Authorization solution based on pundit
 gem "bcrypt", "~> 3.1" # Use bcrypt for secure password hashing
