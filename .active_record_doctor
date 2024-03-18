@@ -1,23 +1,26 @@
 ActiveRecordDoctor.configure do
   # Global settings affect all detectors.
-  global :ignore_tables, [
-    # Ignore internal Rails-related tables.
-    "ar_internal_metadata",
-    "schema_migrations",
-    "active_storage_blobs",
-    "active_storage_attachments",
-    "action_text_rich_texts",
-
-    # Add project-specific tables here.
+  # Ignore internal Rails-related tables.
+  global :ignore_tables, %w[
+    ar_internal_metadata
+    schema_migrations
+    active_storage_blobs
+    active_storage_attachments
+    action_text_rich_texts
+    good_job_batches
+    good_job_executions
+    good_job_processes
+    good_job_settings
+    good_jobs
   ]
 
-  global :ignore_models, [
-    "ActiveStorage::Attachment",
-    "ActiveStorage::Blob",
-    "ActiveStorage::Record",
-    "ActiveStorage::VariantRecord",
-    "ApplicationRecord",
-    "PaperTrail::Version",
+  global :ignore_models, %w[
+    ActiveStorage::Attachment
+    ActiveStorage::Blob
+    ActiveStorage::Record
+    ActiveStorage::VariantRecord
+    ApplicationRecord
+    PaperTrail::Version
   ]
   # Detector-specific settings affect only one specific detector.
   # detector :extraneous_indexes, ignore_tables: ["users"], ignore_indexes: ["accounts_on_email_organization_id"]
