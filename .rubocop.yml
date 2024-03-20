@@ -22,6 +22,7 @@ AllCops:
     - "**/vendor/**/*"
     - "config/environments/**/*" # generated files
     - "config/initializers/new_framework_defaults*" # generated files
+    - "config/initializers/geocoder.rb" # generated file
     - "db/schema.rb" # generated file
     - "spec/rails_helper.rb"
     - "spec/spec_helper.rb"
