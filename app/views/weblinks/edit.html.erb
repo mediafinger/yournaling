@@ -1,9 +1,9 @@
-<% if Current.team == @weblink.team %>
+<% if current_team == @weblink.team %>
   <%= render partial: "form", locals: { weblink: @weblink, form_legend: "Edit weblink"} %>
 <% end %>
 
 <%= link_to "Show this weblink", @weblink, role: "button" %>
 
-<% if Current.team == @weblink.team %>
+<% if current_team == @weblink.team %>
   <%= button_to "Destroy this weblink", weblink_path(@weblink), method: :delete, class: "secondary" %>
 <% end %>

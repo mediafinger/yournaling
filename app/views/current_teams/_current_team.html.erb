@@ -9,7 +9,7 @@
     <%= current_user_team.members.find_by(user: current_user).roles %>
   </p>
 
-  <% if current_user_team == Current.team %>
+  <% if current_user_team == current_team %>
     <%= button_to "go solo", { controller: :current_teams, action: :destroy, id: current_user_team.urlsafe_id }, method: :delete, class: "secondary", id: current_user_team.urlsafe_id %>
     &nbsp; <i>(unlink currently selected team)</i>
   <% else %>

@@ -21,18 +21,15 @@ class TeamSwitcherComponent < ApplicationComponent
   end
 
   def before_render
-    @login_link_tag =
-      link_to "Login",
+    @login_link_tag = link_to "Login",
       login_path,
       role: active_path?(login_path) ? "button" : nil
 
-    @logout_button_tag =
-      button_to "Logout #{current_user.name}",
-        { controller: :sessions, action: :destroy },
-        { method: :delete, role: "link", class: "logout" }
+    @logout_button_tag = button_to "Logout #{current_user.name}",
+      { controller: :sessions, action: :destroy },
+      { method: :delete, role: "link", class: "logout" }
 
-    @switch_teams_link_tag =
-      link_to "Switch team",
+    @switch_teams_link_tag = link_to "Switch team",
       current_teams_path,
       role: active_path?(current_teams_path) ? "button" : nil
   end

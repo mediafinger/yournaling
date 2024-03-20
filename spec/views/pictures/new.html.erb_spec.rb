@@ -3,6 +3,7 @@ RSpec.describe "pictures/new", type: :view do
   let(:team) { FactoryBot.create(:team) }
 
   before do
+    allow(view).to receive(:current_team).and_return(team)
     assign(:picture, Picture.new(
       name: "MyString",
       team: team
@@ -10,9 +11,6 @@ RSpec.describe "pictures/new", type: :view do
   end
 
   it "renders new picture form" do
-    Current.user = user
-    Current.team = team
-
     render
 
     assert_select "form[action=?][method=?]", pictures_path, "post" do

@@ -22,7 +22,7 @@
   <% if action_name != "show" %>
     <%= link_to "Show this weblink", weblink, role: "button"  %>
   <% end %>
-  <% if Current.team == weblink.team %>
+  <% if current_team == weblink.team %>
     <%= link_to "Edit this weblink", edit_weblink_path(weblink), role: "button", class: "secondary" %>
   <% end %>
 </article>

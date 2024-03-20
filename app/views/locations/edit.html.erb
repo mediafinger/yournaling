@@ -1,9 +1,9 @@
-<% if Current.team == @location.team %>
+<% if current_team == @location.team %>
   <%= render partial: "form", locals: { location: @location, form_legend: "Edit location"} %>
 <% end %>
 
 <%= link_to "Show this location", @location, role: "button" %>
 
-<% if Current.team == @location.team %>
+<% if current_team == @location.team %>
   <%= button_to "Destroy this location", location_path(@location), method: :delete, class: "secondary" %>
 <% end %>

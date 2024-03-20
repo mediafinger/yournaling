@@ -4,13 +4,12 @@ RSpec.describe "weblinks/show", type: :view do
   let(:team) { FactoryBot.create(:team) }
   let(:weblink) { FactoryBot.create(:weblink, team: team) }
 
-  it "renders attributes in <p>" do
-    expect(weblink.valid?).to be true
-
+  before do
+    allow(view).to receive(:current_team).and_return(team)
     assign(:weblink, weblink)
+  end
 
-    Current.team = team
-
+  it "renders attributes in <p>" do
     render
 
     expect(rendered).to match(/#{weblink.name}/)

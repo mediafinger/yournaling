@@ -5,6 +5,8 @@ RSpec.describe "locations/new", type: :view do
   let(:team) { FactoryBot.create(:team) }
 
   before do
+    allow(view).to receive(:current_team).and_return(team)
+
     assign(:location, Location.new(
       name: "MyString",
       country_code: "de",
@@ -17,9 +19,6 @@ RSpec.describe "locations/new", type: :view do
   end
 
   it "renders new location form" do
-    Current.user = user
-    Current.team = team
-
     render
 
     assert_select "form[action=?][method=?]", locations_path, "post" do

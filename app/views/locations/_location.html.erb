@@ -43,7 +43,7 @@
   <% if action_name != "show" %>
     <%= link_to "Show this location", location, role: "button"  %>
   <% end %>
-  <% if Current.team == location.team %>
+  <% if current_team == location.team %>
     <%= link_to "Edit this location", edit_location_path(location), role: "button", class: "secondary" %>
   <% end %>
 </article>

@@ -17,13 +17,11 @@ RSpec.describe "locations/edit", type: :view do
   }
 
   before do
+    allow(view).to receive(:current_team).and_return(team)
     assign(:location, location)
   end
 
   it "renders the edit location form" do
-    Current.user = user
-    Current.team = team
-
     render
 
     assert_select "form[action=?][method=?]", location_path(location), "post" do

@@ -4,13 +4,11 @@ RSpec.describe "pictures/edit", type: :view do
   let(:team) { FactoryBot.create(:team) }
 
   before do
+    allow(view).to receive(:current_team).and_return(team)
     assign(:picture, picture)
   end
 
   it "renders the edit picture form" do
-    Current.user = user
-    Current.team = team
-
     render
 
     assert_select "form[enctype=?][action=?][method=?]", "multipart/form-data", picture_path(picture.urlsafe_id), "post" do

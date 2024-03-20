@@ -5,12 +5,11 @@ RSpec.describe "weblinks/new", type: :view do
   let(:weblink) { FactoryBot.build(:weblink, team: team) }
 
   before do
+    allow(view).to receive(:current_team).and_return(team)
     assign(:weblink, weblink)
   end
 
   it "renders new weblink form" do
-    Current.team = team
-
     render
 
     assert_select "form[action=?][method=?]", weblinks_path, "post" do
