@@ -24,18 +24,7 @@
           <li><%= link_to "Members", members_path, role: active_path?(members_path) ? "button" : nil %></li>
         </ul>
 
-        <ul>
-          <% if current_user.persisted? %>
-            <% if current_user.teams %>
-              <li><%= link_to "Switch team", current_teams_path %></li>
-            <% end %>
-            <li>
-              <%= button_to "Logout #{current_user.name}", { controller: :sessions, action: :destroy }, { method: :delete, role: "link", class: "logout" } %>
-            </li>
-          <% else %>
-            <li><%= link_to "Login", login_path, role: active_path?(login_path) ? "button" : nil %></li>
-          <% end %>
-        </ul>
+       <%= render TeamSwitcherComponent.new %>
 
         <ul>
           <li>

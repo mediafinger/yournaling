@@ -1,12 +1,8 @@
 module TeamScope
   extend ActiveSupport::Concern
 
-  included do
-    helper_method :current_team
-    helper_method :current_member
-
-    # before_action :current_team
-    # before_action :current_member
+  def self.included(base)
+    base.send :helper_method, :current_team, :current_member if base.respond_to? :helper_method
   end
 
   def switch_current_team(team_yid)

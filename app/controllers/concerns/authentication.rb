@@ -1,10 +1,10 @@
 module Authentication
   extend ActiveSupport::Concern
 
-  included do
-    helper_method :current_user
+  def self.included(base)
+    base.send :helper_method, :current_user if base.respond_to? :helper_method
 
-    before_action :authenticate
+    base.send :before_action, :authenticate if base.respond_to? :before_action
   end
 
   def sign_in(email:, password:)

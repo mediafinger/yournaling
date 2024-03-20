@@ -1,9 +1,9 @@
 module RequestContext
   extend ActiveSupport::Concern
 
-  included do
-    before_action :initialize_request_context
-    # before_action :set_sentry_context # uncomment when hosting and using Sentry
+  def self.included(base)
+    base.send :before_action, :initialize_request_context if base.respond_to? :before_action
+    # base.send :before_action, :set_sentry_context # uncomment when hosting and using Sentry
   end
 
   private
