@@ -1,6 +1,4 @@
 class ExternalLinkComponent < ApplicationComponent
-  attr_reader :link_tag
-
   erb_template <<-ERB
     <span class="external_link">
       <%= link_tag %>
