@@ -89,7 +89,7 @@ RSpec.describe "/users", type: :request do
 
       it "redirects to the created user" do
         post users_url, params: { user: valid_create_attributes }
-        expect(response).to redirect_to(user_url(User.last))
+        expect(response).to redirect_to(user_url(User.first))
       end
     end
 

@@ -7,7 +7,7 @@ class PicturesController < ApplicationController
     # pictures = authorized_scope(Picture.all, type: :relation, as: :current_team_scope)
     pictures = Picture.all
 
-    @pictures = pictures.order(created_at: :desc)
+    @pictures = pictures
   end
 
   def show

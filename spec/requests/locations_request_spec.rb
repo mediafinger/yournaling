@@ -79,7 +79,7 @@ RSpec.describe "/locations", type: :request do
 
       it "redirects to the created location" do
         post locations_url, params: { location: valid_attributes }
-        expect(response).to redirect_to(location_url(Location.last))
+        expect(response).to redirect_to(location_url(Location.first))
       end
     end
 

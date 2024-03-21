@@ -162,13 +162,13 @@ RSpec.describe "/teams", type: :system do
           post teams_url({ team: { name: "New Name" } }) # TODO: do NOT test POST create with capybara!
         }.to change { Team.count }.by(1)
 
-        expect(response).to redirect_to(team_url(Team.last))
+        expect(response).to redirect_to(team_url(Team.first))
       end
 
       it "redirects to the created team" do
         post teams_url({ team: { name: "New Name" } })
 
-        expect(response).to redirect_to(team_url(Team.last))
+        expect(response).to redirect_to(team_url(Team.first))
       end
     end
 

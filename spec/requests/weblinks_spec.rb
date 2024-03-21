@@ -77,7 +77,7 @@ RSpec.describe "/weblinks", type: :request do
 
       it "redirects to the created weblink" do
         post weblinks_url, params: { weblink: valid_attributes }
-        expect(response).to redirect_to(weblink_url(Weblink.last))
+        expect(response).to redirect_to(weblink_url(Weblink.first))
       end
     end
 

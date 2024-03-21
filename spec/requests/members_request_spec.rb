@@ -108,7 +108,7 @@ RSpec.describe "/members", type: :request do
       it "redirects to the created member" do
         post members_url, params: { member: valid_create_attributes }
 
-        expect(response).to redirect_to(member_url(Member.last.urlsafe_id))
+        expect(response).to redirect_to(member_url(Member.first.urlsafe_id))
       end
     end
 

@@ -7,7 +7,7 @@ class LocationsController < ApplicationController
     # locations = authorized_scope(Location.all, type: :relation, as: :current_team_scope)
     locations = Location.all
 
-    @locations = locations.order(created_at: :desc)
+    @locations = locations
   end
 
   def show

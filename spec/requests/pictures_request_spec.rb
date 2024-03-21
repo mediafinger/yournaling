@@ -81,7 +81,7 @@ RSpec.describe "/pictures", type: :request do
           post pictures_url, params: { picture: valid_attributes }
         }.to change { Picture.count }.by(1)
 
-        expect(response).to redirect_to(picture_url(Picture.last))
+        expect(response).to redirect_to(picture_url(Picture.first))
       end
 
       it "creates a new Picture and records the event" do
@@ -89,10 +89,10 @@ RSpec.describe "/pictures", type: :request do
           post pictures_url, params: { picture: valid_attributes }
         }.to change { RecordHistory.count }.by(1)
 
-        history = RecordHistory.last
+        history = RecordHistory.first
         expect(history.event).to eq("created")
         expect(history.record_type).to eq("pic")
-        expect(history.record_yid).to eq(Picture.last.yid)
+        expect(history.record_yid).to eq(Picture.first.yid)
         expect(history.team_yid).to eq(team.yid)
         expect(history.user_yid).to eq(user.yid)
       end
@@ -169,7 +169,7 @@ RSpec.describe "/pictures", type: :request do
 
       expect(RecordHistory.count).to eq(1)
 
-      history = RecordHistory.last
+      history = RecordHistory.first
       expect(history.event).to eq("deleted")
       expect(history.record_type).to eq("pic")
       expect(history.record_yid).to eq(picture.yid)

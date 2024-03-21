@@ -7,7 +7,7 @@ class WeblinksController < ApplicationController
     # weblinks = authorized_scope(Weblink.all, type: :relation, as: :current_team_scope)
     weblinks = Weblink.all
 
-    @weblinks = weblinks.order(created_at: :desc)
+    @weblinks = weblinks
   end
 
   def show

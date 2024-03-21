@@ -2,6 +2,13 @@ class ApplicationRecordYidEnabled < ApplicationRecord
   self.abstract_class = true
   self.primary_key = "yid"
 
+  # NOTE: setting a default order by created_at DESC for all YID enabled models
+  # should be the same as ordering by YID (with the newest models on top)
+  # but faster. In case any other ordering is needed use `Model.reorder(...)`.
+  # Be aware that `find_in_batches` ignores any default order.
+  #
+  default_scope { order(created_at: :desc) }
+
   before_create :set_yid_and_timestamps
 
   class << self
