@@ -7,12 +7,16 @@ class ApplicationNavActionsComponent < ApplicationComponent
     </ul>
   ERB
 
-  def initialize(actions_for: [])
+  def initialize(actions_for: [], scope: nil)
     @sections = actions_for
+    @scope = scope
   end
 
   def before_render
-    @active_section = @sections.find { |section| active_path?(send(:"#{section}_path")) }
-    @action_buttons = render partial: "#{@active_section}/action_buttons" if @active_section && current_team
+    @active_section = @sections.find do |section|
+      path_prefix = [@scope, section].compact.join("_")
+      active_path?(send(:"#{path_prefix}_path"))
+    end
+    @action_buttons = render partial: "#{@active_section}/action_buttons" if @active_section && (current_team || @scope == "admin")
   end
 end

@@ -1,0 +1,21 @@
+<article id="<%= dom_id member %>">
+  <p>
+    <strong>User:</strong>
+    <%= member.user.name %>
+  </p>
+
+  <p>
+    <strong>Team:</strong>
+    <%= member.team.name %>
+  </p>
+
+  <p>
+    <strong>Roles:</strong>
+    <%= member.roles %>
+  </p>
+
+  <% if action_name != "show" %>
+    <%= link_to "Show this member", member, role: "button"  %>
+  <% end %>
+  <%= link_to 'Edit this member', edit_member_path(member), role: "button", class: "secondary" %>
+</article>

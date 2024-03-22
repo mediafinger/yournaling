@@ -1,0 +1,4 @@
+<%= render partial: "form", locals: { team: @team, form_legend: "Edit team"} %>
+
+<%= link_to "Show this team", @team, role: "button" %>
+<%= button_to 'Destroy this team', team_path(@team), method: :delete, class: "secondary" %>
