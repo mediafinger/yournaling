@@ -12,7 +12,7 @@ end
 
 # create records
 
-andy = User.create!(email: "andy@example.com", password: "foobar1234", name: "Andy Finger")
+andy = User.create!(email: "andy@example.com", password: "foobar1234", name: "Andy Finger", role: "admin")
 dodo = User.create!(email: "dodo@example.com", password: "foobar1234", name: "Dodo Finger")
 user = User.create!(email: "user@example.com", password: "foobar1234", name: "User Account")
 
