@@ -5,7 +5,8 @@ default: &default
   encoding: unicode
   host: <%= AppConf.yournaling_db_host %>
   password: <%= AppConf.yournaling_db_password %>
-  pool: <%= AppConf.rails_max_threads.to_i * AppConf.web_concurrency.to_i + 10 %>
+  # pool: <%= AppConf.rails_max_threads.to_i * AppConf.web_concurrency.to_i + 10 %>
+  pool: <%= AppConf.rails_max_threads.to_i + 3 + AppConf.good_job_max_threads.to_i + 2 %>
   port: <%= AppConf.yournaling_db_port.to_i %>
   read_timeout: <%= AppConf.yournaling_db_timeout_seconds.to_i * 1000 %>
   reconnect: true
