@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  resources :weblinks
   root to: "pages#home"
 
   resources :pictures
@@ -16,6 +15,8 @@ Rails.application.routes.draw do
   delete "logout", to: "sessions#destroy"
 
   get "/pictures_only/:id", to: "pictures_only#show", as: "picture_only" # TODO: replace :id (YID) with urlsafe_id ?!
+
+  mount GoodJob::Engine, at: "good_job", constraints: ->(request) { AdminConstraint.matches?(request) }
 
   # catch all unknown routes to NOT throw a FATAL ActionController::RoutingError
   match "*path", to: "application#error_404", via: :all,
