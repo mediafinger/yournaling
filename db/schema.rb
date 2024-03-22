@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_18_213655) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_18_233643) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -184,6 +184,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_18_213655) do
     t.string "nickname"
     t.string "password_digest", null: false
     t.jsonb "preferences", default: {}, null: false
+    t.string "role", default: "user", null: false
     t.text "temp_auth_token"
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
