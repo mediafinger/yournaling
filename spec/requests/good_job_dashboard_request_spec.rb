@@ -9,9 +9,9 @@ RSpec.describe "/good_job", type: :system do
         let(:role) { "admin" }
 
         it "renders a successful response", aggregate_failures: true do
-          visit "/good_job"
+          visit "/admin/good_job"
 
-          expect(page).to have_current_path("/good_job/jobs", ignore_query: true)
+          expect(page).to have_current_path("/admin/good_job/jobs", ignore_query: true)
           expect(page.status_code).to eq(200) # not supported by selenium driver
         end
       end
@@ -20,9 +20,9 @@ RSpec.describe "/good_job", type: :system do
         let(:role) { "user" }
 
         it "renders a not found response", aggregate_failures: true do
-          visit "/good_job"
+          visit "/admin/good_job"
 
-          expect(page).to have_current_path("/good_job", ignore_query: true)
+          expect(page).to have_current_path("/admin/good_job", ignore_query: true)
           expect(page.status_code).to eq(404) # not supported by selenium driver
         end
       end
@@ -32,9 +32,9 @@ RSpec.describe "/good_job", type: :system do
       let(:role) { "admin" }
 
       it "renders a not found response", aggregate_failures: true do
-        visit "/good_job"
+        visit "/admin/good_job"
 
-        expect(page).to have_current_path("/good_job", ignore_query: true)
+        expect(page).to have_current_path("/admin/good_job", ignore_query: true)
         expect(page.status_code).to eq(404) # not supported by selenium driver
       end
     end

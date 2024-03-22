@@ -29,10 +29,5 @@
     <% end %>
   </p>
 
-  <% if action_name != "show" %>
-    <%= link_to "Show this picture", picture, role: "button"  %>
-  <% end %>
-  <% if current_team == picture.team %>
-    <%= link_to "Edit this picture", edit_picture_path(picture), role: "button", class: "secondary" %>
-  <% end %>
+  <%= render AdminActionsComponent.new(record: picture, name: "picture") %>
 </article>

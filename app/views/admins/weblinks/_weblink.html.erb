@@ -19,10 +19,5 @@
     <%= weblink.team_yid %>
   </p>
 
-  <% if action_name != "show" %>
-    <%= link_to "Show this weblink", weblink, role: "button"  %>
-  <% end %>
-  <% if current_team == weblink.team %>
-    <%= link_to "Edit this weblink", edit_weblink_path(weblink), role: "button", class: "secondary" %>
-  <% end %>
+  <%= render AdminActionsComponent.new(record: weblink, name: "weblink") %>
 </article>

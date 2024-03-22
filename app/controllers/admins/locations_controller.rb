@@ -29,7 +29,6 @@ module Admins
         url: location_params[:url] # TODO: validate URL, or ensure it returns 200 ?!
       )
 
-
       Location.transaction do
         @location.save &&
           RecordHistoryService.call(record: @location, team: current_team, user: current_user, event: :created)

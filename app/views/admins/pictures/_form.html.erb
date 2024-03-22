@@ -1,5 +1,5 @@
 <article>
-  <%= form_with(model: picture) do |form| %>
+  <%= form_with(model: [:admin, picture]) do |form| %>
     <%= render partial: "shared_partials/form_validation_errors", locals: { record: picture } %>
 
     <fieldset>

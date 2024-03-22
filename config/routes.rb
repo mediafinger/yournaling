@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   get "/pictures_only/:id", to: "pictures_only#show", as: "picture_only"
 
   namespace :admin, module: "admins", constraints: ->(request) { AdminConstraint.matches?(request) } do
+    get "", to: "pages#index"
     resources :locations
     resources :members
     resources :pictures
