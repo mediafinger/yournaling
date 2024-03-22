@@ -17,6 +17,9 @@ class ApplicationNavActionsComponent < ApplicationComponent
       path_prefix = [@scope, section].compact.join("_")
       active_path?(send(:"#{path_prefix}_path"))
     end
-    @action_buttons = render partial: "#{@active_section}/action_buttons" if @active_section && (current_team || @scope == "admin")
+
+    return unless @active_section && (current_team || @scope == "admin")
+
+    @action_buttons = render partial: "#{@active_section}/action_buttons"
   end
 end

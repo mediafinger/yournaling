@@ -37,7 +37,6 @@ module Admins
         team: current_team
       )
 
-
       Picture.transaction do
         @picture.save &&
           RecordHistoryService.call(record: @picture, team: current_team, user: current_user, event: :created)

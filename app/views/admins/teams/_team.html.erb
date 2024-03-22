@@ -4,8 +4,5 @@
     <%= team.name %>
   </p>
 
-  <% if action_name != "show" %>
-    <%= link_to "Show this team", team, role: "button"  %>
-  <% end %>
-  <%= link_to 'Edit this team', edit_team_path(team), role: "button", class: "secondary" %>
+<%= render AdminActionsComponent.new(record: team, name: "team") %>
 </article>
