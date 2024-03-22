@@ -8,6 +8,6 @@ class ApplicationNavComponent < ApplicationComponent
   ERB
 
   def initialize
-    @sections = %w[pictures locations weblinks teams users members]
+    @sections = %w[pictures locations weblinks members]
   end
 end

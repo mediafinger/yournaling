@@ -1,0 +1,28 @@
+<article id="<%= dom_id weblink %>">
+  <p>
+    <strong>Name:</strong>
+    <%= weblink.name %>
+  </p>
+
+  <p>
+    <strong>Url:</strong>
+    <%= render ExternalLinkComponent.new(url: weblink.url, text: weblink.url) %>
+  </p>
+
+  <p>
+    <strong>Description:</strong>
+    <%= weblink.description %>
+  </p>
+
+  <p>
+    <strong>Team:</strong>
+    <%= weblink.team_yid %>
+  </p>
+
+  <% if action_name != "show" %>
+    <%= link_to "Show this weblink", weblink, role: "button"  %>
+  <% end %>
+  <% if current_team == weblink.team %>
+    <%= link_to "Edit this weblink", edit_weblink_path(weblink), role: "button", class: "secondary" %>
+  <% end %>
+</article>

@@ -1,0 +1,27 @@
+<article>
+  <%= form_with(model: picture) do |form| %>
+    <%= render partial: "shared_partials/form_validation_errors", locals: { record: picture } %>
+
+    <fieldset>
+      <h3><legend><%= form_legend %></legend></h3>
+
+      <div>
+        <%= form.file_field :file, accept: Picture::ALLOWED_IMAGE_TYPES.map { |type| ".#{type}" }.join(", ") %>
+      </div>
+
+      <div>
+        <%= form.label :name %>
+        <%= form.text_field :name %> <%# TODO: fill in name from file_field if one selected %>
+      </div>
+
+      <div>
+        <%= form.label :date %>
+        <%= form.date_field :date, value: Date.current %> <%# TODO: fill in date from file_field if one selected %>
+      </div>
+
+      <div>
+        <%= form.submit %> <%# TODO: deactivate button until file_field has been used successfully %>
+      </div>
+    </fieldset>
+  <% end %>
+</article>
