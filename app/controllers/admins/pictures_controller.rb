@@ -39,7 +39,8 @@ module Admins
 
       Picture.transaction do
         @picture.save &&
-          RecordHistoryService.call(record: @picture, team: current_team, user: current_user, event: :created)
+          RecordHistoryService.call(
+            record: @picture, team: current_team, user: current_user, event: :created, done_by_admin: true)
       end
 
       if @picture.persisted?
@@ -54,7 +55,8 @@ module Admins
 
       Picture.transaction do
         @picture.update(picture_params) &&
-          RecordHistoryService.call(record: @picture, team: current_team, user: current_user, event: :updated)
+          RecordHistoryService.call(
+            record: @picture, team: current_team, user: current_user, event: :updated, done_by_admin: true)
       end
 
       if @picture.changed? # == picture still dirty, not saved
@@ -68,7 +70,8 @@ module Admins
       @picture = Picture.urlsafe_find!(params[:id])
 
       Picture.transaction do
-        RecordHistoryService.call(record: @picture, team: current_team, user: current_user, event: :deleted)
+        RecordHistoryService.call(
+          record: @picture, team: current_team, user: current_user, event: :deleted, done_by_admin: true)
         @picture.destroy!
       end
 

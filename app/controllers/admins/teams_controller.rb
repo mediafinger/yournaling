@@ -21,8 +21,14 @@ module Admins
 
       @team = Team.new(team_params)
 
-      if @team.save
-        redirect_to admin_team_url(@team), notice: "Team was successfully created."
+      Team.transaction do
+        @team.save &&
+          RecordHistoryService.call(
+            record: @team, team: current_team, user: current_user, event: :created, done_by_admin: true)
+      end
+
+      if @team.persisted?
+        redirect_to @team, notice: "Team was successfully created."
       else
         render :new, status: :unprocessable_entity
       end
@@ -31,17 +37,27 @@ module Admins
     def update
       @team = Team.urlsafe_find!(params[:id])
 
-      if @team.update(team_params)
-        redirect_to admin_team_url(@team), notice: "Team was successfully updated."
-      else
+      Team.transaction do
+        @team.update(team_params) &&
+          RecordHistoryService.call(
+            record: @team, team: current_team, user: current_user, event: :updated, done_by_admin: true)
+      end
+
+      if @team.changed? # == team still dirty, not saved
         render :edit, status: :unprocessable_entity
+      else
+        redirect_to @team, notice: "Team was successfully updated."
       end
     end
 
     def destroy
       @team = Team.urlsafe_find!(params[:id])
 
-      @team.destroy!
+      Team.transaction do
+        RecordHistoryService.call(
+          record: @team, team: current_team, user: current_user, event: :deleted, done_by_admin: true)
+        @team.destroy!
+      end
 
       redirect_to admin_teams_url, notice: "Team was successfully destroyed."
     end

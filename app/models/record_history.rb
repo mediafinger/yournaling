@@ -12,6 +12,13 @@
 #   might be sane to remove all Changes older than 30.days or so.
 #
 class RecordHistory < ApplicationRecord
+  validates :done_by_admin, inclusion: [true, false]
+  validates :event, presence: true
+  validates :record_type, presence: true
+  validates :record_yid, presence: true
+  validates :team_yid, presence: true
+  validates :user_yid, presence: true
+
   def readonly?
     created_at.present?
   end

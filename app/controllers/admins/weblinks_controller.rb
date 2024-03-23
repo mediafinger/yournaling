@@ -27,7 +27,8 @@ module Admins
 
       Weblink.transaction do
         @weblink.save &&
-          RecordHistoryService.call(record: @weblink, team: current_team, user: current_user, event: :created)
+          RecordHistoryService.call(
+            record: @weblink, team: current_team, user: current_user, event: :created, done_by_admin: true)
       end
 
       if @weblink.persisted?
@@ -42,7 +43,8 @@ module Admins
 
       Weblink.transaction do
         @weblink.update(weblink_params) &&
-          RecordHistoryService.call(record: @weblink, team: current_team, user: current_user, event: :updated)
+          RecordHistoryService.call(
+            record: @weblink, team: current_team, user: current_user, event: :updated, done_by_admin: true)
       end
 
       if @weblink.changed? # == weblink still dirty, not saved
@@ -56,7 +58,8 @@ module Admins
       @weblink = Weblink.urlsafe_find!(params[:id])
 
       Weblink.transaction do
-        RecordHistoryService.call(record: @weblink, team: current_team, user: current_user, event: :deleted)
+        RecordHistoryService.call(
+          record: @weblink, team: current_team, user: current_user, event: :deleted, done_by_admin: true)
         @weblink.destroy!
       end
 

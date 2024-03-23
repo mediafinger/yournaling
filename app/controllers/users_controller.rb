@@ -28,7 +28,12 @@ class UsersController < ApplicationController
     @user = User.new(create_params)
     authorize! @user
 
-    if @user.save
+    User.transaction do
+      @user.save &&
+        RecordHistoryService.call(record: @user, team: Team.new(yid: :none), user: @user, event: :created)
+    end
+
+    if @user.persisted?
       redirect_to @user, notice: "User was successfully created."
     else
       render :new, status: :unprocessable_entity
@@ -40,10 +45,15 @@ class UsersController < ApplicationController
     @user = User.urlsafe_find!(params[:id])
     authorize! @user
 
-    if @user.update(update_params)
-      redirect_to @user, notice: "User was successfully updated."
-    else
+    User.transaction do
+      @user.update(update_params) &&
+        RecordHistoryService.call(record: @user, team: Team.new(yid: :none), user: current_user, event: :updated)
+    end
+
+    if @user.changed? # == user still dirty, not saved
       render :edit, status: :unprocessable_entity
+    else
+      redirect_to @user, notice: "User was successfully updated."
     end
   end
 
@@ -52,7 +62,10 @@ class UsersController < ApplicationController
     @user = User.urlsafe_find!(params[:id])
     authorize! @user
 
-    @user.delete # TODO: define what happens with uploaded content
+    User.transaction do
+      RecordHistoryService.call(record: @user, team: Team.new(yid: :none), user: current_user, event: :deleted)
+      @user.destroy! # TODO: define what happens with uploaded content
+    end
 
     redirect_to users_url, notice: "User was successfully destroyed."
   end
