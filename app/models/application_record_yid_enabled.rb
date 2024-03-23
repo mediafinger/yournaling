@@ -33,7 +33,8 @@ class ApplicationRecordYidEnabled < ApplicationRecord
 
     def yid_enabled_models
       # here be dragons
-      @@descendants ||= Rails.application.eager_load! || descendants
+      Rails.application.eager_load! unless defined?(@@descendants)
+      @@descendants ||= ApplicationRecordYidEnabled.descendants
     end
     # rubocop:enable Style/ClassVars
   end
