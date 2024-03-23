@@ -46,13 +46,7 @@
 
   <hr>
 
-  <p>
-    <strong>Team:</strong>
-    <%= location.team.name %>
-    <i>(<%= location.team_yid %>)</i>
-  </p>
-
+  <%= render AdminShowTeamComponent.new(team: location.team) %>
   <%= render AdminShowMetaInformationComponent.new(record: location) %>
-
   <%= render AdminActionsComponent.new(record: location, name: "location") %>
 </article>

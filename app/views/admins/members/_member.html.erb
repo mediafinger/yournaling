@@ -12,13 +12,7 @@
 
   <hr>
 
-  <p>
-    <strong>Team:</strong>
-    <%= member.team.name %>
-    <i>(<%= member.team_yid %>)</i>
-  </p>
-
+  <%= render AdminShowTeamComponent.new(team: member.team) %>
   <%= render AdminShowMetaInformationComponent.new(record: member) %>
-
   <%= render AdminActionsComponent.new(record: member, name: "member") %>
 </article>

@@ -16,13 +16,7 @@
 
   <hr>
 
-  <p>
-    <strong>Team:</strong>
-    <%= weblink.team.name %>
-    <i>(<%= weblink.team_yid %>)</i>
-  </p>
-
+  <%= render AdminShowTeamComponent.new(team: weblink.team) %>
   <%= render AdminShowMetaInformationComponent.new(record: weblink) %>
-
   <%= render AdminActionsComponent.new(record: weblink, name: "weblink") %>
 </article>

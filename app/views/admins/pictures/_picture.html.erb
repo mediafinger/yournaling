@@ -31,13 +31,7 @@
 
   <hr>
 
-  <p>
-    <strong>Team:</strong>
-    <%= picture.team.name %>
-    <i>(<%= picture.team_yid %>)</i>
-  </p>
-
+  <%= render AdminShowTeamComponent.new(team: picture.team) %>
   <%= render AdminShowMetaInformationComponent.new(record: picture) %>
-
   <%= render AdminActionsComponent.new(record: picture, name: "picture") %>
 </article>
