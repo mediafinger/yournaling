@@ -48,16 +48,13 @@ ActiveRecordDoctor.configure do
     good_jobs.retried_good_job_id
   ]
 
-  detector :missing_non_null_constraint, ignore_columns: %w[]
+  detector :missing_non_null_constraint, ignore_columns: %w[
+  ]
 
   detector :missing_presence_validation, ignore_attributes: %w[
     GoodJob::DiscreteExecution.active_job_id
     GoodJob::Job.id
-    RecordHistory.event
-    RecordHistory.record_type
-    RecordHistory.record_yid
-    RecordHistory.team_yid
-    RecordHistory.user_yid
+    Location.geocoded_address
   ]
 
   detector :short_primary_key_type, ignore_tables: %w[
