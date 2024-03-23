@@ -1,8 +1,9 @@
 .admin-area {
-  background-color: #36a;
-  color: #acf;
-
   a {
     color: #acf;
   }
+
+  background-color: #36a;
+  color: #acf;
+  padding: 1rem;
 }
