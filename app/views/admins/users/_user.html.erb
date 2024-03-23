@@ -11,15 +11,7 @@
 
   <hr>
 
-  <p>
-    <strong>Teams:</strong>
-    <ul>
-      <% user.teams.each do |team| %>
-        <li><%= "#{team.name} (#{team.yid}) [#{user.memberships.find_by(team: team).roles.join(', ')}]" %></li>
-      <% end %>
-    </ul>
-  </p>
-
+  <%= render AdminShowUserTeamsComponent.new(user: user) %>
   <%= render AdminShowMetaInformationComponent.new(record: user) %>
   <%= render AdminActionsComponent.new(record: user, name: "user") %>
 </article>
