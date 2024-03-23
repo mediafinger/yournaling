@@ -15,6 +15,10 @@
 
     <header>
       <nav>
+        <% if current_user&.admin? %>
+          <%= link_to "Go to Admin Area", "/admin" %>
+        <% end %>
+
         <%= render ApplicationNavComponent.new %>
       </nav>
 
