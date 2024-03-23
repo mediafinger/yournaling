@@ -6,15 +6,7 @@
 
   <hr>
 
-  <p>
-    <strong>Members:</strong>
-    <ul>
-      <% team.members.each do |member| %>
-        <li><%= "#{member.user.name} (#{member.yid}) [#{member.roles.join(', ')}]" %></li>
-      <% end %>
-    </ul>
-  </p>
-
+  <%= render AdminShowTeamMembersComponent.new(team: team) %>
   <%= render AdminShowMetaInformationComponent.new(record: team) %>
   <%= render AdminActionsComponent.new(record: team, name: "team") %>
 </article>
