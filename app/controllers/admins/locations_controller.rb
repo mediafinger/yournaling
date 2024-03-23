@@ -31,7 +31,8 @@ module Admins
 
       Location.transaction do
         @location.save &&
-          RecordHistoryService.call(record: @location, team: current_team, user: current_user, event: :created)
+          RecordHistoryService.call(
+            record: @location, team: current_team, user: current_user, event: :created, done_by_admin: true)
       end
 
       if @location.persisted?
@@ -46,7 +47,8 @@ module Admins
 
       Location.transaction do
         @location.update(location_params) &&
-          RecordHistoryService.call(record: @location, team: current_team, user: current_user, event: :updated)
+          RecordHistoryService.call(
+            record: @location, team: current_team, user: current_user, event: :updated, done_by_admin: true)
       end
 
       if @location.changed? # == location still dirty, not saved
@@ -60,7 +62,8 @@ module Admins
       @location = Location.urlsafe_find!(params[:id])
 
       Location.transaction do
-        RecordHistoryService.call(record: @location, team: current_team, user: current_user, event: :deleted)
+        RecordHistoryService.call(
+          record: @location, team: current_team, user: current_user, event: :deleted, done_by_admin: true)
         @location.destroy!
       end
 

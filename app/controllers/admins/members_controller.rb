@@ -19,8 +19,14 @@ module Admins
     def create
       @member = Member.new(create_params)
 
-      if @member.save
-        redirect_to admin_member_url(@member), notice: "Member was successfully created."
+      Member.transaction do
+        @member.save &&
+          RecordHistoryService.call(
+            record: @member, team: current_team, user: current_user, event: :created, done_by_admin: true)
+      end
+
+      if @member.persisted?
+        redirect_to @member, notice: "Member was successfully created."
       else
         render :new, status: :unprocessable_entity
       end
@@ -29,19 +35,29 @@ module Admins
     def update
       @member = Member.urlsafe_find!(params[:id])
 
-      if @member.update(update_params)
-        redirect_to admin_member_url(@member), notice: "Member was successfully updated."
-      else
+      Member.transaction do
+        @member.update(update_params) &&
+          RecordHistoryService.call(
+            record: @member, team: current_team, user: current_user, event: :updated, done_by_admin: true)
+      end
+
+      if @member.changed? # == member still dirty, not saved
         render :edit, status: :unprocessable_entity
+      else
+        redirect_to @member, notice: "Member was successfully updated."
       end
     end
 
     def destroy
       @member = Member.urlsafe_find!(params[:id])
 
-      @member.destroy!
+      Member.transaction do
+        RecordHistoryService.call(
+          record: @member, team: current_team, user: current_user, event: :deleted, done_by_admin: true)
+        @member.destroy!
+      end
 
-      redirect_to admin_members_url, notice: "Member was successfully destroyed."
+      redirect_to members_url, notice: "Member was successfully destroyed."
     end
 
     private
