@@ -1,0 +1,50 @@
+<article id="<%=dom_id(record_history)%>">
+  <p>
+    <strong>
+      Event:
+      <%= record_history.event %>
+    </strong>
+    <%= record_history.created_at.iso8601 %>
+    <% if record_history.done_by_admin? %>
+      <strong>changed by Admin</strong>
+    <% end %>
+  </p>
+
+  <p>
+    <strong>Record:</strong>
+    <% record = ApplicationRecordYidEnabled.fynd(record_history.record_yid) %>
+    <% if record.present? %>
+      <%= link_to(record.class.name, send(:"admin_#{record.class.name.tableize.singularize}_url", record)) %>
+    <% end %>
+    <i>(<%= record_history.record_yid %>)</i>
+  </p>
+
+  <p>
+    <strong>User:</strong>
+    <% user = User.find_by(yid: record_history.user_yid) %>
+    <% if user.present? %>
+      <%= link_to(user.name, admin_user_url(user)) %>
+    <% end %>
+    <i>(<%= record_history.user_yid %>)</i>
+  </p>
+
+  <p>
+    <strong>Team:</strong>
+    <% if record_history.team_yid == "admin" %>
+      admin
+    <% elsif record_history.team_yid == "none" %>
+      none
+    <% else %>
+      <% team = Team.find_by(yid: record_history.team_yid) %>
+      <% if team.present? %>
+        <%= link_to(team.name, admin_team_url(team)) %>
+      <% end %>
+      <i>(<%= record_history.team_yid %>)</i>
+    <% end %>
+  </p>
+
+  <p>
+    <strong>YID:</strong>
+    <%= record_history.id %>
+  </p>
+</article>

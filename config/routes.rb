@@ -24,6 +24,7 @@ Rails.application.routes.draw do
     resources :teams
     resources :users
     resources :weblinks
+    get "record_history", to: "record_history#index", as: :record_history
 
     mount GoodJob::Engine, at: "good_job" # , constraints: ->(request) { AdminConstraint.matches?(request) }
   end

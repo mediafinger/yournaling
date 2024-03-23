@@ -1,7 +1,7 @@
 <article id="<%= dom_id member %>">
   <p>
     <strong>User:</strong>
-    <%= member.user.name %>
+    <%= link_to(member.user.name, admin_user_url(member.user)) %>
     <i>(<%= member.user_yid %>)</i>
   </p>
 

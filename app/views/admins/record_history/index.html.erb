@@ -1,0 +1,5 @@
+<div id="record_history">
+  <% @record_history.each do |record_history| %>
+    <%= render partial: "record_history", locals: { record_history: } %>
+  <% end %>
+</div>
