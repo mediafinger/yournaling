@@ -44,9 +44,27 @@
     <%= location.description %>
   </p>
 
+  <hr>
+
   <p>
     <strong>Team:</strong>
-    <%= location.team_yid %>
+    <%= location.team.name %>
+    <i>(<%= location.team_yid %>)</i>
+  </p>
+
+  <p>
+    <strong>created_at:</strong>
+    <%= location.created_at.iso8601 %>
+  </p>
+
+  <p>
+    <strong>updated_at:</strong>
+    <%= location.updated_at.iso8601 %>
+  </p>
+
+  <p>
+    <strong>YID:</strong>
+    <%= location.yid %>
   </p>
 
   <%= render AdminActionsComponent.new(record: location, name: "location") %>

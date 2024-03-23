@@ -14,9 +14,27 @@
     <%= weblink.description %>
   </p>
 
+  <hr>
+
   <p>
     <strong>Team:</strong>
-    <%= weblink.team_yid %>
+    <%= weblink.team.name %>
+    <i>(<%= weblink.team_yid %>)</i>
+  </p>
+
+  <p>
+    <strong>created_at:</strong>
+    <%= weblink.created_at.iso8601 %>
+  </p>
+
+  <p>
+    <strong>updated_at:</strong>
+    <%= weblink.updated_at.iso8601 %>
+  </p>
+
+  <p>
+    <strong>YID:</strong>
+    <%= weblink.yid %>
   </p>
 
   <%= render AdminActionsComponent.new(record: weblink, name: "weblink") %>

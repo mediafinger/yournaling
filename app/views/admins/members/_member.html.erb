@@ -2,16 +2,35 @@
   <p>
     <strong>User:</strong>
     <%= member.user.name %>
-  </p>
-
-  <p>
-    <strong>Team:</strong>
-    <%= member.team.name %>
+    <i>(<%= member.user_yid %>)</i>
   </p>
 
   <p>
     <strong>Roles:</strong>
     <%= member.roles %>
+  </p>
+
+  <hr>
+
+  <p>
+    <strong>Team:</strong>
+    <%= member.team.name %>
+    <i>(<%= member.team_yid %>)</i>
+  </p>
+
+  <p>
+    <strong>created_at:</strong>
+    <%= member.created_at.iso8601 %>
+  </p>
+
+  <p>
+    <strong>updated_at:</strong>
+    <%= member.updated_at.iso8601 %>
+  </p>
+
+  <p>
+    <strong>YID:</strong>
+    <%= member.yid %>
   </p>
 
   <%= render AdminActionsComponent.new(record: member, name: "member") %>

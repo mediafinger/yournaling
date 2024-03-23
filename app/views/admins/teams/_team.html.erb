@@ -4,5 +4,31 @@
     <%= team.name %>
   </p>
 
+  <hr>
+
+  <p>
+    <strong>Members:</strong>
+    <ul>
+      <% team.members.each do |member| %>
+        <li><%= "#{member.user.name} (#{member.yid}) [#{member.roles.join(', ')}]" %></li>
+      <% end %>
+    </ul>
+  </p>
+
+  <p>
+    <strong>created_at:</strong>
+    <%= team.created_at.iso8601 %>
+  </p>
+
+  <p>
+    <strong>updated_at:</strong>
+    <%= team.updated_at.iso8601 %>
+  </p>
+
+  <p>
+    <strong>YID:</strong>
+    <%= team.yid %>
+  </p>
+
 <%= render AdminActionsComponent.new(record: team, name: "team") %>
 </article>
