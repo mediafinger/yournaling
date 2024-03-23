@@ -80,10 +80,14 @@ if AppConf.is?(:environment, :test)
   Geocoder::Lookup::Test.add_stub(
     "New York, US", [
       {
-        "coordinates"  => [40.7143528, -74.0059731],
-        "address"      => "New York, NY, USA",
-        "country"      => "United States",
-        "country_code" => "US",
+        "properties" => {
+          "coordinates"  => [40.7143528, -74.0059731],
+          "lat"          => 40.7143528,
+          "lon"          => -74.0059731,
+          "address"      => "New York, NY, USA",
+          "country"      => "United States",
+          "country_code" => "US",
+        },
       },
     ]
   )
@@ -91,10 +95,14 @@ if AppConf.is?(:environment, :test)
   Geocoder::Lookup::Test.set_default_stub(
     [
       {
-        "coordinates"  => [45.0, 0.0],
-        "address"      => "33660 Puynormand, France",
-        "country"      => "France",
-        "country_code" => "FR",
+        "properties" => {
+          "coordinates"  => [45.0, 0.0],
+          "lat"          => 45.0,
+          "lon"          => 0.0,
+          "address"      => "33660 Puynormand, France",
+          "country"      => "France",
+          "country_code" => "FR",
+        },
       },
     ]
   )
