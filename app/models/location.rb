@@ -74,6 +74,13 @@ class Location < ApplicationRecordYidEnabled
     "https://www.google.com/maps/place/#{lat},#{long}"
   end
 
+  def map(width:, height:, style: "osm-carto", zoom: 14)
+    "https://maps.geoapify.com/v1/staticmap?" \
+      "style=#{style}&width=#{width}&height=#{height}&" \
+      "center=lonlat:#{long},#{lat}&zoom=#{zoom}&" \
+      "type:awesome;color:%231db510;size:x-large&apiKey=#{AppConf.geoapify_api_key}"
+  end
+
   private
 
   def address_with_cc
