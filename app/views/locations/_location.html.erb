@@ -46,4 +46,10 @@
   <% if current_team == location.team %>
     <%= link_to "Edit this location", edit_location_path(location), role: "button", class: "secondary" %>
   <% end %>
+
+  <hr>
+
+  <% if location.coordinates.present? %>
+    <%= render MapLinkComponent.new(location: location, width: 600, height: 400) %>
+  <% end %>
 </article>
