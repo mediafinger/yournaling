@@ -11,6 +11,15 @@
   </p>
 
   <p>
+    <strong>Geocoded Address:</strong>
+    <ul>
+      <% location.geocoded_address.sort.each do |k, v| %>
+        <li><%= "#{k}: #{v}" %></li>
+      <% end %>
+    </ul>
+  </p>
+
+  <p>
     <strong>Address:</strong>
     <%= location.address %>
   </p>
