@@ -20,20 +20,7 @@
     </ul>
   </p>
 
-  <p>
-    <strong>created_at:</strong>
-    <%= user.created_at.iso8601 %>
-  </p>
+  <%= render AdminShowMetaInformationComponent.new(record: user) %>
 
-  <p>
-    <strong>updated_at:</strong>
-    <%= user.updated_at.iso8601 %>
-  </p>
-
-  <p>
-    <strong>YID:</strong>
-    <%= user.yid %>
-  </p>
-
-<%= render AdminActionsComponent.new(record: user, name: "user") %>
+  <%= render AdminActionsComponent.new(record: user, name: "user") %>
 </article>

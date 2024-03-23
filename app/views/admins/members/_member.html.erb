@@ -18,20 +18,7 @@
     <i>(<%= member.team_yid %>)</i>
   </p>
 
-  <p>
-    <strong>created_at:</strong>
-    <%= member.created_at.iso8601 %>
-  </p>
-
-  <p>
-    <strong>updated_at:</strong>
-    <%= member.updated_at.iso8601 %>
-  </p>
-
-  <p>
-    <strong>YID:</strong>
-    <%= member.yid %>
-  </p>
+  <%= render AdminShowMetaInformationComponent.new(record: member) %>
 
   <%= render AdminActionsComponent.new(record: member, name: "member") %>
 </article>

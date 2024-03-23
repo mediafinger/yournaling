@@ -37,20 +37,7 @@
     <i>(<%= picture.team_yid %>)</i>
   </p>
 
-  <p>
-    <strong>created_at:</strong>
-    <%= picture.created_at.iso8601 %>
-  </p>
-
-  <p>
-    <strong>updated_at:</strong>
-    <%= picture.updated_at.iso8601 %>
-  </p>
-
-  <p>
-    <strong>YID:</strong>
-    <%= picture.yid %>
-  </p>
+  <%= render AdminShowMetaInformationComponent.new(record: picture) %>
 
   <%= render AdminActionsComponent.new(record: picture, name: "picture") %>
 </article>

@@ -15,20 +15,7 @@
     </ul>
   </p>
 
-  <p>
-    <strong>created_at:</strong>
-    <%= team.created_at.iso8601 %>
-  </p>
+  <%= render AdminShowMetaInformationComponent.new(record: team) %>
 
-  <p>
-    <strong>updated_at:</strong>
-    <%= team.updated_at.iso8601 %>
-  </p>
-
-  <p>
-    <strong>YID:</strong>
-    <%= team.yid %>
-  </p>
-
-<%= render AdminActionsComponent.new(record: team, name: "team") %>
+  <%= render AdminActionsComponent.new(record: team, name: "team") %>
 </article>
