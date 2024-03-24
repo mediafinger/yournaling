@@ -94,8 +94,8 @@ Yournaling should become a travel journal, where we can:
 
 ### Memories
 
-* must contain short note / memo 
-* must contain exactly one insight of:
+* must contain memo 
+* must contain at least one insight of and not more than one per type:
   * picture
   * (geo) location
   * website link
@@ -103,7 +103,7 @@ Yournaling should become a travel journal, where we can:
 ### Chronicles
 
 * must contain headline
-* must contain (longer) notes
+* must contain notes
 * can contain multiple insights of:
   * pictures
   * (geo) locations
@@ -287,7 +287,7 @@ Yournaling should become a travel journal, where we can:
   * both sides can close a comment-thread
   * team owners and managers can block all or individual users from writing comments
   * team owners and managers can allow or prohibit comments for each content type
-  * limit number of comments users can write by number of unanswered in the last 30 days
+  * limit number of comments users can write by number of unanswered in the last 30 days (?)
 * direct messages
   * always allowed between team members 
   * when a user contacts a user for the first time, the other side has to give permission first
@@ -303,6 +303,8 @@ Yournaling should become a travel journal, where we can:
 * average rating
 * reactions
 * comments
+* bookmarks
+* followers
 * links
 * shares
 * maybe none at all - or only against extra payment?
@@ -446,6 +448,12 @@ The "vanity board" with detailed statistics could be a paid feature. The alterna
   * payment fees are substracted (fixed + %, discourage small recurring payments)
   * we keep 30% of what's left
   * the other 70% go to the team's account (how to handle pay-outs?, delay and aggregation?)
+
+### when paying team members become free users
+
+* they stay a member of the team
+* they are downgraded to reader role
+* they are notified, as well as the team owner and manager
 
 ### Ads
 
