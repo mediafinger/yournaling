@@ -1,0 +1,18 @@
+<article>
+  <%= form_with(url: admin_filter_path, method: :post) do |form| %>
+    <fieldset>
+      <h3><legend><%= form_legend %></legend></h3>
+
+      <% @filters.each do |filter, value| %>
+        <div>
+          <%= form.label filter, for: "filters[#{filter}]" %>
+          <%= form.text_field "filters[#{filter}]", value: value, required: filter == "klass_name" %>
+        </div>
+      <% end %>
+
+      <div>
+        <%= form.submit "Filter" %>
+      </div>
+    </fieldset>
+  <% end %>
+</article>
