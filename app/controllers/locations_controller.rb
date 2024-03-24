@@ -25,8 +25,6 @@ class LocationsController < ApplicationController
     authorize! @location
   end
 
-  # TODO: create with either address + geocoding for lat & long coordinates
-  # TODO: or create with lat & long coordinates and reverse geocoding for address
   def create
     @location = Location.new(
       address: location_params[:address] || {}, # TODO: validate Hash / JSON structure

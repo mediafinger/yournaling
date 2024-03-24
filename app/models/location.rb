@@ -8,6 +8,8 @@ class Location < ApplicationRecordYidEnabled
     additional_attributes: ->(location) { { team_yid: location.team_yid } }
   )
 
+  attr_readonly :team_yid
+
   normalizes :country_code, with: ->(country_code) { country_code.strip.downcase }
   normalizes :name, with: ->(name) { name.strip }
   normalizes :url, with: ->(url) {

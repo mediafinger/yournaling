@@ -21,6 +21,7 @@ class ApplicationNavActionsComponent < ApplicationComponent
     return unless @active_section && (current_team || @scope == "admin")
     return if @active_section == "record_history"
 
-    @action_buttons = render partial: "#{@active_section}/action_buttons"
+    full_section = [@scope&.pluralize, @active_section].compact.join("/")
+    @action_buttons = render partial: "#{full_section}/action_buttons"
   end
 end

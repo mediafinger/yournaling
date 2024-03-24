@@ -17,16 +17,14 @@ module Admins
     end
 
     def create
-      @member = Member.new(create_params)
+      cleaned_params = create_params
+      cleaned_params[:roles] = cleaned_params[:roles].compact_blank
+      @member = Member.new(cleaned_params)
 
-      Member.transaction do
-        @member.save &&
-          RecordHistoryService.call(
-            record: @member, team: current_team, user: current_user, event: :created, done_by_admin: true)
-      end
+      Member.create_with_history(record: @member, history_params: { team: nil, user: current_user, done_by_admin: true })
 
       if @member.persisted?
-        redirect_to @member, notice: "Member was successfully created."
+        redirect_to admin_member_path(@member), notice: "Member was successfully created."
       else
         render :new, status: :unprocessable_entity
       end
@@ -34,30 +32,23 @@ module Admins
 
     def update
       @member = Member.urlsafe_find!(params[:id])
+      @member.assign_attributes(update_params)
 
-      Member.transaction do
-        @member.update(update_params) &&
-          RecordHistoryService.call(
-            record: @member, team: current_team, user: current_user, event: :updated, done_by_admin: true)
-      end
+      Member.update_with_history(record: @member, history_params: { team: nil, user: current_user, done_by_admin: true })
 
       if @member.changed? # == member still dirty, not saved
         render :edit, status: :unprocessable_entity
       else
-        redirect_to @member, notice: "Member was successfully updated."
+        redirect_to admin_member_path(@member), notice: "Member was successfully updated."
       end
     end
 
     def destroy
       @member = Member.urlsafe_find!(params[:id])
 
-      Member.transaction do
-        RecordHistoryService.call(
-          record: @member, team: current_team, user: current_user, event: :deleted, done_by_admin: true)
-        @member.destroy!
-      end
+      Member.destroy_with_history(record: @member, history_params: { team: nil, user: current_user, done_by_admin: true })
 
-      redirect_to members_url, notice: "Member was successfully destroyed."
+      redirect_to admin_members_url, notice: "Member was successfully destroyed."
     end
 
     private

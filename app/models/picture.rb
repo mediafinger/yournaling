@@ -27,6 +27,8 @@ class Picture < ApplicationRecordYidEnabled
     additional_attributes: ->(picture) { { team_yid: picture.team_yid } }
   )
 
+  attr_readonly :team_yid
+
   normalizes :name, with: ->(name) { name.strip }
 
   # NOTE

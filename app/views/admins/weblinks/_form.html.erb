@@ -5,6 +5,21 @@
     <fieldset>
       <h3><legend><%= form_legend %></legend></h3>
 
+      <% if weblink.persisted? %>
+        <label>
+          <strong>Team</strong>
+          <%= weblink.team.name %>
+          <i><%= weblink.team.yid %></i>
+        </label>
+      <% else %>
+        <div>
+          <%= form.label :team_yid %>
+          <%=
+            form.select :team_yid, Team.pluck(:name, :yid), selected: form.object.team_yid, include_blank: true, required: true
+          %>
+        </div>
+      <% end %>
+
       <div>
         <%= form.label :name %>
         <%= form.text_field :name %>

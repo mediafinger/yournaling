@@ -5,19 +5,39 @@
     <fieldset>
       <h3><legend><%= form_legend %></legend></h3>
 
-      <div>
-        <%= form.label :user_yid %>
-        <%= form.text_field :user_yid %>
-      </div>
+      <% if member.persisted? %>
+        <label>
+          <strong>Team</strong>
+          <%= member.team.name %>
+          <i><%= member.team.yid %></i>
+        </label>
 
-      <div>
-        <%= form.label :team_yid %>
-        <%= form.text_field :team_yid %>
-      </div>
+        <label>
+          <strong>User</strong>
+          <%= member.user.name %>
+          <i><%= member.user.yid %></i>
+        </label>
+      <% else %>
+        <div>
+          <%= form.label :team_yid %>
+          <%=
+            form.select :team_yid, Team.pluck(:name, :yid), selected: form.object.team_yid, include_blank: true, required: true
+          %>
+        </div>
+
+        <div>
+          <%= form.label :user_yid %>
+          <%=
+            form.select :user_yid, User.pluck(:email, :yid), selected: form.object.user_yid, include_blank: true, required: true
+          %>
+        </div>
+      <% end %>
 
       <div>
         <%= form.label :roles %>
-        <%= form.text_area :roles, rows: 4 %>
+        <%=
+          form.select :roles, Member::VALID_ROLES, multiple: true, selected: form.object.roles, required: true
+        %>
       </div>
 
       <div>

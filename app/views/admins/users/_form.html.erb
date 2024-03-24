@@ -15,6 +15,7 @@
         <%= form.text_field :email %>
       </div>
 
+      <%# TODO: do not allow Admin to set or change user password manually, only to reset it %>
       <div>
         <%= form.label :password %>
         <%= form.password_field :password %>
