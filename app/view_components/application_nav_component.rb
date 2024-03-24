@@ -1,10 +1,20 @@
 class ApplicationNavComponent < ApplicationComponent
   erb_template <<-ERB
+    <% if current_user&.admin? %>
+    <ul>
+      <li><%= link_to "Go to Admin Area", "/admin" %></li>
+    </ul>
+    <% end %>
+
     <%= render ApplicationNavLinksComponent.new(link_sections: @sections) %>
 
     <%= render TeamSwitcherComponent.new %>
 
-    <%= link_to "Search", new_search_path %>
+    <% if current_team.present? %>
+    <ul>
+      <li><%= link_to "Search", new_search_path %></li>
+    </ul>
+    <% end %>
 
     <%= render ApplicationNavActionsComponent.new(actions_for: @sections) %>
   ERB
