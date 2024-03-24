@@ -55,6 +55,9 @@ Rails.application.routes.draw do
     resources :weblinks
     get "record_history", to: "record_history#index", as: :record_history
 
+    get "new_filter", to: "filters#new", as: "new_filter"
+    post "filter", to: "filters#create", as: "filter"
+
     # NOTE: we setup MissionControl to inherit from our AdminController to only give admins access
     mount MissionControl::Jobs::Engine, at: "/jobs"
   end
