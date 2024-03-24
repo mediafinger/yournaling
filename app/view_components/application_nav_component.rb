@@ -4,6 +4,8 @@ class ApplicationNavComponent < ApplicationComponent
 
     <%= render TeamSwitcherComponent.new %>
 
+    <%= link_to "Search", new_search_path %>
+
     <%= render ApplicationNavActionsComponent.new(actions_for: @sections) %>
   ERB
 

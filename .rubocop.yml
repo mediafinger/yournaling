@@ -111,6 +111,9 @@ Performance/Casecmp:
 Rails/Blank:
   Enabled: false
 
+Rails/Delegate:
+  Enabled: false
+
 Rails/I18nLocaleTexts:
   Enabled: false # for now
 

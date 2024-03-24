@@ -3,6 +3,11 @@ class Location < ApplicationRecordYidEnabled
 
   belongs_to :team, inverse_of: :locations, foreign_key: "team_yid"
 
+  multisearchable(
+    against: %i[name country_code address],
+    additional_attributes: ->(location) { { team_yid: location.team_yid } }
+  )
+
   normalizes :country_code, with: ->(country_code) { country_code.strip.downcase }
   normalizes :name, with: ->(name) { name.strip }
   normalizes :url, with: ->(url) {

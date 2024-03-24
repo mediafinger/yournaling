@@ -24,6 +24,12 @@ class Member < ApplicationRecordYidEnabled
   scope :without_role, ->(role) { without_roles(Array(role)) }
   scope :without_roles, ->(roles) { where.not("roles @> ?", "{#{roles.join(',')}}") } # must not have any role
 
+  # see: https://www.donnfelker.com/multitenant-pgsearch-how-to/
+  multisearchable(
+    against: %i[user_name team_name],
+    additional_attributes: ->(member) { { team_yid: member.team_yid } }
+  )
+
   validates :team_yid, presence: true, uniqueness: { scope: :user_yid }
   validates :user_yid, presence: true, uniqueness: { scope: :team_yid }
   validates :roles, presence: true, if: proc { |record| record.roles.to_s == "" }
@@ -58,6 +64,18 @@ class Member < ApplicationRecordYidEnabled
   def delete_role(role)
     self.roles = (roles - Array(role.to_s)).uniq
     self
+  end
+
+  def name
+    user_name
+  end
+
+  def user_name
+    user.name
+  end
+
+  def team_name
+    team.name
   end
 
   private

@@ -1,4 +1,6 @@
 class ApplicationRecordYidEnabled < ApplicationRecord
+  include PgSearch::Model
+
   self.abstract_class = true
   self.primary_key = "yid"
 
