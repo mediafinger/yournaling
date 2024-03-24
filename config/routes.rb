@@ -10,6 +10,9 @@ Rails.application.routes.draw do
 
   resources :current_teams, only: %i[index show create destroy]
 
+  get "new_search", to: "searches#new", as: "new_search"
+  post "search", to: "searches#create", as: "search"
+
   get "login", to: "sessions#new"
   post "login", to: "sessions#create"
   delete "logout", to: "sessions#destroy"

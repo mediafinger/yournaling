@@ -3,6 +3,11 @@ class Weblink < ApplicationRecordYidEnabled
 
   belongs_to :team, inverse_of: :weblinks, foreign_key: "team_yid"
 
+  multisearchable(
+    against: %i[name],
+    additional_attributes: ->(weblink) { { team_yid: weblink.team_yid } }
+  )
+
   normalizes :name, with: ->(name) { name.strip }
   normalizes :url, with: ->(url) { ActionDispatch::Http::URL.full_url_for(host: url.strip, protocol: "https") }
 

@@ -22,6 +22,11 @@ class Picture < ApplicationRecordYidEnabled
 
   belongs_to :team, foreign_key: "team_yid", primary_key: "yid", inverse_of: :pictures
 
+  multisearchable(
+    against: %i[name],
+    additional_attributes: ->(picture) { { team_yid: picture.team_yid } }
+  )
+
   normalizes :name, with: ->(name) { name.strip }
 
   # NOTE
