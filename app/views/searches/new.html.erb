@@ -1,19 +1,5 @@
 <% if current_team.present? %>
   <%= render partial: "form", locals: { query: @query, klass_name: @klass_name, results: @results, form_legend: "Search"} %>
 
-  <% if @results.present? %>
-    <ul>
-    <% @results.each do |result| %>
-      <% @record = ApplicationRecordYidEnabled.fynd(result["searchable_id"]) %>
-        <li>
-          <%= link_to(
-            "#{@record.class.name}: #{@record.name}", send(:"#{@record.class.name.tableize.singularize}_url", @record))
-          %>
-          -
-          <%# result["content"] %>
-          <i>(updated_at: <%= DateTime.parse(result["updated_at"]).to_formatted_s(:db) %>)</i>
-        </li>
-    <% end %>
-    </ul>
-  <% end %>
+  <%= render SearchResultsComponent.new(results: @results) %>
 <% end %>
