@@ -1,0 +1,29 @@
+<article id="<%= dom_id memory %>">
+  <p>
+    <strong>Team:</strong>
+    <%= memory.team.name %>
+  </p>
+
+  <p>
+    <strong>Memo:</strong>
+    <%= memory.memo %>
+  </p>
+
+  <% if memory.picture %>
+    <%= render partial: "pictures/picture", locals: { picture: memory.picture } %>
+  <% end %>
+
+  <% if memory.location %>
+    <%= render partial: "locations/location", locals: { location: memory.location } %>
+  <% end %>
+
+  <% if memory.weblink %>
+    <%= render partial: "weblinks/weblink", locals: { weblink: memory.weblink } %>
+  <% end %>
+
+  <% if action_name != "show" %>
+    <%= link_to "Show this memory", memory, role: "button"  %>
+  <% end %>
+  <%= link_to 'Edit this memory', edit_memory_path(memory), role: "button", class: "secondary" %>
+  <%= link_to 'Change visibility', edit_content_visibility_path(memory), role: "button", class: "secondary" %>
+</article>

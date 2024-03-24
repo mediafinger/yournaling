@@ -27,20 +27,20 @@ ActiveRecordDoctor.configure do
   # Detector-specific settings affect only one specific detector.
   # detector :extraneous_indexes, ignore_tables: ["users"], ignore_indexes: ["accounts_on_email_organization_id"]
 
-  detector :incorrect_length_validation, ignore_attributes: [
-    # app only validation sufficient, no need to enforce length in DB
-    "Picture.name",
-    "Picture.yid",
-    "Team.name",
-    "Team.yid",
-    "User.email",
-    "User.name",
-    "User.nickname",
-    "User.password_digest",
-    "User.yid",
-
-    "User.temp_auth_token", # for some reason DB Doctor complains about a (non) existing validation on this column?!
-  ]
+  # app only validation sufficient, no need to enforce length in DB
+  detector :incorrect_length_validation, ignore_attributes: %w[
+    Memory.memo
+    Picture.name
+    Picture.yid
+    Team.name
+    Team.yid
+    User.email
+    User.name
+    User.nickname
+    User.password_digest
+    User.yid
+    User.temp_auth_token
+  ] # for some reason DB Doctor complains about a (non) existing validation on User.temp_auth_token column?!
 
   detector :missing_foreign_keys, ignore_columns: %w[
     good_jobs.active_job_id
@@ -74,5 +74,8 @@ ActiveRecordDoctor.configure do
   # # Ignore indexes that are not used in the application
   detector :unindexed_foreign_keys, ignore_columns: %w[
     good_jobs.retried_good_job_id
+    memories.location_yid
+    memories.picture_yid
+    memories.weblink_yid
   ]
 end

@@ -50,7 +50,7 @@ Yournaling should become a travel journal, where we can:
 * team_yid (owned_by)
 * timestamps (created_at, updated_at)
 * user_yid (created_by)
-* visibility (draft, internal, public, unpublished, blocked, deleted - not used on Includes or Insights) 
+* visibility (draft, internal, published, archived, blocked - not used on Includes or Insights) 
 
 #### An visibility_changed_log will contain additional metadata:
 
@@ -59,8 +59,8 @@ Yournaling should become a travel journal, where we can:
 * team_yid (owned_by)
 * user_yid (visiblity_changed_by)
 * visiblity_changed_at (timestamp)
-* visiblity_changed_from (draft, internal, public, unpublished, blocked, deleted)
-* visiblity_changed_to (draft, internal, public, unpublished, blocked, deleted)
+* visiblity_changed_from (draft, internal, published, archived, blocked)
+* visiblity_changed_to (draft, internal, published, archived, blocked)
 
 > When a moderator blocks or deletes content, Pictures and Links could be included in other content and need extra treatment.
 
@@ -94,8 +94,8 @@ Yournaling should become a travel journal, where we can:
 
 ### Memories
 
-* must contain memo 
-* must contain at least one insight of and not more than one per type:
+* must contain memo (limited to 500 characters, minimum 4?)
+* can contain one insight of each type:
   * picture
   * (geo) location
   * website link
@@ -103,7 +103,7 @@ Yournaling should become a travel journal, where we can:
 ### Chronicles
 
 * must contain headline
-* must contain notes
+* must contain notes (limited to 20_000 characters?, minimum 20?)
 * can contain multiple insights of:
   * pictures
   * (geo) locations
@@ -198,8 +198,8 @@ Yournaling should become a travel journal, where we can:
 * included_id
 * team_yid (owner)
 * user_yid (included_by)
-* visiblity_status_included (draft, internal, public, unpublished)
-* visiblity_status_wrapper (draft, internal, public, unpublished)
+* visiblity_status_included (draft, internal, published, archived, blocked)
+* visiblity_status_wrapper (draft, internal, published, archived, blocked)
 * wrapper_id
 
 
@@ -254,11 +254,11 @@ Yournaling should become a travel journal, where we can:
 * internal
   * now also visible to team members with the reader role
   * this should clearly be a paid feature
-* public
+* published
   * visible to everyone on the platform
   * visible to everyone in the whole wide world
-* unpublished
-  * like draft, but has been published before
+* archived
+  * like draft, but listed team internally in extra section
 * blocked
   * when content violates the rules, a platform-moderator can block the content
   * it will be treated like unplished, but visiblity can not be changed anymore
