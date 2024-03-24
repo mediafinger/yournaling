@@ -28,18 +28,11 @@ class TeamsController < ApplicationController
     @team = Team.new(team_params)
     authorize! @team
 
-    Team.transaction do
-      @team.save &&
-        RecordHistoryService.call(record: @team, team: @team, user: current_user, event: :created)
-    end
+    Team.create_with_history(record: @team, history_params: { team: @team, user: current_user })
 
     if @team.persisted?
       member = Member.new(team: @team.reload, user: current_user, roles: Member::VALID_ROLES)
-
-      Member.transaction do
-        member.save &&
-          RecordHistoryService.call(record: member, team: @team, user: current_user, event: :created)
-      end
+      Member.create_with_history(record: member, history_params: { team: @team, user: current_user })
 
       switch_current_team(@team.yid)
 
@@ -52,11 +45,9 @@ class TeamsController < ApplicationController
   def update
     @team = Team.urlsafe_find!(params[:id])
     authorize! @team
+    @team.assign_attributes(team_params)
 
-    Team.transaction do
-      @team.update(team_params) &&
-        RecordHistoryService.call(record: @team, team: current_team, user: current_user, event: :updated)
-    end
+    Team.update_with_history(record: @team, history_params: { team: current_team, user: current_user })
 
     if @team.changed? # == team still dirty, not saved
       render :edit, status: :unprocessable_entity
@@ -69,10 +60,7 @@ class TeamsController < ApplicationController
     @team = Team.urlsafe_find!(params[:id])
     authorize! @team
 
-    Team.transaction do
-      RecordHistoryService.call(record: @team, team: current_team, user: current_user, event: :deleted)
-      @team.destroy!
-    end
+    Team.destroy_with_history(record: @team, history_params: { team: current_team, user: current_user })
 
     redirect_to teams_url, notice: "Team was successfully destroyed."
   end

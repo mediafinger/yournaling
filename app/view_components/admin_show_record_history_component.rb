@@ -6,7 +6,7 @@ class AdminShowRecordHistoryComponent < ApplicationComponent
           Event:
           <%= @record_history.event %>
         </strong>
-        <%= @record_history.created_at.iso8601 %>
+        <%= @record_history.created_at.to_formatted_s(:db) %>
         <% if @record_history.done_by_admin? %>
           <strong>changed by Admin</strong>
         <% end %>

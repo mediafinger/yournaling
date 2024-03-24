@@ -40,10 +40,7 @@ class LocationsController < ApplicationController
 
     authorize! @location
 
-    Location.transaction do
-      @location.save &&
-        RecordHistoryService.call(record: @location, team: current_team, user: current_user, event: :created)
-    end
+    Location.create_with_history(record: @location, history_params: { team: current_team, user: current_user })
 
     if @location.persisted?
       redirect_to @location, notice: "Location was successfully created."
@@ -55,11 +52,9 @@ class LocationsController < ApplicationController
   def update
     @location = Location.urlsafe_find!(params[:id])
     authorize! @location
+    @location.assign_attributes(location_params)
 
-    Location.transaction do
-      @location.update(location_params) &&
-        RecordHistoryService.call(record: @location, team: current_team, user: current_user, event: :updated)
-    end
+    Location.update_with_history(record: @location, history_params: { team: current_team, user: current_user })
 
     if @location.changed? # == location still dirty, not saved
       render :edit, status: :unprocessable_entity
@@ -72,10 +67,7 @@ class LocationsController < ApplicationController
     @location = Location.urlsafe_find!(params[:id])
     authorize! @location
 
-    Location.transaction do
-      RecordHistoryService.call(record: @location, team: current_team, user: current_user, event: :deleted)
-      @location.destroy!
-    end
+    Location.destroy_with_history(record: @location, history_params: { team: current_team, user: current_user })
 
     redirect_to locations_url, notice: "Location was successfully destroyed."
   end

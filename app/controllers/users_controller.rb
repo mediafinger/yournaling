@@ -28,10 +28,7 @@ class UsersController < ApplicationController
     @user = User.new(create_params)
     authorize! @user
 
-    User.transaction do
-      @user.save &&
-        RecordHistoryService.call(record: @user, team: Team.new(yid: :none), user: @user, event: :created)
-    end
+    User.create_with_history(record: @user, history_params: { team: Team.new(yid: :none), user: @user })
 
     if @user.persisted?
       redirect_to @user, notice: "User was successfully created."
@@ -44,11 +41,9 @@ class UsersController < ApplicationController
     # raise AuthError unless @user == current_user && @user.persisted?
     @user = User.urlsafe_find!(params[:id])
     authorize! @user
+    @user.assign_attributes(update_params)
 
-    User.transaction do
-      @user.update(update_params) &&
-        RecordHistoryService.call(record: @user, team: Team.new(yid: :none), user: current_user, event: :updated)
-    end
+    User.update_with_history(record: @user, history_params: { team: Team.new(yid: :none), user: current_user })
 
     if @user.changed? # == user still dirty, not saved
       render :edit, status: :unprocessable_entity
@@ -62,10 +57,7 @@ class UsersController < ApplicationController
     @user = User.urlsafe_find!(params[:id])
     authorize! @user
 
-    User.transaction do
-      RecordHistoryService.call(record: @user, team: Team.new(yid: :none), user: current_user, event: :deleted)
-      @user.destroy! # TODO: define what happens with uploaded content
-    end
+    User.destroy_with_history(record: @user, history_params: { team: Team.new(yid: :none), user: current_user })
 
     redirect_to users_url, notice: "User was successfully destroyed."
   end

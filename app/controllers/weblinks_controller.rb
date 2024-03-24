@@ -36,10 +36,7 @@ class WeblinksController < ApplicationController
 
     authorize! @weblink
 
-    Weblink.transaction do
-      @weblink.save &&
-        RecordHistoryService.call(record: @weblink, team: current_team, user: current_user, event: :created)
-    end
+    Weblink.create_with_history(record: @weblink, history_params: { team: current_team, user: current_user })
 
     if @weblink.persisted?
       redirect_to @weblink, notice: "Weblink was successfully created."
@@ -51,11 +48,9 @@ class WeblinksController < ApplicationController
   def update
     @weblink = Weblink.urlsafe_find!(params[:id])
     authorize! @weblink
+    @weblink.assign_attributes(weblink_params)
 
-    Weblink.transaction do
-      @weblink.update(weblink_params) &&
-        RecordHistoryService.call(record: @weblink, team: current_team, user: current_user, event: :updated)
-    end
+    Weblink.update_with_history(record: @weblink, history_params: { team: current_team, user: current_user })
 
     if @weblink.changed? # == weblink still dirty, not saved
       render :edit, status: :unprocessable_entity
@@ -68,10 +63,7 @@ class WeblinksController < ApplicationController
     @weblink = Weblink.urlsafe_find!(params[:id])
     authorize! @weblink
 
-    Weblink.transaction do
-      RecordHistoryService.call(record: @weblink, team: current_team, user: current_user, event: :deleted)
-      @weblink.destroy!
-    end
+    Weblink.destroy_with_history(record: @weblink, history_params: { team: current_team, user: current_user })
 
     redirect_to weblinks_url, notice: "Weblink was successfully destroyed."
   end
