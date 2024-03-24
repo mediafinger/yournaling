@@ -5,6 +5,21 @@
     <fieldset>
       <h3><legend><%= form_legend %></legend></h3>
 
+      <% if picture.persisted? %>
+        <label>
+          <strong>Team</strong>
+          <%= picture.team.name %>
+          <i><%= picture.team.yid %></i>
+        </label>
+      <% else %>
+        <div>
+          <%= form.label :team_yid %>
+          <%=
+            form.select :team_yid, Team.pluck(:name, :yid), selected: form.object.team_yid, include_blank: true, required: true
+          %>
+        </div>
+      <% end %>
+
       <div>
         <%= form.file_field :file, accept: Picture::ALLOWED_IMAGE_TYPES.map { |type| ".#{type}" }.join(", ") %>
       </div>

@@ -19,14 +19,10 @@ module Admins
     def create
       @user = User.new(create_params)
 
-      User.transaction do
-        @user.save &&
-          RecordHistoryService.call(
-            record: @user, team: current_team, user: current_user, event: :created, done_by_admin: true)
-      end
+      User.create_with_history(record: @user, history_params: { team: nil, user: current_user, done_by_admin: true })
 
       if @user.persisted?
-        redirect_to @user, notice: "User was successfully created."
+        redirect_to admin_user_url(@user), notice: "User was successfully created."
       else
         render :new, status: :unprocessable_entity
       end
@@ -34,28 +30,21 @@ module Admins
 
     def update
       @user = User.urlsafe_find!(params[:id])
+      @user.assign_attributes(update_params)
 
-      User.transaction do
-        @user.update(update_params) &&
-          RecordHistoryService.call(
-            record: @user, team: current_team, user: current_user, event: :updated, done_by_admin: true)
-      end
+      User.update_with_history(record: @user, history_params: { team: nil, user: current_user, done_by_admin: true })
 
       if @user.changed? # == user still dirty, not saved
         render :edit, status: :unprocessable_entity
       else
-        redirect_to @user, notice: "User was successfully updated."
+        redirect_to admin_user_url(@user), notice: "User was successfully updated."
       end
     end
 
     def destroy
       @user = User.urlsafe_find!(params[:id])
 
-      User.transaction do
-        RecordHistoryService.call(
-          record: @user, team: current_team, user: current_user, event: :deleted, done_by_admin: true)
-        @user.destroy! # TODO: define what happens with uploaded content
-      end
+      User.destroy_with_history(record: @user, history_params: { team: nil, user: current_user, done_by_admin: true })
 
       redirect_to admin_users_url, notice: "User was successfully destroyed."
     end

@@ -30,6 +30,9 @@ class Member < ApplicationRecordYidEnabled
     additional_attributes: ->(member) { { team_yid: member.team_yid } }
   )
 
+  attr_readonly :team_yid
+  attr_readonly :user_yid
+
   validates :team_yid, presence: true, uniqueness: { scope: :user_yid }
   validates :user_yid, presence: true, uniqueness: { scope: :team_yid }
   validates :roles, presence: true, if: proc { |record| record.roles.to_s == "" }

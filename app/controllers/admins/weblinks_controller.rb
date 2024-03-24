@@ -18,18 +18,9 @@ module Admins
 
     # TODO: set preview_snippet by calling the URL once to also validate it
     def create
-      @weblink = Weblink.new(
-        url: weblink_params[:url],
-        name: weblink_params[:name],
-        description: weblink_params[:description],
-        team: current_team
-      )
+      @weblink = Weblink.new(weblink_params)
 
-      Weblink.transaction do
-        @weblink.save &&
-          RecordHistoryService.call(
-            record: @weblink, team: current_team, user: current_user, event: :created, done_by_admin: true)
-      end
+      Weblink.create_with_history(record: @weblink, history_params: { team: nil, user: current_user, done_by_admin: true })
 
       if @weblink.persisted?
         redirect_to admin_weblink_url(@weblink), notice: "Weblink was successfully created."
@@ -40,12 +31,9 @@ module Admins
 
     def update
       @weblink = Weblink.urlsafe_find!(params[:id])
+      @weblink.assign_attributes(weblink_params)
 
-      Weblink.transaction do
-        @weblink.update(weblink_params) &&
-          RecordHistoryService.call(
-            record: @weblink, team: current_team, user: current_user, event: :updated, done_by_admin: true)
-      end
+      Weblink.update_with_history(record: @weblink, history_params: { team: nil, user: current_user, done_by_admin: true })
 
       if @weblink.changed? # == weblink still dirty, not saved
         render :edit, status: :unprocessable_entity
@@ -57,11 +45,7 @@ module Admins
     def destroy
       @weblink = Weblink.urlsafe_find!(params[:id])
 
-      Weblink.transaction do
-        RecordHistoryService.call(
-          record: @weblink, team: current_team, user: current_user, event: :deleted, done_by_admin: true)
-        @weblink.destroy!
-      end
+      Weblink.destroy_with_history(record: @weblink, history_params: { team: nil, user: current_user, done_by_admin: true })
 
       redirect_to admin_weblinks_url, notice: "Weblink was successfully destroyed."
     end
@@ -69,7 +53,7 @@ module Admins
     private
 
     def weblink_params
-      params.require(:weblink).permit(:url, :name, :description)
+      params.require(:weblink).permit(:url, :name, :description, :team_yid)
     end
   end
 end

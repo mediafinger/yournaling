@@ -34,14 +34,10 @@ module Admins
         file: ImageUploadConversionService.call(file: picture_params[:file], name: picture_params[:name]),
         name: picture_params[:name], # looks redundant, but image filename is parameterized
         date: picture_params[:date],
-        team: current_team
+        team_yid: picture_params[:team_yid]
       )
 
-      Picture.transaction do
-        @picture.save &&
-          RecordHistoryService.call(
-            record: @picture, team: current_team, user: current_user, event: :created, done_by_admin: true)
-      end
+      Picture.create_with_history(record: @picture, history_params: { team: nil, user: current_user, done_by_admin: true })
 
       if @picture.persisted?
         redirect_to admin_picture_url(@picture), notice: "Picture was successfully created."
@@ -52,12 +48,9 @@ module Admins
 
     def update
       @picture = Picture.urlsafe_find!(params[:id])
+      @picture.assign_attributes(picture_params)
 
-      Picture.transaction do
-        @picture.update(picture_params) &&
-          RecordHistoryService.call(
-            record: @picture, team: current_team, user: current_user, event: :updated, done_by_admin: true)
-      end
+      Picture.update_with_history(record: @picture, history_params: { team: nil, user: current_user, done_by_admin: true })
 
       if @picture.changed? # == picture still dirty, not saved
         render :edit, status: :unprocessable_entity
@@ -69,11 +62,7 @@ module Admins
     def destroy
       @picture = Picture.urlsafe_find!(params[:id])
 
-      Picture.transaction do
-        RecordHistoryService.call(
-          record: @picture, team: current_team, user: current_user, event: :deleted, done_by_admin: true)
-        @picture.destroy!
-      end
+      Picture.destroy_with_history(record: @picture, history_params: { team: nil, user: current_user, done_by_admin: true })
 
       redirect_to admin_pictures_url, notice: "Picture was successfully destroyed."
     end
@@ -82,7 +71,7 @@ module Admins
 
     # switch to dry-validation / dry-contract
     def picture_params
-      params.require(:picture).permit(:file, :date, :name)
+      params.require(:picture).permit(:file, :date, :name, :team_yid)
     end
   end
 end

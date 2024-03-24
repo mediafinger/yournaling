@@ -8,6 +8,8 @@ class Weblink < ApplicationRecordYidEnabled
     additional_attributes: ->(weblink) { { team_yid: weblink.team_yid } }
   )
 
+  attr_readonly :team_yid
+
   normalizes :name, with: ->(name) { name.strip }
   normalizes :url, with: ->(url) { ActionDispatch::Http::URL.full_url_for(host: url.strip, protocol: "https") }
 

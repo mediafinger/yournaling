@@ -17,18 +17,12 @@ module Admins
     end
 
     def create
-      raise AuthError unless current_user.persisted?
-
       @team = Team.new(team_params)
 
-      Team.transaction do
-        @team.save &&
-          RecordHistoryService.call(
-            record: @team, team: current_team, user: current_user, event: :created, done_by_admin: true)
-      end
+      Team.create_with_history(record: @team, history_params: { team: nil, user: current_user, done_by_admin: true })
 
       if @team.persisted?
-        redirect_to @team, notice: "Team was successfully created."
+        redirect_to admin_team_path(@team), notice: "Team was successfully created."
       else
         render :new, status: :unprocessable_entity
       end
@@ -36,28 +30,21 @@ module Admins
 
     def update
       @team = Team.urlsafe_find!(params[:id])
+      @team.assign_attributes(team_params)
 
-      Team.transaction do
-        @team.update(team_params) &&
-          RecordHistoryService.call(
-            record: @team, team: current_team, user: current_user, event: :updated, done_by_admin: true)
-      end
+      Team.update_with_history(record: @team, history_params: { team: nil, user: current_user, done_by_admin: true })
 
       if @team.changed? # == team still dirty, not saved
         render :edit, status: :unprocessable_entity
       else
-        redirect_to @team, notice: "Team was successfully updated."
+        redirect_to admin_team_path(@team), notice: "Team was successfully updated."
       end
     end
 
     def destroy
       @team = Team.urlsafe_find!(params[:id])
 
-      Team.transaction do
-        RecordHistoryService.call(
-          record: @team, team: current_team, user: current_user, event: :deleted, done_by_admin: true)
-        @team.destroy!
-      end
+      Team.destroy_with_history(record: @team, history_params: { team: nil, user: current_user, done_by_admin: true })
 
       redirect_to admin_teams_url, notice: "Team was successfully destroyed."
     end

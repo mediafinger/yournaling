@@ -8,7 +8,7 @@ class AdminShowRecordHistoryComponent < ApplicationComponent
         </strong>
         <%= @record_history.created_at.to_formatted_s(:db) %>
         <% if @record_history.done_by_admin? %>
-          <strong>changed by Admin</strong>
+          <strong>done by Admin</strong>
         <% end %>
       </p>
 
