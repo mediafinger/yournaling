@@ -1,0 +1,4 @@
+<%= render partial: "form", locals: { memory: @memory, form_legend: "Edit memory"} %>
+
+<%= link_to "Show this memory", @memory, role: "button"  %>
+<%= button_to "Destroy this memory", memory_path(@memory), method: :delete, class: "secondary" %>

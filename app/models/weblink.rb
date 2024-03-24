@@ -3,6 +3,9 @@ class Weblink < ApplicationRecordYidEnabled
 
   belongs_to :team, inverse_of: :weblinks, foreign_key: "team_yid"
 
+  has_many :memories, class_name: "Memory", foreign_key: "weblink_yid", primary_key: "yid", inverse_of: :weblink,
+    dependent: :nullify
+
   multisearchable(
     against: %i[name],
     additional_attributes: ->(weblink) { { team_yid: weblink.team_yid } }

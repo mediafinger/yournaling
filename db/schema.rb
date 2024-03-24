@@ -10,10 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_23_232748) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_24_205926) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
+
+  # Custom types defined in this database.
+  # Note that some types may not work with other database engines. Be careful if changing database.
+  create_enum "content_visibility", ["draft", "internal", "published", "archived", "blocked"]
 
   create_table "active_storage_attachments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "blob_id", null: false
@@ -148,6 +152,18 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_23_232748) do
     t.index ["user_yid"], name: "index_members_on_user_yid"
   end
 
+  create_table "memories", primary_key: "yid", id: :string, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "location_yid"
+    t.text "memo", null: false
+    t.string "picture_yid"
+    t.string "team_yid", null: false
+    t.datetime "updated_at", null: false
+    t.enum "visibility", default: "draft", null: false, enum_type: "content_visibility"
+    t.string "weblink_yid"
+    t.index ["team_yid"], name: "index_memories_on_team_yid"
+  end
+
   create_table "pg_search_documents", force: :cascade do |t|
     t.text "content", null: false
     t.datetime "created_at", null: false
@@ -222,6 +238,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_23_232748) do
   add_foreign_key "locations", "teams", column: "team_yid", primary_key: "yid"
   add_foreign_key "members", "teams", column: "team_yid", primary_key: "yid"
   add_foreign_key "members", "users", column: "user_yid", primary_key: "yid"
+  add_foreign_key "memories", "locations", column: "location_yid", primary_key: "yid"
+  add_foreign_key "memories", "pictures", column: "picture_yid", primary_key: "yid"
+  add_foreign_key "memories", "teams", column: "team_yid", primary_key: "yid"
+  add_foreign_key "memories", "weblinks", column: "weblink_yid", primary_key: "yid"
   add_foreign_key "pg_search_documents", "teams", column: "team_yid", primary_key: "yid"
   add_foreign_key "pictures", "teams", column: "team_yid", primary_key: "yid"
   add_foreign_key "weblinks", "teams", column: "team_yid", primary_key: "yid"

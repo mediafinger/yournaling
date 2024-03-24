@@ -22,6 +22,9 @@ class Picture < ApplicationRecordYidEnabled
 
   belongs_to :team, foreign_key: "team_yid", primary_key: "yid", inverse_of: :pictures
 
+  has_many :memories, class_name: "Memory", foreign_key: "picture_yid", primary_key: "yid", inverse_of: :picture,
+    dependent: :nullify
+
   multisearchable(
     against: %i[name],
     additional_attributes: ->(picture) { { team_yid: picture.team_yid } }

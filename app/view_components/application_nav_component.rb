@@ -20,6 +20,6 @@ class ApplicationNavComponent < ApplicationComponent
   ERB
 
   def initialize
-    @sections = %w[pictures locations weblinks members]
+    @sections = %w[memories pictures locations weblinks members]
   end
 end
