@@ -26,10 +26,7 @@ class MembersController < ApplicationController
     @member = Member.new(create_params)
     authorize! @member
 
-    Member.transaction do
-      @member.save &&
-        RecordHistoryService.call(record: @member, team: current_team, user: current_user, event: :created)
-    end
+    Member.create_with_history(record: @member, history_params: { team: current_team, user: current_user })
 
     if @member.persisted?
       redirect_to @member, notice: "Member was successfully created."
@@ -41,11 +38,9 @@ class MembersController < ApplicationController
   def update
     @member = Member.urlsafe_find!(params[:id])
     authorize! @member
+    @member.assign_attributes(update_params)
 
-    Member.transaction do
-      @member.update(update_params) &&
-        RecordHistoryService.call(record: @member, team: current_team, user: current_user, event: :updated)
-    end
+    Member.update_with_history(record: @member, history_params: { team: current_team, user: current_user })
 
     if @member.changed? # == member still dirty, not saved
       render :edit, status: :unprocessable_entity
@@ -58,10 +53,7 @@ class MembersController < ApplicationController
     @member = Member.urlsafe_find!(params[:id])
     authorize! @member
 
-    Member.transaction do
-      RecordHistoryService.call(record: @member, team: current_team, user: current_user, event: :deleted)
-      @member.destroy!
-    end
+    Member.destroy_with_history(record: @member, history_params: { team: current_team, user: current_user })
 
     redirect_to members_url, notice: "Member was successfully destroyed."
   end

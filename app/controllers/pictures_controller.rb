@@ -48,10 +48,7 @@ class PicturesController < ApplicationController
 
     authorize! @picture
 
-    Picture.transaction do
-      @picture.save &&
-        RecordHistoryService.call(record: @picture, team: current_team, user: current_user, event: :created)
-    end
+    Picture.create_with_history(record: @picture, history_params: { team: current_team, user: current_user })
 
     if @picture.persisted?
       redirect_to @picture, notice: "Picture was successfully created."
@@ -63,11 +60,9 @@ class PicturesController < ApplicationController
   def update
     @picture = Picture.urlsafe_find!(params[:id])
     authorize! @picture
+    @picture.assign_attributes(picture_params)
 
-    Picture.transaction do
-      @picture.update(picture_params) &&
-        RecordHistoryService.call(record: @picture, team: current_team, user: current_user, event: :updated)
-    end
+    Picture.update_with_history(record: @picture, history_params: { team: current_team, user: current_user })
 
     if @picture.changed? # == picture still dirty, not saved
       render :edit, status: :unprocessable_entity
@@ -80,10 +75,7 @@ class PicturesController < ApplicationController
     @picture = Picture.urlsafe_find!(params[:id])
     authorize! @picture
 
-    Picture.transaction do
-      RecordHistoryService.call(record: @picture, team: current_team, user: current_user, event: :deleted)
-      @picture.destroy!
-    end
+    Picture.destroy_with_history(record: @picture, history_params: { team: current_team, user: current_user })
 
     redirect_to pictures_url, notice: "Picture was successfully destroyed."
   end
