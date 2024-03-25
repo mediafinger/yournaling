@@ -29,6 +29,7 @@ ActiveRecordDoctor.configure do
 
   # app only validation sufficient, no need to enforce length in DB
   detector :incorrect_length_validation, ignore_attributes: %w[
+    Chronicle.notes
     Memory.memo
     Picture.name
     Picture.yid
@@ -75,6 +76,10 @@ ActiveRecordDoctor.configure do
   # # Ignore indexes that are not used in the application
   detector :unindexed_foreign_keys, ignore_columns: %w[
     good_jobs.retried_good_job_id
+    insights.chronicle_yid
+    insights.location_yid
+    insights.picture_yid
+    insights.weblink_yid
     logins.device_id
     memories.location_yid
     memories.picture_yid
