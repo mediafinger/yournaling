@@ -75,6 +75,12 @@ ActiveRecordDoctor.configure do
 
   # # Ignore indexes that are not used in the application
   detector :unindexed_foreign_keys, ignore_columns: %w[
+    chronicle_locations.chronicle_yid
+    chronicle_locations.location_yid
+    chronicle_pictures.chronicle_yid
+    chronicle_pictures.picture_yid
+    chronicle_weblinks.chronicle_yid
+    chronicle_weblinks.weblink_yid
     good_jobs.retried_good_job_id
     insights.chronicle_yid
     insights.location_yid

@@ -43,5 +43,13 @@ Weblink.create_with_history(record: weblink, history_params: { team: van, user: 
 memory = Memory.new(team: van, memo: "This is a memory", picture: van_pic, location: loc, weblink: weblink, visibility: :published)
 Memory.create_with_history(record: memory, history_params: { team: van, user: andy })
 
-# TODO: create chronicle
+cron = Chronicle.new(team: van, name: "My 1st Chronicle", notes: "This could get wordy")
+cron_loc = ChronicleLocation.new(team: van, chronicle: cron, location: loc)
+cron_pic = ChroniclePicture.new(team: van, chronicle: cron, picture: van_pic)
+cron_link = ChronicleWeblink.new(team: van, chronicle: cron, weblink: weblink)
+ChronicleLocation.create_with_history(record: cron_loc, history_params: { team: van, user: andy })
+ChroniclePicture.create_with_history(record: cron_pic, history_params: { team: van, user: andy })
+ChronicleWeblink.create_with_history(record: cron_link, history_params: { team: van, user: andy })
+Chronicle.create_with_history(record: cron, history_params: { team: van, user: andy })
+
 # TODO: create experience

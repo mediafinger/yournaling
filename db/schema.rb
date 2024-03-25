@@ -47,13 +47,43 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_24_191640) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "chronicle_locations", primary_key: "yid", id: :string, force: :cascade do |t|
+    t.string "chronicle_yid", null: false
+    t.datetime "created_at", null: false
+    t.string "location_yid", null: false
+    t.string "team_yid", null: false
+    t.datetime "updated_at", null: false
+    t.index ["team_yid", "chronicle_yid", "location_yid"], name: "idx_on_team_yid_chronicle_yid_location_yid_8437ee4fe1", unique: true
+  end
+
+  create_table "chronicle_pictures", primary_key: "yid", id: :string, force: :cascade do |t|
+    t.string "chronicle_yid", null: false
+    t.datetime "created_at", null: false
+    t.string "picture_yid", null: false
+    t.string "team_yid", null: false
+    t.datetime "updated_at", null: false
+    t.index ["team_yid", "chronicle_yid", "picture_yid"], name: "idx_on_team_yid_chronicle_yid_picture_yid_6dd4faaefc", unique: true
+  end
+
+  create_table "chronicle_weblinks", primary_key: "yid", id: :string, force: :cascade do |t|
+    t.string "chronicle_yid", null: false
+    t.datetime "created_at", null: false
+    t.string "team_yid", null: false
+    t.datetime "updated_at", null: false
+    t.string "weblink_yid", null: false
+    t.index ["team_yid", "chronicle_yid", "weblink_yid"], name: "idx_on_team_yid_chronicle_yid_weblink_yid_9187e96b19", unique: true
+  end
+
   create_table "chronicles", primary_key: "yid", id: :string, force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.string "locations_order", default: [], null: false, array: true
     t.string "name", null: false
     t.text "notes", null: false
+    t.string "pictures_order", default: [], null: false, array: true
     t.string "team_yid", null: false
     t.datetime "updated_at", null: false
     t.enum "visibility", default: "draft", null: false, enum_type: "content_visibility"
+    t.string "weblinks_order", default: [], null: false, array: true
     t.index ["team_yid", "name"], name: "index_chronicles_on_team_yid_and_name", unique: true
   end
 
@@ -135,17 +165,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_24_191640) do
     t.index ["priority", "created_at"], name: "index_good_jobs_jobs_on_priority_created_at_when_unfinished", order: { priority: "DESC NULLS LAST" }, where: "(finished_at IS NULL)"
     t.index ["queue_name", "scheduled_at"], name: "index_good_jobs_on_queue_name_and_scheduled_at", where: "(finished_at IS NULL)"
     t.index ["scheduled_at"], name: "index_good_jobs_on_scheduled_at", where: "(finished_at IS NULL)"
-  end
-
-  create_table "insights", primary_key: "yid", id: :string, force: :cascade do |t|
-    t.string "chronicle_yid", null: false
-    t.datetime "created_at", null: false
-    t.string "location_yid"
-    t.string "picture_yid"
-    t.string "team_yid", null: false
-    t.datetime "updated_at", null: false
-    t.string "weblink_yid"
-    t.index ["team_yid", "chronicle_yid"], name: "index_insights_on_team_yid_and_chronicle_yid"
   end
 
   create_table "locations", primary_key: "yid", id: :string, force: :cascade do |t|
@@ -271,12 +290,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_24_191640) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "chronicle_locations", "chronicles", column: "chronicle_yid", primary_key: "yid"
+  add_foreign_key "chronicle_locations", "locations", column: "location_yid", primary_key: "yid"
+  add_foreign_key "chronicle_locations", "teams", column: "team_yid", primary_key: "yid"
+  add_foreign_key "chronicle_pictures", "chronicles", column: "chronicle_yid", primary_key: "yid"
+  add_foreign_key "chronicle_pictures", "pictures", column: "picture_yid", primary_key: "yid"
+  add_foreign_key "chronicle_pictures", "teams", column: "team_yid", primary_key: "yid"
+  add_foreign_key "chronicle_weblinks", "chronicles", column: "chronicle_yid", primary_key: "yid"
+  add_foreign_key "chronicle_weblinks", "teams", column: "team_yid", primary_key: "yid"
+  add_foreign_key "chronicle_weblinks", "weblinks", column: "weblink_yid", primary_key: "yid"
   add_foreign_key "chronicles", "teams", column: "team_yid", primary_key: "yid"
-  add_foreign_key "insights", "chronicles", column: "chronicle_yid", primary_key: "yid"
-  add_foreign_key "insights", "locations", column: "location_yid", primary_key: "yid"
-  add_foreign_key "insights", "pictures", column: "picture_yid", primary_key: "yid"
-  add_foreign_key "insights", "teams", column: "team_yid", primary_key: "yid"
-  add_foreign_key "insights", "weblinks", column: "weblink_yid", primary_key: "yid"
   add_foreign_key "locations", "teams", column: "team_yid", primary_key: "yid"
   add_foreign_key "logins", "users", column: "user_yid", primary_key: "yid"
   add_foreign_key "members", "teams", column: "team_yid", primary_key: "yid"
