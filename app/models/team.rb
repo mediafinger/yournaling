@@ -1,6 +1,8 @@
 class Team < ApplicationRecordYidEnabled
   YID_CODE = "team".freeze
 
+  has_many :insights, class_name: "Insight", foreign_key: "team_yid", primary_key: "yid", inverse_of: :team,
+    dependent: :delete_all
   has_many :locations, class_name: "Location", foreign_key: "team_yid", primary_key: "yid", inverse_of: :team,
     dependent: :destroy
   has_many :members, class_name: "Member", foreign_key: "team_yid", primary_key: "yid", inverse_of: :team,
