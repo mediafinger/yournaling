@@ -3,8 +3,12 @@ class Location < ApplicationRecordYidEnabled
 
   belongs_to :team, inverse_of: :locations, foreign_key: "team_yid"
 
+  has_many :chronicle_locations, class_name: "ChronicleLocation", foreign_key: "location_yid", primary_key: "yid",
+    inverse_of: :location, dependent: :destroy
   has_many :memories, class_name: "Memory", foreign_key: "location_yid", primary_key: "yid", inverse_of: :location,
     dependent: :nullify
+
+  has_many :chronicles, through: :chronicle_locations
 
   multisearchable(
     against: %i[name country_code address],
