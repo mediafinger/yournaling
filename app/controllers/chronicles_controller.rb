@@ -23,7 +23,7 @@ class ChroniclesController < ApplicationController
   end
 
   def create
-    @chronicle = Chronicle.new(create_params.compact_blank.merge(team: current_team))
+    @chronicle = Chronicle.new(chronicle_params.compact_blank.merge(team: current_team))
     authorize! @chronicle
 
     Chronicle.create_with_history(record: @chronicle, history_params: { team: current_team, user: current_user })
@@ -38,7 +38,7 @@ class ChroniclesController < ApplicationController
   def update
     @chronicle = Chronicle.urlsafe_find!(params[:id])
     authorize! @chronicle
-    @chronicle.assign_attributes(update_params.compact_blank)
+    @chronicle.assign_attributes(chronicle_params.compact_blank)
 
     Chronicle.update_with_history(record: @chronicle, history_params: { team: current_team, user: current_user })
 
@@ -60,11 +60,13 @@ class ChroniclesController < ApplicationController
 
   private
 
-  def create_params
-    params.require(:chronicle).permit(:team_yid, :memo, :picture_yid, :location_yid, :weblink_yid)
-  end
-
-  def update_params
-    params.require(:chronicle).permit(:memo, :picture_yid, :location_yid, :weblink_yid)
+  def chronicle_params
+    params.require(:chronicle).permit(
+      :name,
+      :notes,
+      chronicle_locations_attributes: %i[location_yid _destroy], # accepts_nested_attributes_for
+      chronicle_pictures_attributes: %i[picture_yid _destroy], # accepts_nested_attributes_for
+      chronicle_weblinks_attributes: %i[weblink_yid _destroy] # accepts_nested_attributes_for
+    )
   end
 end

@@ -7,5 +7,13 @@ class ChroniclePicture < ApplicationRecordYidEnabled
 
   attr_readonly :team_yid
 
+  after_commit :update_chronicle
+
   delegate :name, to: :location
+
+  private
+
+  def update_chronicle
+    chronicle.save # to ensure chronicle.pictures_order is being updated
+  end
 end

@@ -62,11 +62,16 @@ module CurrentTeams
     private
 
     def create_params
-      params.require(:memory).permit(:team_yid, :memo, :picture_yid, :location_yid, :weblink_yid)
+      params.require(:memory).permit(:memo, :picture_yid, :location_yid, :weblink_yid)
     end
 
     def update_params
-      params.require(:memory).permit(:memo, :picture_yid, :location_yid, :weblink_yid)
+      params.require(:memory).permit(
+        :memo, :picture_yid, :location_yid, :weblink_yid,
+        location_attributes: %i[address country_code name lat long url], # accepts_nested_attributes_for
+        picture_attributes: %i[file date name], # accepts_nested_attributes_for
+        weblink_attributes: %i[url name description] # accepts_nested_attributes_for
+    )
     end
   end
 end

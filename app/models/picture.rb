@@ -25,7 +25,7 @@ class Picture < ApplicationRecordForContentAndPosts
   belongs_to :team, foreign_key: "team_yid", primary_key: "yid", inverse_of: :pictures
 
   has_many :chronicle_pictures, class_name: "ChroniclePicture", foreign_key: "picture_yid", primary_key: "yid",
-    inverse_of: :picture, dependent: :delete_all
+    inverse_of: :picture, dependent: :destroy
   has_many :memories, class_name: "Memory", foreign_key: "picture_yid", primary_key: "yid", inverse_of: :picture,
     dependent: :nullify
 
