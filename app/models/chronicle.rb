@@ -3,9 +3,9 @@ class Chronicle < ApplicationRecordForContent
 
   belongs_to :team, inverse_of: :chronicles, foreign_key: "team_yid"
 
-  has_many :chronicle_locations, inverse_of: :chronicle, foreign_key: "chronicle_yid", dependent: :delete_all
-  has_many :chronicle_pictures, inverse_of: :chronicle, foreign_key: "chronicle_yid", dependent: :delete_all
-  has_many :chronicle_weblinks, inverse_of: :chronicle, foreign_key: "chronicle_yid", dependent: :delete_all
+  has_many :chronicle_locations, inverse_of: :chronicle, foreign_key: "chronicle_yid", dependent: :destroy
+  has_many :chronicle_pictures, inverse_of: :chronicle, foreign_key: "chronicle_yid", dependent: :destroy
+  has_many :chronicle_weblinks, inverse_of: :chronicle, foreign_key: "chronicle_yid", dependent: :destroy
 
   has_many :locations, through: :chronicle_locations
   has_many :pictures, through: :chronicle_pictures
@@ -22,6 +22,10 @@ class Chronicle < ApplicationRecordForContent
     includes(:team, chronicle_locations: :location, chronicle_pictures: :picture, chronicle_weblinks: :weblink)
   }
 
+  accepts_nested_attributes_for :chronicle_locations, allow_destroy: true
+  accepts_nested_attributes_for :chronicle_pictures, allow_destroy: true
+  accepts_nested_attributes_for :chronicle_weblinks, allow_destroy: true
+
   normalizes :note, with: ->(note) { note.strip }
 
   before_validation :ensure_locations_order_complete
@@ -31,9 +35,6 @@ class Chronicle < ApplicationRecordForContent
   validates :name, presence: true
   validates :notes, presence: true, length: { minimum: 20, maximum: 5000 } # TODO: more for paying users?
   validates :visibility, presence: true, inclusion: { in: VISIBILITY_STATES }
-  validates :locations_order, presence: true
-  validates :pictures_order, presence: true
-  validates :weblinks_order, presence: true
 
   private
 

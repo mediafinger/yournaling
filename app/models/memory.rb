@@ -13,6 +13,12 @@ class Memory < ApplicationRecordForContent
 
   attr_readonly :team_yid
 
+  scope :with_includes, -> { includes(:team, :location, :picture, :weblink) }
+
+  accepts_nested_attributes_for :location, update_only: true # use the persisted object, do not create a new one each time
+  accepts_nested_attributes_for :picture, update_only: true # use the persisted object, do not create a new one each time
+  accepts_nested_attributes_for :weblink, update_only: true # use the persisted object, do not create a new one each time
+
   normalizes :memo, with: ->(memo) { memo.strip }
 
   validates :memo, presence: true, length: { minimum: 4, maximum: 500 }
