@@ -1,21 +1,29 @@
 Rails.application.routes.draw do
   root to: "pages#home"
 
-  # TODO: move management routes to a /current_team namespace (?)
-  # TODO: move presentation routes to a /team/:id namespace (?)
+  resources :teams do
+    resources :locations
+    resources :members
+    resources :memories
+    resources :pictures
+    resources :weblinks
+  end
 
-  resources :locations
-  resources :members
-  resources :memories
-  resources :pictures
   resources :teams
   resources :users
-  resources :weblinks
+
+  namespace :current_team, module: :current_teams do
+    resources :locations
+    resources :members
+    resources :memories
+    resources :pictures
+    resources :weblinks
+
+    get "/content_visibility/:id/edit", to: "content_visibility#edit", as: "edit_content_visibility"
+    patch "/content_visibility/:id", to: "content_visibility#update", as: "content_visibility"
+  end
 
   resources :switch_current_teams, only: %i[index show create destroy]
-
-  get "/content_visibility/:id/edit", to: "content_visibility#edit", as: "edit_content_visibility"
-  patch "/content_visibility/:id", to: "content_visibility#update", as: "content_visibility"
 
   get "new_search", to: "searches#new", as: "new_search"
   post "search", to: "searches#create", as: "search"
