@@ -2,9 +2,9 @@ module Authentication
   extend ActiveSupport::Concern
 
   def self.included(base)
-    base.send :helper_method, :current_user if base.respond_to? :helper_method
+    base.send :helper_method, :current_user if base.respond_to? :helper_method # helper_method :current_user
 
-    base.send :before_action, :authenticate if base.respond_to? :before_action
+    base.send :before_action, :authenticate if base.respond_to? :before_action # before_action :authenticate
   end
 
   def sign_in(email:, password:)
