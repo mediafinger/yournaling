@@ -35,7 +35,7 @@ class Member < ApplicationRecordForContent
   attr_readonly :team_yid
   attr_readonly :user_yid
 
-  scope :with_includes, -> { includes(:team, location: :picture) }
+  scope :with_includes, -> { includes(:team) }
 
   validates :team_yid, presence: true, uniqueness: { scope: :user_yid }
   validates :user_yid, presence: true, uniqueness: { scope: :team_yid }
