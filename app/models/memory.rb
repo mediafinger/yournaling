@@ -30,6 +30,11 @@ class Memory < ApplicationRecordForContent
   # REFACT: extract this to a service or similar
   # REFACT: ensure the transaction is rolled back, when the memory can not be saved
   #
+  # TODO: ensure updated associations are always saved!
+  #
+  # TODO: OR keep insights always internal and never set them to :published,
+  # so they can only be seen in the context of the Memory... (??)
+  #
   def update_visibilty_of_insights
     transaction do
       %i[location picture weblink].each do |type|

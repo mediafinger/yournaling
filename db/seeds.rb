@@ -40,7 +40,7 @@ Location.create_with_history(record: loc, history_params: { team: van, user: and
 weblink = Weblink.new(name: "Yournaling", url: "www.yournaling.com", description: "Your Journaling", team: van)
 Weblink.create_with_history(record: weblink, history_params: { team: van, user: andy })
 
-memory = Memory.new(team: van, memo: "This is a memory", picture: van_pic, location: loc, weblink: weblink)
+memory = Memory.new(team: van, memo: "This is a memory", picture: van_pic, location: loc, weblink: weblink, visibility: :published)
 Memory.create_with_history(record: memory, history_params: { team: van, user: andy })
 
 # TODO: create chronicle

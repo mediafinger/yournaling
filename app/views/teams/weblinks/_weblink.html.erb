@@ -1,0 +1,27 @@
+<article id="<%= dom_id weblink %>">
+  <% if action_name == "show" %>
+    <p>
+      <strong>Name:</strong>
+      <%= weblink.name %>
+    </p>
+
+    <p>
+      <strong>Url:</strong>
+      <%= render ExternalLinkComponent.new(url: weblink.url, text: weblink.url) %>
+    </p>
+
+    <p>
+      <strong>Description:</strong>
+      <%= weblink.description %>
+    </p>
+
+    <p>
+      <strong>Team:</strong>
+      <%= weblink.team_yid %>
+    </p>
+  <% end %>
+
+  <% if action_name != "show" %>
+    <%= render ExternalLinkComponent.new(url: weblink.url, text: weblink.url) %>
+  <% end %>
+</article>
