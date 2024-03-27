@@ -1,10 +1,19 @@
 class ApplicationNavComponent < ApplicationComponent
   erb_template <<-ERB
-    <% if current_user&.admin? %>
-    <ul>
-      <li><%= link_to "Go to Admin Area", "/admin" %></li>
-    </ul>
+    <% if !@admin_scope %>
+      <% if current_user&.admin? %>
+      <ul>
+        <li><%= link_to "Go to Admin Area", "/admin" %></li>
+      </ul>
+      <% end %>
     <% end %>
+
+    <% if !@current_team_scope %>
+      <% if current_team.present? %>
+        <%= link_to "Go to Current Team", current_team_home_path %>
+      <% end %>
+    <% end %>
+
 
     <% if @admin_scope %>
       admin_scope
@@ -25,10 +34,6 @@ class ApplicationNavComponent < ApplicationComponent
       <%= render ApplicationNavActionsComponent.new(actions_for: %w[memories locations pictures weblinks members], scope: "current_team") %>
     <% else %>
       no_scope
-
-      <% if current_team.present? %>
-        <%= link_to "Go to Current Team", current_team_path %>
-      <% end %>
     <% end %>
 
     <%= render ApplicationNavLinksComponent.new(link_sections: %w[teams]) %>
