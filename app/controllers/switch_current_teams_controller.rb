@@ -1,10 +1,10 @@
-class CurrentTeamsController < ApplicationController
+class SwitchCurrentTeamsController < ApplicationController
   def index
     authorize! current_user, to: :index?, with: CurrentTeamPolicy
 
     @current_user_teams = current_user.teams
 
-    render template: "current_teams/index"
+    render template: "switch_current_teams/index"
   end
 
   def show
@@ -14,7 +14,7 @@ class CurrentTeamsController < ApplicationController
     if @current_team
       render partial: "teams/team", locals: { team: @current_team }
     else
-      redirect_to current_teams_url, notice: "No Team selected"
+      redirect_to switch_current_teams_url, notice: "No Team selected"
     end
   end
 

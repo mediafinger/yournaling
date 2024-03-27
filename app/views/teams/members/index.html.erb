@@ -1,0 +1,5 @@
+<div id="members">
+  <% @members.each do |member| %>
+    <%= render partial: "teams/members/member", locals: { team:, member: } %>
+  <% end %>
+</div>
