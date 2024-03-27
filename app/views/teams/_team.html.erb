@@ -4,7 +4,5 @@
     <%= team.name %>
   </p>
 
-  <% if action_name != "show" %>
-    <%= link_to "Show this team", team, role: "button"  %>
-  <% end %>
+  <%= link_to "Go to team", team_home_path(team_id: team.to_param), role: "button" %>
 </article>

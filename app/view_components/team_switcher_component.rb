@@ -25,8 +25,7 @@ class TeamSwitcherComponent < ApplicationComponent
       login_path,
       role: active_path?(login_path) ? "button" : nil
 
-    @logout_button_tag = button_to "Logout #{current_user.name}",
-      { controller: :sessions, action: :destroy },
+    @logout_button_tag = button_to "Logout #{current_user.name}", logout_path,
       { method: :delete, role: "link", class: "logout" }
 
     @switch_teams_link_tag = link_to "Switch team",

@@ -1,3 +1,5 @@
+<%# TODO: create proper memory index and show partials %>
+
 <article id="<%= dom_id memory %>">
   <p>
     <strong>Team:</strong>
@@ -10,18 +12,18 @@
   </p>
 
   <% if memory.picture %>
-    <%= render partial: "pictures/picture", locals: { picture: memory.picture } %>
+    <%= render partial: "teams/pictures/picture", locals: { team:, picture: memory.picture } %>
   <% end %>
 
   <% if memory.location %>
-    <%= render partial: "locations/location", locals: { location: memory.location } %>
+    <%= render partial: "teams/locations/location", locals: { team:, location: memory.location } %>
   <% end %>
 
   <% if memory.weblink %>
-    <%= render partial: "weblinks/weblink", locals: { weblink: memory.weblink } %>
+    <%= render partial: "teams/weblinks/weblink", locals: { team:, weblink: memory.weblink } %>
   <% end %>
 
   <% if action_name != "show" %>
-    <%= link_to "Show this memory", team_memory_path(memory), role: "button"  %>
+    <%= link_to "Show this memory", team_memory_path(team_id: team.to_param, id: memory.to_param), role: "button"  %>
   <% end %>
 </article>

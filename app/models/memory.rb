@@ -29,6 +29,11 @@ class Memory < ApplicationRecordForContent
 
   # REFACT: extract this to a service or similar
   #
+  # TODO: ensure updated associations are always saved!
+  #
+  # TODO: OR keep insights always internal and never set them to :published,
+  # so they can only be seen in the context of the Memory... (??)
+  #
   def update_visibilty_of_insights
     update_visibility_of_removed_locations
     update_visibility_of_removed_pictures

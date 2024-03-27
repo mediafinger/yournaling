@@ -22,8 +22,8 @@
   <% end %>
 
   <% if action_name != "show" %>
-    <%= link_to "Show this memory", memory, role: "button"  %>
+    <%= link_to "Show this memory", current_team_memory_path(memory), role: "button"  %>
   <% end %>
-  <%= link_to 'Edit this memory', edit_memory_path(memory), role: "button", class: "secondary" %>
-  <%= link_to 'Change visibility', edit_content_visibility_path(memory), role: "button", class: "secondary" %>
+  <%= link_to 'Edit this memory', edit_current_team_memory(memory), role: "button", class: "secondary" %>
+  <%= link_to 'Change visibility', edit_current_team_content_visibility_path(memory), role: "button", class: "secondary" %>
 </article>
