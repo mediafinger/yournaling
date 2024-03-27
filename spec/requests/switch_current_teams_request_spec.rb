@@ -1,4 +1,4 @@
-RSpec.describe "/current_teams", type: :system do
+RSpec.describe "/switch_current_teams", type: :system do
   let(:member) { FactoryBot.create(:member) }
   let(:user) { member.user }
   let(:team) { member.team }
@@ -7,9 +7,9 @@ RSpec.describe "/current_teams", type: :system do
 
   describe "GET /index" do
     it "renders a successful response", aggregate_failures: true do
-      visit current_teams_url
+      visit switch_current_teams_url
 
-      expect(page).to have_current_path("/current_teams", ignore_query: true)
+      expect(page).to have_current_path("/switch_current_teams", ignore_query: true)
       expect(page.status_code).to eq(200) # not supported by selenium driver
 
       main = page.find("main")
@@ -21,9 +21,9 @@ RSpec.describe "/current_teams", type: :system do
     it "renders a successful response" do
       visit_switch_current_team(team)
 
-      visit current_team_url(team.urlsafe_id)
+      visit switch_current_team_url(team.urlsafe_id)
 
-      expect(page).to have_current_path("/current_teams/#{team.urlsafe_id}", ignore_query: true)
+      expect(page).to have_current_path("/switch_current_teams/#{team.urlsafe_id}", ignore_query: true)
       expect(page.status_code).to eq(200) # not supported by selenium driver
     end
   end
@@ -35,7 +35,7 @@ RSpec.describe "/current_teams", type: :system do
 
         expect(Current.team).to be_nil
 
-        post current_teams_path, params: { current_team: { team_yid: team.yid } }
+        post switch_current_teams_path, params: { current_team: { team_yid: team.yid } }
 
         expect(session[:team_yid]).to eq(team.yid)
 

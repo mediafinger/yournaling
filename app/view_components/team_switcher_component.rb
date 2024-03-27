@@ -30,7 +30,7 @@ class TeamSwitcherComponent < ApplicationComponent
       { method: :delete, role: "link", class: "logout" }
 
     @switch_teams_link_tag = link_to "Switch team",
-      current_teams_path,
-      role: active_path?(current_teams_path) ? "button" : nil
+      switch_current_teams_path,
+      role: active_path?(switch_current_teams_path) ? "button" : nil
   end
 end
