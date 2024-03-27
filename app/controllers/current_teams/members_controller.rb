@@ -1,5 +1,7 @@
+# TODO
+
 module CurrentTeams
-  class MembersController < ApplicationController
+  class MembersController < AppCurrentTeamController
     def index
       authorize! current_user, to: :index?, with: MemberPolicy
 
