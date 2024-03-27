@@ -1,8 +1,5 @@
 module CurrentTeams
   class ContentVisibilityController < AppCurrentTeamController
-
-      # TODO: current_team_scope(relation) ?
-
     def edit
       @content = ApplicationRecordYidEnabled.fynd(Base64.urlsafe_decode64(params[:id]))
       authorize! @content, to: :read?

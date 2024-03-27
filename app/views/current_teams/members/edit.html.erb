@@ -1,0 +1,4 @@
+<%= render partial: "form", locals: { member: @member, form_legend: "Edit member"} %>
+
+<%= link_to "Show this member", @member, role: "button"  %>
+<%= button_to "Destroy this member", member_path(@member), method: :delete, class: "secondary" %>
