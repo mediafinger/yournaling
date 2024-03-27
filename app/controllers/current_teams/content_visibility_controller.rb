@@ -1,5 +1,8 @@
 module CurrentTeams
-  class ContentVisibilityController < ApplicationController
+  class ContentVisibilityController < AppCurrentTeamController
+
+      # TODO: current_team_scope(relation) ?
+
     def edit
       @content = ApplicationRecordYidEnabled.fynd(Base64.urlsafe_decode64(params[:id]))
       authorize! @content, to: :read?
@@ -17,7 +20,7 @@ module CurrentTeams
       if @content.changed? # == content still dirty, not saved
         render :edit, status: :unprocessable_entity
       else
-        redirect_to @content, notice: "Memory was successfully updated."
+        redirect_to @content, notice: "Memory was successfully updated." # TODO: current_team_xxx_path(@content)
       end
     end
 

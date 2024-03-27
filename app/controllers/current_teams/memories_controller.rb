@@ -1,5 +1,7 @@
+# TODO
+
 module CurrentTeams
-  class MemoriesController < ApplicationController
+  class MemoriesController < AppCurrentTeamController
     def index
       authorize! current_user, to: :index?, with: MemoryPolicy
 

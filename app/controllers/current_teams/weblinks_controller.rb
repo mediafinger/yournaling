@@ -1,5 +1,7 @@
+# TODO
+
 module CurrentTeams
-  class WeblinksController < ApplicationController
+  class WeblinksController < AppCurrentTeamController
     skip_before_action :authenticate, only: %i[index show] # allow everyone to see the weblinks
 
     def index
