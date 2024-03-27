@@ -3,8 +3,10 @@
 # A User can leave any Team, as long as they are not the last User in the Team.
 # A Team can only be destroyed if last owner decides to destroy the Team
 #  while still being part of another team or if the last owner decides to destroy their whole Account.
-
-class Member < ApplicationRecordYidEnabled
+#
+# NOTE: Members inherit from ApplicationRecordForContent as they are displayed under /teams
+#
+class Member < ApplicationRecordForContent
   VALID_ROLES = [
     "owner", # owns the team, can invite/remove other users to/from the team, can manage everything team related
     "manager", # can manage all team related objects, change member roles (except owner) and invite readers
@@ -33,12 +35,15 @@ class Member < ApplicationRecordYidEnabled
   attr_readonly :team_yid
   attr_readonly :user_yid
 
+  scope :with_includes, -> { includes(:team, location: :picture) }
+
   validates :team_yid, presence: true, uniqueness: { scope: :user_yid }
   validates :user_yid, presence: true, uniqueness: { scope: :team_yid }
   validates :roles, presence: true, if: proc { |record| record.roles.to_s == "" }
   validates :roles, array_inclusion: {
     in: VALID_ROLES, message: "%{rejected_values} not allowed, roles must be in #{VALID_ROLES}"
   } # this uses the custom ArrayInclusionValidator
+  validates :visibility, presence: true, inclusion: { in: VISIBILITY_STATES }
 
   after_initialize :define_has_role_methods
 

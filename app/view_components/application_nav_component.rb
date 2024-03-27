@@ -6,6 +6,10 @@ class ApplicationNavComponent < ApplicationComponent
     </ul>
     <% end %>
 
+    <%= render ApplicationNavLinksComponent.new(link_sections:  %w[memories members], scope: "teams") %>
+
+    |
+
     <%= render ApplicationNavLinksComponent.new(link_sections: @sections) %>
 
     <%= render TeamSwitcherComponent.new %>

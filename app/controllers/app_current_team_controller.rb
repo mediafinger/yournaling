@@ -10,15 +10,15 @@ class AppCurrentTeamController < ApplicationController
   end
 
   def create_with_history(record:, history_params: { team: current_team, user: current_user })
-    ApplicationRecordYidEnabled.create_with_history(record: record, history_params:)
+    ApplicationRecordYidEnabled.create_with_history(record:, history_params:)
   end
 
   def update_with_history(record:, history_params: { team: current_team, user: current_user })
-    ApplicationRecordYidEnabled.update_with_history(record: record, history_params:)
+    ApplicationRecordYidEnabled.update_with_history(record:, history_params:)
   end
 
   def destroy_with_history(record:, history_params: { team: current_team, user: current_user })
-    ApplicationRecordYidEnabled.destroy_with_history(record: record, history_params:)
+    ApplicationRecordYidEnabled.destroy_with_history(record:, history_params:)
   end
 
   def authenticate_member!

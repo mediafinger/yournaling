@@ -261,7 +261,7 @@ Yournaling should become a travel journal, where we can:
   * like draft, but listed team internally in extra section
 * blocked
   * when content violates the rules, a platform-moderator can block the content
-  * it will be treated like unplished, but visiblity can not be changed anymore
+  * it will be treated like archived, but visiblity can not be changed anymore by team members
   * only after a change and a review a platform-moderator can unblock the content again
   * maybe automatic blocking after multiple user-reports
 * only team members with the publisher role can publish content to people outside their team

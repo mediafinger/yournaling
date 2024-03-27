@@ -13,6 +13,8 @@ class Memory < ApplicationRecordForContent
 
   attr_readonly :team_yid
 
+  scope :with_includes, -> { includes(:team, :location, :picture, :weblink) }
+
   normalizes :memo, with: ->(memo) { memo.strip }
 
   validates :memo, presence: true, length: { minimum: 4, maximum: 500 }

@@ -2,11 +2,8 @@ Rails.application.routes.draw do
   root to: "pages#home"
 
   resources :teams do
-    resources :locations
     resources :members
     resources :memories
-    resources :pictures
-    resources :weblinks
   end
 
   resources :teams

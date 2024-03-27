@@ -1,0 +1,20 @@
+<article id="<%= dom_id member %>">
+  <p>
+    <strong>User:</strong>
+    <%= member.user.name %>
+  </p>
+
+  <p>
+    <strong>Team:</strong>
+    <%= member.team.name %>
+  </p>
+
+  <p>
+    <strong>Roles:</strong>
+    <%= member.roles %>
+  </p>
+
+  <% if action_name != "show" %>
+    <%= link_to "Show this member", team_member_path(member), role: "button"  %>
+  <% end %>
+</article>
