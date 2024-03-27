@@ -1,4 +1,4 @@
-class Location < ApplicationRecordYidEnabled
+class Location < ApplicationRecordForContent
   YID_CODE = "loc".freeze
 
   belongs_to :team, inverse_of: :locations, foreign_key: "team_yid"
@@ -27,6 +27,7 @@ class Location < ApplicationRecordYidEnabled
     numericality: { greater_than_or_equal_to: BigDecimal("-180.0"), less_than_or_equal_to: BigDecimal("180.0") }
   validates :name, presence: true, uniqueness: { scope: :team_yid }
   validates :team_yid, presence: true, uniqueness: { scope: :name }
+  validates :visibility, presence: true, inclusion: { in: VISIBILITY_STATES }
 
   after_validation :geocode, if: ->(location) { calculate_coordinates?(location) }
   after_validation :reverse_geocode, if: ->(location) { get_address?(location) }

@@ -5,7 +5,7 @@
 # if deleting the original should not be possible, we should prevent uploading files larger than 10 MB
 # and introduce a smaller limit - at least for non-paying users
 
-class Picture < ApplicationRecordYidEnabled
+class Picture < ApplicationRecordForContent
   extend ActionView::Helpers::NumberHelper
 
   has_one_attached :file
@@ -76,6 +76,7 @@ class Picture < ApplicationRecordYidEnabled
   # TODO: or crop original image to fit landscape / square / portrait variants
 
   validates :name, allow_blank: true, length: { maximum: 255 }
+  validates :visibility, presence: true, inclusion: { in: VISIBILITY_STATES }
 
   def thumbnail
     create_variant(max_width: 160, max_height: 120)

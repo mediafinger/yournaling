@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_27_101103) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_27_101123) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -138,6 +138,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_27_101103) do
     t.string "team_yid", null: false
     t.datetime "updated_at", null: false
     t.text "url"
+    t.enum "visibility", default: "internal", null: false, enum_type: "content_visibility"
     t.index ["country_code"], name: "index_locations_on_country_code"
     t.index ["team_yid", "name"], name: "index_locations_on_team_yid_and_name", unique: true
   end
@@ -182,6 +183,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_27_101103) do
     t.string "name"
     t.string "team_yid", null: false
     t.datetime "updated_at", null: false
+    t.enum "visibility", default: "internal", null: false, enum_type: "content_visibility"
     t.index ["team_yid"], name: "index_pictures_on_team_yid"
   end
 
@@ -231,6 +233,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_27_101103) do
     t.string "team_yid", null: false
     t.datetime "updated_at", null: false
     t.text "url", null: false
+    t.enum "visibility", default: "internal", null: false, enum_type: "content_visibility"
     t.index ["team_yid", "url"], name: "index_weblinks_on_team_yid_and_url", unique: true
   end
 
