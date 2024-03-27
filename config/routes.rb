@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
   root to: "pages#home"
 
+  # TODO: move management routes to a /current_team namespace (?)
+  # TODO: move presentation routes to a /team/:id namespace (?)
+
   resources :locations
   resources :members
   resources :memories
@@ -9,7 +12,7 @@ Rails.application.routes.draw do
   resources :users
   resources :weblinks
 
-  resources :current_teams, only: %i[index show create destroy]
+  resources :switch_current_teams, only: %i[index show create destroy]
 
   get "/content_visibility/:id/edit", to: "content_visibility#edit", as: "edit_content_visibility"
   patch "/content_visibility/:id", to: "content_visibility#update", as: "content_visibility"
