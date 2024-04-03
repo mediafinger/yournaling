@@ -17,7 +17,7 @@ module CurrentTeams
       if @content.changed? # == content still dirty, not saved
         render :edit, status: :unprocessable_entity
       else
-        redirect_to @content, notice: "Memory was successfully updated." # TODO: current_team_xxx_path(@content)
+        redirect_to current_team_edit_content_visibility(@content), notice: "Memory was successfully updated."
       end
     end
 

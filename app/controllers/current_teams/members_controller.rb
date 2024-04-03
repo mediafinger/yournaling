@@ -1,5 +1,3 @@
-# TODO
-
 module CurrentTeams
   class MembersController < AppCurrentTeamController
     def index
@@ -32,7 +30,7 @@ module CurrentTeams
       Member.create_with_history(record: @member, history_params: { team: current_team, user: current_user })
 
       if @member.persisted?
-        redirect_to @member, notice: "Member was successfully created."
+        redirect_to current_team_member_path(@member), notice: "Member was successfully created."
       else
         render :new, status: :unprocessable_entity
       end
@@ -48,7 +46,7 @@ module CurrentTeams
       if @member.changed? # == member still dirty, not saved
         render :edit, status: :unprocessable_entity
       else
-        redirect_to @member, notice: "Member was successfully updated."
+        redirect_to current_team_member_path(@member), notice: "Member was successfully updated."
       end
     end
 
@@ -58,7 +56,7 @@ module CurrentTeams
 
       Member.destroy_with_history(record: @member, history_params: { team: current_team, user: current_user })
 
-      redirect_to members_url, notice: "Member was successfully destroyed."
+      redirect_to current_team_members_path, notice: "Member was successfully destroyed."
     end
 
     private

@@ -1,5 +1,3 @@
-# TODO
-
 module CurrentTeams
   class LocationsController < AppCurrentTeamController
     def index

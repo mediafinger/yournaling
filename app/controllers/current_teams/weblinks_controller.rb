@@ -1,5 +1,3 @@
-# TODO
-
 module CurrentTeams
   class WeblinksController < AppCurrentTeamController
     skip_before_action :authenticate, only: %i[index show] # allow everyone to see the weblinks
@@ -42,7 +40,7 @@ module CurrentTeams
       Weblink.create_with_history(record: @weblink, history_params: { team: current_team, user: current_user })
 
       if @weblink.persisted?
-        redirect_to @weblink, notice: "Weblink was successfully created."
+        redirect_to current_team_weblink_path(@weblink), notice: "Weblink was successfully created."
       else
         render :new, status: :unprocessable_entity
       end
@@ -58,7 +56,7 @@ module CurrentTeams
       if @weblink.changed? # == weblink still dirty, not saved
         render :edit, status: :unprocessable_entity
       else
-        redirect_to @weblink, notice: "Weblink was successfully updated."
+        redirect_to current_team_weblink_path(@weblink), notice: "Weblink was successfully updated."
       end
     end
 
@@ -68,7 +66,7 @@ module CurrentTeams
 
       Weblink.destroy_with_history(record: @weblink, history_params: { team: current_team, user: current_user })
 
-      redirect_to weblinks_url, notice: "Weblink was successfully destroyed."
+      redirect_to current_team_weblinks_path, notice: "Weblink was successfully destroyed."
     end
 
     private

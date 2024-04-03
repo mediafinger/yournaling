@@ -18,6 +18,8 @@ Rails.application.routes.draw do
   end
 
   namespace :current_team, module: :current_teams do
+    get "", to: "pages#show", as: "home"
+
     resources :locations
     resources :members
     resources :memories
@@ -29,8 +31,6 @@ Rails.application.routes.draw do
 
     get "new_search", to: "searches#new", as: "new_search"
     post "search", to: "searches#create", as: "search"
-
-    get "", to: "pages#index"
   end
 
   resources :switch_current_teams, only: %i[index show create destroy]
@@ -40,7 +40,7 @@ Rails.application.routes.draw do
   delete "logout", to: "sessions#destroy"
 
   namespace :admin, module: "admins", constraints: ->(request) { AdminConstraint.matches?(request) } do
-    get "", to: "pages#index"
+    get "", to: "pages#show", as: "home"
     resources :locations
     resources :members
     # resources :memories # TODO
