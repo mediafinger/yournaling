@@ -15,8 +15,8 @@
   </p>
 
   <% if action_name != "show" %>
-    <%= link_to "Show this member", member, role: "button"  %>
+    <%= link_to "Show this member", current_team_member_path(member), role: "button"  %>
   <% end %>
-  <%= link_to 'Edit this member', edit_member_path(member), role: "button", class: "secondary" %>
-  <%= link_to 'Change visibility', edit_content_visibility_path(member), role: "button", class: "secondary" %>
+  <%= link_to 'Edit this member', edit_current_team_member_path(member), role: "button", class: "secondary" %>
+  <%= link_to 'Change visibility', current_team_content_visibility_path(member), role: "button", class: "secondary" %>
 </article>

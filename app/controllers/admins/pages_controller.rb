@@ -1,6 +1,6 @@
 module Admins
   class PagesController < AdminController
-    def index
+    def show
       # no-op
     end
   end

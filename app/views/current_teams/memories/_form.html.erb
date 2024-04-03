@@ -1,5 +1,5 @@
 <article>
-  <%= form_with(model: memory) do |form| %>
+  <%= form_with(model: [:current_team, memory]) do |form| %>
     <%= render partial: "shared_partials/form_validation_errors", locals: { record: memory } %>
 
     <fieldset>

@@ -10,20 +10,20 @@
   </p>
 
   <% if memory.picture %>
-    <%= render partial: "pictures/picture", locals: { picture: memory.picture } %>
+    <%= render partial: "current_teams/pictures/picture", locals: { picture: memory.picture } %>
   <% end %>
 
   <% if memory.location %>
-    <%= render partial: "locations/location", locals: { location: memory.location } %>
+    <%= render partial: "current_teams/locations/location", locals: { location: memory.location } %>
   <% end %>
 
   <% if memory.weblink %>
-    <%= render partial: "weblinks/weblink", locals: { weblink: memory.weblink } %>
+    <%= render partial: "current_teams/weblinks/weblink", locals: { weblink: memory.weblink } %>
   <% end %>
 
   <% if action_name != "show" %>
     <%= link_to "Show this memory", current_team_memory_path(memory), role: "button"  %>
   <% end %>
-  <%= link_to 'Edit this memory', edit_current_team_memory(memory), role: "button", class: "secondary" %>
-  <%= link_to 'Change visibility', edit_current_team_content_visibility_path(memory), role: "button", class: "secondary" %>
+  <%= link_to 'Edit this memory', edit_current_team_memory_path(memory), role: "button", class: "secondary" %>
+  <%= link_to 'Change visibility', current_team_content_visibility_path(memory), role: "button", class: "secondary" %>
 </article>

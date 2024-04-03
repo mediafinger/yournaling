@@ -1,8 +1,8 @@
 module CurrentTeams
   class PagesController < AppCurrentTeamController
-    # TODO: make index to the team-board?!
+    # TODO: make show the team-board?!
     #
-    def index
+    def show
       authorize! current_team, to: :show?, with: CurrentTeamPolicy
     end
   end
