@@ -203,7 +203,7 @@ RSpec/NoExpectationExample:
 RSpec/PendingWithoutReason:
   Enabled: false
 
-RSpec/Rails/InferredSpecType:
+RSpecRails/InferredSpecType:
   Enabled: false
 
 RSpec/ReceiveMessages:
@@ -217,7 +217,7 @@ RSpec/SpecFilePathFormat:
     - 'spec/requests/**/*'
     - 'packages/*/spec/requests/**/*'
 
-RSpec/Rails/TravelAround:
+RSpecRails/TravelAround:
   Enabled: false
 
 RSpec/VariableName:
