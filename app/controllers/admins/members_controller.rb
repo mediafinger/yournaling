@@ -24,7 +24,7 @@ module Admins
       Member.create_with_history(record: @member, history_params: { team: nil, user: current_user, done_by_admin: true })
 
       if @member.persisted?
-        redirect_to admin_member_path(@member), notice: "Member was successfully created."
+        redirect_to admin_member_url(@member), notice: "Member was successfully created."
       else
         render :new, status: :unprocessable_entity
       end
@@ -39,7 +39,7 @@ module Admins
       if @member.changed? # == member still dirty, not saved
         render :edit, status: :unprocessable_entity
       else
-        redirect_to admin_member_path(@member), notice: "Member was successfully updated."
+        redirect_to admin_member_url(@member), notice: "Member was successfully updated."
       end
     end
 

@@ -32,7 +32,7 @@ module CurrentTeams
       create_with_history(record: @location)
 
       if @location.persisted?
-        redirect_to current_team_location_path(@location), notice: "Location was successfully created."
+        redirect_to current_team_location_url(@location), notice: "Location was successfully created."
       else
         render :new, status: :unprocessable_entity
       end
@@ -48,7 +48,7 @@ module CurrentTeams
       if @location.changed? # == location still dirty, not saved
         render :edit, status: :unprocessable_entity
       else
-        redirect_to current_team_location_path(@location), notice: "Location was successfully updated."
+        redirect_to current_team_location_url(@location), notice: "Location was successfully updated."
       end
     end
 
@@ -58,7 +58,7 @@ module CurrentTeams
 
       destroy_with_history(record: @location)
 
-      redirect_to current_team_locations_path, notice: "Location was successfully destroyed."
+      redirect_to current_team_locations_url, notice: "Location was successfully destroyed."
     end
 
     private

@@ -28,7 +28,7 @@ RSpec.describe "/current_team/members", type: :request do
 
       it "forbids access and redirects to home path" do
         get current_team_members_url
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(root_url)
       end
     end
 

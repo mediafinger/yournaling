@@ -13,6 +13,6 @@
     <%= button_to "go solo", { controller: :switch_current_teams, action: :destroy, id: current_user_team.urlsafe_id }, method: :delete, class: "secondary", id: current_user_team.urlsafe_id %>
     &nbsp; <i>(unlink currently selected team)</i>
   <% else %>
-    <%= button_to "Select this team", switch_current_teams_url({ current_team: { team_yid: current_user_team.yid} }), method: :post, class: "secondary", id: current_user_team.urlsafe_id %>
+    <%= button_to "Select this team", switch_current_teams_path({ current_team: { team_yid: current_user_team.yid} }), method: :post, class: "secondary", id: current_user_team.urlsafe_id %>
   <% end %>
 </article>

@@ -30,7 +30,7 @@ class SwitchCurrentTeamsController < ApplicationController
 
     go_solo
 
-    redirect_to root_path, notice: "No Team selected, going solo"
+    redirect_to root_url, notice: "No Team selected, going solo"
   end
 
   private

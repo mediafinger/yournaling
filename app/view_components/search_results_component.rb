@@ -22,7 +22,7 @@ class SearchResultsComponent < ApplicationComponent
     @record_links = @results&.each_with_object({}) do |result, hash|
       record = ApplicationRecordYidEnabled.fynd(result["searchable_id"])
       link_text = "#{record.class.name}: #{record.name}"
-      link_path = send(:"current_team_#{record.class.name.tableize.singularize}_url", record)
+      link_path = send(:"current_team_#{record.class.name.tableize.singularize}_path", record)
       hash[result["searchable_id"]] = link_to(link_text, link_path)
     end
   end

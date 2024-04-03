@@ -13,7 +13,7 @@ class AppTeamsController < ApplicationController
   def team
     Team.urlsafe_find!(params[:team_id]) # TODO: handle /teams/:id endpoints
   rescue ActiveRecord::RecordNotFound => e
-    redirect_to root_path, alert: e.message
+    redirect_to root_url, alert: e.message
   end
 
   private

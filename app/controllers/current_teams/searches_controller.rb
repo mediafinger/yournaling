@@ -17,7 +17,7 @@ module CurrentTeams
       scope = { team_yid: current_team.yid, searchable_type: klass_name }.compact
       results = PgSearch.multisearch(query).where(**scope)
 
-      redirect_to current_team_new_search_path(query:, klass_name:, results: results.as_json)
+      redirect_to current_team_new_search_url(query:, klass_name:, results: results.as_json)
     end
 
     private
