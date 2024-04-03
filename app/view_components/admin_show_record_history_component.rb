@@ -58,12 +58,12 @@ class AdminShowRecordHistoryComponent < ApplicationComponent
   def before_render
     @record_link =
       if @record.present?
-        link_to(@record.class.name, send(:"admin_#{@record.class.name.tableize.singularize}_url", @record))
+        link_to(@record.class.name, send(:"admin_#{@record.class.name.tableize.singularize}_path", @record))
       else
         ApplicationRecordYidEnabled.yid_code_models[@record_history.record_yid.split("_").first].name
       end
 
-    @user_link = link_to(@user.name, admin_user_url(@user)) if @user
-    @team_link = link_to(@team.name, admin_team_url(@team)) if @team
+    @user_link = link_to(@user.name, admin_user_path(@user)) if @user
+    @team_link = link_to(@team.name, admin_team_path(@team)) if @team
   end
 end

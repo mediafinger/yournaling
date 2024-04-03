@@ -52,7 +52,7 @@ module CurrentTeams
       Picture.create_with_history(record: @picture, history_params: { team: current_team, user: current_user })
 
       if @picture.persisted?
-        redirect_to current_team_picture_path(@picture), notice: "Picture was successfully created."
+        redirect_to current_team_picture_url(@picture), notice: "Picture was successfully created."
       else
         render :new, status: :unprocessable_entity
       end
@@ -68,7 +68,7 @@ module CurrentTeams
       if @picture.changed? # == picture still dirty, not saved
         render :edit, status: :unprocessable_entity
       else
-        redirect_to current_team_picture_path(@picture), notice: "Picture was successfully updated."
+        redirect_to current_team_picture_url(@picture), notice: "Picture was successfully updated."
       end
     end
 
@@ -78,7 +78,7 @@ module CurrentTeams
 
       Picture.destroy_with_history(record: @picture, history_params: { team: current_team, user: current_user })
 
-      redirect_to current_team_pictures_path, notice: "Picture was successfully destroyed."
+      redirect_to current_team_pictures_url, notice: "Picture was successfully destroyed."
     end
 
     private

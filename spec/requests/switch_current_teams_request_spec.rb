@@ -35,11 +35,11 @@ RSpec.describe "/switch_current_teams", type: :system do
 
         expect(Current.team).to be_nil
 
-        post switch_current_teams_path, params: { current_team: { team_yid: team.yid } }
+        post switch_current_teams_url, params: { current_team: { team_yid: team.yid } }
 
         expect(session[:team_yid]).to eq(team.yid)
 
-        expect(response).to redirect_to(team_path(team))
+        expect(response).to redirect_to(team_url(team))
       end
     end
   end
@@ -55,7 +55,7 @@ RSpec.describe "/switch_current_teams", type: :system do
         go_solo(team)
 
         expect(session[:team_yid]).to be_nil
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(root_url)
       end
     end
   end

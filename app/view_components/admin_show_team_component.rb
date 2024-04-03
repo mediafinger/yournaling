@@ -12,6 +12,6 @@ class AdminShowTeamComponent < ApplicationComponent
   end
 
   def before_render
-    @team_link_tag = link_to(@team.name, admin_team_url(@team))
+    @team_link_tag = link_to(@team.name, admin_team_path(@team))
   end
 end

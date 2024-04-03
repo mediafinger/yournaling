@@ -10,6 +10,6 @@ class AdminController < ApplicationController
   def authenticate_admin!
     return true if current_user.admin?
 
-    redirect_to root_path, alert: I18n.t("helpers.controller.unauthorized")
+    redirect_to root_url, alert: I18n.t("helpers.controller.unauthorized")
   end
 end

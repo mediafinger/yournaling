@@ -10,7 +10,7 @@ class SessionsController < ApplicationController
     user = sign_in(email: login_params[:email], password: login_params[:password])
 
     if user.present?
-      redirect_to session.delete(:return_to) || root_path, notice: "Login successful" # TODO: notice shown, but pointless
+      redirect_to session.delete(:return_to) || root_url, notice: "Login successful" # TODO: notice shown, but pointless
     else
       render :new, status: :forbidden, notice: "Login failed, please try again" # TODO: notice not shown
     end
@@ -19,7 +19,7 @@ class SessionsController < ApplicationController
   def destroy
     sign_out
 
-    redirect_to root_path
+    redirect_to root_url
   end
 
   private

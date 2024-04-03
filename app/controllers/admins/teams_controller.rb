@@ -22,7 +22,7 @@ module Admins
       Team.create_with_history(record: @team, history_params: { team: nil, user: current_user, done_by_admin: true })
 
       if @team.persisted?
-        redirect_to admin_team_path(@team), notice: "Team was successfully created."
+        redirect_to admin_team_url(@team), notice: "Team was successfully created."
       else
         render :new, status: :unprocessable_entity
       end
@@ -37,7 +37,7 @@ module Admins
       if @team.changed? # == team still dirty, not saved
         render :edit, status: :unprocessable_entity
       else
-        redirect_to admin_team_path(@team), notice: "Team was successfully updated."
+        redirect_to admin_team_url(@team), notice: "Team was successfully updated."
       end
     end
 
