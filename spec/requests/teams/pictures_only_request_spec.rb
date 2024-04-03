@@ -10,7 +10,7 @@
 # of tools you can use to make these specs even more expressive, but we're
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
-RSpec.describe "/pictures_only", type: :request do
+RSpec.describe "teams/:team_id/pictures_only", type: :request do
   let(:file_content_type) { "image/jpeg" }
   let(:file_path) { "spec/support/macbookair_stickered.jpg" }
   let(:file) { Rack::Test::UploadedFile.new(file_path, file_content_type) }
@@ -18,19 +18,25 @@ RSpec.describe "/pictures_only", type: :request do
   let(:date) { Time.zone.today.iso8601 }
   let(:team) { FactoryBot.create(:team) }
   let(:user) { FactoryBot.create(:user) }
-  let(:roles) { %i[owner manager editor] }
   let(:valid_attributes) { { file: file, date: Time.zone.today, name: name, team: team } }
   let(:invalid_attributes) { { file: nil, date: Time.zone.today, name: nil, team: team } }
 
-  before { Member.create!(team: team, user: user, roles: Array(roles.sample)) }
-
   describe "GET /show" do
-    it "renders a successful response" do
+    it "renders a successful response when the picture is visible" do
       picture = Picture.create! valid_attributes
+      picture.update!(visibility: :published)
 
-      get picture_url(picture.urlsafe_id)
+      get team_picture_only_url(team, picture)
 
       expect(response).to be_successful
+    end
+
+    it "renders a 404 when the picture is not visible" do
+      picture = Picture.create! valid_attributes
+
+      get team_picture_only_url(team, picture)
+
+      expect(response).to be_not_found
     end
   end
 end

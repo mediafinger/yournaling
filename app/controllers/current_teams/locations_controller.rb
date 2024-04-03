@@ -16,7 +16,7 @@ module CurrentTeams
     end
 
     def new
-      @location = current_team.locations.new(location_params)
+      @location = current_team.locations.new
       authorize! @location
     end
 

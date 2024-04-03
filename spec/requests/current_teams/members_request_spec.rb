@@ -10,7 +10,7 @@
 # of tools you can use to make these specs even more expressive, but we're
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
-RSpec.describe "/members", type: :request do
+RSpec.describe "/current_team/members", type: :request do
   let(:user) { FactoryBot.create(:user) }
   let(:team) { FactoryBot.create(:team) }
   let(:roles) { %w[owner] }
@@ -26,9 +26,9 @@ RSpec.describe "/members", type: :request do
         sign_in(user)
       end
 
-      it "renders a successful response" do
-        get members_url
-        expect(response).to be_successful
+      it "forbids access and redirects to home path" do
+        get current_team_members_url
+        expect(response).to redirect_to(root_path)
       end
     end
 
@@ -39,7 +39,7 @@ RSpec.describe "/members", type: :request do
       end
 
       it "renders a successful response" do
-        get members_url
+        get current_team_members_url
         expect(response).to be_successful
       end
     end
@@ -54,7 +54,7 @@ RSpec.describe "/members", type: :request do
     end
 
     it "renders a successful response" do
-      get member_url(member.urlsafe_id)
+      get current_team_member_url(member.urlsafe_id)
       expect(response).to be_successful
     end
   end
@@ -68,7 +68,7 @@ RSpec.describe "/members", type: :request do
     end
 
     it "renders a successful response" do
-      get new_member_url
+      get new_current_team_member_url
       expect(response).to be_successful
     end
   end
@@ -82,7 +82,7 @@ RSpec.describe "/members", type: :request do
     end
 
     it "renders a successful response" do
-      get edit_member_url(member.urlsafe_id)
+      get edit_current_team_member_url(member.urlsafe_id)
       expect(response).to be_successful
     end
   end
@@ -101,26 +101,26 @@ RSpec.describe "/members", type: :request do
     context "with valid parameters" do
       it "creates a new Member" do
         expect {
-          post members_url, params: { member: valid_create_attributes }
+          post current_team_members_url, params: { member: valid_create_attributes }
         }.to change { Member.count }.by(1)
       end
 
       it "redirects to the created member" do
-        post members_url, params: { member: valid_create_attributes }
+        post current_team_members_url, params: { member: valid_create_attributes }
 
-        expect(response).to redirect_to(member_url(Member.first.urlsafe_id))
+        expect(response).to redirect_to(current_team_member_url(Member.first.urlsafe_id))
       end
     end
 
     context "with invalid parameters" do
       it "does not create a new Member" do
         expect {
-          post members_url, params: { member: invalid_create_attributes }
+          post current_team_members_url, params: { member: invalid_create_attributes }
         }.to change { Member.count }.by(0)
       end
 
       it "renders a response with 422 status (i.e. to display the 'new' template)" do
-        post members_url, params: { member: invalid_create_attributes }
+        post current_team_members_url, params: { member: invalid_create_attributes }
         expect(response).to have_http_status(:unprocessable_entity)
       end
     end
@@ -140,7 +140,7 @@ RSpec.describe "/members", type: :request do
 
     context "with valid parameters" do
       it "updates the requested member" do
-        patch member_url(other_member.urlsafe_id), params: { member: new_attributes }
+        patch current_team_member_url(other_member.urlsafe_id), params: { member: new_attributes }
 
         other_member.reload
 
@@ -148,17 +148,17 @@ RSpec.describe "/members", type: :request do
       end
 
       it "redirects to the member" do
-        patch member_url(other_member.urlsafe_id), params: { member: new_attributes }
+        patch current_team_member_url(other_member.urlsafe_id), params: { member: new_attributes }
 
         other_member.reload
 
-        expect(response).to redirect_to(member_url(other_member.urlsafe_id))
+        expect(response).to redirect_to(current_team_member_url(other_member.urlsafe_id))
       end
     end
 
     context "with invalid parameters" do
       it "renders a response with 422 status (i.e. to display the 'edit' template)" do
-        patch member_url(member.urlsafe_id), params: { member: invalid_create_attributes }
+        patch current_team_member_url(member.urlsafe_id), params: { member: invalid_create_attributes }
         expect(response).to have_http_status(:unprocessable_entity)
       end
     end
@@ -174,13 +174,13 @@ RSpec.describe "/members", type: :request do
 
     it "destroys the requested member" do
       expect {
-        delete member_url(member.urlsafe_id)
+        delete current_team_member_url(member.urlsafe_id)
       }.to change { Member.count }.by(-1)
     end
 
     it "redirects to the members list" do
-      delete member_url(member.urlsafe_id)
-      expect(response).to redirect_to(members_url)
+      delete current_team_member_url(member.urlsafe_id)
+      expect(response).to redirect_to(current_team_members_url)
     end
   end
 end
