@@ -10,7 +10,7 @@
 # of tools you can use to make these specs even more expressive, but we're
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
-RSpec.describe "/locations", type: :request do
+RSpec.describe "/current_team/locations", type: :request do
   let(:team) { FactoryBot.create(:team) }
   let(:user) { FactoryBot.create(:user) }
   let(:roles) { %i[owner manager editor] }
@@ -18,13 +18,17 @@ RSpec.describe "/locations", type: :request do
   let(:valid_attributes) { { name: "Camping spot near the beach", country_code: "de", url: "www.yournaling.com", team: } }
   let(:invalid_attributes) { { name: nil } }
 
-  before { Member.create!(team: team, user: user, roles: Array(roles.sample)) }
+  before do
+    Member.create!(team: team, user: user, roles: Array(roles.sample))
+    sign_in(user)
+    switch_current_team(team)
+  end
 
   describe "GET /index" do
     it "renders a successful response" do
       Location.create! valid_attributes
 
-      get locations_url
+      get current_team_locations_url
 
       expect(response).to be_successful
     end
@@ -34,7 +38,7 @@ RSpec.describe "/locations", type: :request do
     it "renders a successful response" do
       location = Location.create! valid_attributes
 
-      get location_url(location)
+      get current_team_location_url(location)
 
       expect(response).to be_successful
     end
@@ -42,10 +46,7 @@ RSpec.describe "/locations", type: :request do
 
   describe "GET /new" do
     it "renders a successful response" do
-      sign_in(user)
-      switch_current_team(team)
-
-      get new_location_url
+      get new_current_team_location_url
 
       expect(response).to be_successful
     end
@@ -53,63 +54,50 @@ RSpec.describe "/locations", type: :request do
 
   describe "GET /edit" do
     it "renders a successful response" do
-      sign_in(user)
-      switch_current_team(team)
-
       location = Location.create! valid_attributes
 
-      get edit_location_url(location)
+      get edit_current_team_location_url(location)
 
       expect(response).to be_successful
     end
   end
 
   describe "POST /create" do
-    before do
-      sign_in(user)
-      switch_current_team(team)
-    end
-
     context "with valid parameters" do
       it "creates a new Location" do
         expect {
-          post locations_url, params: { location: valid_attributes }
+          post current_team_locations_url, params: { location: valid_attributes }
         }.to change { Location.count }.by(1)
       end
 
       it "redirects to the created location" do
-        post locations_url, params: { location: valid_attributes }
-        expect(response).to redirect_to(location_url(Location.first))
+        post current_team_locations_url, params: { location: valid_attributes }
+        expect(response).to redirect_to(current_team_location_url(Location.first))
       end
     end
 
     context "with invalid parameters" do
       it "does not create a new Location" do
         expect {
-          post locations_url, params: { location: invalid_attributes }
+          post current_team_locations_url, params: { location: invalid_attributes }
         }.to change { Location.count }.by(0)
       end
 
       it "renders a response with 422 status (i.e. to display the 'new' template)" do
-        post locations_url, params: { location: invalid_attributes }
+        post current_team_locations_url, params: { location: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_entity)
       end
     end
   end
 
   describe "PATCH /update" do
-    before do
-      sign_in(user)
-      switch_current_team(team)
-    end
-
     context "with valid parameters" do
       let(:new_attributes) { { url: "www.rantanvan.com" } }
 
       it "updates the requested location" do
         location = Location.create! valid_attributes
 
-        patch location_url(location), params: { location: new_attributes }
+        patch current_team_location_url(location), params: { location: new_attributes }
 
         location.reload
         expect(location.url).to eq("https://www.rantanvan.com")
@@ -118,17 +106,17 @@ RSpec.describe "/locations", type: :request do
       it "redirects to the location" do
         location = Location.create! valid_attributes
 
-        patch location_url(location), params: { location: new_attributes }
+        patch current_team_location_url(location), params: { location: new_attributes }
 
         location.reload
-        expect(response).to redirect_to(location_url(location))
+        expect(response).to redirect_to(current_team_location_url(location))
       end
     end
 
     context "with invalid parameters" do
       it "renders a response with 422 status (i.e. to display the 'edit' template)" do
         location = Location.create! valid_attributes
-        patch location_url(location), params: { location: invalid_attributes }
+        patch current_team_location_url(location), params: { location: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_entity)
       end
     end
@@ -139,21 +127,16 @@ RSpec.describe "/locations", type: :request do
 
     let!(:location) { Location.create! valid_attributes }
 
-    before do
-      sign_in(user)
-      switch_current_team(team)
-    end
-
     it "destroys the requested location" do
       expect {
-        delete location_url(location)
+        delete current_team_location_url(location)
       }.to change { Location.count }.by(-1)
     end
 
     it "redirects to the locations list" do
-      delete location_url(location)
+      delete current_team_location_url(location)
 
-      expect(response).to redirect_to(locations_url)
+      expect(response).to redirect_to(current_team_locations_url)
     end
   end
 end
