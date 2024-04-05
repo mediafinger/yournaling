@@ -24,6 +24,6 @@
   <% end %>
 
   <% if action_name != "show" %>
-    <%= link_to "Show this memory", team_memory_path(team_id: team.to_param, id: memory.to_param), role: "button"  %>
+    <%= link_to "Show this memory", team_memory_path(team, memory), role: "button"  %>
   <% end %>
 </article>
