@@ -1,5 +1,5 @@
 class AppCurrentTeamController < ApplicationController
-  before_action :authenticate_member!
+  before_action :authenticate_current_member!
 
   # layout "current_team_area" ?!
 
@@ -21,7 +21,7 @@ class AppCurrentTeamController < ApplicationController
     ApplicationRecordYidEnabled.destroy_with_history(record:, history_params:)
   end
 
-  def authenticate_member!
+  def authenticate_current_member!
     return true if current_member.present?
 
     redirect_to root_url, alert: I18n.t("helpers.controller.unauthorized")
