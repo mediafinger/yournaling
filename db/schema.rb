@@ -47,6 +47,27 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_27_101123) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "benchmark_ids", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.string "team_yid", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "benchmark_uuids", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.string "team_yid", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "benchmark_yids", primary_key: "yid", id: :string, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.string "team_yid", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "good_job_batches", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.integer "callback_priority"
     t.text "callback_queue_name"
@@ -239,6 +260,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_27_101123) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "benchmark_ids", "teams", column: "team_yid", primary_key: "yid"
+  add_foreign_key "benchmark_uuids", "teams", column: "team_yid", primary_key: "yid"
+  add_foreign_key "benchmark_yids", "teams", column: "team_yid", primary_key: "yid"
   add_foreign_key "locations", "teams", column: "team_yid", primary_key: "yid"
   add_foreign_key "members", "teams", column: "team_yid", primary_key: "yid"
   add_foreign_key "members", "users", column: "user_yid", primary_key: "yid"

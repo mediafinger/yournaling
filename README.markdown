@@ -74,3 +74,6 @@ YID are constructed like this:
 Any YID can be fed to a search, which will determine the object type before returning the correct object. This is mostly useful for debugging and therefore might only be implemented as an internal endpoint or disolver service which will return the actual object (or a 403 or 404 error).
 
 Instead of using the YIDs in URLs directly, we convert them to their Base64 representation to be URL-safe. The controllers use a custom finder method to decode them back to the plain text YID format automatically. Probably other symmetric encoding / decoding encryption algorithms are faster than Base64 and we update the implementation.
+
+> A benchmark script to compare YID performance to UUIDs and incremental interger IDs can be run via:
+> `ruby script/benchmarks/benchmark_yids.rb`
