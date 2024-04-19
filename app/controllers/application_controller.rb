@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   include ErrorHandler unless AppConf.is?(:debug, true) && !AppConf.production_env
 
   include Authentication # sets current_user, based on the session, provides sign_in / sign_out
+  include Logins # records the login, keeps only a few recent sessions, allows users to delete other sessions
   include TeamScope # sets current_team & current_member, based on the session, provides switch_current_team / go_solo
   include RequestContext # sets the Current.objects, partly based on current_user and current_team
 
