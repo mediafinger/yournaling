@@ -48,6 +48,7 @@ ActiveRecordDoctor.configure do
     good_jobs.batch_id
     good_job_executions.active_job_id
     good_jobs.retried_good_job_id
+    logins.device_id
   ]
 
   detector :missing_non_null_constraint, ignore_columns: %w[
@@ -74,6 +75,7 @@ ActiveRecordDoctor.configure do
   # # Ignore indexes that are not used in the application
   detector :unindexed_foreign_keys, ignore_columns: %w[
     good_jobs.retried_good_job_id
+    logins.device_id
     memories.location_yid
     memories.picture_yid
     memories.weblink_yid
