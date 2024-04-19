@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   root to: "pages#show"
 
+  get "up" => "health#show", as: :rails_health_check
+
   resources :teams, except: %i[show]
   resources :users
 
