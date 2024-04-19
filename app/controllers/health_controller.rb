@@ -3,6 +3,7 @@
 # and it makes one DB request to ensure the DB is up and running
 # https://github.com/rails/rails/blob/main/railties/lib/rails/health_controller.rb
 #
+# rubocop:disable Rails/HttpStatus
 class HealthController < ApplicationController
   rescue_from(Exception) { render_down }
 
@@ -25,7 +26,10 @@ class HealthController < ApplicationController
     render html: html_status(color: "red", status: 503), status: 503 # Rails 7.1 uses 500
   end
 
+  # rubocop:disable Rails/OutputSafety
   def html_status(color:, status:)
     %(<!DOCTYPE html><html><body style="background-color: #{color}; color: white"><h1>#{status}</h1></body></html>).html_safe
   end
+  # rubocop:enable Rails/OutputSafety
 end
+# rubocop:enable Rails/HttpStatus
