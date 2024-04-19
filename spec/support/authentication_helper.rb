@@ -23,7 +23,7 @@ end
 # RSpec / Rails System spec "get response" methods
 #
 def sign_in(user)
-  post login_path, params: { email: user.email, password: "foobar1234" }
+  post login_path, params: { email: user.email, password: "foobar1234" }, headers: { "HTTP_USER_AGENT" => "Rails Test" }
 end
 
 def sign_out

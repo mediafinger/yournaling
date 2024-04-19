@@ -17,6 +17,8 @@ RSpec.configure do |config|
   # Add all configuration for your /system specs here
   config.before(:each, type: :system) do
     driven_by :rack_test # rack_test does not support JavaScript
+
+    page.driver.header "User-Agent", "Rails System Test"
   end
 
   # Add configuration for your /system specs here, when the tests need JavaScript
@@ -27,6 +29,8 @@ RSpec.configure do |config|
     driven_by :selenium, using: :headless_chrome, screen_size: [1400, 1400] do |driver_option|
       driver_option.add_argument("--no-sandbox")
     end
+
+    page.driver.header "User-Agent", "Rails System Test"
   end
 
   config.after(:all) do
