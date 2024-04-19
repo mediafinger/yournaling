@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_27_101123) do
+ActiveRecord::Schema[7.1].define(version: 2024_04_19_151535) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -143,6 +143,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_27_101123) do
     t.index ["team_yid", "name"], name: "index_locations_on_team_yid_and_name", unique: true
   end
 
+  create_table "logins", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "device_id", null: false
+    t.string "ip_address", null: false
+    t.datetime "updated_at", null: false
+    t.text "user_agent", null: false
+    t.string "user_yid", null: false
+    t.index ["user_yid", "device_id"], name: "index_logins_on_user_yid_and_device_id", unique: true
+  end
+
   create_table "members", primary_key: "yid", id: :string, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "roles", default: [], null: false, array: true
@@ -240,6 +250,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_27_101123) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "locations", "teams", column: "team_yid", primary_key: "yid"
+  add_foreign_key "logins", "users", column: "user_yid", primary_key: "yid"
   add_foreign_key "members", "teams", column: "team_yid", primary_key: "yid"
   add_foreign_key "members", "users", column: "user_yid", primary_key: "yid"
   add_foreign_key "memories", "locations", column: "location_yid", primary_key: "yid"
