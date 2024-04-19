@@ -1,13 +1,11 @@
-# NOTE: Use the module "Requests" for all services that make requests to external API endpoints
-#
 module Requests
-  class GeoapifyIpLocationService
+  class GeoapifyIpLocationService < BaseConnectionService
     class << self
       def call(ip_address:)
         endpoint = "v1/ipinfo"
         params = { ip: ip_address, apiKey: AppConf.geoapify_api_key }
 
-        response = connection.get(endpoint, params:, headers:)
+        response = connection.get(endpoint, params:, headers:) # REFACTOR: to use queue_connection
         return [ip_address] unless response.success?
 
         location = [
@@ -23,18 +21,8 @@ module Requests
 
       private
 
-      def connection
-        @connection ||= ::ChimeraHttpClient::Connection.new(
-          base_url: AppConf.geoapify_api_url,
-          user_agent: "#{AppConf.yournaling_name} (#{AppConf.yournaling_version})",
-          logger: Rails.logger
-        )
-      end
-
-      def headers
-        {
-          "Content-Type" => "application/json",
-        }
+      def base_url
+        AppConf.geoapify_api_url
       end
     end
   end
