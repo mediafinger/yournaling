@@ -37,6 +37,9 @@ class ApplicationNavComponent < ApplicationComponent
     <% end %>
 
     <%= render ApplicationNavLinksComponent.new(link_sections: %w[teams]) %>
+    <% if current_user.persisted? %>
+      <%= @login_records_link_tag %>
+    <% end %>
     <%= render TeamSwitcherComponent.new %>
   ERB
 
@@ -48,5 +51,8 @@ class ApplicationNavComponent < ApplicationComponent
     @admin_scope = active_path?("/admin")
     @current_team_scope = active_path?("/current_team")
     @team_scope = params[:team_id].present? && active_path?("/teams/#{params[:team_id]}")
+
+    # TODO: move this into a "profile" section
+    @login_records_link_tag = link_to "Logins", login_records_path, role: active_path?(login_records_path) ? "button" : nil
   end
 end

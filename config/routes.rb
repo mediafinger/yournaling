@@ -37,6 +37,9 @@ Rails.application.routes.draw do
 
   resources :switch_current_teams, only: %i[index show create destroy]
 
+  # Login Controller
+  resources :logins, only: %i[index destroy], as: :login_records
+  # Session Controller
   get "login", to: "sessions#new"
   post "login", to: "sessions#create"
   delete "logout", to: "sessions#destroy"
