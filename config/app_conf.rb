@@ -137,6 +137,7 @@ class AppConf
 
   # Geoapify API
   register :geoapify_api_key, default: "secret_key", required: production_env
+  register :geoapify_api_url, default: "https://api.geoapify.com", required: production_env
 
   # Don't add secrets as 'default' values in this file!
   #
