@@ -1,12 +1,14 @@
+# type: actually neither Content nor Post, but is treated very similar
+#
 # When creating a new User, create a Team for them.
 # A User can invite other Users to join their Team.
 # A User can leave any Team, as long as they are not the last User in the Team.
 # A Team can only be destroyed if last owner decides to destroy the Team
 #  while still being part of another team or if the last owner decides to destroy their whole Account.
 #
-# NOTE: Members inherit from ApplicationRecordForContent as they are displayed under /teams
+# NOTE: Members inherit from ApplicationRecordForContentAndPosts as they are displayed under /teams
 #
-class Member < ApplicationRecordForContent
+class Member < ApplicationRecordForContentAndPosts
   VALID_ROLES = [
     "owner", # owns the team, can invite/remove other users to/from the team, can manage everything team related
     "manager", # can manage all team related objects, change member roles (except owner) and invite readers

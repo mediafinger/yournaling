@@ -1,11 +1,13 @@
+# type: Content
+#
 # file uploads are limited to images: content_type: %w[image/gif image/jpg image/webp image/png]
 # after conversion to webp the file has to be in the size of 150.kilobytes to 6.megabytes
 # two variants are created: thumbnail (max: 400x300) and megasize (max: 4000x3000)
 # ideally we would delete the original file after the variants are created, but I didn't find a working solution yet
 # if deleting the original should not be possible, we should prevent uploading files larger than 10 MB
 # and introduce a smaller limit - at least for non-paying users
-
-class Picture < ApplicationRecordForContent
+#
+class Picture < ApplicationRecordForContentAndPosts
   extend ActionView::Helpers::NumberHelper
 
   has_one_attached :file

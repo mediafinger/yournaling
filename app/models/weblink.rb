@@ -1,4 +1,6 @@
-class Weblink < ApplicationRecordForContent
+# type: Content
+#
+class Weblink < ApplicationRecordForContentAndPosts
   YID_CODE = "link".freeze
 
   belongs_to :team, inverse_of: :weblinks, foreign_key: "team_yid"

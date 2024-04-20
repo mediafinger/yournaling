@@ -1,4 +1,4 @@
-class ApplicationRecordForContent < ApplicationRecordYidEnabled
+class ApplicationRecordForContentAndPosts < ApplicationRecordYidEnabled
   self.abstract_class = true
   self.primary_key = "yid"
 

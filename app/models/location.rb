@@ -1,4 +1,6 @@
-class Location < ApplicationRecordForContent
+# type: Content
+#
+class Location < ApplicationRecordForContentAndPosts
   YID_CODE = "loc".freeze
 
   belongs_to :team, inverse_of: :locations, foreign_key: "team_yid"

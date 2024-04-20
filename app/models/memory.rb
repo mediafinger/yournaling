@@ -1,4 +1,6 @@
-class Memory < ApplicationRecordForContent
+# type: Post
+#
+class Memory < ApplicationRecordForContentAndPosts
   YID_CODE = "memo".freeze
 
   belongs_to :team, inverse_of: :memories, foreign_key: "team_yid"
