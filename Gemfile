@@ -2,7 +2,8 @@ source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 # Read and set Ruby version
-ruby File.read(".ruby-version").strip.delete_prefix("ruby-")
+ruby File.read(".ruby-version").strip.delete_prefix("ruby-") # TODO: this does not work for DOCKER :-/
+# TODO: maybe checking if ENV RUBY_VERSION is set and only if not read from file?!
 
 gem "rails", "~> 8.0.0.rc2"
 
