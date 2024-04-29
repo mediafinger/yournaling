@@ -78,4 +78,7 @@ Rails.application.configure do
 
   # Raise error when a before_action's only/except options reference missing actions
   config.action_controller.raise_on_missing_callback_actions = true
+
+  # Raise error when on unpermitted parameters, alternative are :raise or false
+  config.action_controller.action_on_unpermitted_parameters = :log
 end

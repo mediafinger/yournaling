@@ -84,4 +84,7 @@ Rails.application.configure do
   # ]
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+
+  # Raise error when on unpermitted parameters, alternative are :log or :railse
+  config.action_controller.action_on_unpermitted_parameters = false # default
 end
