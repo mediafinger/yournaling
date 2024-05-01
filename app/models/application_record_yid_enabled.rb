@@ -37,6 +37,10 @@ class ApplicationRecordYidEnabled < ApplicationRecord
       end
     end
 
+    def urlsafe_fynd(urlsafe_id)
+      fynd(Base64.urlsafe_decode64(urlsafe_id))
+    end
+
     def urlsafe_find(urlsafe_id)
       find_by(yid: Base64.urlsafe_decode64(urlsafe_id))
     end
