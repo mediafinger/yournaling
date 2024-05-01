@@ -3,7 +3,7 @@ Rails.application.routes.draw do
 
   get "up" => "health#show", as: :rails_health_check
 
-  resources :teams, except: %i[show]
+  resources :teams#, except: %i[show]
   resources :users
 
   resources :teams, module: :teams do

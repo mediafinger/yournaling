@@ -1,0 +1,10 @@
+TEAM
+
+<article id="#{ dom_id team }">
+  <p>
+    <strong>Name:</strong>
+    #{ team.name }
+  </p>
+
+  #{ link_to "Go to team", team_home_path(team_id: team.to_param), role: "button" }
+</article>

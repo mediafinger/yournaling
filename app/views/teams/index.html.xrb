@@ -1,3 +1,5 @@
+XRB
+
 <div id="teams">
-  <%= render @teams %>
+  #{render @teams}
 </div>

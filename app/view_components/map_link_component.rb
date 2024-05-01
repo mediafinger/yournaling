@@ -1,9 +1,9 @@
 class MapLinkComponent < ApplicationComponent
-  erb_template <<-ERB
+  xrb_template = <<~XRB
     <span class="map_link">
-      <%= @link_tag %>
+      #{ @link_tag }
     </span>
-  ERB
+  XRB
 
   def initialize(location:, width:, height:)
     @location = location

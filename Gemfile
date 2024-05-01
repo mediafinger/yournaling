@@ -35,6 +35,8 @@ gem "stimulus-rails" # Hotwire's modest JavaScript framework [https://stimulus.h
 gem "strong_migrations", "~> 1.6" # Catch unsafe migrations in development
 gem "turbo-rails" # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
 gem "view_component" # Use view_component for reusable view components [https://viewcomponent.org]
+gem "xrb-rails" # use XRB instead of ERB for better performance, linting and syntax highlighting
+# gem "xrb-sanitize", "~> 0.7", require: false # to only allow a subset of HTML tags in XRB templates
 
 group :development do
   # gem "rails-erd"
