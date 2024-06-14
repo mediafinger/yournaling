@@ -19,6 +19,11 @@ class Memory < ApplicationRecordForContentAndPosts
 
   before_save :update_visibilty_of_insights
 
+  # TODO: check how this plays together with update_visibilty_of_insights
+  accepts_nested_attributes_for :location, update_only: true # use the persisted object, do not create a new one each time
+  accepts_nested_attributes_for :picture, update_only: true # use the persisted object, do not create a new one each time
+  accepts_nested_attributes_for :weblink, update_only: true # use the persisted object, do not create a new one each time
+
   normalizes :memo, with: ->(memo) { memo.strip }
 
   validates :memo, presence: true, length: { minimum: 4, maximum: 500 }

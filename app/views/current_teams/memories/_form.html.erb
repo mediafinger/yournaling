@@ -31,6 +31,30 @@
         %>
       </div>
 
+      <%# TODO: why is this nested_form not rendered ?! %>
+      <div>
+        <%= form.fields_for :weblink, include_id: false do |weblink_form| %>
+          <fieldset>
+            <h3><legend>Create new Weblink</legend></h3>
+
+            <div>
+              <%= weblink_form.label :name %>
+              <%= weblink_form.text_field :name %>
+            </div>
+
+            <div>
+              <%= weblink_form.label :url %>
+              <%= weblink_form.text_field :url %>
+            </div>
+
+            <div>
+              <%= weblink_form.label :description %>
+              <%= weblink_form.text_area :description %>
+            </div>
+          </fieldset>
+        <% end %>
+      </div>
+
       <div>
         <%= form.submit %>
       </div>

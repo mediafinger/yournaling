@@ -18,6 +18,9 @@ class ApplicationRecordYidEnabled < ApplicationRecord
       yid_code_models[yid.split("_").first].find_by(yid:)
     end
 
+    # TODO: any chance to write history for associated atttributes, when
+    # saving the whole collections at once? (See chronicle in db/seeds.rb)
+    # Would be relevant to use accepts_nested_attributes_for
     def create_with_history(record:, history_params: {})
       transaction do
         record.save && RecordHistoryService.call(record:, event: :created, **history_params)
