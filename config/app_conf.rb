@@ -94,8 +94,8 @@ class AppConf
   register :good_job_max_threads, default: 5
 
   # determines the size of the DB connection pool and the puma threads
-  register :rails_max_threads, default: 10
-  register :rails_min_threads, default: 5
+  register :rails_max_threads, default: 6
+  register :rails_min_threads, default: 3
   # determines the size of the DB connection pool and the puma threads
   register :web_concurrency, default: 1
   # on production we should use a SecureRandom.hex(64) String with 128 characters
