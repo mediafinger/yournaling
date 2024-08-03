@@ -197,10 +197,6 @@ RSpec/MultipleMemoizedHelpers:
 RSpec/NestedGroups:
   Max: 4
 
-RSpec/NoExpectationExample:
-  Exclude:
-    - packages/industry_orders/spec/services/rums/base_request_spec.rb
-
 RSpec/PendingWithoutReason:
   Enabled: false
 
