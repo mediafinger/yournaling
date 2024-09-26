@@ -8,6 +8,12 @@ class AdminNavComponent < ApplicationComponent
 
     <%= render ApplicationNavLinksComponent.new(link_sections: @sections, scope: "admin") %>
 
+    <% if current_user&.admin? %>
+    <ul>
+      <li><%= link_to "Filter", admin_new_filter_path %></li>
+    </ul>
+    <% end %>
+
     <%= render ApplicationNavActionsComponent.new(actions_for: @sections, scope: "admin") %>
   ERB
 
