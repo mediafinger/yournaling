@@ -17,7 +17,6 @@ gem "device_detector", "~> 1.1"
 gem "dry-validation", "~> 1.10" # Use dry-validation for validations [https://dry-rb.org/gems/dry-validation]
 # gem "exifr", "~> 1.3" # Read EXIF metadata from JPEG images
 gem "geocoder" # (reverse) geocode addresses and GPS coordinates
-gem "good_job" # Use good_job as active_job backend for a simpler setup with queueing in postgres
 gem "image_processing", "~> 1.12" # Use image_processing for image resizing in ActiveStorage variants
 gem "importmap-rails", "~> 2.0" # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
 # gem "logstasher" # better formatted JSON logs for Logstash

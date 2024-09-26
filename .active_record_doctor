@@ -7,11 +7,6 @@ ActiveRecordDoctor.configure do
     active_storage_blobs
     active_storage_attachments
     action_text_rich_texts
-    good_job_batches
-    good_job_executions
-    good_job_processes
-    good_job_settings
-    good_jobs
     pg_search_documents
     solid_cable_messages
     solid_cache_entries
@@ -49,6 +44,7 @@ ActiveRecordDoctor.configure do
     SolidQueue::RecurringTask
     SolidQueue::ScheduledExecution
     SolidQueue::Semaphore
+
   ]
   # Detector-specific settings affect only one specific detector.
   # detector :extraneous_indexes, ignore_tables: ["users"], ignore_indexes: ["accounts_on_email_organization_id"]
@@ -69,19 +65,12 @@ ActiveRecordDoctor.configure do
   ] # for some reason DB Doctor complains about a (non) existing validation on User.temp_auth_token column?!
 
   detector :missing_foreign_keys, ignore_columns: %w[
-    good_jobs.active_job_id
-    good_jobs.batch_callback_id
-    good_jobs.batch_id
-    good_job_executions.active_job_id
-    good_jobs.retried_good_job_id
     logins.device_id
   ]
 
   detector :missing_non_null_constraint, ignore_columns: %w[]
 
   detector :missing_presence_validation, ignore_attributes: %w[
-    GoodJob::DiscreteExecution.active_job_id
-    GoodJob::Job.id
     Location.geocoded_address
   ]
 
@@ -93,13 +82,11 @@ ActiveRecordDoctor.configure do
   ]
 
   detector :undefined_table_references, ignore_models: %w[
-    ApplicationRecordYidEnabled,
-    GoodJob::DiscreteExecution
+    ApplicationRecordYidEnabled
   ]
 
   # # Ignore indexes that are not used in the application
   detector :unindexed_foreign_keys, ignore_columns: %w[
-    good_jobs.retried_good_job_id
     logins.device_id
     memories.location_yid
     memories.picture_yid
