@@ -83,7 +83,7 @@ RSpec.describe "/current_team/weblinks", type: :request do
 
       it "renders a response with 422 status (i.e. to display the 'new' template)" do
         post current_team_weblinks_url, params: { weblink: invalid_attributes }
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
     end
   end
@@ -113,7 +113,7 @@ RSpec.describe "/current_team/weblinks", type: :request do
       it "renders a response with 422 status (i.e. to display the 'edit' template)" do
         weblink = Weblink.create! valid_attributes
         patch current_team_weblink_url(weblink), params: { weblink: invalid_attributes }
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
     end
   end

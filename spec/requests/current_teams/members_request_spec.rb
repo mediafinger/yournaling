@@ -121,7 +121,7 @@ RSpec.describe "/current_team/members", type: :request do
 
       it "renders a response with 422 status (i.e. to display the 'new' template)" do
         post current_team_members_url, params: { member: invalid_create_attributes }
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
     end
   end
@@ -159,7 +159,7 @@ RSpec.describe "/current_team/members", type: :request do
     context "with invalid parameters" do
       it "renders a response with 422 status (i.e. to display the 'edit' template)" do
         patch current_team_member_url(member.urlsafe_id), params: { member: invalid_create_attributes }
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
     end
   end

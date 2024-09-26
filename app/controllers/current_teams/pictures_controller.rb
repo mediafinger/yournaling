@@ -28,7 +28,7 @@ module CurrentTeams
 
     def create
       unless picture_params[:file].is_a?(ActionDispatch::Http::UploadedFile)
-        raise CustomError.new("File not valid", status: 422, code: :unprocessable_entity)
+        raise CustomError.new("File not valid", status: 422, code: :unprocessable_content)
       end
 
       # IDEA
@@ -54,7 +54,7 @@ module CurrentTeams
       if @picture.persisted?
         redirect_to current_team_picture_url(@picture), notice: "Picture was successfully created."
       else
-        render :new, status: :unprocessable_entity
+        render :new, status: :unprocessable_content
       end
     end
 
@@ -66,7 +66,7 @@ module CurrentTeams
       Picture.update_with_history(record: @picture, history_params: { team: current_team, user: current_user })
 
       if @picture.changed? # == picture still dirty, not saved
-        render :edit, status: :unprocessable_entity
+        render :edit, status: :unprocessable_content
       else
         redirect_to current_team_picture_url(@picture), notice: "Picture was successfully updated."
       end

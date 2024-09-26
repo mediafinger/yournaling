@@ -180,7 +180,7 @@ RSpec.describe "/teams", type: :system do
           post teams_url({ team: invalid_attributes })
         }.to change { Team.count }.by(0)
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
     end
   end
@@ -212,7 +212,7 @@ RSpec.describe "/teams", type: :system do
         it "renders a response with 422 status (i.e. to display the 'edit' template)" do
           patch team_url(team.urlsafe_id), params: { team: invalid_attributes }
 
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
       end
     end

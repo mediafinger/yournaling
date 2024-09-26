@@ -24,7 +24,7 @@ module Admins
       if @user.persisted?
         redirect_to admin_user_url(@user), notice: "User was successfully created."
       else
-        render :new, status: :unprocessable_entity
+        render :new, status: :unprocessable_content
       end
     end
 
@@ -35,7 +35,7 @@ module Admins
       User.update_with_history(record: @user, history_params: { team: nil, user: current_user, done_by_admin: true })
 
       if @user.changed? # == user still dirty, not saved
-        render :edit, status: :unprocessable_entity
+        render :edit, status: :unprocessable_content
       else
         redirect_to admin_user_url(@user), notice: "User was successfully updated."
       end

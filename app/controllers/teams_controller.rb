@@ -38,7 +38,7 @@ class TeamsController < ApplicationController
 
       redirect_to @team, notice: "Team was successfully created."
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -50,7 +50,7 @@ class TeamsController < ApplicationController
     Team.update_with_history(record: @team, history_params: { team: current_team, user: current_user })
 
     if @team.changed? # == team still dirty, not saved
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     else
       redirect_to @team, notice: "Team was successfully updated."
     end
