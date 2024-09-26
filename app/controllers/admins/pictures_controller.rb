@@ -18,7 +18,7 @@ module Admins
 
     def create
       unless picture_params[:file].is_a?(ActionDispatch::Http::UploadedFile)
-        raise CustomError.new("File not valid", status: 422, code: :unprocessable_entity)
+        raise CustomError.new("File not valid", status: 422, code: :unprocessable_content)
       end
 
       # IDEA
@@ -42,7 +42,7 @@ module Admins
       if @picture.persisted?
         redirect_to admin_picture_url(@picture), notice: "Picture was successfully created."
       else
-        render :new, status: :unprocessable_entity
+        render :new, status: :unprocessable_content
       end
     end
 
@@ -53,7 +53,7 @@ module Admins
       Picture.update_with_history(record: @picture, history_params: { team: nil, user: current_user, done_by_admin: true })
 
       if @picture.changed? # == picture still dirty, not saved
-        render :edit, status: :unprocessable_entity
+        render :edit, status: :unprocessable_content
       else
         redirect_to admin_picture_url(@picture), notice: "Picture was successfully updated."
       end

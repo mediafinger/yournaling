@@ -15,7 +15,7 @@ module CurrentTeams
       Memory.update_with_history(record: @content, history_params: { team: current_team, user: current_user })
 
       if @content.changed? # == content still dirty, not saved
-        render :edit, status: :unprocessable_entity
+        render :edit, status: :unprocessable_content
       else
         redirect_to current_team_edit_content_visibility(@content), notice: "Memory was successfully updated."
       end

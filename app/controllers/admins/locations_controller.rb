@@ -25,7 +25,7 @@ module Admins
       if @location.persisted?
         redirect_to admin_location_url(@location), notice: "Location was successfully created."
       else
-        render :new, status: :unprocessable_entity
+        render :new, status: :unprocessable_content
       end
     end
 
@@ -37,7 +37,7 @@ module Admins
         record: @location, history_params: { team: nil, user: current_user, done_by_admin: true })
 
       if @location.changed? # == location still dirty, not saved
-        render :edit, status: :unprocessable_entity
+        render :edit, status: :unprocessable_content
       else
         redirect_to admin_location_url(@location), notice: "Location was successfully updated."
       end

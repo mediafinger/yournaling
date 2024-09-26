@@ -96,7 +96,7 @@ RSpec.describe "/current_team/memories", type: :request do
 
       it "renders a response with 422 status (i.e. to display the 'new' template)" do
         post current_team_memories_url, params: { memory: invalid_attributes }
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
     end
   end
@@ -129,7 +129,7 @@ RSpec.describe "/current_team/memories", type: :request do
       it "renders a response with 422 status (i.e. to display the 'edit' template)" do
         memory = Memory.create! valid_attributes
         patch current_team_memory_url(memory), params: { memory: invalid_attributes }
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
     end
   end

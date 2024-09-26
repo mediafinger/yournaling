@@ -34,7 +34,7 @@ module CurrentTeams
       if @location.persisted?
         redirect_to current_team_location_url(@location), notice: "Location was successfully created."
       else
-        render :new, status: :unprocessable_entity
+        render :new, status: :unprocessable_content
       end
     end
 
@@ -46,7 +46,7 @@ module CurrentTeams
       update_with_history(record: @location)
 
       if @location.changed? # == location still dirty, not saved
-        render :edit, status: :unprocessable_entity
+        render :edit, status: :unprocessable_content
       else
         redirect_to current_team_location_url(@location), notice: "Location was successfully updated."
       end

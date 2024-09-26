@@ -6,6 +6,6 @@ class ParamsValidationError < CustomError
 
     messages = validation_result.errors.map { |e| "#{e.path} #{e.text}" }.join(", ")
 
-    super(messages, code: :unprocessable_entity, status: 422)
+    super(messages, code: :unprocessable_content, status: 422)
   end
 end

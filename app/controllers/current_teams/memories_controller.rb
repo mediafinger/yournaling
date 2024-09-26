@@ -32,7 +32,7 @@ module CurrentTeams
       if @memory.persisted?
         redirect_to current_team_memory_url(@memory), notice: "Memory was successfully created."
       else
-        render :new, status: :unprocessable_entity
+        render :new, status: :unprocessable_content
       end
     end
 
@@ -44,7 +44,7 @@ module CurrentTeams
       Memory.update_with_history(record: @memory, history_params: { team: current_team, user: current_user })
 
       if @memory.changed? # == memory still dirty, not saved
-        render :edit, status: :unprocessable_entity
+        render :edit, status: :unprocessable_content
       else
         redirect_to current_team_memory_url(@memory), notice: "Memory was successfully updated."
       end

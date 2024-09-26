@@ -42,7 +42,7 @@ module CurrentTeams
       if @weblink.persisted?
         redirect_to current_team_weblink_url(@weblink), notice: "Weblink was successfully created."
       else
-        render :new, status: :unprocessable_entity
+        render :new, status: :unprocessable_content
       end
     end
 
@@ -54,7 +54,7 @@ module CurrentTeams
       Weblink.update_with_history(record: @weblink, history_params: { team: current_team, user: current_user })
 
       if @weblink.changed? # == weblink still dirty, not saved
-        render :edit, status: :unprocessable_entity
+        render :edit, status: :unprocessable_content
       else
         redirect_to current_team_weblink_url(@weblink), notice: "Weblink was successfully updated."
       end

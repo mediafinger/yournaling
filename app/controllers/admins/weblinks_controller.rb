@@ -25,7 +25,7 @@ module Admins
       if @weblink.persisted?
         redirect_to admin_weblink_url(@weblink), notice: "Weblink was successfully created."
       else
-        render :new, status: :unprocessable_entity
+        render :new, status: :unprocessable_content
       end
     end
 
@@ -36,7 +36,7 @@ module Admins
       Weblink.update_with_history(record: @weblink, history_params: { team: nil, user: current_user, done_by_admin: true })
 
       if @weblink.changed? # == weblink still dirty, not saved
-        render :edit, status: :unprocessable_entity
+        render :edit, status: :unprocessable_content
       else
         redirect_to admin_weblink_url(@weblink), notice: "Weblink was successfully updated."
       end
