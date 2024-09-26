@@ -160,7 +160,7 @@
 - [ ] new user accounts
 - [ ] daily active users
 - [ ] newly created or updated content
-- [ ] page views (details in Redis, counter in Postgres?)
+- [ ] page views (details in Cache, counter in Postgres?)
 - [ ] reports of suspicious or offensive content
 
 ## Notification Emails
@@ -179,7 +179,7 @@
 - [ ] Dockerize everything? :-/
 - [ ] Self-hosted Ruby app with all dependencies (2.5GB RAM)
 - [ ] Self-hosted Postgresql (2GB RAM) - with rsync backups to S3
-- [ ] Self-hosted Redis (0.5GB RAM) - (do queued jobs need backup?) - or use good_job and queue jobs with Postgres
+~~- [ ] Self-hosted Redis (0.5GB RAM) - (do queued jobs need backup?) - or use good_job and queue jobs with Postgres~~
 - [ ] Self-hosted RabbitMQ (maybe 1.5GB RAM) - (do persisted jobs need backup?) - or don't for the start
 - [ ] Self-hosted anycable-go (0.5GB RAM) https://github.com/anycable/anycable-rails to save RAM vs ActionCable default
 - [ ] Self-hosted Sentry error tracking (1+GB RAM): https://develop.sentry.dev/self-hosted/
