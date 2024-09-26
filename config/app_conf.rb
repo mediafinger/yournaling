@@ -91,8 +91,6 @@ class AppConf
   register :yournaling_db_timeout_seconds, default: 5, required: production_env
   register :yournaling_db_username, default: "postgres", required: production_env
 
-  register :good_job_max_threads, default: 5
-
   # determines the size of the DB connection pool and the puma threads
   register :rails_max_threads, default: 6
   register :rails_min_threads, default: 3
