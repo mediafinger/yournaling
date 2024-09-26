@@ -5,11 +5,11 @@ module CurrentTeams
 
       # memories = authorized_scope(Memory.all, type: :relation, as: :current_team_scope)
 
-      @memories = Memory.includes(:team, :picture, :location, :weblink).all
+      @memories = current_team_scope(Memory).includes(:team, :picture, :location, :weblink).all
     end
 
     def show
-      @memory = Memory.urlsafe_find!(params[:id])
+      @memory = current_team_scope(Memory).urlsafe_find!(params[:id])
       authorize! @memory
     end
 
@@ -19,7 +19,7 @@ module CurrentTeams
     end
 
     def edit
-      @memory = Memory.urlsafe_find!(params[:id])
+      @memory = current_team_scope(Memory).urlsafe_find!(params[:id])
       authorize! @memory
     end
 
@@ -37,7 +37,7 @@ module CurrentTeams
     end
 
     def update
-      @memory = Memory.urlsafe_find!(params[:id])
+      @memory = current_team_scope(Memory).urlsafe_find!(params[:id])
       authorize! @memory
       @memory.assign_attributes(update_params.compact_blank)
 
@@ -51,7 +51,7 @@ module CurrentTeams
     end
 
     def destroy
-      @memory = Memory.urlsafe_find!(params[:id])
+      @memory = current_team_scope(Memory).urlsafe_find!(params[:id])
       authorize! @memory
 
       Memory.destroy_with_history(record: @memory, history_params: { team: current_team, user: current_user })
@@ -62,11 +62,16 @@ module CurrentTeams
     private
 
     def create_params
-      params.require(:memory).permit(:team_yid, :memo, :picture_yid, :location_yid, :weblink_yid)
+      params.require(:memory).permit(:memo, :picture_yid, :location_yid, :weblink_yid)
     end
 
     def update_params
-      params.require(:memory).permit(:memo, :picture_yid, :location_yid, :weblink_yid)
+      params.require(:memory).permit(
+        :memo, :picture_yid, :location_yid, :weblink_yid,
+        location_attributes: %i[address country_code name lat long url], # accepts_nested_attributes_for
+        picture_attributes: %i[file date name], # accepts_nested_attributes_for
+        weblink_attributes: %i[url name description] # accepts_nested_attributes_for
+      )
     end
   end
 end

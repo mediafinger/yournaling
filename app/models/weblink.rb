@@ -5,8 +5,12 @@ class Weblink < ApplicationRecordForContentAndPosts
 
   belongs_to :team, inverse_of: :weblinks, foreign_key: "team_yid"
 
+  has_many :chronicle_weblinks, class_name: "ChronicleWeblink", foreign_key: "weblink_yid", primary_key: "yid",
+    inverse_of: :weblink, dependent: :destroy
   has_many :memories, class_name: "Memory", foreign_key: "weblink_yid", primary_key: "yid", inverse_of: :weblink,
     dependent: :nullify
+
+  has_many :chronicles, through: :chronicle_weblinks
 
   multisearchable(
     against: %i[name],
