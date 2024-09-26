@@ -13,6 +13,7 @@ ActiveRecordDoctor.configure do
     good_job_settings
     good_jobs
     pg_search_documents
+    solid_cable_messages
     solid_cache_entries
   ]
 
@@ -24,6 +25,7 @@ ActiveRecordDoctor.configure do
     ApplicationRecord
     PaperTrail::Version
     PgSearch::Document
+    SolidCable::Message
     SolidCache::Entry
   ]
   # Detector-specific settings affect only one specific detector.

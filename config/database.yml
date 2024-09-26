@@ -18,6 +18,10 @@ default: &default
 development:
   primary: &primary_development
     <<: *default
+  cable:
+    <<: *primary_development
+    database: <%= "#{AppConf.yournaling_db_name}_cable" %>
+    migrations_paths: db/migrate_cable
   cache:
     <<: *primary_development
     database: <%= "#{AppConf.yournaling_db_name}_cache" %>
@@ -28,6 +32,10 @@ test:
     <<: *default
     # unfortunately necessary, as some `rake db:` commands work against dev & test env
     database: <%= AppConf.yournaling_db_name_test %>
+  cable:
+    <<: *primary_test
+    database: <%= "#{AppConf.yournaling_db_name_test}_cable" %>
+    migrations_paths: db/migrate_cable
   cache:
     <<: *primary_test
     database: <%= "#{AppConf.yournaling_db_name_test}_cache" %>
@@ -36,6 +44,10 @@ test:
 production:
   primary: &primary_production
     <<: *default
+  cable:
+    <<: *primary_production
+    database: <%= "#{AppConf.yournaling_db_name}_cable" %>
+    migrations_paths: db/migrate_cable
   cache:
     <<: *primary_production
     database: <%= "#{AppConf.yournaling_db_name}_cache" %>
