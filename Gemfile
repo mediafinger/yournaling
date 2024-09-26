@@ -21,6 +21,7 @@ gem "good_job" # Use good_job as active_job backend for a simpler setup with que
 gem "image_processing", "~> 1.12" # Use image_processing for image resizing in ActiveStorage variants
 gem "importmap-rails", "~> 2.0" # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
 # gem "logstasher" # better formatted JSON logs for Logstash
+gem "mission_control-jobs", "~> 0.3.1" # dashboard for SolidQueue jobs
 # gem "pagy", "~> 5.10" # fast and lightweight pagination solution # TODO: require "pagy/extras/navs"
 gem "pg", "~> 1.1"
 gem "pg_search", "~> 2.3" # Use pg_search for full-text search in PostgreSQL
@@ -31,6 +32,7 @@ gem "rack-timeout", "~> 0.6", require: "rack/timeout/base" # set a custom timeou
 gem "ruby-vips" # Use ruby-vips for image processing with ActiveStorage, requires the vips library
 gem "solid_cable", "~> 3.0"
 gem "solid_cache", "~> 1.0"
+gem "solid_queue", "~> 1.0"
 gem "sprockets-rails" # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "stimulus-rails" # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
 gem "strong_migrations", "~> 1.6" # Catch unsafe migrations in development

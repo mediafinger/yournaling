@@ -15,6 +15,17 @@ ActiveRecordDoctor.configure do
     pg_search_documents
     solid_cable_messages
     solid_cache_entries
+    solid_queue_blocked_executions
+    solid_queue_claimed_executions
+    solid_queue_failed_executions
+    solid_queue_jobs
+    solid_queue_pauses
+    solid_queue_processes
+    solid_queue_ready_executions
+    solid_queue_recurring_executions
+    solid_queue_recurring_tasks
+    solid_queue_scheduled_executions
+    solid_queue_semaphores
   ]
 
   global :ignore_models, %w[
@@ -27,6 +38,17 @@ ActiveRecordDoctor.configure do
     PgSearch::Document
     SolidCable::Message
     SolidCache::Entry
+    SolidQueue::Job
+    SolidQueue::BlockedExecution
+    SolidQueue::ClaimedExecution
+    SolidQueue::FailedExecution
+    SolidQueue::Pause
+    SolidQueue::Process
+    SolidQueue::ReadyExecution
+    SolidQueue::RecurringExecution
+    SolidQueue::RecurringTask
+    SolidQueue::ScheduledExecution
+    SolidQueue::Semaphore
   ]
   # Detector-specific settings affect only one specific detector.
   # detector :extraneous_indexes, ignore_tables: ["users"], ignore_indexes: ["accounts_on_email_organization_id"]

@@ -5,8 +5,7 @@ default: &default
   encoding: unicode
   host: <%= AppConf.yournaling_db_host %>
   password: <%= AppConf.yournaling_db_password %>
-  # pool: <%= AppConf.rails_max_threads.to_i * AppConf.web_concurrency.to_i + 10 %>
-  pool: <%= AppConf.rails_max_threads.to_i + 3 + AppConf.good_job_max_threads.to_i + 2 %>
+  pool: <%= AppConf.rails_max_threads.to_i + 3 * AppConf.job_concurrency.to_i + 5 %>
   port: <%= AppConf.yournaling_db_port.to_i %>
   read_timeout: <%= AppConf.yournaling_db_timeout_seconds.to_i * 1000 %>
   reconnect: true
@@ -26,6 +25,10 @@ development:
     <<: *primary_development
     database: <%= "#{AppConf.yournaling_db_name}_cache" %>
     migrations_paths: db/migrate_cache
+  queue:
+    <<: *primary_development
+    database: <%= "#{AppConf.yournaling_db_name}_queue" %>
+    migrations_paths: db/migrate_queue
 
 test:
   primary: &primary_test
@@ -40,6 +43,10 @@ test:
     <<: *primary_test
     database: <%= "#{AppConf.yournaling_db_name_test}_cache" %>
     migrations_paths: db/migrate_cache
+  queue:
+    <<: *primary_test
+    database: <%= "#{AppConf.yournaling_db_name_test}_queue" %>
+    migrations_paths: db/migrate_queue
 
 production:
   primary: &primary_production
@@ -52,3 +59,7 @@ production:
     <<: *primary_production
     database: <%= "#{AppConf.yournaling_db_name}_cache" %>
     migrations_paths: db/migrate_cache
+  queue:
+    <<: *primary_production
+    database: <%= "#{AppConf.yournaling_db_name}_queue" %>
+    migrations_paths: db/migrate_queue

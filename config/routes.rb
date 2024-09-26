@@ -55,7 +55,8 @@ Rails.application.routes.draw do
     resources :weblinks
     get "record_history", to: "record_history#index", as: :record_history
 
-    mount GoodJob::Engine, at: "good_job" # , constraints: ->(request) { AdminConstraint.matches?(request) }
+    # NOTE: we setup MissionControl to inherit from our AdminController to only give admins access
+    mount MissionControl::Jobs::Engine, at: "/jobs"
   end
 
   # catch all unknown routes to NOT throw a FATAL ActionController::RoutingError

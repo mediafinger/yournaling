@@ -98,6 +98,8 @@ class AppConf
   register :rails_min_threads, default: 3
   # determines the size of the DB connection pool and the puma threads
   register :web_concurrency, default: 1
+  # used for the job queue workers
+  register :job_concurrency, default: 1
   # on production we should use a SecureRandom.hex(64) String with 128 characters
   register :rails_secret_key_base, required: production_env, default: "foofoobar123456"
   # Enable static file serving from the `/public` folder (turn off if using NGINX/Apache for it).
