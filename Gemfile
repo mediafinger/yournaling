@@ -16,6 +16,7 @@ gem "csv", require: false
 gem "device_detector", "~> 1.1"
 gem "dry-validation", "~> 1.10" # Use dry-validation for validations [https://dry-rb.org/gems/dry-validation]
 # gem "exifr", "~> 1.3" # Read EXIF metadata from JPEG images
+gem "falcon", "~> 0.48.2"
 gem "geocoder" # (reverse) geocode addresses and GPS coordinates
 gem "image_processing", "~> 1.12" # Use image_processing for image resizing in ActiveStorage variants
 gem "importmap-rails", "~> 2.0" # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
@@ -24,7 +25,6 @@ gem "mission_control-jobs", "~> 0.3.1" # dashboard for SolidQueue jobs
 # gem "pagy", "~> 5.10" # fast and lightweight pagination solution # TODO: require "pagy/extras/navs"
 gem "pg", "~> 1.1"
 gem "pg_search", "~> 2.3" # Use pg_search for full-text search in PostgreSQL
-gem "puma", "~> 6.3"
 # gem "pundit", "~> 2.2" # Authorize actions by admin role
 gem "rack-requestid", "~> 0.2" # always set a request_id with this middleware
 gem "rack-timeout", "~> 0.6", require: "rack/timeout/base" # set a custom timeout in the middleware
@@ -51,6 +51,7 @@ group :development, :test do
   gem "factory_bot-awesome_linter", "~> 1.0"
   gem "factory_bot_rails", "~> 6.2"
   gem "faker", "~> 3.2"
+  gem "falcon-capybara", "~> 1.6"
   gem "rspec-rails", "~> 6.0"
   gem "rubocop-capybara", "~> 2.19", require: false
   gem "rubocop-faker", "~> 1.1", require: false
