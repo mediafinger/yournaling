@@ -16,12 +16,27 @@ default: &default
     statement_timeout: <%= AppConf.yournaling_db_timeout_seconds.to_i * 1000 %>
 
 development:
-  <<: *default
+  primary: &primary_development
+    <<: *default
+  cache:
+    <<: *primary_development
+    database: <%= "#{AppConf.yournaling_db_name}_cache" %>
+    migrations_paths: db/migrate_cache
 
 test:
-  <<: *default
-  # unfortunately necessary, as some `rake db:` commands work against dev & test env
-  database: <%= AppConf.yournaling_db_name_test %>
+  primary: &primary_test
+    <<: *default
+    # unfortunately necessary, as some `rake db:` commands work against dev & test env
+    database: <%= AppConf.yournaling_db_name_test %>
+  cache:
+    <<: *primary_test
+    database: <%= "#{AppConf.yournaling_db_name_test}_cache" %>
+    migrations_paths: db/migrate_cache
 
 production:
-  <<: *default
+  primary: &primary_production
+    <<: *default
+  cache:
+    <<: *primary_production
+    database: <%= "#{AppConf.yournaling_db_name}_cache" %>
+    migrations_paths: db/migrate_cache

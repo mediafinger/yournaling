@@ -13,6 +13,7 @@ ActiveRecordDoctor.configure do
     good_job_settings
     good_jobs
     pg_search_documents
+    solid_cache_entries
   ]
 
   global :ignore_models, %w[
@@ -23,6 +24,7 @@ ActiveRecordDoctor.configure do
     ApplicationRecord
     PaperTrail::Version
     PgSearch::Document
+    SolidCache::Entry
   ]
   # Detector-specific settings affect only one specific detector.
   # detector :extraneous_indexes, ignore_tables: ["users"], ignore_indexes: ["accounts_on_email_organization_id"]
@@ -51,8 +53,7 @@ ActiveRecordDoctor.configure do
     logins.device_id
   ]
 
-  detector :missing_non_null_constraint, ignore_columns: %w[
-  ]
+  detector :missing_non_null_constraint, ignore_columns: %w[]
 
   detector :missing_presence_validation, ignore_attributes: %w[
     GoodJob::DiscreteExecution.active_job_id
