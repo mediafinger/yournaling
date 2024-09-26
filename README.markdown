@@ -21,8 +21,7 @@ The Yournaling app will become a place where single people, couples or teams can
 ## Dependencies
 
 * Ruby - for exact version see: https://raw.githubusercontent.com/mediafinger/yournaling/main/.ruby-version
-* Postgres v15
-* Redis
+* Postgres v15+
 * libvips library for image manipulation
 * many Ruby gems: https://raw.githubusercontent.com/mediafinger/yournaling/main/Gemfile.lock
 

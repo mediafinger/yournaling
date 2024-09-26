@@ -285,10 +285,6 @@ GEM
     rake (13.2.1)
     rdoc (6.7.0)
       psych (>= 4.0.0)
-    redis (5.2.0)
-      redis-client (>= 0.22.0)
-    redis-client (0.22.1)
-      connection_pool
     regexp_parser (2.9.0)
     reline (0.5.10)
       io-console (~> 0.5)
@@ -445,7 +441,6 @@ DEPENDENCIES
   rack-requestid (~> 0.2)
   rack-timeout (~> 0.6)
   rails (~> 7.2.1)
-  redis (~> 5.0)
   rspec-rails (~> 6.0)
   rubocop-capybara (~> 2.19)
   rubocop-faker (~> 1.1)

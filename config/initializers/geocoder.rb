@@ -35,7 +35,7 @@ Geocoder.configure(
 
   # configure services
   timeout: 2,
-  cache: nil,                   # cache object (must respond to #[], #[]=, and #del) / use Redis?!
+  cache: nil,                   # cache object (must respond to #[], #[]=, and #del) / use SolidCache
   language: :en,                # ISO-639 language code
   use_https: true,              # use HTTPS for lookup requests? (if supported)
 

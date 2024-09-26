@@ -124,10 +124,6 @@ class AppConf
   # rack-timeout in seconds
   register :rack_timeout, default: is?(:debug, true) ? 300 : 10 # seconds
 
-  # configure Redis for ActionCable / TurboReflex
-  register :redis_url, default: "redis://localhost:6379/1", required: production_env
-  register :redis_password, default: nil, required: production_env
-
   # external service configuration
 
   # Amazon S3
