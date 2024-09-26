@@ -17,7 +17,7 @@ class ApplicationController < ActionController::Base
   authorize :user, through: :current_user # makes "user" available to the policy classes
   authorize :team, through: :current_team # makes "team" available to the policy classes
   authorize :member, through: :current_member # makes "member" available to the policy classes
-  #
+
   verify_authorized # ensures all actions are authorized
 
   before_action :ensure_html_safe_flash

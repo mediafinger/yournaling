@@ -7,6 +7,6 @@ namespace :active_storage do
 
   desc "Purges unattached Active Storage blobs."
   task purge_unattached: :environment do
-    ActiveStorage::Blob.unattached.where("active_storage_blobs.created_at <= ?", 1.day.ago).find_each(&:purge_later)
+    ActiveStorage::Blob.unattached.where(created_at: ..1.day.ago).find_each(&:purge_later)
   end
 end
