@@ -16,7 +16,7 @@ require "capybara/rails"
 require "spec_helper"
 
 # configure Capybara for system specs
-Capybara.server = :puma, { Silent: true } # To clean up your test output
+Capybara.server = :falcon, { Silent: true } # To clean up your test output
 # set default driver which is fast, but does not support JavaScript
 Capybara.register_driver :rack_test do |app|
   Capybara::RackTest::Driver.new(app, headers: { "HTTP_USER_AGENT" => "Capybara" })
