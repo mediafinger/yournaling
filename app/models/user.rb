@@ -1,6 +1,6 @@
 class User < ApplicationRecordYidEnabled
   USER_ROLES = [
-    "admin", # can access the good_job interface and other internal UIs, is also editor, moderator and account_manager
+    "admin", # can access the jobs interface and other internal UIs, is also editor, moderator and account_manager
     "account_manager", # can create and manage teams and users and is an editor
     "moderator", # can flag, hide, edit content that violates the TOS and flag or block users and is an editor
     "editor", # can update content of the homepage and I18n resources
