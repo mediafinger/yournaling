@@ -11,12 +11,12 @@ gem "active_storage_validations" # to validate the content type and size of a fi
 gem "bcrypt", "~> 3.1" # Use bcrypt for secure password hashing
 gem "bootsnap", require: false
 gem "chimera_http_client", "~> 1.6" # HTTP client based on Typhoeus / lib_curl
-gem "countries", "~> 6.0" # Lists of countries, their ISO codes, emoji flags and more
+gem "countries", "~> 7.0" # Lists of countries, their ISO codes, emoji flags and more
 gem "csv", require: false
 gem "device_detector", "~> 1.1"
 gem "dry-validation", "~> 1.10" # Use dry-validation for validations [https://dry-rb.org/gems/dry-validation]
 # gem "exifr", "~> 1.3" # Read EXIF metadata from JPEG images
-gem "falcon", "~> 0.48.2"
+gem "falcon", "~> 0.48"
 gem "geocoder" # (reverse) geocode addresses and GPS coordinates
 gem "image_processing", "~> 1.12" # Use image_processing for image resizing in ActiveStorage variants
 gem "importmap-rails", "~> 2.0" # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
@@ -34,7 +34,7 @@ gem "solid_cache", "~> 1.0"
 gem "solid_queue", "~> 1.0"
 gem "sprockets-rails" # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "stimulus-rails" # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
-gem "strong_migrations", "~> 1.6" # Catch unsafe migrations in development
+gem "strong_migrations", "~> 2.0" # Catch unsafe migrations in development
 gem "turbo-rails" # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
 gem "view_component" # Use view_component for reusable view components [https://viewcomponent.org]
 
@@ -52,13 +52,15 @@ group :development, :test do
   gem "factory_bot_rails", "~> 6.2"
   gem "faker", "~> 3.2"
   gem "falcon-capybara", "~> 1.6"
-  gem "rspec-rails", "~> 6.0"
+  gem "rspec-rails", "~> 7.0"
   gem "rubocop-capybara", "~> 2.19", require: false
+  gem "rubocop-factory_bot", "~> 2.26", require: false
   gem "rubocop-faker", "~> 1.1", require: false
   gem "rubocop-performance", "~> 1.12", require: false
   gem "rubocop-rails", "~> 2.21", require: false
   gem "rubocop-rake", "~> 0.6", require: false
-  gem "rubocop-rspec", "~> 2.6", require: false
+  gem "rubocop-rspec", "~> 3.0", require: false
+  gem "rubocop-rspec_rails", "~> 2.30", require: false
 end
 
 group :test do

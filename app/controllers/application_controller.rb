@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  # allow_browser versions: { chrome: 80, firefox: 100, safari: 12.1, ie: false, edge: 106 } # TODO: choose sensible versions
   protect_from_forgery prepend: true
 
   # Detailed error pages must only be used in development! By default use our custom (less informative) error pages

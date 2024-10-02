@@ -145,9 +145,6 @@ Rails/UnknownEnv:
 RSpec/AlignLeftLetBrace:
   Enabled: false
 
-RSpec/Capybara/FeatureMethods:
-  Enabled: false
-
 RSpec/ChangeByZero:
   Enabled: false # asking the impossible as there is not "and_not"
 
@@ -158,6 +155,9 @@ RSpec/DescribeClass:
   Exclude:
     - "**/spec/integration/**/*_spec.rb"
     - "**/spec/system/**/*_spec.rb"
+
+RSpec/Dialect:
+  Enabled: false
 
 RSpec/EmptyExampleGroup:
   Exclude:
