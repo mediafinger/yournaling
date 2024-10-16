@@ -1,6 +1,4 @@
 class CreateMemories < ActiveRecord::Migration[7.1]
-  StrongMigrations.disable_check(:add_foreign_key) # as tables are empty
-
   def change
     create_enum :content_visibility, %w[draft internal published archived blocked]
 
