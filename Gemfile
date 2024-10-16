@@ -33,13 +33,14 @@ gem "solid_cable", "~> 3.0"
 gem "solid_cache", "~> 1.0"
 gem "solid_queue", "~> 1.0"
 gem "sprockets-rails" # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
+gem "sqlite3" # Use sqlite3 as the database for solid_cache, solid_cable, solid_queue
 gem "stimulus-rails" # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
 gem "turbo-rails" # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
 gem "view_component" # Use view_component for reusable view components [https://viewcomponent.org]
 
 group :development do
   # gem "rails-erd"
-  gem "fix-db-schema-conflicts" # to keep the schema.rb file sorted alphabetically without string_migrations
+  gem "fix-db-schema-conflicts" # to keep the schema.rb file sorted alphabetically without strong_migrations
   gem "web-console"
 end
 
