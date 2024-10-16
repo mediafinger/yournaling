@@ -19,6 +19,12 @@ Rails.application.routes.draw do
     get "/pictures_only/:id", to: "pictures_only#show", as: "picture_only"
   end
 
+  scope ActiveStorage.routes_prefix do
+    # NOTE: allow to auth user, to prevent anyone with the link from opening images
+    #
+    get "/blobs/redirect/:signed_id/*filename" => "authorize_blobs#show"
+  end
+
   namespace :current_team, module: :current_teams do
     get "", to: "pages#show", as: "home"
 
