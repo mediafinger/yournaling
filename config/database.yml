@@ -30,17 +30,17 @@ sqlite3: &sqlite3
   adapter: sqlite3
   encoding: utf-8
 
-cable: &cable
+cable_config: &cable_config
   <<: *sqlite3
   database: <%= "storage/#{AppConf.yournaling_db_name}_cable.sqlite3" %>
   migrations_paths: db/migrate_cable
 
-cache: &cache
+cache_config: &cache_config
   <<: *sqlite3
   database: <%= "storage/#{AppConf.yournaling_db_name}_cache.sqlite3" %>
   migrations_paths: db/migrate_cache
 
-queue: &queue
+queue_config: &queue_config
   <<: *sqlite3
   database: <%= "storage/#{AppConf.yournaling_db_name}_queue.sqlite3" %>
   migrations_paths: db/migrate_queue
@@ -49,11 +49,11 @@ development:
   primary:
     <<: *postgres
   cable:
-    <<: *cable
+    <<: *cable_config
   cache:
-    <<: *cache
+    <<: *cache_config
   queue:
-    <<: *queue
+    <<: *queue_config
 
 test:
   # unfortunately yournaling_db_name_test is necessary, as some `rake db:` commands work against dev & test env
@@ -61,21 +61,21 @@ test:
     <<: *postgres
     database: <%= AppConf.yournaling_db_name_test %>
   cable:
-    <<: *cable
+    <<: *cable_config
     database: <%= "storage/#{AppConf.yournaling_db_name_test}_cable.sqlite3" %>
   cache:
-    <<: *cache
+    <<: *cache_config
     database: <%= "storage/#{AppConf.yournaling_db_name_test}_cache.sqlite3" %>
   queue:
-    <<: *queue
+    <<: *queue_config
     database: <%= "storage/#{AppConf.yournaling_db_name_test}_queue.sqlite3" %>
 
 production:
   primary:
     <<: *postgres
   cable:
-    <<: *cable
+    <<: *cable_config
   cache:
-    <<: *cache
+    <<: *cache_config
   queue:
-    <<: *queue
+    <<: *queue_config
