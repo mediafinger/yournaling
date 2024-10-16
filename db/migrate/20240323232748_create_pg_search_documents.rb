@@ -12,6 +12,6 @@ class CreatePgSearchDocuments < ActiveRecord::Migration[7.1]
     add_index :pg_search_documents, %w[searchable_type searchable_id], name: "index_pg_search_documents_on_searchable"
     add_index :pg_search_documents, %w[team_yid searchable_type], name: "index_pg_search_documents_on_team_yid"
 
-    safety_assured { add_foreign_key :pg_search_documents, :teams, column: :team_yid, primary_key: :yid }
+    add_foreign_key :pg_search_documents, :teams, column: :team_yid, primary_key: :yid
   end
 end

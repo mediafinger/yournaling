@@ -1,6 +1,4 @@
 class CreateLocations < ActiveRecord::Migration[7.1]
-  StrongMigrations.disable_check(:add_foreign_key) # as tables are empty
-
   def change
     create_table :locations, primary_key: "yid", id: :string do |t|
       t.string :team_yid, null: false

@@ -1,6 +1,4 @@
 class CreateLogins < ActiveRecord::Migration[7.1]
-  StrongMigrations.disable_check(:add_foreign_key) # as tables are empty
-
   def change
     create_table :logins, id: :uuid do |t|
       t.string :user_yid, null: false
