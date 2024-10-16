@@ -39,6 +39,7 @@ gem "view_component" # Use view_component for reusable view components [https://
 
 group :development do
   # gem "rails-erd"
+  gem "fix-db-schema-conflicts" # to keep the schema.rb file sorted alphabetically without string_migrations
   gem "web-console"
 end
 
