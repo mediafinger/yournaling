@@ -9,7 +9,7 @@ class SessionsController < ApplicationController
   def create
     user = sign_in(email: login_params[:email], password: login_params[:password])
 
-    if user.present?
+    if user.present? && user.persisted?
       create_login
       redirect_to session.delete(:return_to) || root_url, notice: "Login successful" # TODO: notice shown, but pointless
     else
