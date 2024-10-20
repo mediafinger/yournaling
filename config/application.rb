@@ -36,7 +36,7 @@ module Yournaling
     config.action_view.image_loading = "lazy"
 
     # configure new Rails 7.1 cache format
-    config.active_support.cache_format_version = 7.1
+    config.active_support.cache_format_version = 8.0
 
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
