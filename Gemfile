@@ -24,6 +24,7 @@ gem "mission_control-jobs", "~> 0.3.1" # dashboard for SolidQueue jobs
 # gem "pagy", "~> 5.10" # fast and lightweight pagination solution # TODO: require "pagy/extras/navs"
 gem "pg", "~> 1.1"
 gem "pg_search", "~> 2.3" # Use pg_search for full-text search in PostgreSQL
+gem "propshaft", "~> 1.1" # Use Propshaft for asset fingerprinting
 gem "puma", "~> 6.3"
 # gem "pundit", "~> 2.2" # Authorize actions by admin role
 gem "rack-requestid", "~> 0.2" # always set a request_id with this middleware
@@ -32,7 +33,6 @@ gem "ruby-vips" # Use ruby-vips for image processing with ActiveStorage, require
 gem "solid_cable", "~> 3.0"
 gem "solid_cache", "~> 1.0"
 gem "solid_queue", "~> 1.0"
-gem "sprockets-rails" # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sqlite3" # Use sqlite3 as the database for solid_cache, solid_cable, solid_queue
 gem "stimulus-rails" # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
 gem "turbo-rails" # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
