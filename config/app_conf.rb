@@ -79,7 +79,7 @@ class AppConf
 
   register :yournaling_host, default: "localhost", required: production_env
   register :yournaling_name, default: "yournaling"
-  register :yournaling_port, default: 3000
+  register :yournaling_port, default: 3008
   register :yournaling_version, default: env_and_version
 
   # Database setup
