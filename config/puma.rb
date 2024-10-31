@@ -1,13 +1,17 @@
 # This configuration file will be evaluated by Puma. The top-level methods that
 # are invoked here are part of Puma's configuration DSL. For more information
 # about methods provided by the DSL, see https://puma.io/puma/Puma/DSL.html.
-
+#
 # Puma starts a configurable number of processes (workers) and each process
 # serves each request in a thread from an internal thread pool.
 #
+# You can control the number of workers using ENV["WEB_CONCURRENCY"]. You
+# should only set this value when you want to run 2 or more workers. The
+# default is already 1.
+#
 # The ideal number of threads per worker depends both on how much time the
 # application spends waiting for IO operations and on how much you wish to
-# to prioritize throughput over latency.
+# prioritize throughput over latency.
 #
 # As a rule of thumb, increasing the number of threads will increase how much
 # traffic a given process can handle (throughput), but due to CRuby's
@@ -20,28 +24,7 @@
 # Any libraries that use a connection pool or another resource pool should
 # be configured to provide at least as many connections as the number of
 # threads. This includes Active Record's `pool` parameter in `database.yml`.
-#
 threads AppConf.rails_min_threads.to_i, AppConf.rails_max_threads.to_i
-
-# Specifies the `environment` that Puma will run in.
-environment AppConf.environment
-
-case AppConf.environment
-when "production"
-  # If you are running more than 1 thread per process, the workers count
-  # should be equal to the number of processors (CPU cores) in production.
-  #
-  # Automatically detect the number of available processors in production.
-  require "concurrent-ruby"
-  workers_count = Concurrent.available_processor_count || AppConf.web_concurrency # do not trust the default?!
-  workers workers_count.to_i if workers_count.to_i > 1
-
-  preload_app!
-when "development"
-  # Specifies a very generous `worker_timeout` so that the worker
-  # isn't killed by Puma when suspended by a debugger.
-  worker_timeout 3600
-end
 
 # Specifies the `port` that Puma will listen on to receive requests; default is 3000.
 port AppConf.yournaling_port.to_i
@@ -49,6 +32,9 @@ port AppConf.yournaling_port.to_i
 # Allow puma to be restarted by `bin/rails restart` command.
 plugin :tmp_restart
 
-# Only use a pidfile when requested
-pidfile ENV["PIDFILE"] if ENV["PIDFILE"]
-# pidfile ENV.fetch("PIDFILE") { "tmp/pids/server.pid" }
+# Run the Solid Queue supervisor inside of Puma for single-server deployments
+plugin :solid_queue if AppConf.is?(:solid_queue_in_puma, true)
+
+# Specify the PID file. Defaults to tmp/pids/server.pid in development.
+# In other environments, only set the PID file if requested.
+pidfile AppConf.pidfile if AppConf.pidfile

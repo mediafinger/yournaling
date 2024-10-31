@@ -30,7 +30,7 @@ MissionControl::Jobs.base_controller_class = "AdminController"
 module Yournaling
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 7.1
+    config.load_defaults 8.0
 
     # defer loading of all image_tag images until they reach the viewport
     config.action_view.image_loading = "lazy"
