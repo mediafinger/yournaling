@@ -6,8 +6,12 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%# Using a downloaded version of pico.css for development %>
-    <%# stylesheet_link_tag "https://unpkg.com/@picocss/pico@latest/css/pico.min.css", "data-turbo-track": "reload" %>
+    <% if AppConf.production_env %>
+      <%= stylesheet_link_tag "https://unpkg.com/@picocss/pico@latest/css/pico.blue.min.css", "data-turbo-track": "reload" %>
+    <% else %>
+      <%# Using a downloaded version of pico.css for development %>
+      <%= stylesheet_link_tag "pico.blue.css", "data-turbo-track": "reload" %>
+    <% end %>
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>

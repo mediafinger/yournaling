@@ -1,2 +1,4 @@
-web: bin/rails server -p 3000
+web: bin/rails server -p $YOURNALING_PORT
 log: tail -f log/development.log
+js: yarn build --watch
+css: yarn build:css --watch
