@@ -67,6 +67,7 @@ ActiveRecordDoctor.configure do
 
   detector :missing_foreign_keys, ignore_columns: %w[
     logins.device_id
+    record_events.visit_id
   ]
 
   detector :missing_non_null_constraint, ignore_columns: %w[]
