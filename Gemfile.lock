@@ -83,6 +83,10 @@ GEM
       uri (>= 0.13.1)
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
+    ahoy_matey (5.2.1)
+      activesupport (>= 6.1)
+      device_detector (>= 1)
+      safely_block (>= 0.4)
     amazing_print (1.6.0)
     ast (2.4.2)
     base64 (0.2.0)
@@ -357,6 +361,7 @@ GEM
       ffi (~> 1.12)
       logger
     rubyzip (2.3.2)
+    safely_block (0.4.1)
     securerandom (0.3.1)
     selenium-webdriver (4.26.0)
       base64 (~> 0.2)
@@ -441,6 +446,7 @@ DEPENDENCIES
   action_policy (~> 0.6)
   active_record_doctor (~> 1.10)
   active_storage_validations
+  ahoy_matey (~> 5.2)
   amazing_print (~> 1.4)
   bcrypt (~> 3.1)
   bootsnap

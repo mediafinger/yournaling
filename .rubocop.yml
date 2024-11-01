@@ -51,6 +51,9 @@ Layout/ArgumentAlignment:
 Layout/CaseIndentation:
   EnforcedStyle: case
 
+Layout/CommentIndentation:
+  Enabled: false
+
 Layout/EmptyLinesAroundAttributeAccessor:
   AllowAliasSyntax: true
   Enabled: true

@@ -66,6 +66,8 @@ ActiveRecordDoctor.configure do
   ] # for some reason DB Doctor complains about a (non) existing validation on User.temp_auth_token column?!
 
   detector :missing_foreign_keys, ignore_columns: %w[
+    ahoy_events.user_id
+    ahoy_visits.user_id
     logins.device_id
     record_histories.team_id
     record_histories.user_id

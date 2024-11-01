@@ -12,6 +12,14 @@ class RecordHistoryService
         team_id: done_by_admin ? :admin : team.id,
         user_id: user.id
       )
+
+      # Is it possible to ENQUEUE in background job - or is then context missing?
+      # Do not run this in the transaction!!
+      #
+      # ahoy.track(
+      #   "RecordHistory #{record.class::YID_CODE} #{event}",
+      #   { user_id: user.id , history_id: rh.id}
+      # );
     end
   end
 end

@@ -8,6 +8,7 @@ gem "rails", "~> 8.0.0.rc2"
 
 gem "action_policy", "~> 0.6" # Authorization solution based on pundit
 gem "active_storage_validations" # to validate the content type and size of a file (add ruby-vips for dimensions)
+gem "ahoy_matey", "~> 5.2" # Simple, powerful, first-party analytics for Rails
 gem "bcrypt", "~> 3.1" # Use bcrypt for secure password hashing
 gem "bootsnap", require: false
 gem "chimera_http_client", "~> 1.6" # HTTP client based on Typhoeus / lib_curl
