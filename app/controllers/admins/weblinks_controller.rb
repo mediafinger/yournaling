@@ -20,7 +20,7 @@ module Admins
     def create
       @weblink = Weblink.new(weblink_params)
 
-      Weblink.create_with_history(record: @weblink, history_params: { team: nil, user: current_user, done_by_admin: true })
+      Weblink.create_with_event(record: @weblink, event_params: { team: nil, user: current_user, done_by_admin: true })
 
       if @weblink.persisted?
         redirect_to admin_weblink_url(@weblink), notice: "Weblink was successfully created."
@@ -33,7 +33,7 @@ module Admins
       @weblink = Weblink.urlsafe_find!(params[:id])
       @weblink.assign_attributes(weblink_params)
 
-      Weblink.update_with_history(record: @weblink, history_params: { team: nil, user: current_user, done_by_admin: true })
+      Weblink.update_with_event(record: @weblink, event_params: { team: nil, user: current_user, done_by_admin: true })
 
       if @weblink.changed? # == weblink still dirty, not saved
         render :edit, status: :unprocessable_content
@@ -45,7 +45,7 @@ module Admins
     def destroy
       @weblink = Weblink.urlsafe_find!(params[:id])
 
-      Weblink.destroy_with_history(record: @weblink, history_params: { team: nil, user: current_user, done_by_admin: true })
+      Weblink.destroy_with_event(record: @weblink, event_params: { team: nil, user: current_user, done_by_admin: true })
 
       redirect_to admin_weblinks_url, notice: "Weblink was successfully destroyed."
     end

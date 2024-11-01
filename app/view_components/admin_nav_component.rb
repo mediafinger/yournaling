@@ -10,6 +10,6 @@ class AdminNavComponent < ApplicationComponent
   SLIM
 
   def initialize
-    @sections = %w[users teams members pictures thoughts weblinks locations record_history]
+    @sections = %w[users teams members pictures thoughts weblinks locations record_events]
   end
 end

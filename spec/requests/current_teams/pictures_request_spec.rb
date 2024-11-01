@@ -80,14 +80,14 @@ RSpec.describe "/current_team/pictures", type: :request do
       it "creates a new Picture and records the event" do
         expect {
           post current_team_pictures_url, params: { picture: valid_attributes }
-        }.to change { RecordHistory.count }.by(1)
+        }.to change { RecordEvent.count }.by(1)
 
-        history = RecordHistory.first
-        expect(history.event).to eq("created")
-        expect(history.record_type).to eq("pic")
-        expect(history.record_yid).to eq(Picture.first.yid)
-        expect(history.team_yid).to eq(team.yid)
-        expect(history.user_yid).to eq(user.yid)
+        event = RecordEvent.first
+        expect(event.name).to eq("created")
+        expect(event.record_type).to eq("pic")
+        expect(event.record_yid).to eq(Picture.first.yid)
+        expect(event.team_yid).to eq(team.yid)
+        expect(event.user_yid).to eq(user.yid)
       end
     end
 
@@ -150,14 +150,14 @@ RSpec.describe "/current_team/pictures", type: :request do
 
       delete current_team_picture_url(picture.urlsafe_id)
 
-      expect(RecordHistory.count).to eq(1)
+      expect(RecordEvent.count).to eq(1)
 
-      history = RecordHistory.first
-      expect(history.event).to eq("deleted")
-      expect(history.record_type).to eq("pic")
-      expect(history.record_yid).to eq(picture.yid)
-      expect(history.team_yid).to eq(team.yid)
-      expect(history.user_yid).to eq(user.yid)
+      event = RecordEvent.first
+      expect(event.name).to eq("deleted")
+      expect(event.record_type).to eq("pic")
+      expect(event.record_yid).to eq(picture.yid)
+      expect(event.team_yid).to eq(team.yid)
+      expect(event.user_yid).to eq(user.yid)
     end
   end
 end

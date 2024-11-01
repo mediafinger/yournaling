@@ -27,7 +27,7 @@ module CurrentTeams
       @member = Member.new(create_params)
       authorize! @member
 
-      Member.create_with_history(record: @member, history_params: { team: current_team, user: current_user })
+      Member.create_with_event(record: @member, event_params: { team: current_team, user: current_user })
 
       if @member.persisted?
         redirect_to current_team_member_url(@member), notice: "Member was successfully created."
@@ -41,7 +41,7 @@ module CurrentTeams
       authorize! @member
       @member.assign_attributes(update_params)
 
-      Member.update_with_history(record: @member, history_params: { team: current_team, user: current_user })
+      Member.update_with_event(record: @member, event_params: { team: current_team, user: current_user })
 
       if @member.changed? # == member still dirty, not saved
         render :edit, status: :unprocessable_content
@@ -54,7 +54,7 @@ module CurrentTeams
       @member = Member.urlsafe_find!(params[:id])
       authorize! @member
 
-      Member.destroy_with_history(record: @member, history_params: { team: current_team, user: current_user })
+      Member.destroy_with_event(record: @member, event_params: { team: current_team, user: current_user })
 
       redirect_to current_team_members_url, notice: "Member was successfully destroyed."
     end

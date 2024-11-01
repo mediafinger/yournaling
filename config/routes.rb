@@ -56,7 +56,7 @@ Rails.application.routes.draw do
     resources :users
     resources :thoughts
     resources :weblinks
-    get "record_history", to: "record_history#index", as: :record_history
+    get "record_events", to: "record_events#index", as: :record_events
 
     # NOTE: we setup MissionControl to inherit from our AdminController to only give admins access
     mount MissionControl::Jobs::Engine, at: "/jobs"

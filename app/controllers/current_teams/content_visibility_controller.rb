@@ -12,7 +12,7 @@ module CurrentTeams
       @content.visibility = update_params[:visibility]
       authorize! @content, to: :update?, with: ContentVisibilityPolicy
 
-      Memory.update_with_history(record: @content, history_params: { team: current_team, user: current_user })
+      Memory.update_with_event(record: @content, event_params: { team: current_team, user: current_user })
 
       if @content.changed? # == content still dirty, not saved
         render :edit, status: :unprocessable_content
