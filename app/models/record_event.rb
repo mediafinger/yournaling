@@ -16,16 +16,16 @@ class RecordEvent < ApplicationRecord
 
   self.table_name = "record_events"
 
-  belongs_to :team, foreign_key: "team_yid", inverse_of: :events
-  belongs_to :user, foreign_key: "user_yid", inverse_of: :events
-  belongs_to :visit
+  belongs_to :team, foreign_key: "team_yid", inverse_of: :events, optional: true
+  belongs_to :user, foreign_key: "user_yid", inverse_of: :events, optional: true
+  belongs_to :visit, class_name: "Ahoy::Visit", inverse_of: :events, optional: true
 
   validates :done_by_admin, inclusion: [true, false]
-  validates :event, presence: true
+  validates :name, presence: true
   validates :record_type, presence: true # should this be optional to track page viewing or similar?
   validates :record_yid, presence: true # should this be optional to track page viewing or similar?
-  validates :team_yid, presence: true # should this be optional to track actions unrelated to a team?
-  validates :user_yid, presence: true
+  # validates :team_yid, presence: true, allow_nil: true
+  # validates :user_yid, presence: true, allow_nil: true
 
   def readonly?
     created_at.present?
