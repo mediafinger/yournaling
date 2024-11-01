@@ -17,6 +17,8 @@ module Authentication
       initialize_request_context # to refresh the Current objects directly
     end
 
+    ahoy.authenticate(user) # TODO: check if this handles YIDs correctly
+
     current_user
   end
 

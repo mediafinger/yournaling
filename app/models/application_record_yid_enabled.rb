@@ -18,21 +18,21 @@ class ApplicationRecordYidEnabled < ApplicationRecord
       yid_code_models[yid.split("_").first].find_by(yid:)
     end
 
-    def create_with_history(record:, history_params: {})
+    def create_with_event(record:, event_params: {})
       transaction do
-        record.save && RecordHistoryService.call(record:, event: :created, **history_params)
+        record.save && RecordEventService.call(record:, name: :created, **event_params)
       end
     end
 
-    def update_with_history(record:, history_params: {})
+    def update_with_event(record:, event_params: {})
       transaction do
-        record.save && RecordHistoryService.call(record:, event: :updated, **history_params)
+        record.save && RecordEventService.call(record:, name: :updated, **event_params)
       end
     end
 
-    def destroy_with_history(record:, history_params: {})
+    def destroy_with_event(record:, event_params: {})
       transaction do
-        RecordHistoryService.call(record:, event: :deleted, **history_params)
+        RecordEventService.call(record:, name: :deleted, **event_params)
         record.destroy! # TODO: refactor controller actions to not raise
       end
     end

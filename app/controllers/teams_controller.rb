@@ -28,11 +28,11 @@ class TeamsController < ApplicationController
     @team = Team.new(team_params)
     authorize! @team
 
-    Team.create_with_history(record: @team, history_params: { team: @team, user: current_user })
+    Team.create_with_event(record: @team, event_params: { team: @team, user: current_user })
 
     if @team.persisted?
       member = Member.new(team: @team.reload, user: current_user, roles: Member::VALID_ROLES)
-      Member.create_with_history(record: member, history_params: { team: @team, user: current_user })
+      Member.create_with_event(record: member, event_params: { team: @team, user: current_user })
 
       switch_current_team(@team.yid)
 
@@ -47,7 +47,7 @@ class TeamsController < ApplicationController
     authorize! @team
     @team.assign_attributes(team_params)
 
-    Team.update_with_history(record: @team, history_params: { team: current_team, user: current_user })
+    Team.update_with_event(record: @team, event_params: { team: current_team, user: current_user })
 
     if @team.changed? # == team still dirty, not saved
       render :edit, status: :unprocessable_content
@@ -60,7 +60,7 @@ class TeamsController < ApplicationController
     @team = Team.urlsafe_find!(params[:id])
     authorize! @team
 
-    Team.destroy_with_history(record: @team, history_params: { team: current_team, user: current_user })
+    Team.destroy_with_event(record: @team, event_params: { team: current_team, user: current_user })
 
     redirect_to teams_url, notice: "Team was successfully destroyed."
   end

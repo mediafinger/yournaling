@@ -19,8 +19,8 @@ module Admins
     def create
       @location = Location.new(location_params)
 
-      Location.create_with_history(
-        record: @location, history_params: { team: nil, user: current_user, done_by_admin: true })
+      Location.create_with_event(
+        record: @location, event_params: { team: nil, user: current_user, done_by_admin: true })
 
       if @location.persisted?
         redirect_to admin_location_url(@location), notice: "Location was successfully created."
@@ -33,8 +33,8 @@ module Admins
       @location = Location.urlsafe_find!(params[:id])
       @location.assign_attributes(location_params)
 
-      Location.update_with_history(
-        record: @location, history_params: { team: nil, user: current_user, done_by_admin: true })
+      Location.update_with_event(
+        record: @location, event_params: { team: nil, user: current_user, done_by_admin: true })
 
       if @location.changed? # == location still dirty, not saved
         render :edit, status: :unprocessable_content
@@ -46,8 +46,8 @@ module Admins
     def destroy
       @location = Location.urlsafe_find!(params[:id])
 
-      Location.destroy_with_history(
-        record: @location, history_params: { team: nil, user: current_user, done_by_admin: true })
+      Location.destroy_with_event(
+        record: @location, event_params: { team: nil, user: current_user, done_by_admin: true })
 
       redirect_to admin_locations_url, notice: "Location was successfully destroyed."
     end

@@ -37,7 +37,7 @@ module CurrentTeams
 
       authorize! @weblink
 
-      Weblink.create_with_history(record: @weblink, history_params: { team: current_team, user: current_user })
+      Weblink.create_with_event(record: @weblink, event_params: { team: current_team, user: current_user })
 
       if @weblink.persisted?
         redirect_to current_team_weblink_url(@weblink), notice: "Weblink was successfully created."
@@ -51,7 +51,7 @@ module CurrentTeams
       authorize! @weblink
       @weblink.assign_attributes(weblink_params)
 
-      Weblink.update_with_history(record: @weblink, history_params: { team: current_team, user: current_user })
+      Weblink.update_with_event(record: @weblink, event_params: { team: current_team, user: current_user })
 
       if @weblink.changed? # == weblink still dirty, not saved
         render :edit, status: :unprocessable_content
@@ -64,7 +64,7 @@ module CurrentTeams
       @weblink = Weblink.urlsafe_find!(params[:id])
       authorize! @weblink
 
-      Weblink.destroy_with_history(record: @weblink, history_params: { team: current_team, user: current_user })
+      Weblink.destroy_with_event(record: @weblink, event_params: { team: current_team, user: current_user })
 
       redirect_to current_team_weblinks_url, notice: "Weblink was successfully destroyed."
     end

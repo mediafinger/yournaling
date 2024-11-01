@@ -12,6 +12,6 @@ class AdminNavComponent < ApplicationComponent
   ERB
 
   def initialize
-    @sections = %w[users teams members pictures weblinks locations record_history]
+    @sections = %w[users teams members pictures weblinks locations record_events]
   end
 end

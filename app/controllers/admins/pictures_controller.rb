@@ -37,7 +37,7 @@ module Admins
         team_yid: picture_params[:team_yid]
       )
 
-      Picture.create_with_history(record: @picture, history_params: { team: nil, user: current_user, done_by_admin: true })
+      Picture.create_with_event(record: @picture, event_params: { team: nil, user: current_user, done_by_admin: true })
 
       if @picture.persisted?
         redirect_to admin_picture_url(@picture), notice: "Picture was successfully created."
@@ -50,7 +50,7 @@ module Admins
       @picture = Picture.urlsafe_find!(params[:id])
       @picture.assign_attributes(picture_params)
 
-      Picture.update_with_history(record: @picture, history_params: { team: nil, user: current_user, done_by_admin: true })
+      Picture.update_with_event(record: @picture, event_params: { team: nil, user: current_user, done_by_admin: true })
 
       if @picture.changed? # == picture still dirty, not saved
         render :edit, status: :unprocessable_content
@@ -62,7 +62,7 @@ module Admins
     def destroy
       @picture = Picture.urlsafe_find!(params[:id])
 
-      Picture.destroy_with_history(record: @picture, history_params: { team: nil, user: current_user, done_by_admin: true })
+      Picture.destroy_with_event(record: @picture, event_params: { team: nil, user: current_user, done_by_admin: true })
 
       redirect_to admin_pictures_url, notice: "Picture was successfully destroyed."
     end
