@@ -70,7 +70,7 @@ module ErrorHandler
 
   def map_error(error)
     MappedError.new(
-      **ERROR_DEFAULTS.merge(
+      **ERROR_DEFAULTS.merge( # rubocop:disable Style/KeywordArgumentsMerging
         MAP_RAILS_ERRORS.fetch(error.class.name, {}).merge(
           message: error.message, original_class: error.class.name, backtrace: error.backtrace
         )
