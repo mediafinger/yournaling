@@ -14,6 +14,7 @@ Rails.application.routes.draw do
 
     resources :locations, only: %i[show]
     resources :pictures, only: %i[show]
+    resources :thoughts, only: %i[show]
     resources :weblinks, only: %i[show]
 
     get "/pictures_only/:id", to: "pictures_only#show", as: "picture_only"
@@ -26,6 +27,7 @@ Rails.application.routes.draw do
     resources :members
     resources :memories
     resources :pictures
+    resources :thoughts
     resources :weblinks
 
     get "/content_visibility/:id/edit", to: "content_visibility#edit", as: "edit_content_visibility"
@@ -52,6 +54,7 @@ Rails.application.routes.draw do
     resources :pictures
     resources :teams
     resources :users
+    resources :thoughts
     resources :weblinks
     get "record_history", to: "record_history#index", as: :record_history
 

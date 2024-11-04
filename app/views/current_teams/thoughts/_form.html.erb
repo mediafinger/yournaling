@@ -1,0 +1,23 @@
+<article>
+  <%= form_with(model: [:current_team, thought]) do |form| %>
+    <%= render partial: "shared_partials/form_validation_errors", locals: { record: thought } %>
+
+    <fieldset>
+      <h3><legend><%= form_legend %></legend></h3>
+
+      <div>
+        <%= form.label :text %>
+        <%= form.text_field :text %>
+      </div>
+
+      <div>
+        <%= form.label :date %>
+        <%= form.date_field :date, value: Date.current %>
+      </div>
+
+      <div>
+        <%= form.submit %>
+      </div>
+    </fieldset>
+  <% end %>
+</article>

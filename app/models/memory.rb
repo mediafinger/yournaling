@@ -6,16 +6,17 @@ class Memory < ApplicationRecordForContentAndPosts
   belongs_to :team, inverse_of: :memories, foreign_key: "team_yid"
   belongs_to :location, inverse_of: :memories, foreign_key: "location_yid", optional: true
   belongs_to :picture, inverse_of: :memories, foreign_key: "picture_yid", optional: true
+  belongs_to :thought, inverse_of: :memories, foreign_key: "thought_yid", optional: true
   belongs_to :weblink, inverse_of: :memories, foreign_key: "weblink_yid", optional: true
 
   multisearchable(
-    against: %i[memo],
+    against: %i[memo], # TODO: thought.name, picture.name, weblink.name, location.name
     additional_attributes: ->(memory) { { team_yid: memory.team_yid } }
   )
 
   attr_readonly :team_yid
 
-  scope :with_includes, -> { includes(:team, :location, :picture, :weblink) }
+  scope :with_includes, -> { includes(:team, :location, :picture, :thought, :weblink) }
 
   before_save :update_visibilty_of_insights
 
@@ -24,6 +25,7 @@ class Memory < ApplicationRecordForContentAndPosts
   validates :memo, presence: true, length: { minimum: 4, maximum: 500 }
   validates :location, presence: true, if: -> { location_yid.present? }
   validates :picture, presence: true, if: -> { picture_yid.present? }
+  validates :thought, presence: true, if: -> { thought_yid.present? }
   validates :weblink, presence: true, if: -> { weblink_yid.present? }
   validates :visibility, presence: true, inclusion: { in: VISIBILITY_STATES }
 
@@ -39,7 +41,7 @@ class Memory < ApplicationRecordForContentAndPosts
   #
   def update_visibilty_of_insights
     transaction do
-      %i[location picture weblink].each do |type|
+      %i[location picture thought weblink].each do |type|
         update_visibility_of_removed_insight(type)
 
         # update visibility of associated insight to the visibility of this memory

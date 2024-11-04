@@ -1,0 +1,2 @@
+class ThoughtPolicy < InsightPolicy
+end

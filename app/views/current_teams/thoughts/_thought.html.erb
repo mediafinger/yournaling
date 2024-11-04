@@ -1,0 +1,23 @@
+<article id="<%= dom_id thought %>">
+  <p>
+    <strong>Text:</strong>
+    <%= thought.text %>
+  </p>
+
+  <p>
+    <strong>Date:</strong>
+    <%= thought.date %>
+  </p>
+
+  <p>
+    <strong>Team:</strong>
+    <%= thought.team_yid %>
+  </p>
+
+  <% if action_name != "show" %>
+    <%= link_to "Show this thought", current_team_thought_path(thought), role: "button"  %>
+  <% end %>
+  <% if current_team == thought.team %>
+    <%= link_to "Edit this thought", edit_current_team_thought_path(thought), role: "button", class: "secondary" %>
+  <% end %>
+</article>
