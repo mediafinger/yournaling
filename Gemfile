@@ -40,7 +40,6 @@ gem "view_component" # Use view_component for reusable view components [https://
 
 group :development do
   # gem "rails-erd"
-  gem "fix-db-schema-conflicts" # to keep the schema.rb file sorted alphabetically without strong_migrations
   gem "web-console"
 end
 
@@ -52,6 +51,7 @@ group :development, :test do
   gem "factory_bot-awesome_linter", "~> 1.0"
   gem "factory_bot_rails", "~> 6.2"
   gem "faker", "~> 3.2"
+  gem "fix-db-schema-conflicts" # to keep the schema.rb file sorted alphabetically without strong_migrations
   gem "rspec-rails", "~> 7.0"
   gem "rubocop-capybara", "~> 2.19", require: false
   gem "rubocop-factory_bot", "~> 2.26", require: false

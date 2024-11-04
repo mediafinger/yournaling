@@ -127,6 +127,10 @@ Rails/ResponseParsedBody:
 Rails/RenderInline:
   Enabled: false
 
+Rails/RootPathnameMethods:
+  Exclude:
+    - '**/*.rake'
+
 Rails/SafeNavigation:
   ConvertTry: false
 
