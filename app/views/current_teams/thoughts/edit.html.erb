@@ -1,0 +1,9 @@
+<% if current_team == @thought.team %>
+  <%= render partial: "form", locals: { thought: @thought, form_legend: "Edit thought"} %>
+<% end %>
+
+<%= link_to "Show this thought", current_team_thought_path(@thought), role: "button" %>
+
+<% if current_team == @thought.team %>
+  <%= button_to "Destroy this thought", current_team_thought_path(@thought), method: :delete, class: "secondary" %>
+<% end %>

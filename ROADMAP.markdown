@@ -34,6 +34,10 @@
 - [ ] reverse geo-code given data to location
 - [ ] display Geo-Location on an embedded Google Map
 
+### Thoughts
+
+- [ ] use in Memories
+
 ### Website-Links
 
 - [ ] create Links via URL and description
@@ -53,7 +57,8 @@
 
 ### Memories
 
-- [ ] setup memory creation by linking an insight with a note
+- [x] setup memory creation by linking an insight with a note
+- [ ] accept nested attributes to create insights on the fly
 
 ### Chronicles
 

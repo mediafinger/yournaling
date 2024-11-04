@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_11_04_192139) do
+ActiveRecord::Schema[8.0].define(version: 2024_11_04_193138) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -92,6 +92,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_04_192139) do
     t.text "memo", null: false
     t.string "picture_yid"
     t.string "team_yid", null: false
+    t.string "thought_yid"
     t.datetime "updated_at", null: false
     t.enum "visibility", default: "draft", null: false, enum_type: "content_visibility"
     t.string "weblink_yid"
@@ -142,6 +143,17 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_04_192139) do
     t.index ["name"], name: "index_teams_on_name", unique: true
   end
 
+  create_table "thoughts", primary_key: "yid", id: :string, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.date "date"
+    t.virtual "name", type: :string, as: "(\"substring\"(text, 0, 60) || '...'::text)", stored: true
+    t.string "team_yid", null: false
+    t.text "text", null: false
+    t.datetime "updated_at", null: false
+    t.enum "visibility", default: "internal", null: false, enum_type: "content_visibility"
+    t.index ["team_yid", "date"], name: "index_thoughts_on_team_yid_and_date"
+  end
+
   create_table "users", primary_key: "yid", id: :string, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email", null: false
@@ -179,8 +191,10 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_04_192139) do
   add_foreign_key "memories", "locations", column: "location_yid", primary_key: "yid"
   add_foreign_key "memories", "pictures", column: "picture_yid", primary_key: "yid"
   add_foreign_key "memories", "teams", column: "team_yid", primary_key: "yid"
+  add_foreign_key "memories", "thoughts", column: "thought_yid", primary_key: "yid"
   add_foreign_key "memories", "weblinks", column: "weblink_yid", primary_key: "yid"
   add_foreign_key "pg_search_documents", "teams", column: "team_yid", primary_key: "yid"
   add_foreign_key "pictures", "teams", column: "team_yid", primary_key: "yid"
+  add_foreign_key "thoughts", "teams", column: "team_yid", primary_key: "yid"
   add_foreign_key "weblinks", "teams", column: "team_yid", primary_key: "yid"
 end

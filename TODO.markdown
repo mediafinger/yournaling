@@ -94,19 +94,21 @@ Yournaling should become a travel journal, where we can:
 
 ### Memories
 
-* must contain memo (limited to 500 characters, minimum 4?)
-* can contain one insight of each type:
+* can contain one insight of each type, must contain at least one of:
   * picture
   * (geo) location
+  * thought
   * website link
 
 ### Chronicles
 
 * must contain headline
-* must contain notes (limited to 20_000 characters?, minimum 20?)
+* must contain at least one story (limited to 20_000 characters?, minimum 20?)
 * can contain multiple insights of:
   * pictures
   * (geo) locations
+  * thoughts  
+  * stories
   * website links
 
 ### Experiences
@@ -254,6 +256,7 @@ Yournaling should become a travel journal, where we can:
 * internal
   * now also visible to team members with the reader role
   * this should clearly be a paid feature
+  * aka "OnlyFans" mode
 * published
   * visible to everyone on the platform
   * visible to everyone in the whole wide world
@@ -344,6 +347,7 @@ The "vanity board" with detailed statistics could be a paid feature. The alterna
 * no pornography (sorry, its the payment providers' fault)
 * cut down on the nudity of published photos
 * as long as photos are in draft state, no one but the team members can see them
+* optionally a date
 
 ## Locations
 
@@ -352,12 +356,19 @@ The "vanity board" with detailed statistics could be a paid feature. The alterna
   * APIs do not offer this for free, so this has to be limited, higher limit for paid accounts
 * a name or description
 * the name or description is mandatory and either a maps-link or geocoding information have to exist as well
+* optionally a date
+
+## Thoughts
+
+* a short text (limited to 512 characters, minimum 4?)
+* optionally a date
 
 ## Website Links
 
 * a URL to a website (not pointing to a geolocation)
 * a name or description
 * the name or description is mandatory and the link as well
+* optionally a date
 
 ## User roles
 
@@ -446,8 +457,8 @@ The "vanity board" with detailed statistics could be a paid feature. The alterna
 * subscribe (monthly, quarterly, half yearly or yearly) as paying-reader to a team
   * fee set by team
   * payment fees are substracted (fixed + %, discourage small recurring payments)
-  * we keep 30% of what's left
-  * the other 70% go to the team's account (how to handle pay-outs?, delay and aggregation?)
+  * we keep 20% of what's left
+  * the other 80% go to the team's account (how to handle pay-outs?, delay and aggregation?)
 
 ### when paying team members become free users
 
@@ -561,3 +572,9 @@ The "vanity board" with detailed statistics could be a paid feature. The alterna
   * manage promotions
 * stakeholder
   * only read access to dashboards  
+
+## Analytics
+
+* Setup GDPR compliant Ahoy gem in separate SQLite DB
+  * https://github.com/ankane/ahoy
+  
