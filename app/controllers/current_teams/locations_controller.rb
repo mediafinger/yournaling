@@ -65,7 +65,7 @@ module CurrentTeams
 
     # switch to dry-validation / dry-contract
     def location_params
-      params.require(:location).permit(:address, :country_code, :name, :lat, :long, :url)
+      params.require(:location).permit(:address, :country_code, :name, :date, :lat, :long, :url)
     end
   end
 end

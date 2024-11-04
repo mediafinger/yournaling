@@ -26,6 +26,11 @@
       </div>
 
       <div>
+        <%= form.label :date %>
+        <%= form.date_field :date, value: Date.current %>
+      </div>
+
+      <div>
         <%= form.label :country_code %>
         <%= form.select :country_code, CountriesEnForSelectService.call.map { |k,v| [v, k] }, selected: form.object.country_code || "de" %>
         <%# TODO: use select2 or other searchable drop-down %>
