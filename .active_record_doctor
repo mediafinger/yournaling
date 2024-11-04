@@ -56,6 +56,7 @@ ActiveRecordDoctor.configure do
     Picture.yid
     Team.name
     Team.yid
+    Thought.text
     User.email
     User.name
     User.nickname
@@ -90,6 +91,7 @@ ActiveRecordDoctor.configure do
     logins.device_id
     memories.location_yid
     memories.picture_yid
+    memories.thought_yid
     memories.weblink_yid
   ]
 end

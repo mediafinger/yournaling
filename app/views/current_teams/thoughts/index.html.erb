@@ -1,0 +1,5 @@
+<div id="thoughts">
+  <% @thoughts.each do |thought| %>
+    <%= render partial: "current_teams/thoughts/thought", locals: { thought: } %>
+  <% end %>
+</div>

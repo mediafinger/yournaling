@@ -29,9 +29,9 @@ class ApplicationNavComponent < ApplicationComponent
         <li><%= link_to "Search", current_team_new_search_path %></li>
       </ul>
 
-      <%= render ApplicationNavLinksComponent.new(link_sections:  %w[memories locations pictures weblinks members], scope: "current_team") %>
+      <%= render ApplicationNavLinksComponent.new(link_sections:  %w[memories locations pictures thoughts weblinks members], scope: "current_team") %>
 
-      <%= render ApplicationNavActionsComponent.new(actions_for: %w[memories locations pictures weblinks members], scope: "current_team") %>
+      <%= render ApplicationNavActionsComponent.new(actions_for: %w[memories locations pictures thoughts weblinks members], scope: "current_team") %>
     <% else %>
       no_scope
     <% end %>

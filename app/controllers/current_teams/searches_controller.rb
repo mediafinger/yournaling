@@ -14,6 +14,8 @@ module CurrentTeams
       klass_name = query_params[:klass_name].presence
       query = query_params[:query].presence
 
+      # TODO: add date RANGE to search scope
+
       scope = { team_yid: current_team.yid, searchable_type: klass_name }.compact
       results = PgSearch.multisearch(query).where(**scope)
 
