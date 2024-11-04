@@ -11,6 +11,11 @@
       </div>
 
       <div>
+        <%= form.label :date %>
+        <%= form.date_field :date, value: Date.current %>
+      </div>
+
+      <div>
         <%= form.label :url %>
         <%= form.text_field :url %>
       </div>

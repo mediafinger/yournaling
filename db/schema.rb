@@ -10,10 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_04_24_191640) do
+ActiveRecord::Schema[8.0].define(version: 2024_11_04_192139) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
-  enable_extension "plpgsql"
 
   # Custom types defined in this database.
   # Note that some types may not work with other database engines. Be careful if changing database.
@@ -51,6 +51,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_04_24_191640) do
     t.string "address"
     t.string "country_code", null: false
     t.datetime "created_at", null: false
+    t.date "date"
     t.string "description"
     t.jsonb "geocoded_address", default: {}, null: false
     t.decimal "lat"
@@ -158,6 +159,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_04_24_191640) do
 
   create_table "weblinks", primary_key: "yid", id: :string, force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.date "date"
     t.text "description"
     t.string "name", null: false
     t.json "preview_snippet", default: {}

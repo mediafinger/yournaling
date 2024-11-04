@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_26_222324) do
+ActiveRecord::Schema[8.0].define(version: 2024_09_26_222324) do
   create_table "solid_cache_entries", force: :cascade do |t|
     t.integer "byte_size", limit: 4, null: false
     t.datetime "created_at", null: false

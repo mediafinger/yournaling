@@ -56,7 +56,7 @@ module Admins
 
     # switch to dry-validation / dry-contract
     def location_params
-      params.require(:location).permit(:address, :country_code, :name, :lat, :long, :url, :team_yid)
+      params.require(:location).permit(:address, :country_code, :name, :date, :lat, :long, :url, :team_yid)
     end
   end
 end
