@@ -1,7 +1,7 @@
 class AppCurrentTeamController < ApplicationController
   before_action :authenticate_member!
 
-  # layout "current_team_area" ?!
+  # TODO: layout "current_team_area" ?!
 
   private
 

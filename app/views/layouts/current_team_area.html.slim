@@ -1,0 +1,22 @@
+doctype html
+html
+  head
+    title
+      | Yournaling Current Team Area
+    meta[name="viewport" content="width=device-width,initial-scale=1"]
+    = csrf_meta_tags
+    = csp_meta_tag
+    - if AppConf.production_env
+      = stylesheet_link_tag "https://unpkg.com/@picocss/pico@latest/css/pico.amber.min.css", "data-turbo-track": "reload"
+    - else
+      / - # Using a downloaded version of pico.css for development
+      = stylesheet_link_tag "pico.amber.css", "data-turbo-track": "reload"
+    = stylesheet_link_tag "application", "data-turbo-track": "reload"
+    = javascript_importmap_tags
+  body
+    header.current-team-area
+      nav
+        = render CurrentTeamNavComponent.new # TODO: Add current team nav component
+      = render partial: "shared_partials/flash_notifications"
+    main
+      = yield
