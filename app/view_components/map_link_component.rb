@@ -1,5 +1,5 @@
 class MapLinkComponent < ApplicationComponent
-  erb_template <<-ERB
+  erb_template <<~ERB
     <span class="map_link">
       <%= @link_tag %>
     </span>

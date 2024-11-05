@@ -1,7 +1,7 @@
 class TeamSwitcherComponent < ApplicationComponent
   # attr_reader :...
 
-  erb_template <<-ERB
+  erb_template <<~ERB
     <ul>
       <% if current_user.persisted? %>
         <% if current_user.teams %>

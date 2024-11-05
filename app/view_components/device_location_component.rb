@@ -1,5 +1,5 @@
 class DeviceLocationComponent < ApplicationComponent
-  erb_template <<-ERB
+  erb_template <<~ERB
     <%= @infos.compact.join(" ") %>
   ERB
 

@@ -1,5 +1,5 @@
 class AdminShowTeamComponent < ApplicationComponent
-  erb_template <<-ERB
+  erb_template <<~ERB
     <p>
       <strong>Team:</strong>
       <%= @team_link_tag %>

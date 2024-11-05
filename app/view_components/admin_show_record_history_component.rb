@@ -1,5 +1,5 @@
 class AdminShowRecordHistoryComponent < ApplicationComponent
-  erb_template <<-ERB
+  erb_template <<~ERB
     <article id="<%=dom_id(@record_history)%>">
       <p>
         <strong>

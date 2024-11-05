@@ -1,5 +1,5 @@
 class ApplicationNavLinksComponent < ApplicationComponent
-  erb_template <<-ERB
+  erb_template <<~ERB
     <ul>
       <% @link_tags.each do |link_tag| %>
         <li><%= link_tag %></li>

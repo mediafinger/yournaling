@@ -1,5 +1,5 @@
 class ApplicationNavComponent < ApplicationComponent
-  erb_template <<-ERB
+  erb_template <<~ERB
     <% if !@admin_scope %>
       <% if current_user&.admin? %>
       <ul>
@@ -13,7 +13,6 @@ class ApplicationNavComponent < ApplicationComponent
         <%= link_to "Go to Current Team", current_team_home_path %>
       <% end %>
     <% end %>
-
 
     <% if @admin_scope %>
       admin_scope

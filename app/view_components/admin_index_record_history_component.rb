@@ -1,5 +1,5 @@
 class AdminIndexRecordHistoryComponent < ApplicationComponent
-  erb_template <<-ERB
+  erb_template <<~ERB
     <div id="record_history">
       <% @record_history.each do |record_history| %>
         <%= render AdminShowRecordHistoryComponent.new(record_history:) %>

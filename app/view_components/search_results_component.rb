@@ -1,5 +1,5 @@
 class SearchResultsComponent < ApplicationComponent
-  erb_template <<-ERB
+  erb_template <<~ERB
     <% if @results.present? %>
       <ul>
       <% @results.each do |result| %>

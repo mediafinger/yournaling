@@ -1,5 +1,5 @@
 class AdminShowMetaInformationComponent < ApplicationComponent
-  erb_template <<-ERB
+  erb_template <<~ERB
     <p>
       <strong>created_at:</strong>
       <%= @record.created_at.iso8601 %>

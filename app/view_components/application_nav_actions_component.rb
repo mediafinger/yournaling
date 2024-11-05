@@ -1,5 +1,5 @@
 class ApplicationNavActionsComponent < ApplicationComponent
-  erb_template <<-ERB
+  erb_template <<~ERB
     <ul>
       <li>
         <%= @action_buttons %>

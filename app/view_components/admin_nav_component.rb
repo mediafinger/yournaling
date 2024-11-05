@@ -1,5 +1,5 @@
 class AdminNavComponent < ApplicationComponent
-  erb_template <<-ERB
+  erb_template <<~ERB
     <% if current_user&.admin? %>
     <ul>
       <li><%= link_to "Leave Admin Area", "/" %></li>

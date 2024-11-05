@@ -1,5 +1,5 @@
 class ExternalLinkComponent < ApplicationComponent
-  erb_template <<-ERB
+  erb_template <<~ERB
     <span class="external_link">
       <%= @link_tag %>
     </span>

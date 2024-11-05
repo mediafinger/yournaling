@@ -1,5 +1,5 @@
 class AdminShowTeamMembersComponent < ApplicationComponent
-  erb_template <<-ERB
+  erb_template <<~ERB
     <p>
       <strong>Members:</strong>
       <ul>

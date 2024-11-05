@@ -1,5 +1,5 @@
 class DeviceComponent < ApplicationComponent
-  erb_template <<-ERB
+  erb_template <<~ERB
     <ul>
       <% @infos.each do |info| %>
         <li><%= info %></li>
