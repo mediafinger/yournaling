@@ -22,17 +22,17 @@ class Picture < ApplicationRecordForContentAndPosts
   MIN_PIXEL_WIDTH = 400
   YID_CODE = "pic".freeze
 
-  belongs_to :team, foreign_key: "team_yid", primary_key: "yid", inverse_of: :pictures
+  belongs_to :team, inverse_of: :pictures
 
-  has_many :memories, class_name: "Memory", foreign_key: "picture_yid", primary_key: "yid", inverse_of: :picture,
+  has_many :memories, class_name: "Memory", inverse_of: :picture,
     dependent: :nullify
 
   multisearchable(
     against: %i[name],
-    additional_attributes: ->(picture) { { team_yid: picture.team_yid } }
+    additional_attributes: ->(picture) { { team_id: picture.team_id } }
   )
 
-  attr_readonly :team_yid
+  attr_readonly :team_id
 
   normalizes :name, with: ->(name) { name.strip }
 

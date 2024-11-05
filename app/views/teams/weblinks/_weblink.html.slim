@@ -16,6 +16,6 @@ article id= dom_id(weblink)
     p
       strong
         | Team:
-      = weblink.team_yid
+      = weblink.team_id
   - if action_name != "show"
     = render ExternalLinkComponent.new(url: weblink.url, text: weblink.url)

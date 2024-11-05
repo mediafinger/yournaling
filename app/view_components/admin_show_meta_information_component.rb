@@ -7,8 +7,8 @@ class AdminShowMetaInformationComponent < ApplicationComponent
       strong updated_at:
       = @record.updated_at.iso8601
     p
-      strong YID:
-      = @record.yid
+      strong ID:
+      = @record.id
   SLIM
 
   def initialize(record:)

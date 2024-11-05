@@ -20,8 +20,8 @@ class Member < ApplicationRecordForContentAndPosts
   ].freeze
   YID_CODE = "member".freeze
 
-  belongs_to :team, inverse_of: :members, foreign_key: "team_yid"
-  belongs_to :user, inverse_of: :memberships, foreign_key: "user_yid"
+  belongs_to :team, inverse_of: :members
+  belongs_to :user, inverse_of: :memberships
 
   scope :with_role, ->(role) { with_roles(Array(role)) }
   scope :with_roles, ->(roles) { where("roles @> ?", "{#{roles.join(',')}}") } # must have all roles
@@ -31,16 +31,16 @@ class Member < ApplicationRecordForContentAndPosts
   # see: https://www.donnfelker.com/multitenant-pgsearch-how-to/
   multisearchable(
     against: %i[user_name team_name],
-    additional_attributes: ->(member) { { team_yid: member.team_yid } }
+    additional_attributes: ->(member) { { team_id: member.team_id } }
   )
 
-  attr_readonly :team_yid
-  attr_readonly :user_yid
+  attr_readonly :team_id
+  attr_readonly :user_id
 
   scope :with_includes, -> { includes(:team) }
 
-  validates :team_yid, presence: true, uniqueness: { scope: :user_yid }
-  validates :user_yid, presence: true, uniqueness: { scope: :team_yid }
+  validates :team_id, uniqueness: { scope: :user_id }
+  validates :user_id, uniqueness: { scope: :team_id }
   validates :roles, presence: true, if: proc { |record| record.roles.to_s == "" }
   validates :roles, array_inclusion: {
     in: VALID_ROLES, message: "%{rejected_values} not allowed, roles must be in #{VALID_ROLES}"

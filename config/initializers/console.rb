@@ -12,13 +12,13 @@ Rails.application.console do
     # alias class User to USer (my favority fast-typing typo)
     USer = User
 
-    # for YidEnabled record just type fynd("yid...") to find the record
-    def fynd(yid)
-      ApplicationRecordYidEnabled.fynd(yid)
+    # for YidEnabled record just type fynd("id...") to find the record
+    def fynd(id)
+      ApplicationRecordYidEnabled.fynd(id)
     end
 
-    def from_url(yid)
-      ApplicationRecordYidEnabled.urlsafe_fynd(yid)
+    def from_url(id)
+      ApplicationRecordYidEnabled.urlsafe_fynd(id)
     end
 
     @andy = User.find_by(email: "andy@example.com")

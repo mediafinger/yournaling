@@ -37,7 +37,7 @@ article id= dom_id(location)
     p
       strong
         | Team:
-      = location.team_yid
+      = location.team_id
     hr
     - if location.coordinates.present?
       = render MapLinkComponent.new(location: location, width: 600, height: 400)

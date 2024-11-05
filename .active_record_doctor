@@ -53,20 +53,22 @@ ActiveRecordDoctor.configure do
   detector :incorrect_length_validation, ignore_attributes: %w[
     Memory.memo
     Picture.name
-    Picture.yid
+    Picture.id
     Team.name
-    Team.yid
+    Team.id
     Thought.text
     User.email
     User.name
     User.nickname
     User.password_digest
-    User.yid
+    User.id
     User.temp_auth_token
   ] # for some reason DB Doctor complains about a (non) existing validation on User.temp_auth_token column?!
 
   detector :missing_foreign_keys, ignore_columns: %w[
     logins.device_id
+    record_histories.team_id
+    record_histories.user_id
   ]
 
   detector :missing_non_null_constraint, ignore_columns: %w[]
@@ -89,9 +91,13 @@ ActiveRecordDoctor.configure do
   # # Ignore indexes that are not used in the application
   detector :unindexed_foreign_keys, ignore_columns: %w[
     logins.device_id
-    memories.location_yid
-    memories.picture_yid
-    memories.thought_yid
-    memories.weblink_yid
+    memories.location_id
+    memories.picture_id
+    memories.thought_id
+    memories.weblink_id
+    record_histories.team_id
+    record_histories.user_id
+    record_histories.record_id
+    record_histories.record_type
   ]
 end

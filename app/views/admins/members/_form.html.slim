@@ -10,21 +10,21 @@ article
           strong Team
           = member.team.name
           i
-            = member.team.yid
+            = member.team.id
         label
           strong User
           = member.user.name
           i
-            = member.user.yid
+            = member.user.id
       - else
         div
-          = form.label :team_yid
+          = form.label :team_id
           =
-          -             form.select :team_yid, Team.pluck(:name, :yid), selected: form.object.team_yid, include_blank: true, required: true
+          -             form.select :team_id, Team.pluck(:name, :id), selected: form.object.team_id, include_blank: true, required: true
         div
-          = form.label :user_yid
+          = form.label :user_id
           =
-          -             form.select :user_yid, User.pluck(:email, :yid), selected: form.object.user_yid, include_blank: true, required: true
+          -             form.select :user_id, User.pluck(:email, :id), selected: form.object.user_id, include_blank: true, required: true
       div
         = form.label :roles
         =

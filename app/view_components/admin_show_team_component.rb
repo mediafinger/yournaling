@@ -5,7 +5,7 @@ class AdminShowTeamComponent < ApplicationComponent
       = @team_link_tag
       i
         > (
-        = @team.yid
+        = @team.id
         > )
   SLIM
 

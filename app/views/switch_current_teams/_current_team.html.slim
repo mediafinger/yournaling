@@ -11,4 +11,4 @@ article id= dom_id(current_user_team)
     i
       (unlink currently selected team)
   - else
-    = button_to "Select this team", switch_current_teams_path({ current_team: { team_yid: current_user_team.yid} }), method: :post, class: "secondary", id: current_user_team.urlsafe_id
+    = button_to "Select this team", switch_current_teams_path({ current_team: { team_id: current_user_team.id} }), method: :post, class: "secondary", id: current_user_team.urlsafe_id

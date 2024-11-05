@@ -1,20 +1,20 @@
-class AdminShowRecordHistoryComponent < ApplicationComponent
+class AdminShowRecordEventComponent < ApplicationComponent
   slim_template <<~SLIM
-    article id= dom_id(@record_history)
+    article id= dom_id(@record_event)
       p
         strong Event:
-          = @record_history.event
+          = @record_event.name
 
-        = @record_history.created_at.to_formatted_s(:db)
+        = @record_event.created_at.to_formatted_s(:db)
 
-        - if @record_history.done_by_admin?
+        - if @record_event.done_by_admin?
           strong done by Admin
       p
         strong Record:
         = @record_link
         i
           > (
-          = @record_history.record_id
+          = @record_event.record_id
           > )
       p
         strong User:
@@ -22,32 +22,32 @@ class AdminShowRecordHistoryComponent < ApplicationComponent
           = @user_link
         i
           > (
-          = @record_history.user_id
+          = @record_event.user_id
           > )
       p
         strong Team:
-        - if @record_history.team_id == "admin"
+        - if @record_event.team_id == "admin"
           > admin
-        - elsif @record_history.team_id == "none"
+        - elsif @record_event.team_id == "none"
           > none
         - else
           - if @team.present?
             = @team_link
           i
             > (
-            = @record_history.team_id
+            = @record_event.team_id
             > )
       p
         strong ID:
-        = @record_history.id
+        = @record_event.id
   SLIM
 
-  def initialize(record_history:)
-    @record_history = record_history
+  def initialize(record_event:)
+    @record_event = record_event
 
-    @record = ApplicationRecordYidEnabled.fynd(record_history.record_id)
-    @user = User.find_by(id: record_history.user_id)
-    @team = Team.find_by(id: record_history.team_id)
+    @record = ApplicationRecordYidEnabled.fynd(record_event.record_id)
+    @user = User.find_by(id: record_event.user_id)
+    @team = Team.find_by(id: record_event.team_id)
   end
 
   def before_render
@@ -55,7 +55,7 @@ class AdminShowRecordHistoryComponent < ApplicationComponent
       if @record.present?
         link_to(@record.class.name, send(:"admin_#{@record.class.name.tableize.singularize}_path", @record))
       else
-        ApplicationRecordYidEnabled.id_code_models[@record_history.record_id.split("_").first].name
+        ApplicationRecordYidEnabled.id_code_models[@record_event.record_id.split("_").first].name
       end
 
     @user_link = link_to(@user.name, admin_user_path(@user)) if @user

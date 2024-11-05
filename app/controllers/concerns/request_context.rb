@@ -21,16 +21,16 @@ module RequestContext
   # uncomment when hosting and using Sentry
   #
   # def set_sentry_context
-  #   Sentry.set_user(id: Current.user&.yid)
+  #   Sentry.set_user(id: Current.user&.id)
   #
   #   Sentry.configure_scope do |scope|
   #     scope.set_extras(
   #       request_id: Current.request_id
   #       params: request.filtered_parameters,
   #
-  #       user_yid: Current.user&.yid
-  #       team_yid: Current.team&.yid,
-  #       member_yid: Current.member&.yid,
+  #       user_id: Current.user&.id
+  #       team_id: Current.team&.id,
+  #       member_id: Current.member&.id,
   #       member_roles: Current.member&.roles,
   #     )
   #   end

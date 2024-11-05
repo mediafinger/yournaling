@@ -11,8 +11,8 @@ class User < ApplicationRecordYidEnabled
   # TODO: check if we want validations: https://api.rubyonrails.org/classes/ActiveModel/SecurePassword/ClassMethods.html
   has_secure_password :password, validations: false
 
-  has_many :logins, foreign_key: "user_yid", inverse_of: :user, dependent: :delete_all
-  has_many :memberships, class_name: "Member", foreign_key: "user_yid", inverse_of: :user, dependent: :destroy
+  has_many :logins, inverse_of: :user, dependent: :delete_all
+  has_many :memberships, class_name: "Member", inverse_of: :user, dependent: :destroy
 
   has_many :teams, through: :memberships
 

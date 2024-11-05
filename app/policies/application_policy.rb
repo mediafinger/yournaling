@@ -52,9 +52,9 @@ class ApplicationPolicy < ActionPolicy::Base
     return relation.none unless member.present? && member.team == team && member.user == user
 
     if relation.klass.name == ("Team")
-      relation.where(yid: team.yid)
+      relation.where(id: team.id)
     elsif NON_TEAM_OWNED_RECORD_CLASSES.include?(relation.klass.name)
-      relation.where(yid: user.yid) if relation.klass.name == "User"
+      relation.where(id: user.id) if relation.klass.name == "User"
     else
       relation.where(team:)
     end

@@ -10,12 +10,12 @@ article
           strong Team
           = thought.team.name
           i
-            = thought.team.yid
+            = thought.team.id
       - else
         div
-          = form.label :team_yid
+          = form.label :team_id
           =
-          -             form.select :team_yid, Team.pluck(:name, :yid), selected: form.object.team_yid, include_blank: true, required: true
+          -             form.select :team_id, Team.pluck(:name, :id), selected: form.object.team_id, include_blank: true, required: true
       div
         = form.label :text
         = form.text_area :text

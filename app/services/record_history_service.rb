@@ -8,9 +8,9 @@ class RecordHistoryService
         done_by_admin:,
         event:,
         record_type: record.class::YID_CODE,
-        record_yid: record.yid,
-        team_yid: done_by_admin ? :admin : team.yid,
-        user_yid: user.yid
+        record_id: record.id,
+        team_id: done_by_admin ? :admin : team.id,
+        user_id: user.id
       )
     end
   end

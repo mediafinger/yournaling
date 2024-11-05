@@ -2,7 +2,6 @@ class ApplicationRecordYidEnabled < ApplicationRecord
   include PgSearch::Model
 
   self.abstract_class = true
-  self.primary_key = "yid"
 
   # NOTE: setting a default order by created_at DESC for all YID enabled models
   # should be the same as ordering by YID (with the newest models on top)
@@ -11,11 +10,11 @@ class ApplicationRecordYidEnabled < ApplicationRecord
   #
   default_scope { order(created_at: :desc) }
 
-  before_create :set_yid_and_timestamps
+  before_create :set_id_and_timestamps
 
   class << self
-    def fynd(yid)
-      yid_code_models[yid.split("_").first].find_by(yid:)
+    def fynd(id)
+      id_code_models[id.split("_").first].find_by(id:)
     end
 
     def create_with_history(record:, history_params: {})
@@ -42,21 +41,21 @@ class ApplicationRecordYidEnabled < ApplicationRecord
     end
 
     def urlsafe_find(urlsafe_id)
-      find_by(yid: Base64.urlsafe_decode64(urlsafe_id))
+      find_by(id: Base64.urlsafe_decode64(urlsafe_id))
     end
 
     def urlsafe_find!(urlsafe_id)
-      find_by!(yid: Base64.urlsafe_decode64(urlsafe_id))
+      find(Base64.urlsafe_decode64(urlsafe_id))
     end
 
     # rubocop:disable Style/ClassVars
-    def yid_code_models
-      @@yid_code_models ||= yid_enabled_models.each_with_object({}) do |model, hash|
+    def id_code_models
+      @@id_code_models ||= id_enabled_models.each_with_object({}) do |model, hash|
         hash[model::YID_CODE] = model.name.constantize
       end
     end
 
-    def yid_enabled_models
+    def id_enabled_models
       # here be dragons
       Rails.application.eager_load! unless defined?(@@descendants)
       @@descendants ||= ApplicationRecordYidEnabled.descendants.reject do |klass|
@@ -75,14 +74,14 @@ class ApplicationRecordYidEnabled < ApplicationRecord
     urlsafe_id
   end
 
-  # or use OpenSSL::Cipher::AES128 or similar to encode from / decode to yid
+  # or use OpenSSL::Cipher::AES128 or similar to encode from / decode to id
   def urlsafe_id
-    Base64.urlsafe_encode64(yid, padding: false)
+    Base64.urlsafe_encode64(id, padding: false)
   end
 
   private
 
-  def generate_yid
+  def generate_id
     "#{self.class::YID_CODE}_#{now_timestamp}_#{SecureRandom.hex(6)}"
   end
 
@@ -90,9 +89,9 @@ class ApplicationRecordYidEnabled < ApplicationRecord
     @now_timestamp ||= Time.current.utc.iso8601(6)
   end
 
-  def set_yid_and_timestamps
+  def set_id_and_timestamps
     self.created_at = now_timestamp
     self.updated_at = now_timestamp
-    self.yid = generate_yid
+    self.id = generate_id
   end
 end

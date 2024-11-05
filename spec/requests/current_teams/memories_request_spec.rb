@@ -16,8 +16,8 @@ RSpec.describe "/current_team/memories", type: :request do
   let(:weblink) { FactoryBot.create(:weblink, team:) }
   let(:roles) { %i[owner manager editor] }
 
-  let(:valid_attributes) { { team_yid: team.yid, memo: "Memo Text", weblink: } }
-  let(:invalid_attributes) { { team_yid: team.yid, memo: "." } }
+  let(:valid_attributes) { { team_id: team.id, memo: "Memo Text", weblink: } }
+  let(:invalid_attributes) { { team_id: team.id, memo: "." } }
 
   before do
     Member.create!(team: team, user: user, roles: Array(roles.sample))
@@ -104,7 +104,7 @@ RSpec.describe "/current_team/memories", type: :request do
   describe "PATCH /update" do
     context "with valid parameters" do
       let(:location) { FactoryBot.create(:location, team: team) }
-      let(:new_attributes) { { location_yid: location.yid } }
+      let(:new_attributes) { { location_id: location.id } }
 
       it "updates the requested memory" do
         memory = Memory.create! valid_attributes
@@ -112,7 +112,7 @@ RSpec.describe "/current_team/memories", type: :request do
         patch current_team_memory_url(memory), params: { memory: new_attributes }
 
         memory.reload
-        expect(memory.location_yid).to eq(location.yid)
+        expect(memory.location_id).to eq(location.id)
       end
 
       it "redirects to the memory" do

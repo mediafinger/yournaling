@@ -15,8 +15,8 @@ RSpec.describe "/current_team/members", type: :request do
   let(:team) { FactoryBot.create(:team) }
   let(:roles) { %w[owner] }
 
-  let(:valid_create_attributes) { { user_yid: user.yid, team_yid: team.yid, roles: roles } }
-  let(:invalid_create_attributes) { { user_yid: user.yid, team_yid: team.yid, roles: ["Hausmeister"] } }
+  let(:valid_create_attributes) { { user_id: user.id, team_id: team.id, roles: roles } }
+  let(:invalid_create_attributes) { { user_id: user.id, team_id: team.id, roles: ["Hausmeister"] } }
 
   describe "GET /index" do
     let!(:member) { Member.create! valid_create_attributes }
@@ -91,7 +91,7 @@ RSpec.describe "/current_team/members", type: :request do
     let!(:member) { FactoryBot.create(:member, team: team, user: user, roles: %w[owner]) }
 
     let(:other_user) { FactoryBot.create(:user) }
-    let(:valid_create_attributes) { { user_yid: other_user.yid, team_yid: team.yid, roles: roles } }
+    let(:valid_create_attributes) { { user_id: other_user.id, team_id: team.id, roles: roles } }
 
     before do
       sign_in(user)
