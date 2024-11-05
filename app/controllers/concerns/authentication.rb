@@ -12,7 +12,7 @@ module Authentication
 
     if user.present?
       reset_session
-      session[:user_yid] = user.urlsafe_id
+      session[:user_id] = user.urlsafe_id
       @current_user = user
       initialize_request_context # to refresh the Current objects directly
     end
@@ -37,7 +37,7 @@ module Authentication
   end
 
   def current_user
-    @current_user ||= session[:user_yid] ? (User.urlsafe_find(session[:user_yid]) || guest_user) : guest_user
+    @current_user ||= session[:user_id] ? (User.urlsafe_find(session[:user_id]) || guest_user) : guest_user
   end
 
   def guest_user

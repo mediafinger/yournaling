@@ -54,7 +54,7 @@ module Admins
     private
 
     def create_params
-      params.require(:member).permit(:user_yid, :team_yid, roles: [])
+      params.require(:member).permit(:user_id, :team_id, roles: [])
     end
 
     def update_params

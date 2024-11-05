@@ -53,7 +53,7 @@ module Admins
     private
 
     def weblink_params
-      params.require(:weblink).permit(:url, :name, :date, :description, :team_yid)
+      params.require(:weblink).permit(:url, :name, :date, :description, :team_id)
     end
   end
 end

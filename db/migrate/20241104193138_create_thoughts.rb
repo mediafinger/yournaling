@@ -1,7 +1,7 @@
 class CreateThoughts < ActiveRecord::Migration[8.0]
   def change
-    create_table :thoughts, primary_key: "yid", id: :string do |t|
-      t.string :team_yid, null: false
+    create_table :thoughts, id: :string do |t|
+      t.references :team, type: :string, null: false, index: false, foreign_key: true
       t.text :text, null: false
       t.date :date
       t.virtual :name, type: :string, as: "(((SUBSTRING(text, 0, 60))::text || '...'::text))", stored: true
@@ -10,10 +10,8 @@ class CreateThoughts < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    add_index :thoughts, %i[team_yid date]
-    add_foreign_key :thoughts, :teams, column: :team_yid, primary_key: :yid
+    add_index :thoughts, %i[team_id date]
 
-    add_column :memories, :thought_yid, :string
-    add_foreign_key :memories, :thoughts, column: :thought_yid, primary_key: :yid
+    add_reference :memories, :thought, type: :string, index: false, foreign_key: true
   end
 end

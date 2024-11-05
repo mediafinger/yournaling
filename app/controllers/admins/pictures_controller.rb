@@ -34,7 +34,7 @@ module Admins
         file: ImageUploadConversionService.call(file: picture_params[:file], name: picture_params[:name]),
         name: picture_params[:name], # looks redundant, but image filename is parameterized
         date: picture_params[:date],
-        team_yid: picture_params[:team_yid]
+        team_id: picture_params[:team_id]
       )
 
       Picture.create_with_history(record: @picture, history_params: { team: nil, user: current_user, done_by_admin: true })
@@ -71,7 +71,7 @@ module Admins
 
     # switch to dry-validation / dry-contract
     def picture_params
-      params.require(:picture).permit(:file, :date, :name, :team_yid)
+      params.require(:picture).permit(:file, :date, :name, :team_id)
     end
   end
 end

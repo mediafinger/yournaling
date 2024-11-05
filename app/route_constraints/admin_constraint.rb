@@ -3,9 +3,9 @@
 class AdminConstraint
   class << self
     def matches?(request)
-      return false unless request.session[:user_yid]
+      return false unless request.session[:user_id]
 
-      user = User.urlsafe_find(request.session[:user_yid])
+      user = User.urlsafe_find(request.session[:user_id])
       return false unless user.present?
 
       user.admin?

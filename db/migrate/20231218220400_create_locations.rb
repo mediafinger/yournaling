@@ -1,7 +1,7 @@
 class CreateLocations < ActiveRecord::Migration[7.1]
   def change
-    create_table :locations, primary_key: "yid", id: :string do |t|
-      t.string :team_yid, null: false
+    create_table :locations, id: :string do |t|
+      t.string :team_id, null: false
       t.json :address, default: {}
       t.decimal :lat
       t.decimal :long
@@ -11,8 +11,8 @@ class CreateLocations < ActiveRecord::Migration[7.1]
       t.timestamps
     end
 
-    add_index :locations, %i[team_yid name], unique: true
+    add_index :locations, %i[team_id name], unique: true
 
-    add_foreign_key :locations, :teams, column: :team_yid, primary_key: :yid
+    add_foreign_key :locations, :teams, column: :team_id
   end
 end

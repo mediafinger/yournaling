@@ -8,7 +8,7 @@ article id= dom_id(thought)
     = thought.date
   p
     strong Team:
-    = thought.team_yid
+    = thought.team_id
   - if action_name != "show"
     = link_to "Show this thought", current_team_thought_path(thought), role: "button"
   - if current_team == thought.team

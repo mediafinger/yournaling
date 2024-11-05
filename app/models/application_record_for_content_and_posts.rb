@@ -1,6 +1,5 @@
 class ApplicationRecordForContentAndPosts < ApplicationRecordYidEnabled
   self.abstract_class = true
-  self.primary_key = "yid"
 
   VISIBILITY_STATES = %w[draft internal published archived blocked].freeze
   YID_CODE = "abstract_class_must_not_be_used".freeze

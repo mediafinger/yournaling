@@ -23,7 +23,7 @@ end
 # RSpec / Rails System spec "get response" methods
 #
 def switch_current_team(team)
-  post switch_current_teams_path, params: { current_team: { team_yid: team.yid } }
+  post switch_current_teams_path, params: { current_team: { team_id: team.id } }
 end
 
 def go_solo(team)

@@ -53,7 +53,7 @@ module Admins
     private
 
     def thought_params
-      params.require(:thought).permit(:text, :date, :team_yid)
+      params.require(:thought).permit(:text, :date, :team_id)
     end
   end
 end

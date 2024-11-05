@@ -16,7 +16,7 @@ module CurrentTeams
 
       # TODO: add date RANGE to search scope
 
-      scope = { team_yid: current_team.yid, searchable_type: klass_name }.compact
+      scope = { team_id: current_team.id, searchable_type: klass_name }.compact
       results = PgSearch.multisearch(query).where(**scope)
 
       redirect_to current_team_new_search_url(query:, klass_name:, results: results.as_json)
@@ -28,7 +28,7 @@ module CurrentTeams
       params.permit(
         :query,
         :klass_name,
-        results: %i[id content searchable_type searchable_id team_yid created_at updated_at]
+        results: %i[id content searchable_type searchable_id team_id created_at updated_at]
       )
     end
   end

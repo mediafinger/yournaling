@@ -85,9 +85,9 @@ RSpec.describe "/current_team/pictures", type: :request do
         history = RecordHistory.first
         expect(history.event).to eq("created")
         expect(history.record_type).to eq("pic")
-        expect(history.record_yid).to eq(Picture.first.yid)
-        expect(history.team_yid).to eq(team.yid)
-        expect(history.user_yid).to eq(user.yid)
+        expect(history.record_id).to eq(Picture.first.id)
+        expect(history.team_id).to eq(team.id)
+        expect(history.user_id).to eq(user.id)
       end
     end
 
@@ -155,9 +155,9 @@ RSpec.describe "/current_team/pictures", type: :request do
       history = RecordHistory.first
       expect(history.event).to eq("deleted")
       expect(history.record_type).to eq("pic")
-      expect(history.record_yid).to eq(picture.yid)
-      expect(history.team_yid).to eq(team.yid)
-      expect(history.user_yid).to eq(user.yid)
+      expect(history.record_id).to eq(picture.id)
+      expect(history.team_id).to eq(team.id)
+      expect(history.user_id).to eq(user.id)
     end
   end
 end

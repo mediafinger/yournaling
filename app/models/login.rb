@@ -1,5 +1,5 @@
 class Login < ApplicationRecord
-  belongs_to :user, inverse_of: :logins, foreign_key: "user_yid"
+  belongs_to :user, inverse_of: :logins
 
   before_validation :generate_device_id, on: :create
 

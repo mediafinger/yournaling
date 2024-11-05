@@ -12,6 +12,6 @@ article id= dom_id(thought)
     p
       strong
         | Team:
-      = thought.team_yid
+      = thought.team_id
   - if action_name != "show"
     = render ExternalLinkComponent.new(url: thought.url, text: thought.url)

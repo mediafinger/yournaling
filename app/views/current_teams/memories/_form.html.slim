@@ -9,16 +9,16 @@ article
         = form.label :memo
         = form.text_area :memo, rows: 4, require: true
       div
-        = form.label :picture_yid
+        = form.label :picture_id
         =
-        -           form.select :picture_yid, Picture.pluck(:name, :yid), selected: form.object.picture_yid, include_blank: true
+        -           form.select :picture_id, Picture.pluck(:name, :id), selected: form.object.picture_id, include_blank: true
       div
-        = form.label :location_yid
+        = form.label :location_id
         =
-        -           form.select :location_yid, Location.pluck(:name, :yid), selected: form.object.location_yid, include_blank: true
+        -           form.select :location_id, Location.pluck(:name, :id), selected: form.object.location_id, include_blank: true
       div
-        = form.label :weblink_yid
+        = form.label :weblink_id
         =
-        -           form.select :weblink_yid, Weblink.pluck(:name, :yid), selected: form.object.weblink_yid, include_blank: true
+        -           form.select :weblink_id, Weblink.pluck(:name, :id), selected: form.object.weblink_id, include_blank: true
       div
         = form.submit

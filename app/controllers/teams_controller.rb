@@ -34,7 +34,7 @@ class TeamsController < ApplicationController
       member = Member.new(team: @team.reload, user: current_user, roles: Member::VALID_ROLES)
       Member.create_with_history(record: member, history_params: { team: @team, user: current_user })
 
-      switch_current_team(@team.yid)
+      switch_current_team(@team.id)
 
       redirect_to @team, notice: "Team was successfully created."
     else

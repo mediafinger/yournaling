@@ -11,7 +11,7 @@ article id= dom_id(weblink)
     = weblink.description
   p
     strong Team:
-    = weblink.team_yid
+    = weblink.team_id
   - if action_name != "show"
     = link_to "Show this weblink", current_team_weblink_path(weblink), role: "button"
   - if current_team == weblink.team

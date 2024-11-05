@@ -5,14 +5,14 @@ class AdminShowTeamMembersComponent < ApplicationComponent
       ul
         - @team.members.each do |member|
           li
-            = @user_links[member.yid]
+            = @user_links[member.id]
             i
               > (
-              = member.yid
+              = member.id
               > )
 
             > (
-            = @member_links[member.yid]
+            = @member_links[member.id]
             > )
   SLIM
 
@@ -22,12 +22,12 @@ class AdminShowTeamMembersComponent < ApplicationComponent
 
   def before_render
     @user_links = @team.members.each_with_object({}) do |member, hash|
-      hash[member.yid] = link_to(member.user.name, admin_user_path(member.user))
+      hash[member.id] = link_to(member.user.name, admin_user_path(member.user))
     end
 
     @member_links = @team.members.each_with_object({}) do |member, hash|
       roles = member.roles.join(", ")
-      hash[member.yid] = link_to(roles, admin_member_path(member))
+      hash[member.id] = link_to(roles, admin_member_path(member))
     end
   end
 end

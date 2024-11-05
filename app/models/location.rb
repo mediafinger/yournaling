@@ -3,17 +3,17 @@
 class Location < ApplicationRecordForContentAndPosts
   YID_CODE = "loc".freeze
 
-  belongs_to :team, inverse_of: :locations, foreign_key: "team_yid"
+  belongs_to :team, inverse_of: :locations
 
-  has_many :memories, class_name: "Memory", foreign_key: "location_yid", primary_key: "yid", inverse_of: :location,
+  has_many :memories, class_name: "Memory", inverse_of: :location,
     dependent: :nullify
 
   multisearchable(
     against: %i[name country_code address],
-    additional_attributes: ->(location) { { team_yid: location.team_yid } }
+    additional_attributes: ->(location) { { team_id: location.team_id } }
   )
 
-  attr_readonly :team_yid
+  attr_readonly :team_id
 
   normalizes :country_code, with: ->(country_code) { country_code.strip.downcase }
   normalizes :name, with: ->(name) { name.strip }
@@ -27,8 +27,8 @@ class Location < ApplicationRecordForContentAndPosts
     numericality: { greater_than_or_equal_to: BigDecimal("-90.0"), less_than_or_equal_to: BigDecimal("90.0") }
   validates :long, allow_nil: true,
     numericality: { greater_than_or_equal_to: BigDecimal("-180.0"), less_than_or_equal_to: BigDecimal("180.0") }
-  validates :name, presence: true, uniqueness: { scope: :team_yid }
-  validates :team_yid, presence: true, uniqueness: { scope: :name }
+  validates :name, presence: true, uniqueness: { scope: :team_id }
+  validates :team_id, uniqueness: { scope: :name }
   validates :visibility, presence: true, inclusion: { in: VISIBILITY_STATES }
 
   after_validation :geocode, if: ->(location) { calculate_coordinates?(location) }

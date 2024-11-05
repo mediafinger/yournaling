@@ -5,12 +5,12 @@ module TeamScope
     base.send :helper_method, :current_team, :current_member if base.respond_to? :helper_method
   end
 
-  def switch_current_team(team_yid)
-    raise ActiveRecord::RecordNotFound.new("User not persisted", current_user, :yid) unless current_user.persisted?
+  def switch_current_team(team_id)
+    raise ActiveRecord::RecordNotFound.new("User not persisted", current_user, :id) unless current_user.persisted?
 
-    team = current_user.teams.find(team_yid)
+    team = current_user.teams.find(team_id)
 
-    session[:team_yid] = team.yid
+    session[:team_id] = team.id
     @current_team = team
     @current_member = current_user.memberships.find_by!(team:)
     initialize_request_context # to refresh the Current objects directly
@@ -19,7 +19,7 @@ module TeamScope
   end
 
   def go_solo
-    session[:team_yid] = nil
+    session[:team_id] = nil
     @current_team = nil
     @current_member = nil
     initialize_request_context # to refresh the Current objects directly
@@ -30,7 +30,7 @@ module TeamScope
   private
 
   def current_team
-    @current_team ||= current_user.teams.find_by(yid: session[:team_yid]) if session[:team_yid]
+    @current_team ||= current_user.teams.find_by(id: session[:team_id]) if session[:team_id]
   end
 
   def current_member

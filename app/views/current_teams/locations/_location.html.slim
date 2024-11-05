@@ -28,7 +28,7 @@ article id= dom_id(location)
     = location.description
   p
     strong Team:
-    = location.team_yid
+    = location.team_id
   - if action_name != "show"
     = link_to "Show this location", current_team_location_path(location), role: "button"
   - if current_team == location.team

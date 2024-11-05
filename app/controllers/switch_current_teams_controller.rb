@@ -8,7 +8,7 @@ class SwitchCurrentTeamsController < ApplicationController
   end
 
   def show
-    @current_team = current_team # == Current.team # == current_user.teams.find_by(yid: session[:team_yid])
+    @current_team = current_team # == Current.team # == current_user.teams.find_by(id: session[:team_id])
     authorize! @current_team, with: CurrentTeamPolicy
 
     if @current_team
@@ -19,7 +19,7 @@ class SwitchCurrentTeamsController < ApplicationController
   end
 
   def create
-    @team = switch_current_team(current_team_params[:team_yid])
+    @team = switch_current_team(current_team_params[:team_id])
     authorize! @team, with: CurrentTeamPolicy
 
     redirect_to @team, notice: "Team #{@team.name} selected"
@@ -36,6 +36,6 @@ class SwitchCurrentTeamsController < ApplicationController
   private
 
   def current_team_params
-    params.require(:current_team).permit(:team_yid)
+    params.require(:current_team).permit(:team_id)
   end
 end
