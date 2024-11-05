@@ -1,0 +1,15 @@
+article id= dom_id(thought)
+
+  p
+    strong Text:
+    = thought.text
+  p
+    strong Date:
+    = thought.date
+  p
+    strong Team:
+    = thought.team_yid
+  - if action_name != "show"
+    = link_to "Show this thought", current_team_thought_path(thought), role: "button"
+  - if current_team == thought.team
+    = link_to "Edit this thought", edit_current_team_thought_path(thought), role: "button", class: "secondary"

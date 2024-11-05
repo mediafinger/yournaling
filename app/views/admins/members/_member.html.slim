@@ -1,0 +1,16 @@
+article id= dom_id(member)
+
+  p
+    strong User:
+    = link_to(member.user.name, admin_user_path(member.user))
+    i
+      | (
+      = member.user_yid
+      | )
+  p
+    strong Roles:
+    = member.roles
+  hr
+  = render AdminShowTeamComponent.new(team: member.team)
+  = render AdminShowMetaInformationComponent.new(record: member)
+  = render AdminActionsComponent.new(record: member, name: "member")

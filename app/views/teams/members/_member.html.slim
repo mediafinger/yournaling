@@ -1,0 +1,12 @@
+article id= dom_id(member)
+  p
+    strong User:
+    = member.user.name
+  p
+    strong Team:
+    = member.team.name
+  p
+    strong Roles:
+    = member.roles
+  - if action_name != "show"
+    = link_to "Show this member", team_member_path(team_id: team.to_param, id: member.to_param), role: "button"

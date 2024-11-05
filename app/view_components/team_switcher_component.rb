@@ -1,6 +1,4 @@
 class TeamSwitcherComponent < ApplicationComponent
-  # attr_reader :...
-
   slim_template <<~SLIM
     ul
       - if current_user.persisted?

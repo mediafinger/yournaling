@@ -1,0 +1,18 @@
+article id= dom_id(weblink)
+
+  p
+    strong Name:
+    = weblink.name
+  p
+    strong Url:
+    = render ExternalLinkComponent.new(url: weblink.url, text: weblink.url)
+  p
+    strong Description:
+    = weblink.description
+  p
+    strong Team:
+    = weblink.team_yid
+  - if action_name != "show"
+    = link_to "Show this weblink", current_team_weblink_path(weblink), role: "button"
+  - if current_team == weblink.team
+    = link_to "Edit this weblink", edit_current_team_weblink_path(weblink), role: "button", class: "secondary"

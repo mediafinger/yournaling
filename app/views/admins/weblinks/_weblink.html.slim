@@ -1,0 +1,15 @@
+article id= dom_id(weblink)
+
+  p
+    strong Name:
+    = weblink.name
+  p
+    strong Url:
+    = render ExternalLinkComponent.new(url: weblink.url, text: weblink.url)
+  p
+    strong Description:
+    = weblink.description
+  hr
+  = render AdminShowTeamComponent.new(team: weblink.team)
+  = render AdminShowMetaInformationComponent.new(record: weblink)
+  = render AdminActionsComponent.new(record: weblink, name: "weblink")

@@ -1,0 +1,51 @@
+article id= dom_id(location)
+
+  - if action_name == "show"
+    p
+      strong
+        | Name:
+      = location.name
+    p
+      strong
+        | Country:
+      - iso_country = ISO3166::Country.find_country_by_alpha2(location.country_code)
+      = iso_country.iso_short_name
+      |  (
+      = iso_country.alpha2
+      | )
+      = iso_country.emoji_flag
+    p
+      strong
+        | Address:
+      = location.address
+    p
+      strong
+        | Url:
+      = render ExternalLinkComponent.new(url: location.url, text: location.url)
+    p
+      strong
+        | Lat:
+      = location.lat
+    p
+      strong
+        | Long:
+      = location.long
+    p
+      strong
+        | Description:
+      = location.description
+    p
+      strong
+        | Team:
+      = location.team_yid
+    hr
+    - if location.coordinates.present?
+      = render MapLinkComponent.new(location: location, width: 600, height: 400)
+  - if action_name != "show"
+    = location.name
+    - iso_country = ISO3166::Country.find_country_by_alpha2(location.country_code)
+    = iso_country.iso_short_name
+    |  (
+    = iso_country.alpha2
+    | )
+    = iso_country.emoji_flag

@@ -1,0 +1,9 @@
+article id= dom_id(team)
+
+  p
+    strong Name:
+    = team.name
+  hr
+  = render AdminShowTeamMembersComponent.new(team: team)
+  = render AdminShowMetaInformationComponent.new(record: team)
+  = render AdminActionsComponent.new(record: team, name: "team")

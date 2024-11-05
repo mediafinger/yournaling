@@ -1,11 +1,10 @@
 class DeviceComponent < ApplicationComponent
-  erb_template <<~ERB
-    <ul>
-      <% @infos.each do |info| %>
-        <li><%= info %></li>
-      <% end %>
-    </ul>
-  ERB
+  slim_template <<~SLIM
+    ul
+      @infos.each do |info|
+        li
+          = info
+  SLIM
 
   def initialize(user_agent:)
     device = DeviceDetector.new(user_agent)

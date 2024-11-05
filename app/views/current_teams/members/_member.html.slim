@@ -1,0 +1,15 @@
+article id= dom_id(member)
+
+  p
+    strong User:
+    = member.user.name
+  p
+    strong Team:
+    = member.team.name
+  p
+    strong Roles:
+    = member.roles
+  - if action_name != "show"
+    = link_to "Show this member", current_team_member_path(member), role: "button"
+  = link_to "Edit this member", edit_current_team_member_path(member), role: "button", class: "secondary"
+  = link_to "Change visibility", current_team_content_visibility_path(member), role: "button", class: "secondary"

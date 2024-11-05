@@ -1,0 +1,14 @@
+article
+  = form_with(url: current_team_search_path, method: :post) do |form|
+    fieldset
+      h3
+        legend
+          = form_legend
+      div
+        = form.label :query
+        = form.text_field :query, value: query
+      div
+        = form.label :klass_name
+        = form.select :klass_name, %w[Location Member Picture Weblink], selected: klass_name, include_blank: true
+      div
+        = form.submit "Search"

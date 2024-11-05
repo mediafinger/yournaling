@@ -1,0 +1,18 @@
+article
+  = form_with(model: [:current_team, member]) do |form|
+    = render partial: "shared_partials/form_validation_errors", locals: { record: member }
+    fieldset
+      h3
+        legend
+          = form_legend
+      div
+        = form.label :user_yid
+        = form.text_field :user_yid
+      div
+        = form.label :team_yid
+        = form.text_field :team_yid
+      div
+        = form.label :roles
+        = form.text_area :roles, rows: 4
+      div
+        = form.submit

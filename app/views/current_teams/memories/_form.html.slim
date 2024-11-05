@@ -1,0 +1,24 @@
+article
+  = form_with(model: [:current_team, memory]) do |form|
+    = render partial: "shared_partials/form_validation_errors", locals: { record: memory }
+    fieldset
+      h3
+        legend
+          = form_legend
+      div
+        = form.label :memo
+        = form.text_area :memo, rows: 4, require: true
+      div
+        = form.label :picture_yid
+        =
+        -           form.select :picture_yid, Picture.pluck(:name, :yid), selected: form.object.picture_yid, include_blank: true
+      div
+        = form.label :location_yid
+        =
+        -           form.select :location_yid, Location.pluck(:name, :yid), selected: form.object.location_yid, include_blank: true
+      div
+        = form.label :weblink_yid
+        =
+        -           form.select :weblink_yid, Weblink.pluck(:name, :yid), selected: form.object.weblink_yid, include_blank: true
+      div
+        = form.submit

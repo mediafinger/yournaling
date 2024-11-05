@@ -1,11 +1,10 @@
 class AdminActionsComponent < ApplicationComponent
-  erb_template <<~ERB
-    <% if action_name != "show" %>
-      <%= @show_link %>
-    <% end %>
-    <%= @edit_link %>
-    <%= @history_link %>
-  ERB
+  slim_template <<~SLIM
+    - if action_name != "show"
+      = @show_link
+    = @edit_link
+    = @history_link
+  SLIM
 
   def initialize(record:, name:)
     @record = record

@@ -1,0 +1,19 @@
+article
+  = form_with(model: [:admin, user]) do |form|
+    = render partial: "shared_partials/form_validation_errors", locals: { record: user }
+    fieldset
+      h3
+        legend
+          = form_legend
+      div
+        = form.label :name
+        = form.text_field :name
+      div
+        = form.label :email
+        = form.text_field :email
+      / - # TODO: do not allow Admin to set or change user password manually, only to reset it
+      div
+        = form.label :password
+        = form.password_field :password
+      .inline
+        = form.submit

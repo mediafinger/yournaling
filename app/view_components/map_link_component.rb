@@ -1,9 +1,8 @@
 class MapLinkComponent < ApplicationComponent
-  erb_template <<~ERB
-    <span class="map_link">
-      <%= @link_tag %>
-    </span>
-  ERB
+  slim_template <<~SLIM
+    span class="map_link"
+      = @link_tag
+  SLIM
 
   def initialize(location:, width:, height:)
     @location = location

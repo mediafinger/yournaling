@@ -1,0 +1,17 @@
+/ - # TODO: create proper memory index and show partials
+article id= dom_id(memory)
+
+  p
+    strong Team:
+    = memory.team.name
+  p
+    strong Memo:
+    = memory.memo
+  - if memory.picture
+    = render partial: "teams/pictures/picture", locals: { team:, picture: memory.picture }
+  - if memory.location
+    = render partial: "teams/locations/location", locals: { team:, location: memory.location }
+  - if memory.weblink
+    = render partial: "teams/weblinks/weblink", locals: { team:, weblink: memory.weblink }
+  - if action_name != "show"
+    = link_to "Show this memory", team_memory_path(team, memory), role: "button"

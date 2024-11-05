@@ -1,0 +1,32 @@
+article
+  = form_with(model: [:admin, weblink]) do |form|
+    = render partial: "shared_partials/form_validation_errors", locals: { record: weblink }
+    fieldset
+      h3
+        legend
+          = form_legend
+      - if weblink.persisted?
+        label
+          strong Team
+          = weblink.team.name
+          i
+            = weblink.team.yid
+      - else
+        div
+          = form.label :team_yid
+          =
+          -             form.select :team_yid, Team.pluck(:name, :yid), selected: form.object.team_yid, include_blank: true, required: true
+      div
+        = form.label :name
+        = form.text_field :name
+      div
+        = form.label :date
+        = form.date_field :date, value: Date.current
+      div
+        = form.label :url
+        = form.text_field :url
+      div
+        = form.label :description
+        = form.text_area :description
+      div
+        = form.submit

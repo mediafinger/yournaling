@@ -1,0 +1,37 @@
+article id= dom_id(location)
+  p
+    strong Name:
+    = location.name
+  p
+    strong Country:
+    - iso_country = ISO3166::Country.find_country_by_alpha2(location.country_code)
+    = iso_country.iso_short_name
+    |  (
+    = iso_country.alpha2
+    | )
+    = iso_country.emoji_flag
+  p
+    strong Geocoded Address:
+  ul
+    - location.geocoded_address.sort.each do |k, v|
+      li
+        = "#{k}: #{v}"
+  p
+    strong Address:
+    = location.address
+  p
+    strong Url:
+    = render ExternalLinkComponent.new(url: location.url, text: location.url)
+  p
+    strong Lat:
+    = location.lat
+  p
+    strong Long:
+    = location.long
+  p
+    strong Description:
+    = location.description
+  hr
+  = render AdminShowTeamComponent.new(team: location.team)
+  = render AdminShowMetaInformationComponent.new(record: location)
+  = render AdminActionsComponent.new(record: location, name: "location")

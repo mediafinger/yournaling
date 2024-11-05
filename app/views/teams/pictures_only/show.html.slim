@@ -1,0 +1,20 @@
+doctype html
+html
+  head
+    title
+      > Yournaling
+  body[style="font-family: sans-serif"]
+    p
+      strong
+        = @picture.name
+      = "#{@picture.width} x #{@picture.height}"
+      <> |
+      = number_to_human_size(@picture.megabytes.megabytes)
+      <> |
+      = @picture.content_type
+      <> |
+      = @picture.filename
+    p
+      / - # TODO: to prevent direct linking of image, keep visibility: :internal
+      / - # and only display images in the context of a Memory, Chronicle, Experience... to other users
+      = image_tag(@picture.file, style: "width: auto;")

@@ -1,0 +1,16 @@
+article id= dom_id(login)
+
+  p
+    strong Last login at:
+    = login.updated_at.rfc822
+  p
+    strong Device:
+    = render DeviceComponent.new(user_agent: login.user_agent)
+  p
+    strong Location:
+    = render DeviceLocationComponent.new(ip_address: login.ip_address)
+  - if login.device_id == session[:device_id]
+    i
+      | Current login session
+  - else
+    = button_to "Destroy this session", login_record_path(login), method: :delete, class: "secondary"
