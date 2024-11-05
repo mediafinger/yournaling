@@ -1,0 +1,38 @@
+article id= dom_id(location)
+
+  p
+    strong Name:
+    = location.name
+  p
+    strong Country:
+    - iso_country = ISO3166::Country.find_country_by_alpha2(location.country_code)
+    = iso_country.iso_short_name
+    |  (
+    = iso_country.alpha2
+    | )
+    = iso_country.emoji_flag
+  p
+    strong Address:
+    = location.address
+  p
+    strong Url:
+    = render ExternalLinkComponent.new(url: location.url, text: location.url)
+  p
+    strong Lat:
+    = location.lat
+  p
+    strong Long:
+    = location.long
+  p
+    strong Description:
+    = location.description
+  p
+    strong Team:
+    = location.team_yid
+  - if action_name != "show"
+    = link_to "Show this location", current_team_location_path(location), role: "button"
+  - if current_team == location.team
+    = link_to "Edit this location", edit_current_team_location_path(location), role: "button", class: "secondary"
+  hr
+  - if location.coordinates.present?
+    = render MapLinkComponent.new(location: location, width: 600, height: 400)

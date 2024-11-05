@@ -1,11 +1,10 @@
 class ApplicationNavLinksComponent < ApplicationComponent
-  erb_template <<~ERB
-    <ul>
-      <% @link_tags.each do |link_tag| %>
-        <li><%= link_tag %></li>
-      <% end %>
-    </ul>
-  ERB
+  slim_template <<~SLIM
+    ul
+      - @link_tags.each do |link_tag|
+        li
+          = link_tag
+  SLIM
 
   def initialize(link_sections: [], scope: nil, id: {})
     @link_sections = link_sections

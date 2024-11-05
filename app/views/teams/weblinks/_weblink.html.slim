@@ -1,0 +1,21 @@
+article id= dom_id(weblink)
+
+  - if action_name == "show"
+    p
+      strong
+        | Name:
+      = weblink.name
+    p
+      strong
+        | Url:
+      = render ExternalLinkComponent.new(url: weblink.url, text: weblink.url)
+    p
+      strong
+        | Description:
+      = weblink.description
+    p
+      strong
+        | Team:
+      = weblink.team_yid
+  - if action_name != "show"
+    = render ExternalLinkComponent.new(url: weblink.url, text: weblink.url)

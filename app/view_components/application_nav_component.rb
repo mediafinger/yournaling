@@ -1,46 +1,40 @@
 class ApplicationNavComponent < ApplicationComponent
-  erb_template <<~ERB
-    <% if !@admin_scope %>
-      <% if current_user&.admin? %>
-      <ul>
-        <li><%= link_to "Go to Admin Area", "/admin" %></li>
-      </ul>
-      <% end %>
-    <% end %>
+  slim_template <<~SLIM
+    - if !@admin_scope
+      - if current_user&.admin?
+        ul
+          li
+            = link_to "Go to Admin Area", "/admin"
 
-    <% if !@current_team_scope %>
-      <% if current_team.present? %>
-        <%= link_to "Go to Current Team", current_team_home_path %>
-      <% end %>
-    <% end %>
+    - if !@current_team_scope
+      - if current_team.present?
+        = link_to "Go to Current Team", current_team_home_path
 
-    <% if @admin_scope %>
-      admin_scope
-      <%# nothing to do, as AdminNavComponent is used in this case ?! %>
+    - if @admin_scope
+      > admin_scope
 
-    <% elsif @team_scope %>
-      team_scope
-      <%= render ApplicationNavLinksComponent.new(link_sections:  %w[memories members], scope: "team", id: { team_id: params[:team_id] }) %>
+    - elsif @team_scope
+      > team_scope
+      = render ApplicationNavLinksComponent.new(link_sections:  %w[memories members], scope: "team", id: { team_id: params[:team_id] })
 
-    <% elsif @current_team_scope %>
-      current_team_scope
-      <ul>
-        <li><%= link_to "Search", current_team_new_search_path %></li>
-      </ul>
+    - elsif @current_team_scope
+      > current_team_scope
+      ul
+        li
+          = link_to "Search", current_team_new_search_path
+      = render ApplicationNavLinksComponent.new(link_sections:  %w[memories locations pictures thoughts weblinks members], scope: "current_team")
+      = render ApplicationNavActionsComponent.new(actions_for: %w[memories locations pictures thoughts weblinks members], scope: "current_team")
 
-      <%= render ApplicationNavLinksComponent.new(link_sections:  %w[memories locations pictures thoughts weblinks members], scope: "current_team") %>
+    - else
+      > no_scope
 
-      <%= render ApplicationNavActionsComponent.new(actions_for: %w[memories locations pictures thoughts weblinks members], scope: "current_team") %>
-    <% else %>
-      no_scope
-    <% end %>
+    = render ApplicationNavLinksComponent.new(link_sections: %w[teams])
 
-    <%= render ApplicationNavLinksComponent.new(link_sections: %w[teams]) %>
-    <% if current_user.persisted? %>
-      <%= @login_records_link_tag %>
-    <% end %>
-    <%= render TeamSwitcherComponent.new %>
-  ERB
+    - if current_user.persisted?
+      = @login_records_link_tag
+
+      = render TeamSwitcherComponent.new
+  SLIM
 
   def initialize(params: {})
     @params = params

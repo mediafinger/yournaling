@@ -50,7 +50,7 @@ Rails.application.routes.draw do
     get "", to: "pages#show", as: "home"
     resources :locations
     resources :members
-    # resources :memories # TODO
+    resources :memories # TODO: add controllers and views
     resources :pictures
     resources :teams
     resources :users

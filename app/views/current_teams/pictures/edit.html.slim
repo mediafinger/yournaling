@@ -1,0 +1,5 @@
+- if current_team == @picture.team
+  = render partial: "form", locals: { picture: @picture, form_legend: "Edit picture" }
+= link_to "Show this picture", current_team_picture_path(@picture), role: "button"
+- if current_team == @picture.team
+  = button_to "Destroy this picture", current_team_picture_path(@picture), method: :delete, class: "secondary"

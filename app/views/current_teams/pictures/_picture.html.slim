@@ -1,0 +1,35 @@
+article id= dom_id(picture)
+  p
+    strong
+      = picture.name
+
+    - if picture.date
+      = "(#{picture.date})"
+
+  - if action_name == "show"
+    p
+      > Original:
+      = "#{picture.width} x #{picture.height}"
+      > |
+      = number_to_human_size(picture.megabytes.megabytes)
+      > |
+      = picture.content_type
+      > |
+      = picture.filename
+
+  p
+    - if action_name != "show"
+      / / - # Render our 4:3 thumbnails in 3:2 format
+      = link_to image_tag(picture.thumbnail, style: "width: 160px; height: 106px; object-fit: cover;"), current_team_picture_path(picture)
+      / / - # Render our 4:3 previews in 3:2 format
+      = link_to image_tag(picture.preview, style: "width: 400px; height: 266px; object-fit: cover;"), current_team_picture_path(picture)
+    - else
+      / / - # TODO: hide real URL / use expiring token to access image in fullsize
+      / / - # image_tag(picture.file, style: "max-height: 40rem; width: auto;")
+      = link_to image_tag(picture.large, style: "max-height: 30rem; width: auto;"), team_picture_only_path(current_team, picture), target: "_blank"
+
+    - if action_name != "show"
+      = link_to "Show this picture", current_team_picture_path(picture), role: "button"
+
+    - if current_team == picture.team
+      = link_to "Edit this picture", edit_current_team_picture_path(picture), role: "button", class: "secondary"

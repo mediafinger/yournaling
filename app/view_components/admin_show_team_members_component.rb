@@ -1,18 +1,20 @@
 class AdminShowTeamMembersComponent < ApplicationComponent
-  erb_template <<~ERB
-    <p>
-      <strong>Members:</strong>
-      <ul>
-        <% @team.members.each do |member| %>
-          <li>
-            <%= @user_links[member.yid] %>
-            <i>(<%= member.yid %>)</i>
-            [<%= @member_links[member.yid] %>]
-          </li>
-        <% end %>
-      </ul>
-    </p>
-  ERB
+  slim_template <<~SLIM
+    p
+      strong Members:
+      ul
+        - @team.members.each do |member|
+          li
+            = @user_links[member.yid]
+            i
+              > (
+              = member.yid
+              > )
+
+            > (
+            = @member_links[member.yid]
+            > )
+  SLIM
 
   def initialize(team:)
     @team = team

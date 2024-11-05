@@ -1,51 +1,46 @@
 class AdminShowRecordHistoryComponent < ApplicationComponent
-  erb_template <<~ERB
-    <article id="<%=dom_id(@record_history)%>">
-      <p>
-        <strong>
-          Event:
-          <%= @record_history.event %>
-        </strong>
-        <%= @record_history.created_at.to_formatted_s(:db) %>
-        <% if @record_history.done_by_admin? %>
-          <strong>done by Admin</strong>
-        <% end %>
-      </p>
+  slim_template <<~SLIM
+    article id= dom_id(@record_history)
+      p
+        strong Event:
+          = @record_history.event
 
-      <p>
-        <strong>Record:</strong>
-        <%= @record_link %>
-        <i>(<%= @record_history.record_yid %>)</i>
-      </p>
+        = @record_history.created_at.to_formatted_s(:db)
 
-      <p>
-        <strong>User:</strong>
-        <% if @user.present? %>
-          <%= @user_link %>
-        <% end %>
-        <i>(<%= @record_history.user_yid %>)</i>
-      </p>
-
-      <p>
-        <strong>Team:</strong>
-        <% if @record_history.team_yid == "admin" %>
-          admin
-        <% elsif @record_history.team_yid == "none" %>
-          none
-        <% else %>
-          <% if @team.present? %>
-            <%= @team_link %>
-          <% end %>
-          <i>(<%= @record_history.team_yid %>)</i>
-        <% end %>
-      </p>
-
-      <p>
-        <strong>YID:</strong>
-        <%= @record_history.id %>
-      </p>
-    </article>
-  ERB
+        - if @record_history.done_by_admin?
+          strong done by Admin
+      p
+        strong Record:
+        = @record_link
+        i
+          > (
+          = @record_history.record_yid
+          > )
+      p
+        strong User:
+        - if @user.present?
+          = @user_link
+        i
+          > (
+          = @record_history.user_yid
+          > )
+      p
+        strong Team:
+        - if @record_history.team_yid == "admin"
+          > admin
+        - elsif @record_history.team_yid == "none"
+          > none
+        - else
+          - if @team.present?
+            = @team_link
+          i
+            > (
+            = @record_history.team_yid
+            > )
+      p
+        strong YID:
+        = @record_history.id
+  SLIM
 
   def initialize(record_history:)
     @record_history = record_history

@@ -1,0 +1,5 @@
+article id= dom_id(team)
+  p
+    strong Name:
+    = team.name
+  = link_to "Go to team", team_home_path(team_id: team.to_param), role: "button"

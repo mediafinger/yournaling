@@ -1,0 +1,3 @@
+#current_user_teams
+  - @current_user_teams.each do |current_user_team|
+    = render partial: "switch_current_teams/current_team", locals: { current_user_team: current_user_team }

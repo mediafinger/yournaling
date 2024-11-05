@@ -1,0 +1,18 @@
+article id= dom_id(memory)
+
+  p
+    strong Team:
+    = memory.team.name
+  p
+    strong Memo:
+    = memory.memo
+  - if memory.picture
+    = render partial: "current_teams/pictures/picture", locals: { picture: memory.picture }
+  - if memory.location
+    = render partial: "current_teams/locations/location", locals: { location: memory.location }
+  - if memory.weblink
+    = render partial: "current_teams/weblinks/weblink", locals: { weblink: memory.weblink }
+  - if action_name != "show"
+    = link_to "Show this memory", current_team_memory_path(memory), role: "button"
+  = link_to "r Edit this memory", edit_current_team_memory_path(memory), role: "button", class: "secondary"
+  = link_to "Change visibility", current_team_content_visibility_path(memory), role: "button", class: "secondary"

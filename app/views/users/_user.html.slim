@@ -1,0 +1,11 @@
+article id= dom_id(user)
+
+  p
+    strong Name:
+    = user.name
+  p
+    strong Email:
+    = user.email
+  - if action_name != "show"
+    = link_to "Show this user", user, role: "button"
+  = link_to "Edit this user", edit_user_path(user), role: "button", class: "secondary"

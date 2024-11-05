@@ -1,0 +1,13 @@
+h2
+  Unfortunately you encountered an issue.
+h3
+  > Error:
+  = "#{code} (#{status})"
+p
+  = message
+p
+  = link_to "Back to previous page", :back, role: "button", class: "contrast"
+
+- if status >= 500
+  .error_comment
+    This looks like an issue on our side. We will look into it.

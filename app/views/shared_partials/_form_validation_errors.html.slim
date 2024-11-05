@@ -1,0 +1,11 @@
+- if record.errors.any?
+  section
+    h2
+      = pluralize(record.errors.count, "error")
+      |  prohibited this
+      = record.class.name
+      |  from being saved:
+    ul
+      - record.errors.each do |error|
+        li
+          = error.full_message

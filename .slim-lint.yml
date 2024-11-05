@@ -1,0 +1,17 @@
+exclude:
+  # - 'exclude/files/in/this/directory/from/all/linters/**/*.slim'
+
+linters:
+  EmptyControlStatement:
+    exclude:
+      # - 'app/views/directory_of_files_to_exclude/**/*.slim'
+      # - 'specific/file/to/exclude.slim'
+
+  LineLength:
+    max: 255
+
+  RedundantDiv:
+    enabled: false
+
+  UnknownLineIndicator:
+    enabled: false

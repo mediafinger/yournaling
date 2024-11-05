@@ -1,7 +1,7 @@
 class DeviceLocationComponent < ApplicationComponent
-  erb_template <<~ERB
-    <%= @infos.compact.join(" ") %>
-  ERB
+  slim_template <<~SLIM
+    = @infos.compact.join(" ")
+  SLIM
 
   def initialize(ip_address:)
     @ip_address = ip_address

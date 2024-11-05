@@ -1,20 +1,16 @@
 class TeamSwitcherComponent < ApplicationComponent
-  # attr_reader :...
-
-  erb_template <<~ERB
-    <ul>
-      <% if current_user.persisted? %>
-        <% if current_user.teams %>
-          <li><%= @switch_teams_link_tag %></li>
-        <% end %>
-        <li>
-          <%= @logout_button_tag %>
-        </li>
-      <% else %>
-        <li><%= @login_link_tag %></li>
-      <% end %>
-    </ul>
-  ERB
+  slim_template <<~SLIM
+    ul
+      - if current_user.persisted?
+        - if current_user.teams
+          li
+            = @switch_teams_link_tag
+        li
+          = @logout_button_tag
+      - else
+        li
+          = @login_link_tag
+  SLIM
 
   def initialize
     # no-op

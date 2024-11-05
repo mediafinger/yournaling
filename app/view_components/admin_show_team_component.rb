@@ -1,11 +1,13 @@
 class AdminShowTeamComponent < ApplicationComponent
-  erb_template <<~ERB
-    <p>
-      <strong>Team:</strong>
-      <%= @team_link_tag %>
-      <i>(<%= @team.yid %>)</i>
-    </p>
-  ERB
+  slim_template <<~SLIM
+    p
+      strong Team:
+      = @team_link_tag
+      i
+        > (
+        = @team.yid
+        > )
+  SLIM
 
   def initialize(team:)
     @team = team

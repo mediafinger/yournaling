@@ -1,0 +1,36 @@
+article
+  = form_with(model: [:current_team, location]) do |form|
+    = render partial: "shared_partials/form_validation_errors", locals: { record: location }
+    fieldset
+      h3
+        legend
+          = form_legend
+      div
+        = form.label :name
+        = form.text_field :name
+      div
+        = form.label :date
+        = form.date_field :date, value: Date.current
+      div
+        = form.label :country_code
+        = form.select :country_code, CountriesEnForSelectService.call.map { |k, v| [v, k] }, selected: form.object.country_code || "de"
+        / - # TODO: use select2 or other searchable drop-down
+      div
+        = form.label :address
+        = form.text_field :address
+      div
+        = form.label :url
+        = form.text_field :url
+      / - # TODO: show either ADDRESS or LAT and LONG fields for either geocoding or reverse-geocoding
+      div
+        = form.label :lat
+        = form.text_field :lat
+      div
+        = form.label :long
+        = form.text_field :long
+      / - # TODO: display Powered by <a href="https://www.geoapify.com/">Geoapify</a>
+      div
+        = form.label :description
+        = form.text_area :description
+      div
+        = form.submit

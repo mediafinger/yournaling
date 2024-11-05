@@ -1,9 +1,8 @@
 class ExternalLinkComponent < ApplicationComponent
-  erb_template <<~ERB
-    <span class="external_link">
-      <%= @link_tag %>
-    </span>
-  ERB
+  slim_template <<~SLIM
+    span class="external_link"
+      = @link_tag
+  SLIM
 
   def initialize(url:, text:)
     @url = url

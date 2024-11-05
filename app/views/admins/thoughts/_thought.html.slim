@@ -1,0 +1,12 @@
+article id= dom_id(thought)
+
+  p
+    strong Text:
+    = thought.text
+  p
+    strong Date:
+    = thought.date
+  hr
+  = render AdminShowTeamComponent.new(team: thought.team)
+  = render AdminShowMetaInformationComponent.new(record: thought)
+  = render AdminActionsComponent.new(record: thought, name: "thought")

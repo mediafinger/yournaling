@@ -8,6 +8,7 @@ if %w[development test].include? Rails.env
   require "bundler/audit/task"
   require "rspec/core/rake_task"
   require "rubocop/rake_task"
+  require "slim_lint/rake_task"
 
   # setup task bundle:audit
   Bundler::Audit::Task.new
@@ -61,6 +62,8 @@ if %w[development test].include? Rails.env
   RuboCop::RakeTask.new do |task|
     task.requires << "rubocop-rails"
   end
+
+  SlimLint::RakeTask.new
 
   desc "Run test suite"
   task ci: %w[rubocop factory_bot:awesome_lint db:doctor rspec bundle:audit:update bundle:audit]

@@ -1,11 +1,9 @@
 class ApplicationNavActionsComponent < ApplicationComponent
-  erb_template <<~ERB
-    <ul>
-      <li>
-        <%= @action_buttons %>
-      </li>
-    </ul>
-  ERB
+  slim_template <<~SLIM
+    ul
+      li
+        = @action_buttons
+  SLIM
 
   def initialize(actions_for: [], scope: nil, id: {})
     @sections = actions_for

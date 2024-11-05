@@ -1,0 +1,22 @@
+doctype html
+html
+  head
+    title
+      | Yournaling Admin Area
+    meta[name="viewport" content="width=device-width,initial-scale=1"]
+    = csrf_meta_tags
+    = csp_meta_tag
+    - if AppConf.production_env
+      = stylesheet_link_tag "https://unpkg.com/@picocss/pico@latest/css/pico.blue.min.css", "data-turbo-track": "reload"
+    - else
+      / - # Using a downloaded version of pico.css for development
+      = stylesheet_link_tag "pico.blue.css", "data-turbo-track": "reload"
+    = stylesheet_link_tag "application", "data-turbo-track": "reload"
+    = javascript_importmap_tags
+  body
+    header.admin-area
+      nav
+        = render AdminNavComponent.new
+      = render partial: "shared_partials/flash_notifications"
+    main
+      = yield

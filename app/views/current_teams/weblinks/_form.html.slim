@@ -1,0 +1,21 @@
+article
+  = form_with(model: [:current_team, weblink]) do |form|
+    = render partial: "shared_partials/form_validation_errors", locals: { record: weblink }
+    fieldset
+      h3
+        legend
+          = form_legend
+      div
+        = form.label :name
+        = form.text_field :name
+      div
+        = form.label :date
+        = form.date_field :date, value: Date.current
+      div
+        = form.label :url
+        = form.text_field :url
+      div
+        = form.label :description
+        = form.text_area :description
+      div
+        = form.submit

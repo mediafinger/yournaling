@@ -1,18 +1,17 @@
 class SearchResultsComponent < ApplicationComponent
-  erb_template <<~ERB
-    <% if @results.present? %>
-      <ul>
-      <% @results.each do |result| %>
-          <li>
-            <%= @record_links[result["searchable_id"]] %>
-            -
-            <%# result["content"] %>
-            <i>(updated_at: <%= DateTime.parse(result["updated_at"]).to_formatted_s(:db) %>)</i>
-          </li>
-      <% end %>
-      </ul>
-    <% end %>
-  ERB
+  slim_template <<~SLIM
+    - if @results.present?
+      ul
+        - @results.each do |result|
+          li
+            = @record_links[result["searchable_id"]]
+            i
+              > (updated_at:
+              = DateTime.parse(result['updated_at']).to_fs(:db)
+              > )
+  SLIM
+
+  # TODO: display result["content"] as well ?!
 
   def initialize(results:)
     @results = results
