@@ -15,9 +15,8 @@ module Authentication
       session[:user_yid] = user.urlsafe_id
       @current_user = user
       initialize_request_context # to refresh the Current objects directly
+      ahoy.authenticate(user) # TODO: check if this handles YIDs correctly
     end
-
-    ahoy.authenticate(user) # TODO: check if this handles YIDs correctly
 
     current_user
   end

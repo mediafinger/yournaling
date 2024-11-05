@@ -23,6 +23,14 @@ class ApplicationController < ActionController::Base
 
   before_action :ensure_html_safe_flash
 
+  skip_before_action :track_ahoy_visit, unless: :current_user_signed_in? # skip tracking for anonymous users
+
+  def current_user_signed_in?
+    current_user.present? && current_user.persisted?
+  end
+
+  # NOTE: we use the `ahoy` gem for tracking, see
+
   # dry-validates the dry-contract against the given params
   # which can be either a hash or an ActionController::Parameters object
   #
