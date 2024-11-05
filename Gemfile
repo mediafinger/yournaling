@@ -62,6 +62,7 @@ group :development, :test do
   gem "rubocop-rake", "~> 0.6", require: false
   gem "rubocop-rspec", "~> 3.0", require: false
   gem "rubocop-rspec_rails", "~> 2.30", require: false
+  gem "slim_lint"
 end
 
 group :test do
