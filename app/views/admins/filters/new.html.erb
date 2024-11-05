@@ -1,0 +1,3 @@
+<%= render partial: "form", locals: { filters: @filters, form_legend: "Filter"} %>
+
+<%= render AdminFilterResultsComponent.new(results: @results) %>
