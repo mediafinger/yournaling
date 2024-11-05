@@ -10,6 +10,7 @@ gem "action_policy", "~> 0.6" # Authorization solution based on pundit
 gem "active_storage_validations" # to validate the content type and size of a file (add ruby-vips for dimensions)
 gem "ahoy_matey", "~> 5.2" # Use ahoy for analytics
 gem "bcrypt", "~> 3.1" # Use bcrypt for secure password hashing
+gem "blazer", "~> 3.1" # Run SQL queries from the browser and display ahoy analytics in tables and graphs
 gem "bootsnap", require: false
 gem "chimera_http_client", "~> 1.6" # HTTP client based on Typhoeus / lib_curl
 gem "countries", "~> 7.0" # Lists of countries, their ISO codes, emoji flags and more

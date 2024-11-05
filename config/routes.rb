@@ -58,6 +58,9 @@ Rails.application.routes.draw do
     resources :weblinks
     get "record_events", to: "record_events#index", as: :record_events
 
+    # NOTE: we setup Blazer::BaseController to inherit from our AdminController to only give admins access
+    mount Blazer::Engine, at: "/blazer"
+
     # NOTE: we setup MissionControl to inherit from our AdminController to only give admins access
     mount MissionControl::Jobs::Engine, at: "/jobs"
   end
