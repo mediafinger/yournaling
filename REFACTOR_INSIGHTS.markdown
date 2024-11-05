@@ -4,8 +4,9 @@
 
 ### Picture
 
-* file (+ meta-data)
-* name (unique)
+* file
+* meta-data (=> automatically extracted)
+* name (unique ?)
 * date (optional)
 
 ### Location
@@ -17,19 +18,22 @@
 
 ### Story
 
-* headline
 * text (markdown formatted, without image tags, without link tags(?))
+* headline
+* name (== headline)
 * date (optional)
 
 ### Thought
 
 * text (unformatted, max. 512 characters)
+* name (=> generated from start of text)
 * date (optional)
 
 ### Weblink
 
 * URL (unique)
-* description
+* name
+* description (optional)
 * date (optional)
 
 ## Memory

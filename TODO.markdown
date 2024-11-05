@@ -47,17 +47,17 @@ Yournaling should become a travel journal, where we can:
 
 * date (optional on Includes to overwrite a date set in the included content, optional on Insights)
 * tags (not used on Includes or Insights)
-* team_yid (owned_by)
+* team_id (owned_by)
 * timestamps (created_at, updated_at)
-* user_yid (created_by)
+* user_id (created_by)
 * visibility (draft, internal, published, archived, blocked - not used on Includes or Insights) 
 
 #### An visibility_changed_log will contain additional metadata:
 
 * content_id
 * content_type (memory, chronicle, experience, journey)
-* team_yid (owned_by)
-* user_yid (visiblity_changed_by)
+* team_id (owned_by)
+* user_id (visiblity_changed_by)
 * visiblity_changed_at (timestamp)
 * visiblity_changed_from (draft, internal, published, archived, blocked)
 * visiblity_changed_to (draft, internal, published, archived, blocked)
@@ -198,8 +198,8 @@ Yournaling should become a travel journal, where we can:
 * content_type_wrapper (experience, journey)
 * included_at (timestamp)
 * included_id
-* team_yid (owner)
-* user_yid (included_by)
+* team_id (owner)
+* user_id (included_by)
 * visiblity_status_included (draft, internal, published, archived, blocked)
 * visiblity_status_wrapper (draft, internal, published, archived, blocked)
 * wrapper_id
@@ -575,6 +575,7 @@ The "vanity board" with detailed statistics could be a paid feature. The alterna
 
 ## Analytics
 
-* Setup GDPR compliant Ahoy gem in separate SQLite DB
+* Setup GDPR compliant Ahoy gem ~~in separate SQLite DB~~
   * https://github.com/ankane/ahoy
-  
+* Setup Blazer as SQL browser UI for analytics
+  * https://github.com/ankane/blazer

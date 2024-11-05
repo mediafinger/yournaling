@@ -50,18 +50,18 @@ And then compate the current post's score with the average or median scores (may
 ## Data structure
 
 * Use a separate table to track all ratings and use this for the "bookmark" functionality
-  * user.yid
-  * post.yid
-  * team.yid (that owns the post)
+  * user.id
+  * post.id
+  * team.id (that owns the post)
   * rating
   * date_rated
 * Use a separate table to persist the number views
-  * post.yid
-  * team.yid (that owns the post)
+  * post.id
+  * team.id (that owns the post)
   * number of views
 * Use a separate table to persist the number of views and ratings and score after every calculation
-  * post.yid
-  * team.yid (that owns the post)
+  * post.id
+  * team.id (that owns the post)
   * score
   * number_of_views
   * number_of_ratings

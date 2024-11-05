@@ -54,7 +54,7 @@ YID are **sortable** **unique** IDs which contain:
 
 YID are:
 
-* stored in the database field `yid` as primary key
+* stored in the database field `id` as primary key
 * used in serializers to the frontend
 * used in associations to other objects (with DB foreign_key)
 * used as foreign_keys in Rails associations
