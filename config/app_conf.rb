@@ -107,7 +107,7 @@ class AppConf
   register :pidfile, default: production_env ? nil : "tmp/pids/server.pid"
   # on production we should use a SecureRandom.hex(64) String with 128 characters
   register :rails_secret_key_base, required: production_env, default: "foofoobar123456"
-  # Enable static file serving from the `/public` folder (turn off if using NGINX/Apache for it).
+  # Enable static file serving from the `/public` folder (turn off if using a CDN or NGINX/Apache for it).
   register :rails_serve_static_files, default: true # Rails 7.1 default
   # Error pages, have only an effect in development
   register :display_rails_error_page, default: is?(:debug, true)

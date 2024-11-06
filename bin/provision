@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+
 # Provision a virtual private server for Kamal deployments on Ubuntu 22+ LTS.
 #
 # This script relies on SSH keys authentication.
@@ -28,12 +29,13 @@ def parse_arguments
     end
   end.parse!
 
-  if ARGV.empty?
-    puts "Error: Destination argument is required"
-    puts "Usage: #{$0} <destination>"
-    puts "Example: #{$0} production"
-    exit 1
-  end
+  # TODO: activate when splitting deploy for staging and production
+  # if ARGV.empty?
+  #   puts "Error: Destination argument is required"
+  #   puts "Usage: #{$0} <destination>"
+  #   puts "Example: #{$0} production"
+  #   exit 1
+  # end
 
   ARGV[0]
 end
@@ -52,7 +54,7 @@ def load_config(base_config_path, destination)
   # Let Kamal handle the config loading and merging
   Kamal::Configuration.create_from(
     config_file: config_file,
-    destination: destination
+    # destination: destination # TODO: activate when splitting deploy for staging and production
   )
 end
 
@@ -79,13 +81,13 @@ COMMANDS = {
       chmod 700 /data/storage;
       chown 1000:1000 /data/storage
 
-      mkdir -p /data/redis;
-      chmod 700 /data/redis;
-      chown 1000:1000 /data/redis
-
       mkdir -p /data/postgres;
       chmod 700 /data/postgres;
-      chown 1000:1000 /data/postgres
+      chown 1000:1000 /data/postgres # TODO: ensure the same pathes are used in deploy.yml
+
+      # mkdir -p /data/redis;
+      # chmod 700 /data/redis;
+      # chown 1000:1000 /data/redis
     SH
   },
   add_swap: {
@@ -112,19 +114,20 @@ COMMANDS = {
       systemctl enable fail2ban
     SH
   },
-  configure_firewall: {
-    description: "Configuring firewall",
-    command: <<~'SH'
-      ufw logging on;
-      ufw default deny incoming;
-      ufw default allow outgoing;
-      ufw allow 22;
-      ufw allow 80;
-      ufw allow 443;
-      ufw --force enable;
-      systemctl restart ufw
-    SH
-  },
+  # Using Hetzner Cloud Firewall instead
+  # configure_firewall: {
+  #   description: "Configuring firewall",
+  #   command: <<~'SH'
+  #     ufw logging on;
+  #     ufw default deny incoming;
+  #     ufw default allow outgoing;
+  #     ufw allow 22;
+  #     ufw allow 80;
+  #     ufw allow 443;
+  #     ufw --force enable;
+  #     systemctl restart ufw
+  #   SH
+  # },
   disable_root: {
     description: "Disabling root",
     command: <<~'SH'
