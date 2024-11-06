@@ -80,4 +80,19 @@ class ApplicationController < ActionController::Base
                            flash[:notice].html_safe # rubocop:disable Rails/OutputSafety
                          end
   end
+
+  # to update multiple parts of the page in one request with Turbo and ViewComponents
+  # use like this in your controller:
+  #
+  #   turbo_stream_update("someid", SomeComponent.new(param1: somevalue) )
+  #   turbo_stream_update("otherid", OtherComponent.new(other: othervalue) )
+  #   render turbo_stream: actions
+  #
+  # def turbo_stream_update(key, component)
+  #   turbo_stream_actions << turbo_stream.update(key, view_context.render(component))
+  # end
+  #
+  # def turbo_stream_actions
+  #   @turbo_stream_actions || []
+  # end
 end
