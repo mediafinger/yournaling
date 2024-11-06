@@ -1,0 +1,4 @@
+name: deploys
+
+# TODO: https://jetthoughts.com/blog/automate-your-deployments-with-kamal-2-github-actions-devops-development/
+# TODO: only run it after a release tag was pushed

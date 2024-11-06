@@ -13,18 +13,24 @@ ARG RUBY_VERSION=3.3.6
 FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
 
 # Rails app lives here
-WORKDIR /rails
+WORKDIR /app
 
 # Install base packages
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y curl libjemalloc2 libvips postgresql-client && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
+ARG DB_HOST=192.168.0.8:5432
+ARG YOURNALING_DB_USERNAME
+ARG YOURNALING_DB_PASSWORD
+ARG YOURNALING_DB_NAME
+
 # Set production environment
-ENV RAILS_ENV="production" \
-    BUNDLE_DEPLOYMENT="1" \
-    BUNDLE_PATH="/usr/local/bundle" \
-    BUNDLE_WITHOUT="development:test"
+ENV RAILS_ENV="production"
+ENV BUNDLE_DEPLOYMENT="1"
+ENV BUNDLE_PATH="/usr/local/bundle"
+ENV BUNDLE_WITHOUT="development:test"
+ENV YOURNALING_DB_URL="postgres://${YOURNALING_DB_USERNAME}:${YOURNALING_DB_PASSWORD}@${DB_HOST}/${YOURNALING_DB_NAME}"
 
 # Throw-away build stage to reduce size of final image
 FROM base AS build
@@ -55,7 +61,7 @@ FROM base
 
 # Copy built artifacts: gems, application
 COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
-COPY --from=build /rails /rails
+COPY --from=build /app /app
 
 # Run and own only the runtime files as a non-root user for security
 RUN groupadd --system --gid 1000 rails && \
@@ -64,7 +70,7 @@ RUN groupadd --system --gid 1000 rails && \
 USER 1000:1000
 
 # Entrypoint prepares the database.
-ENTRYPOINT ["/rails/bin/docker-entrypoint"]
+ENTRYPOINT ["/app/bin/docker-entrypoint"]
 
 # Start server via Thruster by default, this can be overwritten at runtime
 EXPOSE 80
