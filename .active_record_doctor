@@ -7,6 +7,11 @@ ActiveRecordDoctor.configure do
     active_storage_blobs
     active_storage_attachments
     action_text_rich_texts
+    blazer_audits
+    blazer_checks
+    blazer_dashboards
+    blazer_dashboard_queries
+    blazer_queries
     pg_search_documents
     solid_cable_messages
     solid_cache_entries
@@ -29,6 +34,9 @@ ActiveRecordDoctor.configure do
     ActiveStorage::Record
     ActiveStorage::VariantRecord
     ApplicationRecord
+    Blazer::Dashboard
+    Blazer::Query
+    Blazer::Upload
     PaperTrail::Version
     PgSearch::Document
     SolidCable::Message
@@ -66,6 +74,8 @@ ActiveRecordDoctor.configure do
   ] # for some reason DB Doctor complains about a (non) existing validation on User.temp_auth_token column?!
 
   detector :missing_foreign_keys, ignore_columns: %w[
+    ahoy_events.user_id
+    ahoy_visits.user_id
     logins.device_id
     record_histories.team_id
     record_histories.user_id
