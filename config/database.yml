@@ -13,15 +13,15 @@ postgres: &postgres
   <<: *default
   adapter: postgresql
   connect_timeout: <%= AppConf.yournaling_db_timeout_seconds.to_i * 1000 %>
-  database: <%= AppConf.yournaling_db_name %>
   encoding: unicode
-  host: <%= AppConf.yournaling_db_host %>
   migrations_paths: db/migrate
-  password: <%= AppConf.yournaling_db_password %>
-  port: <%= AppConf.yournaling_db_port.to_i %>
   read_timeout: <%= AppConf.yournaling_db_timeout_seconds.to_i * 1000 %>
   reconnect: true
-  username: <%= AppConf.yournaling_db_username %>
+  # database: <%= AppConf.yournaling_db_name %>
+  # host: <%= AppConf.yournaling_db_host %>
+  # password: <%= AppConf.yournaling_db_password %>
+  # port: <%= AppConf.yournaling_db_port.to_i %>
+  # username: <%= AppConf.yournaling_db_username %>
   variables:
     statement_timeout: <%= AppConf.yournaling_db_timeout_seconds.to_i * 1000 %>
 
@@ -48,31 +48,36 @@ queue_config: &queue_config
 development:
   primary:
     <<: *postgres
+    url: <%= "#{AppConf.yournaling_db_url}_development" %>
   cable:
     <<: *cable_config
+    database: <%= "storage/#{AppConf.yournaling_db_name}_development_cable.sqlite3" %>
   cache:
     <<: *cache_config
+    database: <%= "storage/#{AppConf.yournaling_db_name}_development_cache.sqlite3" %>
   queue:
     <<: *queue_config
+    database: <%= "storage/#{AppConf.yournaling_db_name}_development_queue.sqlite3" %>
 
 test:
-  # unfortunately yournaling_db_name_test is necessary, as some `rake db:` commands work against dev & test env
+  # unfortunately _test is necessary, as some `rake db:` commands work against dev & test env
   primary:
     <<: *postgres
-    database: <%= AppConf.yournaling_db_name_test %>
+    url: <%= "#{AppConf.yournaling_db_url}_test" %>
   cable:
     <<: *cable_config
-    database: <%= "storage/#{AppConf.yournaling_db_name_test}_cable.sqlite3" %>
+    database: <%= "storage/#{AppConf.yournaling_db_name}_test_cable.sqlite3" %>
   cache:
     <<: *cache_config
-    database: <%= "storage/#{AppConf.yournaling_db_name_test}_cache.sqlite3" %>
+    database: <%= "storage/#{AppConf.yournaling_db_name}_test_cache.sqlite3" %>
   queue:
     <<: *queue_config
-    database: <%= "storage/#{AppConf.yournaling_db_name_test}_queue.sqlite3" %>
+    database: <%= "storage/#{AppConf.yournaling_db_name}_test_queue.sqlite3" %>
 
 production:
   primary:
     <<: *postgres
+    url: <%= AppConf.yournaling_db_url %>
   cable:
     <<: *cable_config
   cache:

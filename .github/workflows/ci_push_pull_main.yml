@@ -36,8 +36,7 @@ jobs:
       RAILS_MAX_THREADS: 5
       OSTYPE: linux
       YOURNALING_DB_HOST: localhost
-      YOURNALING_DB_NAME: yournaling_ci # for db:doctor
-      YOURNALING_DB_NAME_TEST: yournaling_test # for the specs
+      YOURNALING_DB_NAME: yournaling
       YOURNALING_DB_PASSWORD: ci_db_user_password
       YOURNALING_DB_PORT: 5432
       YOURNALING_DB_USERNAME: postgres-ci

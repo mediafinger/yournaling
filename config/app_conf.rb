@@ -83,13 +83,16 @@ class AppConf
   register :yournaling_version, default: env_and_version
 
   # Database setup
-  register :yournaling_db_host, default: "localhost", required: production_env
-  register :yournaling_db_name, default: "yournaling_#{environment}", required: production_env
-  register :yournaling_db_name_test, default: "yournaling_test"
-  register :yournaling_db_password, default: "", required: production_env
-  register :yournaling_db_port, default: 5432, required: production_env
+  register :yournaling_db_host, default: "localhost"
+  register :yournaling_db_name, default: "yournaling", required: production_env
+  register :yournaling_db_password, default: ""
+  register :yournaling_db_port, default: 5432
   register :yournaling_db_timeout_seconds, default: 5, required: production_env
-  register :yournaling_db_username, default: "postgres", required: production_env
+  register :yournaling_db_username, default: "postgres"
+  register :yournaling_db_url,
+    default: "postgres://#{yournaling_db_username}:#{yournaling_db_password}@" \
+             "#{yournaling_db_host}:#{yournaling_db_port}/#{yournaling_db_name}",
+    required: production_env
 
   # determines the size of the DB connection pool and the puma threads
   register :rails_max_threads, default: 6
