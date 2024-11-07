@@ -122,8 +122,8 @@ aliases:
 #
 # TODO - needs provisioning to work!
 #
-ssh:
-  user: rails
+# ssh:
+#   user: rails
 
 
 # Bridge fingerprinted assets, like JS and CSS, between versions to avoid
@@ -154,8 +154,7 @@ boot:
 accessories:
   postgres:
     image: postgres:17
-    host: 192.168.0.8 # use "private IP" ?!
-      # - 188.245.99.209
+    host: 188.245.99.209 # 192.168.0.8 # use "private IP" ?!
     # port: 5678
     # options:
     #   cpus: 2

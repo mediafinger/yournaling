@@ -20,9 +20,8 @@ RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y curl libjemalloc2 libvips postgresql-client && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
-ARG DB_HOST=192.168.0.8:5432
+ARG DB_HOST=188.245.99.209:5432
 ARG YOURNALING_DB_USERNAME
-ARG YOURNALING_DB_PASSWORD
 ARG YOURNALING_DB_NAME
 
 # Set production environment
