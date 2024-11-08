@@ -21,6 +21,7 @@ AllCops:
     - "**/node_modules/**/*"
     - "**/tmp/**/*"
     - "**/vendor/**/*"
+    - "config/app_conf.local.rb"
     - "config/environments/**/*" # generated files
     - "config/initializers/new_framework_defaults*" # generated files
     - "config/initializers/geocoder.rb" # generated file
