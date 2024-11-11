@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 # Read and set Ruby version
 ruby File.read(".ruby-version").strip.delete_prefix("ruby-")
 
-gem "rails", "~> 8.0.0.rc2"
+gem "rails", "~> 8.0.0"
 
 gem "action_policy", "~> 0.6" # Authorization solution based on pundit
 gem "active_storage_validations" # to validate the content type and size of a file (add ruby-vips for dimensions)
