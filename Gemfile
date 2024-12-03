@@ -21,7 +21,7 @@ gem "geocoder" # (reverse) geocode addresses and GPS coordinates
 gem "image_processing", "~> 1.12" # Use image_processing for image resizing in ActiveStorage variants
 gem "importmap-rails", "~> 2.0" # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
 # gem "logstasher" # better formatted JSON logs for Logstash
-gem "mission_control-jobs", "~> 0.3.1" # dashboard for SolidQueue jobs
+gem "mission_control-jobs", "~> 0.3" # dashboard for SolidQueue jobs
 # gem "pagy", "~> 5.10" # fast and lightweight pagination solution # TODO: require "pagy/extras/navs"
 gem "pg", "~> 1.1"
 gem "pg_search", "~> 2.3" # Use pg_search for full-text search in PostgreSQL
