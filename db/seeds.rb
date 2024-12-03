@@ -1,4 +1,22 @@
-exit unless Rails.env.development?
+if AppConf.is?(:environment, :production)
+  andy = User.new(email: "andy@mediafinger.com", password: "foobar1234", name: "Andy Finger", role: "admin")
+  User.create_with_history(record: andy, history_params: { team: Team.new(id: :none), user: User.new(id: :admin) })
+
+  van = Team.new(name: "RanTanVan")
+  Team.create_with_history(record: van, history_params: { team: van, user: User.new(id: :admin) })
+
+  van_owner = Member.new(user: andy, team: van, roles: %w[owner publisher])
+  Member.create_with_history(record: van_owner, history_params: { team: van, user: andy })
+
+  loc = Location.new(country_code: "es", address: "N-340, Km 79.3, 11380 Tarifa, Cádiz", lat: "36.0523", long: "-5.6487", name: "Tarifa - La Peña", url: "https://www.google.com/maps?q=36.0523,-5.6487", team: van)
+  Location.create_with_history(record: loc, history_params: { team: van, user: andy })
+
+  weblink = Weblink.new(name: "Yournaling", url: "www.yournaling.com", description: "Your Journaling", team: van)
+  Weblink.create_with_history(record: weblink, history_params: { team: van, user: andy })
+end
+
+# --------------------------------------
+
 exit unless AppConf.is?(:environment, :development)
 
 # delete all uploaded files
