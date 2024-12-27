@@ -22,6 +22,7 @@ gem "image_processing", "~> 1.12" # Use image_processing for image resizing in A
 gem "importmap-rails", "~> 2.0" # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
 # gem "logstasher" # better formatted JSON logs for Logstash
 gem "mission_control-jobs", "~> 1.0" # dashboard for SolidQueue jobs
+gem "net-smtp", github: "ruby/net-smtp" # FIXME: Explicitly fetching from Github due to a missing net-protocol dependency
 # gem "pagy", "~> 5.10" # fast and lightweight pagination solution # TODO: require "pagy/extras/navs"
 gem "pg", "~> 1.1"
 gem "pg_search", "~> 2.3" # Use pg_search for full-text search in PostgreSQL
