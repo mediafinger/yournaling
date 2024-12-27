@@ -23,10 +23,6 @@ Bundler.require(*Rails.groups)
 
 require "rack/requestid"
 
-# Ensure the Jobs Dashboard is only accessible to admins
-#
-MissionControl::Jobs.base_controller_class = "AdminController"
-
 module Yournaling
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
@@ -54,6 +50,11 @@ module Yournaling
     # Use a real queuing backend for Active Job (and separate queues per environment).
     config.active_job.queue_adapter = :solid_queue
     config.solid_queue.connects_to = { database: { writing: :queue } }
+
+    # Ensure the Jobs Dashboard is only accessible to admins
+    #
+    config.mission_control.jobs.base_controller_class = "AdminController"
+    config.mission_control.jobs.http_basic_auth_enabled = false
 
     # Middleware configuration:
 
