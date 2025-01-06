@@ -15,10 +15,10 @@ jobs:
       - name: Checkout app repo
         uses: actions/checkout@v3
 
-      - name: Install newer libxml2
-        run: |
-          sudo apt-get update
-          sudo apt-get -y install libxml2
+      # - name: Install newer libxml2
+      #   run: |
+      #     sudo apt-get update
+      #     sudo apt-get -y install libxml2
 
       - name: Setup Ruby and install gems
         uses: ruby/setup-ruby@v1
@@ -71,10 +71,10 @@ jobs:
         run: |
           # cp config/secrets.yml config/secrets.yml
 
-      - name: Install newer libxml2
-        run: |
-          sudo apt-get update
-          sudo apt-get -y install libxml2
+      # - name: Install newer libxml2
+      #   run: |
+      #     sudo apt-get update
+      #     sudo apt-get -y install libxml2
 
       - name: Setup Ruby and install gems
         uses: ruby/setup-ruby@v1

@@ -48,9 +48,11 @@ if %w[development test].include? Rails.env
     #   WARNING: Nokogiri was built against libxml version 2.13.5, but has dynamically loaded 2.9.14
     # compare to: https://github.com/sparklemotion/nokogiri/issues/2419#issuecomment-1009614404
     #
+    # FIX: by telling GitHub Actions to use the bundled libxml2 version instead of the system one?!
+    #
     # maybe refactor to test view components https://viewcomponent.org/guide/testing.html
     #
-    # t.exclude_pattern = "**/{views}/**/*_spec.rb" if ENV["CI"].to_s == "true"
+    t.exclude_pattern = "**/{views}/**/*_spec.rb" if ENV["CI"].to_s == "true"
   end
 
   namespace :factory_bot do
