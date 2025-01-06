@@ -50,7 +50,7 @@ if %w[development test].include? Rails.env
     #
     # maybe refactor to test view components https://viewcomponent.org/guide/testing.html
     #
-    t.exclude_pattern = "**/{views}/**/*_spec.rb" if ENV["CI"].to_s == "true"
+    # t.exclude_pattern = "**/{views}/**/*_spec.rb" if ENV["CI"].to_s == "true"
   end
 
   namespace :factory_bot do
