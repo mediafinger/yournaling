@@ -44,6 +44,8 @@ if %w[development test].include? Rails.env
     # t.exclude_pattern = "**/{requests,blocknox}/**/*_spec.rb" # example, here how to skip integration specs
 
     # SKIPPING view specs on CI, as used nokogiri syntax is invalid when not run against bundle libxml2 ?!
+    # on GitHub Actions only:
+    #   WARNING: Nokogiri was built against libxml version 2.13.5, but has dynamically loaded 2.9.14
     # compare to: https://github.com/sparklemotion/nokogiri/issues/2419#issuecomment-1009614404
     #
     # maybe refactor to test view components https://viewcomponent.org/guide/testing.html
