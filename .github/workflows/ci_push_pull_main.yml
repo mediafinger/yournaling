@@ -23,7 +23,7 @@ jobs:
           BUNDLE_WITHOUT: development:staging:production
         with:
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-          cache-version: 2 # increment this number when you have to empty the cache manually
+          cache-version: 3 # increment this number when you have to empty the cache manually
 
   tests:
     name: Run specs
