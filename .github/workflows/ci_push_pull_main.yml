@@ -82,11 +82,17 @@ jobs:
           bundler-cache: true
           cache-version: 1
 
+      # - name: Install bundle for debugging
+      #   run: bundle install
+
+      # - name: Print PLATFORM name
+      #   run: bundle platform
+
       # TODO: install optional JPG, EXIF ... dependencies first?
       # https://github.com/libvips/libvips#optional-dependencies
       #
       - name: Install libvips
-        run:
+        run: |
           sudo apt-get install --fix-missing -qq -o Acquire::Retries=3 libvips
 
       - name: Setup DB
