@@ -54,11 +54,11 @@ module Admins
     private
 
     def create_params
-      params.require(:member).permit(:user_id, :team_id, roles: [])
+      params.expect(member: [:user_id, :team_id, { roles: [] }])
     end
 
     def update_params
-      params.require(:member).permit(roles: [])
+      params.expect(member: [roles: []])
     end
   end
 end

@@ -53,11 +53,11 @@ module Admins
 
     # Only allow a list of trusted parameters through.
     def create_params
-      params.require(:user).permit(:name, :email, :password)
+      params.expect(user: %i[name email password])
     end
 
     def update_params
-      params.require(:user).permit(:name, :nickname) # TODO: extract password & email update to extra endpoints
+      params.expect(user: %i[name nickname]) # TODO: extract password & email update to extra endpoints
     end
   end
 end

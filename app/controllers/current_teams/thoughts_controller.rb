@@ -71,7 +71,7 @@ module CurrentTeams
     private
 
     def thought_params
-      params.require(:thought).permit(:text, :date)
+      params.expect(thought: %i[text date])
     end
   end
 end

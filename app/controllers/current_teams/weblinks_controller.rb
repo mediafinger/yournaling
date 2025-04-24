@@ -72,7 +72,7 @@ module CurrentTeams
     private
 
     def weblink_params
-      params.require(:weblink).permit(:url, :name, :date, :description)
+      params.expect(weblink: %i[url name date description])
     end
   end
 end

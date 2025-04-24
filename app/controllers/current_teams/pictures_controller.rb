@@ -85,7 +85,7 @@ module CurrentTeams
 
     # switch to dry-validation / dry-contract
     def picture_params
-      params.require(:picture).permit(:file, :date, :name)
+      params.expect(picture: %i[file date name])
     end
   end
 end

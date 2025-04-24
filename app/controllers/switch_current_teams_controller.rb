@@ -36,6 +36,6 @@ class SwitchCurrentTeamsController < ApplicationController
   private
 
   def current_team_params
-    params.require(:current_team).permit(:team_id)
+    params.expect(current_team: [:team_id])
   end
 end
