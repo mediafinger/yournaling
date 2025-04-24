@@ -56,14 +56,14 @@ group :development, :test do
   gem "factory_bot_rails", "~> 6.2"
   gem "faker", "~> 3.2"
   gem "rspec-rails", "~> 7.0"
-  gem "rubocop-capybara", "~> 2.19", require: false
-  gem "rubocop-factory_bot", "~> 2.26", require: false
-  gem "rubocop-faker", "~> 1.1", require: false
-  gem "rubocop-performance", "~> 1.12", require: false
-  gem "rubocop-rails", "~> 2.21", require: false
-  gem "rubocop-rake", "~> 0.6", require: false
-  gem "rubocop-rspec", "~> 3.0", require: false
-  gem "rubocop-rspec_rails", "~> 2.30", require: false
+  gem "rubocop-capybara", "~> 2.19"
+  gem "rubocop-factory_bot", "~> 2.26"
+  gem "rubocop-faker", "~> 1.1"
+  gem "rubocop-performance", "~> 1.12"
+  gem "rubocop-rails", "~> 2.21"
+  gem "rubocop-rake", "~> 0.6"
+  gem "rubocop-rspec", "~> 3.0"
+  gem "rubocop-rspec_rails", "~> 2.30"
   gem "slim_lint"
 end
 
