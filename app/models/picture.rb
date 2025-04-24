@@ -1,6 +1,6 @@
 # type: Content
 #
-# file uploads are limited to images: content_type: %w[image/gif image/jpg image/webp image/png]
+# file uploads are limited to images: content_type: %w[image/gif image/jpeg image/webp image/png]
 # after conversion to webp the file has to be in the size of 150.kilobytes to 6.megabytes
 # two variants are created: thumbnail (max: 400x300) and megasize (max: 4000x3000)
 # ideally we would delete the original file after the variants are created, but I didn't find a working solution yet
@@ -12,7 +12,7 @@ class Picture < ApplicationRecordForContentAndPosts
 
   has_one_attached :file
 
-  ALLOWED_IMAGE_TYPES = %w[gif jpg jpeg png tiff webp].freeze
+  ALLOWED_IMAGE_TYPES = %w[gif jpeg png tiff webp].freeze
   ALLOWED_CONTENT_TYPES = ALLOWED_IMAGE_TYPES.map { |type| "image/#{type}" }.freeze
   MAX_BYTE_SIZE = 6.megabytes.freeze
   MIN_BYTE_SIZE = 150.kilobytes.freeze

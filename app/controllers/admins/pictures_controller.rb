@@ -71,7 +71,7 @@ module Admins
 
     # switch to dry-validation / dry-contract
     def picture_params
-      params.require(:picture).permit(:file, :date, :name, :team_id)
+      params.expect(picture: %i[file date name team_id])
     end
   end
 end

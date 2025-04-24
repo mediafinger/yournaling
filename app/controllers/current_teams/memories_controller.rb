@@ -62,11 +62,11 @@ module CurrentTeams
     private
 
     def create_params
-      params.require(:memory).permit(:team_id, :memo, :picture_id, :location_id, :weblink_id)
+      params.expect(memory: %i[team_id memo picture_id location_id weblink_id])
     end
 
     def update_params
-      params.require(:memory).permit(:memo, :picture_id, :location_id, :weblink_id)
+      params.expect(memory: %i[memo picture_id location_id weblink_id])
     end
   end
 end

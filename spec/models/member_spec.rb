@@ -17,7 +17,7 @@ RSpec.describe Member, type: :model do
     let(:valid_role)   { Member::VALID_ROLES.sample }
     let(:invalid_role) { "thief" }
 
-    Member::VALID_ROLES.each { |role| include_examples("has_role?", role) }
+    Member::VALID_ROLES.each { |role| it_behaves_like("has_role?", role) }
 
     describe "#add_role" do
       it "returns self" do
