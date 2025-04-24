@@ -1,10 +1,18 @@
 # production:
 #   periodic_cleanup:
-#     class: CleanSoftDeletedRecordsJob
+#     class: CleanArchivedRecordsJob
 #     queue: background
 #     args: [ 1000, { batch_size: 500 } ]
 #     schedule: every hour
 #   periodic_command:
-#     command: "SoftDeletedRecord.due.delete_all"
+#     command: "ArchivedRecord.due.delete_all"
 #     priority: 2
 #     schedule: at 5am every day
+
+development:
+  cleanup_archived_records:
+    class: Recurring::CleanupArchivedRecordsJob
+    # command: "Recurring::CleanupArchivedRecordsService.call"
+    queue: default
+    # args: [ klasses: ["Posts"] ]
+    schedule: every minute # day at 3am
