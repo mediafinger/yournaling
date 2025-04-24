@@ -1,4 +1,4 @@
-require:
+plugins:
   - rubocop-capybara
   - rubocop-rails
   - rubocop-rspec
@@ -103,6 +103,10 @@ Metrics:
 Naming/MethodParameterName:
   Exclude:
     - "**/spec/**/*"
+
+Naming/VariableName:
+  Exclude:
+    - '**/*_swagger_spec.rb'
 
 Naming/VariableNumber:
   Enabled: false
@@ -217,10 +221,6 @@ RSpec/SpecFilePathFormat:
 
 RSpecRails/TravelAround:
   Enabled: false
-
-RSpec/VariableName:
-  Exclude:
-    - '**/*_swagger_spec.rb'
 
 Style/AsciiComments:
   Enabled: false
