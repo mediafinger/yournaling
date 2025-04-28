@@ -15,6 +15,9 @@ Rails.application.configure do
                                     :test
                                   end
 
+  # set host to enable url_for method in AuthorizeBlobsController
+  config.active_storage.host = [AppConf.yournaling_host, AppConf.yournaling_port.presence].compact.join(":")
+
   # Avoid expensive external existence checks
   config.active_storage.track_variants = true
 
