@@ -21,6 +21,7 @@ gem "geocoder" # (reverse) geocode addresses and GPS coordinates
 gem "image_processing", "~> 1.12" # Use image_processing for image resizing in ActiveStorage variants
 gem "importmap-rails", "~> 2.0" # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
 # gem "logstasher" # better formatted JSON logs for Logstash
+gem "kamal", require: false # Deploy this application anywhere as a Docker container [https://kamal-deploy.org]
 gem "mission_control-jobs", "~> 1.0" # dashboard for SolidQueue jobs
 gem "net-smtp", github: "ruby/net-smtp" # FIXME: Explicitly fetching from Github due to a missing net-protocol dependency
 # gem "pagy", "~> 5.10" # fast and lightweight pagination solution # TODO: require "pagy/extras/navs"
@@ -38,6 +39,7 @@ gem "solid_cache", "~> 1.0"
 gem "solid_queue", "~> 1.0"
 gem "sqlite3" # Use sqlite3 as the database for solid_cache, solid_cable, solid_queue
 gem "stimulus-rails" # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
+gem "thruster", require: false # Add HTTP asset caching/compression and X-Sendfile acceleration to Puma [https://github.com/basecamp/thruster/]
 gem "turbo-rails" # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
 gem "view_component" # Use view_component for reusable view components [https://viewcomponent.org]
 

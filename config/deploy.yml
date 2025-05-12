@@ -1,0 +1,194 @@
+# Name of your application. Used to uniquely configure containers.
+service: yournaling
+
+# Name of the container image.
+image: mediafinger/yournaling
+
+# Deploy to these servers.
+#
+# TODO
+#
+servers:
+  web:
+    hosts:
+      - 188.245.99.209
+    options:
+      cpus: 2
+      memory: 2g
+      memory-swap: 3g # memory + swap memory
+    # cmd: bin/rails server # done by Docker
+    logging:
+      driver: local
+      options:
+        max-size: 10M
+        max-file: 10
+  job:
+    hosts:
+      - 188.245.99.209
+    options:
+      cpus: 1.8
+      memory: 1g
+      memory-swap: 1.5g # memory + swap memory
+    cmd: bin/jobs
+    logging:
+      driver: local
+      options:
+        max-size: 10M
+        max-file: 10
+
+# Enable SSL auto certification via Let's Encrypt and allow for multiple apps on a single web server.
+# Remove this section when using multiple web servers and ensure you terminate SSL at your load balancer.
+#
+# Note: If using Cloudflare, set encryption mode in SSL/TLS setting to "Full" to enable CF-to-app encryption.
+proxy:
+  ssl: true
+  host: yournaling.com # TODO: parameterize this!
+  app_port: 3000 # Proxy connects to your container on port 80 by default.
+  response_timeout: 240 # s
+
+
+# Credentials for your docker image host.
+#
+registry:
+  server: ghcr.io
+  username:
+    - KAMAL_REGISTRY_USERNAME
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+
+# Configure builder setup.
+builder:
+  arch: amd64 # TODO: intel-server or ARM64-macbook ?
+  args:
+    RUBY_VERSION: 3.3.6
+  cache:
+    type: registry
+    image: ghcr.io/mediafinger/yournaling/build-cache
+    options: mode=max,oci-mediatypes=true
+
+  # # Build image via remote server (useful for faster amd64 builds on arm64 computers)
+  # remote: ssh://docker@docker-builder-server
+  #
+  # # Pass arguments and secrets to the Docker build process
+  # args:
+  #   RUBY_VERSION: ruby-3.3.6
+  # secrets:
+  #   - GITHUB_TOKEN
+  #   - RAILS_MASTER_KEY
+
+# Inject ENV variables into containers (secrets come from .kamal/secrets).
+#
+# TODO
+#
+env:
+  clear:
+    # Match this to any external database server to configure Active Record correctly
+    # Use yournaling-db for a db accessory server on same machine via local kamal docker network.
+    DB_HOST: 192.168.0.8
+
+    # Run the Solid Queue Supervisor inside the web server's Puma process to do jobs.
+    # When you start using multiple servers, you should split out job processing to a dedicated machine.
+    SOLID_QUEUE_IN_PUMA: false
+
+    # Set number of processes dedicated to Solid Queue (default: 1)
+    JOB_CONCURRENCY: 2
+
+    # Set number of cores available to the application on each server (default: 1).
+    WEB_CONCURRENCY: 2
+
+    RAILS_LOG_LEVEL: debug
+    RAILS_SERVE_STATIC_FILES: true
+    RAILS_LOG_TO_STDOUT: true
+
+  secret:
+    - GEOAPIFY_API_KEY
+    - RAILS_MASTER_KEY
+    - POSTGRES_DB
+    - POSTGRES_PASSWORD
+    - POSTGRES_USER
+
+# Aliases are triggered with "bin/kamal <alias>". You can overwrite arguments on invocation:
+# "bin/kamal logs -r job" will tail logs from the first server in the job section.
+#
+aliases:
+  console: app exec --interactive --reuse "bin/rails console"
+  shell: app exec --interactive --reuse "bash"
+  logs: app logs -f
+  dbc: app exec --interactive --reuse "bin/rails dbconsole"
+
+
+# Use a different ssh user than root
+#
+# TODO - needs provisioning to work!
+#
+# ssh:
+#   user: rails
+
+
+# Bridge fingerprinted assets, like JS and CSS, between versions to avoid
+# hitting 404 on in-flight requests. Combines all files from new and old
+# version inside the asset_path.
+#
+asset_path: /app/public/assets
+
+
+# more config
+#
+allow_empty_roles: false
+# primary_role: web # default
+require_destination: false # when true forces to set flag, e.g.: -d production
+
+
+# Configure rolling deploys by setting a wait time between batches of restarts.
+#
+boot:
+  limit: 10 # Can also specify as a percentage of total hosts, such as "25%"
+  wait: 2
+
+
+# Use accessory services (secrets come from .kamal/secrets).
+#
+# TODO
+#
+accessories:
+  postgres:
+    image: postgres:17
+    host: 188.245.99.209 # 192.168.0.8 # use "private IP" ?!
+    # port: 5678
+    # options:
+    #   cpus: 2
+    #   memory: 1g
+    env:
+      clear:
+        POSTGRES_DB: POSTGRES_DB
+        POSTGRES_USER: POSTGRES_USER
+      secret:
+        - POSTGRES_PASSWORD
+    # files:
+      # - config/postgres_production.conf:/etc/postgresql/postgresql.conf
+      # - config/init.sql:/docker-entrypoint-initdb.d/setup.sql # e.g.: CREATE DATABASE myservice_production;
+    directories:
+      - /data/postgres:/var/lib/postgresql/data
+  # postgres-backups: # TODO
+    # image: eeshugerman/postgres-backup-s3:15
+
+# Aliases are triggered with "bin/kamal <alias>". You can overwrite arguments on invocation:
+# "bin/kamal logs -r job" will tail logs from the first server in the job section.
+aliases:
+  console: app exec --interactive --reuse "bin/rails console"
+  shell: app exec --interactive --reuse "bash"
+  logs: app logs -f
+  dbc: app exec --interactive --reuse "bin/rails dbconsole"
+
+
+# Use a persistent storage volume for sqlite database files and local Active Storage files.
+# Recommended to change this to a mounted volume path that is backed up off server.
+volumes:
+  - "/data/storage:/app/storage" # default is rails/ instead of app/
+
+
+# Bridge fingerprinted assets, like JS and CSS, between versions to avoid
+# hitting 404 on in-flight requests. Combines all files from new and old
+# version inside the asset_path.
+asset_path: /app/public/assets
