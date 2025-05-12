@@ -55,7 +55,7 @@ group :development, :test do
   gem "factory_bot-awesome_linter", "~> 1.0"
   gem "factory_bot_rails", "~> 6.2"
   gem "faker", "~> 3.2"
-  gem "rspec-rails", "~> 7.0"
+  gem "rspec-rails", "~> 8.0"
   gem "rubocop-capybara", "~> 2.19"
   gem "rubocop-factory_bot", "~> 2.26"
   gem "rubocop-faker", "~> 1.1"
