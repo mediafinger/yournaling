@@ -55,6 +55,7 @@ group :development, :test do
   gem "factory_bot-awesome_linter", "~> 1.0"
   gem "factory_bot_rails", "~> 6.2"
   gem "faker", "~> 3.2"
+  # gem "kamal"
   gem "rspec-rails", "~> 8.0"
   gem "rubocop-capybara", "~> 2.19"
   gem "rubocop-factory_bot", "~> 2.26"
@@ -64,6 +65,9 @@ group :development, :test do
   gem "rubocop-rake", "~> 0.6"
   gem "rubocop-rspec", "~> 3.0"
   gem "rubocop-rspec_rails", "~> 2.30"
+  gem "ruby-lsp"
+  gem "ruby-lsp-rails", require: false
+  gem "ruby-lsp-rspec", require: false
   gem "slim_lint"
 end
 
