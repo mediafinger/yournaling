@@ -86,8 +86,9 @@ jobs:
       # https://github.com/libvips/libvips#optional-dependencies
       #
       - name: Install libvips
-        run:
-          sudo apt-get install --fix-missing -qq -o Acquire::Retries=3 libvips
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends libpoppler-glib8 libvips
 
       - name: Setup DB
         env:
@@ -95,6 +96,9 @@ jobs:
           POSTGRES_PORT: 5432
         run: |
           bundle exec rake db:drop db:create db:migrate
+
+        # psql -U postgres-ci -c "CREATE ROLE root WITH LOGIN CREATEDB;" || true
+        # bundle exec rake db:drop db:create db:migrate
 
       # this could be parallelized by running the individual jobs in different workflows
       - name: Run rake:ci
