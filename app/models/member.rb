@@ -76,10 +76,6 @@ class Member < ApplicationRecordForContentAndPosts
     self
   end
 
-  def name
-    user_name
-  end
-
   def user_name
     user.name
   end
