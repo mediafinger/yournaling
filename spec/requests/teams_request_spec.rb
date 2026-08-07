@@ -12,7 +12,7 @@
 
 RSpec.describe "/teams", type: :system do
   let(:user) { FactoryBot.create(:user) }
-  let(:name) { Faker::Sports::Football.unique.team }
+  let(:name) { Faker::Sports::Football.unique.team.ljust(7, " FC") }
 
   let(:valid_attributes) { { name: name } }
   let(:invalid_attributes) { { name: nil } }

@@ -4,21 +4,21 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 # Read and set Ruby version
 ruby File.read(".ruby-version").strip.delete_prefix("ruby-")
 
-gem "rails", "~> 8.0.1"
+gem "rails", "~> 8.1.3"
 
 gem "action_policy", "~> 0.6" # Authorization solution based on pundit
 gem "active_storage_validations" # to validate the content type and size of a file (add ruby-vips for dimensions)
 gem "bcrypt", "~> 3.1" # Use bcrypt for secure password hashing
 gem "bootsnap", require: false
 gem "chimera_http_client", "~> 1.6" # HTTP client based on Typhoeus / lib_curl
-gem "countries", "~> 7.0" # Lists of countries, their ISO codes, emoji flags and more
+gem "countries", "~> 8.1" # Lists of countries, their ISO codes, emoji flags and more
 gem "csv", require: false
 gem "dartsass-rails" # https://github.com/rails/cssbundling-rails?tab=readme-ov-file#installation
 gem "device_detector", "~> 1.1"
 gem "dry-validation", "~> 1.10" # Use dry-validation for validations [https://dry-rb.org/gems/dry-validation]
 # gem "exifr", "~> 1.3" # Read EXIF metadata from JPEG images
 gem "geocoder" # (reverse) geocode addresses and GPS coordinates
-gem "image_processing", "~> 1.12" # Use image_processing for image resizing in ActiveStorage variants
+gem "image_processing", "~> 2.0" # Use image_processing for image resizing in ActiveStorage variants
 gem "importmap-rails", "~> 2.0" # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
 # gem "logstasher" # better formatted JSON logs for Logstash
 gem "mission_control-jobs", "~> 1.0" # dashboard for SolidQueue jobs
@@ -31,8 +31,8 @@ gem "puma", "~> 8.0"
 gem "rack-requestid", "~> 0.2" # always set a request_id with this middleware
 gem "rack-timeout", "~> 0.6", require: "rack/timeout/base" # set a custom timeout in the middleware
 gem "ruby-vips" # Use ruby-vips for image processing with ActiveStorage, requires the vips library
-gem "slim-rails", "~> 3.6", require: ["slim", "slim/smart"] # Use slim 5.2 for HTML templates
-gem "solid_cable", "~> 3.0"
+gem "slim-rails", "~> 4.0", require: ["slim", "slim/smart"] # Use slim 5.2 for HTML templates
+gem "solid_cable", "~> 4.0"
 gem "solid_cache", "~> 1.0"
 gem "solid_queue", "~> 1.0"
 gem "sqlite3" # Use sqlite3 as the database for solid_cache, solid_cable, solid_queue
@@ -47,8 +47,8 @@ group :development do
 end
 
 group :development, :test do
-  gem "active_record_doctor", "~> 1.10", require: false
-  gem "amazing_print", "~> 1.4"
+  gem "active_record_doctor", "~> 2.0", require: false
+  gem "amazing_print", "~> 2.0"
   gem "bundler-audit", "~> 0.9"
   gem "capybara", "~> 3.19" # for headless browser tests
   gem "factory_bot-awesome_linter", "~> 1.0"
@@ -56,7 +56,7 @@ group :development, :test do
   gem "faker", "~> 3.2"
   gem "kamal"
   gem "rspec-rails", "~> 8.0"
-  gem "rubocop-capybara", "~> 2.19"
+  gem "rubocop-capybara", "~> 3.0"
   gem "rubocop-factory_bot", "~> 2.26"
   gem "rubocop-faker", "~> 1.1"
   gem "rubocop-performance", "~> 1.12"
