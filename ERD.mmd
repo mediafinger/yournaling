@@ -1,0 +1,184 @@
+erDiagram
+	direction TB
+	"ActiveStorage::Attachment" {
+		string name
+		string record_type
+	}
+	"ActiveStorage::Blob" {
+		integer byte_size
+		string checksum
+		string content_type
+		string filename
+		string key
+		text metadata
+		string service_name
+	}
+	"ActiveStorage::VariantRecord" {
+		string variation_digest
+	}
+	Location {
+		string address
+		string country_code
+		date date
+		string description
+		jsonb geocoded_address
+		decimal lat
+		decimal long
+		string name
+		text url
+		enum visibility
+	}
+	Login {
+		string device_id
+		string ip_address
+		text user_agent
+	}
+	Member {
+		text roles
+		enum visibility
+	}
+	Memory {
+		text memo
+		enum visibility
+	}
+	Picture {
+		date date
+		string name
+		enum visibility
+	}
+	RecordHistory {
+		boolean done_by_admin
+		string event
+		string record_id
+		string record_type
+		string team_id
+		string user_id
+	}
+	"SolidCable::Message" {
+		binary channel
+		integer channel_hash
+		binary payload
+	}
+	"SolidCache::Entry" {
+		integer byte_size
+		binary key
+		integer key_hash
+		binary value
+	}
+	"SolidQueue::BlockedExecution" {
+		string concurrency_key
+		datetime expires_at
+		integer priority
+		string queue_name
+	}
+	"SolidQueue::ClaimedExecution" {
+	}
+	"SolidQueue::FailedExecution" {
+		text error
+	}
+	"SolidQueue::Job" {
+		string active_job_id
+		text arguments
+		string class_name
+		string concurrency_key
+		datetime finished_at
+		integer priority
+		string queue_name
+		datetime scheduled_at
+	}
+	"SolidQueue::Pause" {
+		string queue_name
+	}
+	"SolidQueue::Process" {
+		string hostname
+		string kind
+		datetime last_heartbeat_at
+		text metadata
+		string name
+		integer pid
+	}
+	"SolidQueue::ReadyExecution" {
+		integer priority
+		string queue_name
+	}
+	"SolidQueue::RecurringExecution" {
+		datetime run_at
+	}
+	"SolidQueue::RecurringTask" {
+		text arguments
+		string class_name
+		string command
+		text description
+		string key
+		integer priority
+		string queue_name
+		string schedule
+		boolean static
+	}
+	"SolidQueue::ScheduledExecution" {
+		integer priority
+		string queue_name
+		datetime scheduled_at
+	}
+	"SolidQueue::Semaphore" {
+		datetime expires_at
+		integer value
+	}
+	Team {
+		string name
+		jsonb preferences
+	}
+	Thought {
+		date date
+		string name
+		text text
+		enum visibility
+	}
+	User {
+		string email
+		string name
+		string nickname
+		string password_digest
+		jsonb preferences
+		string role
+		text temp_auth_token
+	}
+	Weblink {
+		date date
+		text description
+		string name
+		json preview_snippet
+		text url
+		enum visibility
+	}
+	Record ||--|o "ActiveStorage::Attachment" : ""
+	"ActiveStorage::Blob" ||--|o "ActiveStorage::Attachment" : ""
+	"ActiveStorage::VariantRecord" ||--|o "ActiveStorage::Attachment" : ""
+	Picture ||--|o "ActiveStorage::Attachment" : ""
+	"ActiveStorage::Blob" ||--}o "ActiveStorage::Attachment" : ""
+	"ActiveStorage::Blob" ||--}o "ActiveStorage::VariantRecord" : ""
+	"ActiveStorage::Blob" o|..|o "ActiveStorage::Blob" : ""
+	Team ||--}o Location : ""
+	Location ||--}o Memory : ""
+	User ||--}o Login : ""
+	Team ||--}o Member : ""
+	User ||--}o Member : ""
+	Team ||--}o Memory : ""
+	Picture ||--}o Memory : ""
+	Thought ||--}o Memory : ""
+	Weblink ||--}o Memory : ""
+	Picture o|..|o "ActiveStorage::Blob" : ""
+	Team ||--}o Picture : ""
+	"SolidQueue::BlockedExecution" o|--|o "SolidQueue::Semaphore" : ""
+	"SolidQueue::Process" ||--}o "SolidQueue::ClaimedExecution" : ""
+	"SolidQueue::Job" o|--|o "SolidQueue::RecurringExecution" : ""
+	"SolidQueue::Job" o|--|o "SolidQueue::FailedExecution" : ""
+	"SolidQueue::Job" o|--|o "SolidQueue::ScheduledExecution" : ""
+	"SolidQueue::Job" o|--|o "SolidQueue::BlockedExecution" : ""
+	"SolidQueue::Job" o|--|o "SolidQueue::ReadyExecution" : ""
+	"SolidQueue::Job" o|--|o "SolidQueue::ClaimedExecution" : ""
+	"SolidQueue::Process" o|--}o "SolidQueue::Process" : ""
+	"SolidQueue::RecurringTask" o|--}o "SolidQueue::RecurringExecution" : ""
+	Team ||--}o Thought : ""
+	Team ||--}o Weblink : ""
+	Team o|..}o User : ""
