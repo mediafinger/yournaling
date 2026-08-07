@@ -26,7 +26,7 @@ gem "mission_control-jobs", "~> 1.0" # dashboard for SolidQueue jobs
 gem "pg", "~> 1.1"
 gem "pg_search", "~> 2.3" # Use pg_search for full-text search in PostgreSQL
 gem "propshaft" # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
-gem "puma", "~> 6.3"
+gem "puma", "~> 8.0"
 # gem "pundit", "~> 2.2" # Authorize actions by admin role
 gem "rack-requestid", "~> 0.2" # always set a request_id with this middleware
 gem "rack-timeout", "~> 0.6", require: "rack/timeout/base" # set a custom timeout in the middleware
@@ -54,7 +54,7 @@ group :development, :test do
   gem "factory_bot-awesome_linter", "~> 1.0"
   gem "factory_bot_rails", "~> 6.2"
   gem "faker", "~> 3.2"
-  # gem "kamal"
+  gem "kamal"
   gem "rspec-rails", "~> 8.0"
   gem "rubocop-capybara", "~> 2.19"
   gem "rubocop-factory_bot", "~> 2.26"

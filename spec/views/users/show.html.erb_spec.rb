@@ -7,7 +7,7 @@ RSpec.describe "users/show", type: :view do
 
   it "renders attributes in <p>" do
     render
-    expect(rendered).to match(/Name/)
-    expect(rendered).to match(/Email/)
+    expect(rendered).to include("Name")
+    expect(rendered).to include("Email")
   end
 end

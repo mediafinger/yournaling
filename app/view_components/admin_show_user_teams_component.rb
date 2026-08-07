@@ -18,8 +18,8 @@ class AdminShowUserTeamsComponent < ApplicationComponent
   end
 
   def before_render
-    @team_links = @user.teams.each_with_object({}) do |team, hash|
-      hash[team.id] = link_to(team.name, admin_team_path(team))
+    @team_links = @user.teams.to_h do |team|
+      [team.id, link_to(team.name, admin_team_path(team))]
     end
 
     @member_links = @user.teams.each_with_object({}) do |team, hash|

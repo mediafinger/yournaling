@@ -12,6 +12,6 @@ RSpec.describe "current_teams/memories/show", type: :view do
 
   it "renders attributes in <p>" do
     render
-    expect(rendered).to match(/Memo Text/)
+    expect(rendered).to include("Memo Text")
   end
 end
