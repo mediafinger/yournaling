@@ -45,7 +45,7 @@ class Memory < ApplicationRecordForContentAndPosts
         update_visibility_of_removed_insight(type)
 
         # update visibility of associated insight to the visibility of this memory
-        send(type).update(visibility:) if send(type).present?
+        send(type).presence&.update(visibility:)
       end
     end
   end

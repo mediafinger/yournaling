@@ -6,7 +6,7 @@ class LoginsController < ApplicationController
   end
 
   def destroy
-    @login = Login.find(params[:id])
+    @login = Login.find(params.expect(:id))
     authorize! @login
 
     @login.destroy!

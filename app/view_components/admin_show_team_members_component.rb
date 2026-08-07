@@ -21,8 +21,8 @@ class AdminShowTeamMembersComponent < ApplicationComponent
   end
 
   def before_render
-    @user_links = @team.members.each_with_object({}) do |member, hash|
-      hash[member.id] = link_to(member.user.name, admin_user_path(member.user))
+    @user_links = @team.members.to_h do |member|
+      [member.id, link_to(member.user.name, admin_user_path(member.user))]
     end
 
     @member_links = @team.members.each_with_object({}) do |member, hash|

@@ -50,8 +50,8 @@ class ApplicationRecordYidEnabled < ApplicationRecord
 
     # rubocop:disable Style/ClassVars
     def id_code_models
-      @@id_code_models ||= id_enabled_models.each_with_object({}) do |model, hash|
-        hash[model::YID_CODE] = model.name.constantize
+      @@id_code_models ||= id_enabled_models.to_h do |model|
+        [model::YID_CODE, model.name.constantize]
       end
     end
 

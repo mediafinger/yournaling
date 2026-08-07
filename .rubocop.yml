@@ -9,7 +9,7 @@ plugins:
   - rubocop-rake
 
 AllCops:
-  TargetRubyVersion: 3.4
+  TargetRubyVersion: 4.0
   DisplayCopNames: true
   NewCops: enable
   Exclude:
@@ -103,6 +103,11 @@ Metrics:
 Naming/MethodParameterName:
   Exclude:
     - "**/spec/**/*"
+
+Naming/PredicateMethod:
+  Exclude:
+    - config/app_conf.rb
+    - app/controllers/concerns/team_scope.rb
 
 Naming/VariableName:
   Exclude:

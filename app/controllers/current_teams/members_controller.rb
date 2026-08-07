@@ -66,7 +66,7 @@ module CurrentTeams
     end
 
     def update_params
-      params.expect(member: [roles: []])
+      params.expect(member: [{ roles: [] }])
     end
   end
 end

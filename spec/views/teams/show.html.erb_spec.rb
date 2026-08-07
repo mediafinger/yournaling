@@ -7,6 +7,6 @@ RSpec.describe "teams/show", type: :view do
 
   it "renders attributes in <p>" do
     render
-    expect(rendered).to match(/The Name/)
+    expect(rendered).to include("The Name")
   end
 end

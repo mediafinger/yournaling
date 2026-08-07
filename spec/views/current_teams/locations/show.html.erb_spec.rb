@@ -21,9 +21,9 @@ RSpec.describe "current_teams/locations/show", type: :view do
 
   it "renders attributes in <p>" do
     render
-    expect(rendered).to match(/Flat in Carrer Ferlandina/)
-    expect(rendered).to match(/Spain/)
-    expect(rendered).to match(/{}/)
+    expect(rendered).to include("Flat in Carrer Ferlandina")
+    expect(rendered).to include("Spain")
+    expect(rendered).to include("{}")
     expect(rendered).to match(/#{lat}/)
     expect(rendered).to match(/#{long}/)
     expect(rendered).to match(%r{https://www.google.com/maps/place/41.3819253,2.1656894})
