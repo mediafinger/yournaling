@@ -31,8 +31,9 @@ AllCops:
 
 ################ When adding a new rule, please keep the list in alphabetical order ################
 
-Capybara/ClickLinkOrButtonStyle:
-  Enabled: false
+# Gone from 3.x to 4.0 of the rubocop-capybara plugin
+# Capybara/ClickLinkOrButtonStyle:
+#   Enabled: false
 
 FactoryBot/CreateList:
   Enabled: false

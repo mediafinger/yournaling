@@ -6,6 +6,7 @@ ActiveRecordDoctor.configure do
     schema_migrations
     active_storage_blobs
     active_storage_attachments
+    active_storage_variant_records
     action_text_rich_texts
     pg_search_documents
     solid_cable_messages
@@ -65,10 +66,10 @@ ActiveRecordDoctor.configure do
     User.temp_auth_token
   ] # for some reason DB Doctor complains about a (non) existing validation on User.temp_auth_token column?!
 
-  detector :missing_foreign_keys, ignore_columns: %w[
-    logins.device_id
-    record_histories.team_id
-    record_histories.user_id
+  detector :missing_foreign_keys, ignore_associations: %w[
+    Login.device
+    RecordHistory.team
+    RecordHistory.user
   ]
 
   detector :missing_non_null_constraint, ignore_columns: %w[]
