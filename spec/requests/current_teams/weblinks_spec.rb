@@ -13,6 +13,8 @@ require "rails_helper"
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
 RSpec.describe "/current_team/weblinks", type: :request do
+  let!(:member) { Member.create!(team: team, user: user, roles: Array(roles.sample)) }
+
   let(:team) { FactoryBot.create(:team) }
   let(:user) { FactoryBot.create(:user) }
   let(:roles) { %i[owner manager editor] }
@@ -21,7 +23,6 @@ RSpec.describe "/current_team/weblinks", type: :request do
   let(:invalid_attributes) { { name: nil } }
 
   before do
-    Member.create!(team: team, user: user, roles: Array(roles.sample))
     sign_in(user)
     switch_current_team(team)
   end
@@ -86,19 +87,26 @@ RSpec.describe "/current_team/weblinks", type: :request do
         expect(response).to have_http_status(:unprocessable_content)
       end
     end
+
+    context "when member has unauthorized role (publisher)" do
+      before { member.update!(roles: %w[publisher]) }
+
+      it "forbids creating a weblink with 403 Forbidden" do
+        post current_team_weblinks_url, params: { weblink: valid_attributes }
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
   end
 
   describe "PATCH /update" do
     context "with valid parameters" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
+      let(:new_attributes) { { name: "Updated Yournaling Link" } }
 
       it "updates the requested weblink" do
         weblink = Weblink.create! valid_attributes
         patch current_team_weblink_url(weblink), params: { weblink: new_attributes }
         weblink.reload
-        skip("Add assertions for updated state")
+        expect(weblink.name).to eq("Updated Yournaling Link")
       end
 
       it "redirects to the weblink" do
@@ -114,6 +122,17 @@ RSpec.describe "/current_team/weblinks", type: :request do
         weblink = Weblink.create! valid_attributes
         patch current_team_weblink_url(weblink), params: { weblink: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_content)
+      end
+    end
+
+    context "when member has unauthorized role (publisher)" do
+      before { member.update!(roles: %w[publisher]) }
+
+      it "forbids updating a weblink with 403 Forbidden" do
+        weblink = Weblink.create! valid_attributes
+        patch current_team_weblink_url(weblink), params: { weblink: valid_attributes }
+
+        expect(response).to have_http_status(:forbidden)
       end
     end
   end
@@ -132,6 +151,17 @@ RSpec.describe "/current_team/weblinks", type: :request do
       weblink = Weblink.create! valid_attributes
       delete current_team_weblink_url(weblink)
       expect(response).to redirect_to(current_team_weblinks_url)
+    end
+
+    context "when member has unauthorized role (editor)" do
+      before { member.update!(roles: %w[editor]) }
+
+      it "forbids deleting a weblink with 403 Forbidden" do
+        weblink = Weblink.create! valid_attributes
+        delete current_team_weblink_url(weblink)
+
+        expect(response).to have_http_status(:forbidden)
+      end
     end
   end
 end

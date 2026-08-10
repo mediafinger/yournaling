@@ -11,6 +11,8 @@
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
 RSpec.describe "/current_team/locations", type: :request do
+  let!(:member) { Member.create!(team: team, user: user, roles: Array(roles.sample)) }
+
   let(:team) { FactoryBot.create(:team) }
   let(:user) { FactoryBot.create(:user) }
   let(:roles) { %i[owner manager editor] }
@@ -19,7 +21,6 @@ RSpec.describe "/current_team/locations", type: :request do
   let(:invalid_attributes) { { name: nil } }
 
   before do
-    Member.create!(team: team, user: user, roles: Array(roles.sample))
     sign_in(user)
     switch_current_team(team)
   end
@@ -88,6 +89,15 @@ RSpec.describe "/current_team/locations", type: :request do
         expect(response).to have_http_status(:unprocessable_content)
       end
     end
+
+    context "when member has unauthorized role (publisher)" do
+      before { member.update!(roles: %w[publisher]) }
+
+      it "forbids creating a location with 403 Forbidden" do
+        post current_team_locations_url, params: { location: valid_attributes }
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
   end
 
   describe "PATCH /update" do
@@ -114,17 +124,31 @@ RSpec.describe "/current_team/locations", type: :request do
     end
 
     context "with invalid parameters" do
+      let(:new_attributes) { { url: "www.rantanvan.com" } }
+
       it "renders a response with 422 status (i.e. to display the 'edit' template)" do
         location = Location.create! valid_attributes
         patch current_team_location_url(location), params: { location: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_content)
       end
     end
+
+    context "when member has unauthorized role (publisher)" do
+      let(:new_attributes) { { url: "www.rantanvan.com" } }
+
+      before { member.update!(roles: %w[publisher]) }
+
+      it "forbids updating a location with 403 Forbidden" do
+        location = Location.create! valid_attributes
+        patch current_team_location_url(location), params: { location: new_attributes }
+
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
   end
 
   describe "DELETE /destroy" do
     let(:roles) { %i[owner manager] }
-
     let!(:location) { Location.create! valid_attributes }
 
     it "destroys the requested location" do
@@ -137,6 +161,16 @@ RSpec.describe "/current_team/locations", type: :request do
       delete current_team_location_url(location)
 
       expect(response).to redirect_to(current_team_locations_url)
+    end
+
+    context "when member has unauthorized role (editor)" do
+      before { member.update!(roles: %w[editor]) }
+
+      it "forbids deleting a location with 403 Forbidden" do
+        delete current_team_location_url(location)
+
+        expect(response).to have_http_status(:forbidden)
+      end
     end
   end
 end

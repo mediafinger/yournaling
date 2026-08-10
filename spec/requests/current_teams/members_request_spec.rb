@@ -124,6 +124,16 @@ RSpec.describe "/current_team/members", type: :request do
         expect(response).to have_http_status(:unprocessable_content)
       end
     end
+
+    context "when user has unauthorized role (manager)" do
+      before { member.update!(roles: %w[manager]) }
+
+      it "forbids creating a member with 403 Forbidden" do
+        post current_team_members_url, params: { member: valid_create_attributes }
+
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
   end
 
   describe "PATCH /update" do
@@ -162,6 +172,16 @@ RSpec.describe "/current_team/members", type: :request do
         expect(response).to have_http_status(:unprocessable_content)
       end
     end
+
+    context "when user has unauthorized role (manager)" do
+      before { member.update!(roles: %w[manager]) }
+
+      it "forbids updating another member with 403 Forbidden" do
+        patch current_team_member_url(other_member.urlsafe_id), params: { member: new_attributes }
+
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
   end
 
   describe "DELETE /destroy" do
@@ -181,6 +201,19 @@ RSpec.describe "/current_team/members", type: :request do
     it "redirects to the members list" do
       delete current_team_member_url(member.urlsafe_id)
       expect(response).to redirect_to(current_team_members_url)
+    end
+
+    context "when user has unauthorized role (editor) trying to delete another member" do
+      let!(:other_user) { FactoryBot.create(:user) }
+      let!(:target_member) { FactoryBot.create(:member, team: team, user: other_user, roles: %w[editor]) }
+
+      before { member.update!(roles: %w[editor]) }
+
+      it "forbids deleting another member with 403 Forbidden" do
+        delete current_team_member_url(target_member.urlsafe_id)
+
+        expect(response).to have_http_status(:forbidden)
+      end
     end
   end
 end

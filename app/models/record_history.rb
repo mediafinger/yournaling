@@ -23,15 +23,17 @@ class RecordHistory < ApplicationRecord
     created_at.present?
   end
 
-  def get_history_for_team_record(team:, record:)
-    where(team_id: team.id, record_type: record.class::YID_CODE, record_id: record.id)
-  end
+  class << self
+    def get_history_for_team_record(team:, record:)
+      where(team_id: team.id, record_type: record.class::YID_CODE, record_id: record.id)
+    end
 
-  def get_history_for_team_events(event:, record_type_id_code:, team:)
-    where(event:, record_type: record_type_id_code, team_id: team.id)
-  end
+    def get_history_for_team_events(event:, record_type_id_code:, team:)
+      where(event:, record_type: record_type_id_code, team_id: team.id)
+    end
 
-  def get_history_for_user_events(event:, record_type_id_code:, user:)
-    where(event:, record_type: record_type_id_code, user_id: user.id)
+    def get_history_for_user_events(event:, record_type_id_code:, user:)
+      where(event:, record_type: record_type_id_code, user_id: user.id)
+    end
   end
 end

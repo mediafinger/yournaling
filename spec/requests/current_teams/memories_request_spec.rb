@@ -11,6 +11,8 @@
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
 RSpec.describe "/current_team/memories", type: :request do
+  let!(:member) { Member.create!(team: team, user: user, roles: Array(roles.sample)) }
+
   let(:user) { FactoryBot.create(:user) }
   let(:team) { FactoryBot.create(:team) }
   let(:weblink) { FactoryBot.create(:weblink, team:) }
@@ -20,7 +22,6 @@ RSpec.describe "/current_team/memories", type: :request do
   let(:invalid_attributes) { { team_id: team.id, memo: "." } }
 
   before do
-    Member.create!(team: team, user: user, roles: Array(roles.sample))
     sign_in(user)
     switch_current_team(team)
   end
@@ -99,6 +100,16 @@ RSpec.describe "/current_team/memories", type: :request do
         expect(response).to have_http_status(:unprocessable_content)
       end
     end
+
+    context "when member has unauthorized role (publisher)" do
+      before { member.update!(roles: %w[publisher]) }
+
+      it "forbids creating a memory with 403 Forbidden" do
+        post current_team_memories_url, params: { memory: valid_attributes }
+
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
   end
 
   describe "PATCH /update" do
@@ -129,7 +140,22 @@ RSpec.describe "/current_team/memories", type: :request do
       it "renders a response with 422 status (i.e. to display the 'edit' template)" do
         memory = Memory.create! valid_attributes
         patch current_team_memory_url(memory), params: { memory: invalid_attributes }
+
         expect(response).to have_http_status(:unprocessable_content)
+      end
+    end
+
+    context "when member has unauthorized role (publisher)" do
+      let(:location) { FactoryBot.create(:location, team: team) }
+      let(:new_attributes) { { location_id: location.id } }
+
+      before { member.update!(roles: %w[publisher]) }
+
+      it "forbids updating a memory with 403 Forbidden" do
+        memory = Memory.create! valid_attributes
+        patch current_team_memory_url(memory), params: { memory: new_attributes }
+
+        expect(response).to have_http_status(:forbidden)
       end
     end
   end
@@ -149,6 +175,16 @@ RSpec.describe "/current_team/memories", type: :request do
       delete current_team_memory_url(memory)
 
       expect(response).to redirect_to(current_team_memories_url)
+    end
+
+    context "when member has unauthorized role (editor)" do
+      before { member.update!(roles: %w[editor]) }
+
+      it "forbids deleting a memory with 403 Forbidden" do
+        delete current_team_memory_url(memory)
+
+        expect(response).to have_http_status(:forbidden)
+      end
     end
   end
 end

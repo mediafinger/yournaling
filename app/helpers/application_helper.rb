@@ -12,7 +12,7 @@ module ApplicationHelper
 
   def render_svg(svg_name, options = {})
     svg = Rails.application.assets.load_path.find("#{svg_name}.svg")&.content
-    raise ArgumentError.new("SVG image file does not exist: #{svg_name}") if Rails.env.local && svg.blank?
+    raise ArgumentError.new("SVG image file does not exist: #{svg_name}") if Rails.env.local? && svg.blank?
 
     klazz  = options[:class] if options&.key?(:class)
     style  = options[:style] if options&.key?(:style)

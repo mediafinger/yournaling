@@ -11,6 +11,8 @@
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
 RSpec.describe "/current_team/pictures", type: :request do
+  let!(:member) { Member.create!(team: team, user: user, roles: Array(roles.sample)) }
+
   let(:file_content_type) { "image/jpeg" }
   let(:file_path) { "spec/support/macbookair_stickered.jpg" }
   let(:file) { Rack::Test::UploadedFile.new(file_path, file_content_type) }
@@ -23,7 +25,6 @@ RSpec.describe "/current_team/pictures", type: :request do
   let(:invalid_attributes) { { file: nil, date: Time.zone.today, name: nil, team: team } }
 
   before do
-    Member.create!(team: team, user: user, roles: Array(roles.sample))
     sign_in(user)
     switch_current_team(team)
   end
@@ -103,6 +104,15 @@ RSpec.describe "/current_team/pictures", type: :request do
         expect(response).to have_http_status(:unprocessable_content)
       end
     end
+
+    context "when member has unauthorized role (publisher)" do
+      before { member.update!(roles: %w[publisher]) }
+
+      it "forbids creating a picture with 403 Forbidden" do
+        post current_team_pictures_url, params: { picture: valid_attributes }
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
   end
 
   describe "PATCH /update" do
@@ -126,6 +136,17 @@ RSpec.describe "/current_team/pictures", type: :request do
         patch current_team_picture_url(picture.urlsafe_id), params: { picture: invalid_attributes }
 
         expect(response).to have_http_status(:unprocessable_content)
+      end
+    end
+
+    context "when member has unauthorized role (publisher)" do
+      let(:new_attributes) { { name: "New Name" } }
+
+      before { member.update!(roles: %w[publisher]) }
+
+      it "forbids updating a picture with 403 Forbidden" do
+        patch current_team_picture_url(picture.urlsafe_id), params: { picture: new_attributes }
+        expect(response).to have_http_status(:forbidden)
       end
     end
   end
@@ -158,6 +179,15 @@ RSpec.describe "/current_team/pictures", type: :request do
       expect(history.record_id).to eq(picture.id)
       expect(history.team_id).to eq(team.id)
       expect(history.user_id).to eq(user.id)
+    end
+
+    context "when member has unauthorized role (editor)" do
+      before { member.update!(roles: %w[editor]) }
+
+      it "forbids deleting a picture with 403 Forbidden" do
+        delete current_team_picture_url(picture.urlsafe_id)
+        expect(response).to have_http_status(:forbidden)
+      end
     end
   end
 end

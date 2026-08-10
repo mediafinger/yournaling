@@ -12,7 +12,7 @@ RSpec.describe "current_teams/weblinks/show", type: :view do
   it "renders attributes in <p>" do
     render
 
-    expect(rendered).to match(/#{weblink.name}/)
+    expect(rendered).to match(/#{CGI.escapeHTML(weblink.name)}/)
     expect(rendered).to have_link(weblink.url, href: weblink.url)
   end
 end

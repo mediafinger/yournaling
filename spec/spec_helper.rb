@@ -33,7 +33,7 @@ RSpec.configure do |config|
     page.driver.header "User-Agent", "Rails System Test"
   end
 
-  config.after(:all) do
+  config.after(:suite) do
     FileUtils.rm_rf(Dir[Rails.root.join("tmp/storage_test/")])
   end
 
