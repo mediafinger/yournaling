@@ -18,6 +18,9 @@ Rails.application.configure do
   # Avoid expensive external existence checks
   config.active_storage.track_variants = true
 
-  # Resize images using vips, aternative is :mini_magick
+  # Resize images using vips, alternative is :mini_magick
   config.active_storage.variant_processor = :vips
+
+  # Proxy files and variants through the application for authenticated delivery
+  config.active_storage.resolve_model_to_route = :rails_storage_proxy
 end

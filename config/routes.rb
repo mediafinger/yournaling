@@ -20,6 +20,11 @@ Rails.application.routes.draw do
     get "/pictures_only/:id", to: "pictures_only#show", as: "picture_only"
   end
 
+  scope ActiveStorage.routes_prefix do
+    get "/blobs/proxy/:signed_id/*filename" => "active_storage/authorized_blobs#show"
+    get "/representations/proxy/:signed_blob_id/:variation_key/*filename" => "active_storage/authorized_representations#show"
+  end
+
   namespace :current_team, module: :current_teams do
     get "", to: "pages#show", as: "home"
 
