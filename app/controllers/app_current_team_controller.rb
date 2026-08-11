@@ -9,16 +9,16 @@ class AppCurrentTeamController < ApplicationController
     relation.where(team: current_team)
   end
 
-  def create_with_history(record:, history_params: { team: current_team, user: current_user })
-    ApplicationRecordYidEnabled.create_with_history(record:, history_params:)
+  def create_with_event(record:, event_params: { team: current_team, user: current_user })
+    ApplicationRecordYidEnabled.create_with_event(record:, event_params:)
   end
 
-  def update_with_history(record:, history_params: { team: current_team, user: current_user })
-    ApplicationRecordYidEnabled.update_with_history(record:, history_params:)
+  def update_with_event(record:, event_params: { team: current_team, user: current_user })
+    ApplicationRecordYidEnabled.update_with_event(record:, event_params:)
   end
 
-  def destroy_with_history(record:, history_params: { team: current_team, user: current_user })
-    ApplicationRecordYidEnabled.destroy_with_history(record:, history_params:)
+  def destroy_with_event(record:, event_params: { team: current_team, user: current_user })
+    ApplicationRecordYidEnabled.destroy_with_event(record:, event_params:)
   end
 
   def authenticate_member!

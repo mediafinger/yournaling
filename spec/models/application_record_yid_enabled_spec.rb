@@ -74,4 +74,38 @@ RSpec.describe ApplicationRecordYidEnabled, type: :model do
       expect(mapping["member"]).to eq(Member)
     end
   end
+
+  describe "event lifecycle methods" do
+    let(:user) { FactoryBot.create(:user) }
+
+    it "creates record and emits created event via .create_with_event" do
+      new_thought = Thought.new(team: team, text: "A fresh thought")
+      expect {
+        Thought.create_with_event(record: new_thought, event_params: { team: team, user: user })
+      }.to change { Thought.count }.by(1).and change { RecordEvent.count }.by(1)
+
+      event = RecordEvent.last
+      expect(event.name).to eq("created")
+      expect(event.record_id).to eq(new_thought.id)
+    end
+
+    it "updates record and emits updated event via .update_with_event" do
+      thought.text = "Updated text"
+      expect {
+        Thought.update_with_event(record: thought, event_params: { team: team, user: user })
+      }.to change { RecordEvent.count }.by(1)
+
+      expect(thought.reload.text).to eq("Updated text")
+      expect(RecordEvent.last.name).to eq("updated")
+    end
+
+    it "destroys record and emits deleted event via .destroy_with_event" do
+      persisted_thought = FactoryBot.create(:thought, team: team)
+      expect {
+        Thought.destroy_with_event(record: persisted_thought, event_params: { team: team, user: user })
+      }.to change { Thought.count }.by(-1).and change { RecordEvent.count }.by(1)
+
+      expect(RecordEvent.last.name).to eq("deleted")
+    end
+  end
 end

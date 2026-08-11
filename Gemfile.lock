@@ -87,6 +87,11 @@ GEM
       uri (>= 0.13.1)
     addressable (2.9.0)
       public_suffix (>= 2.0.2, < 8.0)
+    ahoy_matey (5.5.0)
+      activesupport (>= 7.2)
+      cgi
+      device_detector (>= 1)
+      safely_block (>= 0.4)
     amazing_print (2.0.0)
     ast (2.4.3)
     base64 (0.3.0)
@@ -94,6 +99,11 @@ GEM
     bcrypt_pbkdf (1.1.2)
     bigdecimal (4.1.2)
     bindex (0.8.1)
+    blazer (3.5.1)
+      activerecord (>= 7.2)
+      csv
+      railties (>= 7.2)
+      safely_block (>= 1)
     bootsnap (1.24.6)
       msgpack (~> 1.2)
     builder (3.3.0)
@@ -109,6 +119,7 @@ GEM
       rack-test (>= 0.6.3)
       regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
+    cgi (0.5.2)
     chimera_http_client (1.7.0)
       typhoeus (~> 1.4)
       zeitwerk (>= 2.6)
@@ -428,6 +439,7 @@ GEM
       ffi (~> 1.12)
       logger
     rubyzip (3.4.1)
+    safely_block (1.0.0)
     sass-embedded (1.102.0-arm64-darwin)
       google-protobuf (~> 4.31)
     sass-embedded (1.102.0-x86_64-linux-gnu)
@@ -526,8 +538,10 @@ DEPENDENCIES
   action_policy (~> 0.6)
   active_record_doctor (~> 2.0)
   active_storage_validations
+  ahoy_matey (~> 5.2)
   amazing_print (~> 2.0)
   bcrypt (~> 3.1)
+  blazer (~> 3.1)
   bootsnap
   bundler-audit (~> 0.9)
   capybara (~> 3.19)

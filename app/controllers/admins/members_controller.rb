@@ -21,7 +21,7 @@ module Admins
       cleaned_params[:roles] = cleaned_params[:roles].compact_blank
       @member = Member.new(cleaned_params)
 
-      Member.create_with_history(record: @member, history_params: { team: nil, user: current_user, done_by_admin: true })
+      Member.create_with_event(record: @member, event_params: { team: nil, user: current_user, done_by_admin: true })
 
       if @member.persisted?
         redirect_to admin_member_url(@member), notice: "Member was successfully created."
@@ -34,7 +34,7 @@ module Admins
       @member = Member.urlsafe_find!(params[:id])
       @member.assign_attributes(update_params)
 
-      Member.update_with_history(record: @member, history_params: { team: nil, user: current_user, done_by_admin: true })
+      Member.update_with_event(record: @member, event_params: { team: nil, user: current_user, done_by_admin: true })
 
       if @member.changed? # == member still dirty, not saved
         render :edit, status: :unprocessable_content
@@ -46,7 +46,7 @@ module Admins
     def destroy
       @member = Member.urlsafe_find!(params[:id])
 
-      Member.destroy_with_history(record: @member, history_params: { team: nil, user: current_user, done_by_admin: true })
+      Member.destroy_with_event(record: @member, event_params: { team: nil, user: current_user, done_by_admin: true })
 
       redirect_to admin_members_url, notice: "Member was successfully destroyed."
     end

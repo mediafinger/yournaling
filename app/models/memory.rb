@@ -1,5 +1,8 @@
 # type: Post
 #
+# Memory.memo and an optional Thought feel like basically the same thing.
+# We keep it this way for now to optimize fast text-only memory creation and querying.
+#
 class Memory < ApplicationRecordForContentAndPosts
   YID_CODE = "memo".freeze
 

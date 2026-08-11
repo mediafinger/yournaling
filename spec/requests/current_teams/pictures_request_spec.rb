@@ -81,14 +81,14 @@ RSpec.describe "/current_team/pictures", type: :request do
       it "creates a new Picture and records the event" do
         expect {
           post current_team_pictures_url, params: { picture: valid_attributes }
-        }.to change { RecordHistory.count }.by(1)
+        }.to change { RecordEvent.count }.by(1)
 
-        history = RecordHistory.first
-        expect(history.event).to eq("created")
-        expect(history.record_type).to eq("pic")
-        expect(history.record_id).to eq(Picture.first.id)
-        expect(history.team_id).to eq(team.id)
-        expect(history.user_id).to eq(user.id)
+        event = RecordEvent.first
+        expect(event.name).to eq("created")
+        expect(event.record_type).to eq("pic")
+        expect(event.record_id).to eq(Picture.first.id)
+        expect(event.team_id).to eq(team.id)
+        expect(event.user_id).to eq(user.id)
       end
     end
 
@@ -171,14 +171,14 @@ RSpec.describe "/current_team/pictures", type: :request do
 
       delete current_team_picture_url(picture.urlsafe_id)
 
-      expect(RecordHistory.count).to eq(1)
+      expect(RecordEvent.count).to eq(1)
 
-      history = RecordHistory.first
-      expect(history.event).to eq("deleted")
-      expect(history.record_type).to eq("pic")
-      expect(history.record_id).to eq(picture.id)
-      expect(history.team_id).to eq(team.id)
-      expect(history.user_id).to eq(user.id)
+      event = RecordEvent.first
+      expect(event.name).to eq("deleted")
+      expect(event.record_type).to eq("pic")
+      expect(event.record_id).to eq(picture.id)
+      expect(event.team_id).to eq(team.id)
+      expect(event.user_id).to eq(user.id)
     end
 
     context "when member has unauthorized role (editor)" do

@@ -27,7 +27,7 @@ module CurrentTeams
       @memory = Memory.new(create_params.compact_blank.merge(team: current_team))
       authorize! @memory
 
-      Memory.create_with_history(record: @memory, history_params: { team: current_team, user: current_user })
+      Memory.create_with_event(record: @memory, event_params: { team: current_team, user: current_user })
 
       if @memory.persisted?
         redirect_to current_team_memory_url(@memory), notice: "Memory was successfully created."
@@ -41,7 +41,7 @@ module CurrentTeams
       authorize! @memory
       @memory.assign_attributes(update_params.compact_blank)
 
-      Memory.update_with_history(record: @memory, history_params: { team: current_team, user: current_user })
+      Memory.update_with_event(record: @memory, event_params: { team: current_team, user: current_user })
 
       if @memory.changed? # == memory still dirty, not saved
         render :edit, status: :unprocessable_content
@@ -54,7 +54,7 @@ module CurrentTeams
       @memory = Memory.urlsafe_find!(params[:id])
       authorize! @memory
 
-      Memory.destroy_with_history(record: @memory, history_params: { team: current_team, user: current_user })
+      Memory.destroy_with_event(record: @memory, event_params: { team: current_team, user: current_user })
 
       redirect_to current_team_memories_url, notice: "Memory was successfully destroyed."
     end

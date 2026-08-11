@@ -29,7 +29,7 @@ module CurrentTeams
       @location = current_team.locations.new(location_params)
       authorize! @location
 
-      create_with_history(record: @location)
+      create_with_event(record: @location)
 
       if @location.persisted?
         redirect_to current_team_location_url(@location), notice: "Location was successfully created."
@@ -43,7 +43,7 @@ module CurrentTeams
       authorize! @location
       @location.assign_attributes(location_params)
 
-      update_with_history(record: @location)
+      update_with_event(record: @location)
 
       if @location.changed? # == location still dirty, not saved
         render :edit, status: :unprocessable_content
@@ -56,7 +56,7 @@ module CurrentTeams
       @location = current_team_scope(Location).urlsafe_find!(params[:id])
       authorize! @location
 
-      destroy_with_history(record: @location)
+      destroy_with_event(record: @location)
 
       redirect_to current_team_locations_url, notice: "Location was successfully destroyed."
     end

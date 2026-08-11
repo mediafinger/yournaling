@@ -15,6 +15,7 @@ module Authentication
       session[:user_id] = user.urlsafe_id
       @current_user = user
       initialize_request_context # to refresh the Current objects directly
+      ahoy.authenticate(user) # TODO: check if this handles YIDs correctly
     end
 
     current_user
@@ -42,5 +43,11 @@ module Authentication
 
   def guest_user
     User.new(name: "Guest")
+  end
+
+  def authenticate_admin!
+    return true if current_user&.admin?
+
+    redirect_to root_url, alert: I18n.t("helpers.controller.unauthorized")
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Admins
   class ThoughtsController < AdminController
     def index
@@ -20,7 +22,7 @@ module Admins
     def create
       @thought = Thought.new(thought_params)
 
-      Thought.create_with_history(record: @thought, history_params: { team: nil, user: current_user, done_by_admin: true })
+      Thought.create_with_event(record: @thought, event_params: { team: nil, user: current_user, done_by_admin: true })
 
       if @thought.persisted?
         redirect_to admin_thought_url(@thought), notice: "Thought was successfully created."
@@ -33,7 +35,7 @@ module Admins
       @thought = Thought.urlsafe_find!(params[:id])
       @thought.assign_attributes(thought_params)
 
-      Thought.update_with_history(record: @thought, history_params: { team: nil, user: current_user, done_by_admin: true })
+      Thought.update_with_event(record: @thought, event_params: { team: nil, user: current_user, done_by_admin: true })
 
       if @thought.changed? # == thought still dirty, not saved
         render :edit, status: :unprocessable_content
@@ -45,7 +47,7 @@ module Admins
     def destroy
       @thought = Thought.urlsafe_find!(params[:id])
 
-      Thought.destroy_with_history(record: @thought, history_params: { team: nil, user: current_user, done_by_admin: true })
+      Thought.destroy_with_event(record: @thought, event_params: { team: nil, user: current_user, done_by_admin: true })
 
       redirect_to admin_thoughts_url, notice: "Thought was successfully destroyed."
     end

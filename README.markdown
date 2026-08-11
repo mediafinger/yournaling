@@ -73,3 +73,42 @@ YID are constructed like this:
 Any YID can be fed to a search, which will determine the object type before returning the correct object. This is mostly useful for debugging and therefore might only be implemented as an internal endpoint or disolver service which will return the actual object (or a 403 or 404 error).
 
 Instead of using the YIDs in URLs directly, we convert them to their Base64 representation to be URL-safe. The controllers use a custom finder method to decode them back to the plain text YID format automatically. Probably other symmetric encoding / decoding encryption algorithms are faster than Base64 and we update the implementation.
+
+---
+
+## Analytics & SQL Dashboard (Blazer)
+
+Yournaling uses **Blazer** alongside **Ahoy** to provide self-hosted product analytics and database insights without third-party tracking.
+
+### Accessing Blazer
+
+1. **Sign In**: Log in with an account having the `admin` role (in development: `andy@example.com` / `foobar1234`).
+2. **Open Dashboard**:
+   * Click **Analytics** in the top navigation of the Admin Area (`/admin`), or
+   * Navigate directly to [`/admin/blazer`](http://localhost:3000/admin/blazer).
+
+> **Access Control**: Blazer is mounted under the `/admin` namespace. Requests from unauthenticated guests or non-admin users return `404 Not Found`.
+
+### Common Queries
+
+* **Recent Visits (`ahoy_visits`)**:
+  ```sql
+  SELECT started_at, user_id, browser, os, device_type, landing_page
+  FROM ahoy_visits
+  ORDER BY started_at DESC
+  LIMIT 50;
+  ```
+* **Event Stream (`record_events`)**:
+  ```sql
+  SELECT created_at, name, record_type, record_id, user_id, properties
+  FROM record_events
+  ORDER BY created_at DESC
+  LIMIT 50;
+  ```
+
+### TODO (Production Hardening)
+
+* **Create a Read-Only Database Role**
+  * When deploying to production with Kamal, configure a read-only PostgreSQL user for Blazer in config/blazer.yml to prevent accidental UPDATE/DELETE queries from the UI.
+* **Scheduled SQL Checks & Slack Alerts**
+  * Blazer can automatically run background checks (e.g. alerts when error rates spike or daily signups drop) using rake blazer:run_checks.

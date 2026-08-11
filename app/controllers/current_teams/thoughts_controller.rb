@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module CurrentTeams
   class ThoughtsController < AppCurrentTeamController
     skip_before_action :authenticate, only: %i[index show] # allow everyone to see the thoughts
@@ -36,7 +38,7 @@ module CurrentTeams
 
       authorize! @thought
 
-      Thought.create_with_history(record: @thought, history_params: { team: current_team, user: current_user })
+      create_with_event(record: @thought)
 
       if @thought.persisted?
         redirect_to current_team_thought_url(@thought), notice: "Thought was successfully created."
@@ -50,7 +52,7 @@ module CurrentTeams
       authorize! @thought
       @thought.assign_attributes(thought_params)
 
-      Thought.update_with_history(record: @thought, history_params: { team: current_team, user: current_user })
+      update_with_event(record: @thought)
 
       if @thought.changed? # == thought still dirty, not saved
         render :edit, status: :unprocessable_content
@@ -63,7 +65,7 @@ module CurrentTeams
       @thought = Thought.urlsafe_find!(params[:id])
       authorize! @thought
 
-      Thought.destroy_with_history(record: @thought, history_params: { team: current_team, user: current_user })
+      destroy_with_event(record: @thought)
 
       redirect_to current_team_thoughts_url, notice: "Thought was successfully destroyed."
     end

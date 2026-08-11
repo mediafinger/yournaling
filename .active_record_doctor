@@ -1,14 +1,22 @@
+# frozen_string_literal: true
+
 ActiveRecordDoctor.configure do
   # Global settings affect all detectors.
   # Ignore internal Rails-related tables.
   global :ignore_tables, %w[
-    ar_internal_metadata
-    schema_migrations
-    active_storage_blobs
     active_storage_attachments
+    active_storage_blobs
     active_storage_variant_records
     action_text_rich_texts
+    ahoy_visits
+    ar_internal_metadata
+    blazer_audits
+    blazer_checks
+    blazer_dashboards
+    blazer_dashboard_queries
+    blazer_queries
     pg_search_documents
+    schema_migrations
     solid_cable_messages
     solid_cache_entries
     solid_queue_blocked_executions
@@ -29,15 +37,22 @@ ActiveRecordDoctor.configure do
     ActiveStorage::Blob
     ActiveStorage::Record
     ActiveStorage::VariantRecord
+    Ahoy::Visit
     ApplicationRecord
+    Blazer::Audit
+    Blazer::Check
+    Blazer::Dashboard
+    Blazer::DashboardQuery
+    Blazer::Query
+    Blazer::Upload
     PaperTrail::Version
     PgSearch::Document
     SolidCable::Message
     SolidCache::Entry
-    SolidQueue::Job
     SolidQueue::BlockedExecution
     SolidQueue::ClaimedExecution
     SolidQueue::FailedExecution
+    SolidQueue::Job
     SolidQueue::Pause
     SolidQueue::Process
     SolidQueue::ReadyExecution
@@ -45,10 +60,7 @@ ActiveRecordDoctor.configure do
     SolidQueue::RecurringTask
     SolidQueue::ScheduledExecution
     SolidQueue::Semaphore
-
   ]
-  # Detector-specific settings affect only one specific detector.
-  # detector :extraneous_indexes, ignore_tables: ["users"], ignore_indexes: ["accounts_on_email_organization_id"]
 
   # app only validation sufficient, no need to enforce length in DB
   detector :incorrect_length_validation, ignore_attributes: %w[
@@ -64,12 +76,14 @@ ActiveRecordDoctor.configure do
     User.password_digest
     User.id
     User.temp_auth_token
-  ] # for some reason DB Doctor complains about a (non) existing validation on User.temp_auth_token column?!
+  ]
 
   detector :missing_foreign_keys, ignore_associations: %w[
+    Ahoy::Visit.user
     Login.device
-    RecordHistory.team
-    RecordHistory.user
+    RecordEvent.team
+    RecordEvent.user
+    RecordEvent.visit
   ]
 
   detector :missing_non_null_constraint, ignore_columns: %w[]
@@ -89,16 +103,15 @@ ActiveRecordDoctor.configure do
     ApplicationRecordYidEnabled
   ]
 
-  # # Ignore indexes that are not used in the application
   detector :unindexed_foreign_keys, ignore_columns: %w[
     logins.device_id
     memories.location_id
     memories.picture_id
     memories.thought_id
     memories.weblink_id
-    record_histories.team_id
-    record_histories.user_id
-    record_histories.record_id
-    record_histories.record_type
+    record_events.record_id
+    record_events.record_type
+    record_events.team_id
+    record_events.user_id
   ]
 end

@@ -4,7 +4,7 @@ Rails.application.console do
   if AppConf.is?(:environment, :development)
     class ApplicationRecord
       class << self
-        # e.g. call `RecordHistory>"uuid..."` to find a record
+        # e.g. call `RecordEvent>"uuid..."` to find a record
         alias_method :>, :find
       end
     end

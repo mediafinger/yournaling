@@ -19,7 +19,7 @@ module Admins
     def create
       @user = User.new(create_params)
 
-      User.create_with_history(record: @user, history_params: { team: nil, user: current_user, done_by_admin: true })
+      User.create_with_event(record: @user, event_params: { team: nil, user: current_user, done_by_admin: true })
 
       if @user.persisted?
         redirect_to admin_user_url(@user), notice: "User was successfully created."
@@ -32,7 +32,7 @@ module Admins
       @user = User.urlsafe_find!(params[:id])
       @user.assign_attributes(update_params)
 
-      User.update_with_history(record: @user, history_params: { team: nil, user: current_user, done_by_admin: true })
+      User.update_with_event(record: @user, event_params: { team: nil, user: current_user, done_by_admin: true })
 
       if @user.changed? # == user still dirty, not saved
         render :edit, status: :unprocessable_content
@@ -44,7 +44,7 @@ module Admins
     def destroy
       @user = User.urlsafe_find!(params[:id])
 
-      User.destroy_with_history(record: @user, history_params: { team: nil, user: current_user, done_by_admin: true })
+      User.destroy_with_event(record: @user, event_params: { team: nil, user: current_user, done_by_admin: true })
 
       redirect_to admin_users_url, notice: "User was successfully destroyed."
     end

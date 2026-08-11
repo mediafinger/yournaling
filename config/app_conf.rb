@@ -94,6 +94,10 @@ class AppConf
              "#{yournaling_db_host}:#{yournaling_db_port}/#{yournaling_db_name}",
     required: production_env
 
+  register :yournaling_db_url,
+    default: "postgres://#{yournaling_db_username}:#{yournaling_db_password}@" \
+             "#{yournaling_db_host}:#{yournaling_db_port}/#{yournaling_db_name}"
+
   # determines the size of the DB connection pool and the puma threads
   register :rails_max_threads, default: 6
   register :rails_min_threads, default: 2

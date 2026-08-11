@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_11_04_193138) do
+ActiveRecord::Schema[8.1].define(version: 2024_11_05_202731) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -45,6 +45,93 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_04_193138) do
     t.uuid "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "ahoy_visits", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "app_version"
+    t.string "browser"
+    t.string "city"
+    t.string "country"
+    t.string "device_type"
+    t.string "ip"
+    t.text "landing_page"
+    t.float "latitude"
+    t.float "longitude"
+    t.string "os"
+    t.string "os_version"
+    t.string "platform"
+    t.text "referrer"
+    t.string "referring_domain"
+    t.string "region"
+    t.datetime "started_at"
+    t.text "user_agent"
+    t.string "user_id"
+    t.string "utm_campaign"
+    t.string "utm_content"
+    t.string "utm_medium"
+    t.string "utm_source"
+    t.string "utm_term"
+    t.string "visit_token"
+    t.string "visitor_token"
+    t.index ["user_id"], name: "index_ahoy_visits_on_user_id"
+    t.index ["visit_token"], name: "index_ahoy_visits_on_visit_token", unique: true
+    t.index ["visitor_token", "started_at"], name: "index_ahoy_visits_on_visitor_token_and_started_at"
+  end
+
+  create_table "blazer_audits", force: :cascade do |t|
+    t.datetime "created_at"
+    t.string "data_source"
+    t.bigint "query_id"
+    t.text "statement"
+    t.string "user_id"
+    t.index ["query_id"], name: "index_blazer_audits_on_query_id"
+    t.index ["user_id"], name: "index_blazer_audits_on_user_id"
+  end
+
+  create_table "blazer_checks", force: :cascade do |t|
+    t.string "check_type"
+    t.datetime "created_at", null: false
+    t.string "creator_id"
+    t.text "emails"
+    t.datetime "last_run_at"
+    t.text "message"
+    t.bigint "query_id"
+    t.string "schedule"
+    t.text "slack_channels"
+    t.string "state"
+    t.datetime "updated_at", null: false
+    t.index ["creator_id"], name: "index_blazer_checks_on_creator_id"
+    t.index ["query_id"], name: "index_blazer_checks_on_query_id"
+  end
+
+  create_table "blazer_dashboard_queries", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "dashboard_id"
+    t.integer "position"
+    t.bigint "query_id"
+    t.datetime "updated_at", null: false
+    t.index ["dashboard_id"], name: "index_blazer_dashboard_queries_on_dashboard_id"
+    t.index ["query_id"], name: "index_blazer_dashboard_queries_on_query_id"
+  end
+
+  create_table "blazer_dashboards", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "creator_id"
+    t.string "name"
+    t.datetime "updated_at", null: false
+    t.index ["creator_id"], name: "index_blazer_dashboards_on_creator_id"
+  end
+
+  create_table "blazer_queries", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "creator_id"
+    t.string "data_source"
+    t.text "description"
+    t.string "name"
+    t.text "statement"
+    t.string "status"
+    t.datetime "updated_at", null: false
+    t.index ["creator_id"], name: "index_blazer_queries_on_creator_id"
   end
 
   create_table "locations", id: :string, force: :cascade do |t|
@@ -120,19 +207,25 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_04_193138) do
     t.index ["team_id"], name: "index_pictures_on_team_id"
   end
 
-  create_table "record_histories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "record_events", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.boolean "done_by_admin", default: false, null: false
-    t.string "event", null: false
+    t.string "name", null: false
+    t.jsonb "properties"
     t.string "record_id", null: false
     t.string "record_type", null: false
-    t.string "team_id", null: false
+    t.string "team_id"
+    t.virtual "time", type: :datetime, as: "created_at", stored: true
     t.datetime "updated_at", null: false
-    t.string "user_id", null: false
-    t.index ["done_by_admin", "user_id", "record_type"], name: "idx_on_done_by_admin_user_id_record_type_a6550ac183"
-    t.index ["event", "record_type", "team_id"], name: "index_record_histories_on_event_and_record_type_and_team_id"
-    t.index ["event", "record_type", "user_id"], name: "index_record_histories_on_event_and_record_type_and_user_id"
+    t.string "user_id"
+    t.uuid "visit_id"
+    t.index ["done_by_admin", "user_id", "record_type"], name: "idx_on_done_by_admin_user_id_record_type_894b61a92b"
+    t.index ["name", "record_type", "team_id"], name: "index_record_events_on_name_and_record_type_and_team_id"
+    t.index ["name", "record_type", "user_id"], name: "index_record_events_on_name_and_record_type_and_user_id"
+    t.index ["name", "time"], name: "index_record_events_on_name_and_time"
+    t.index ["properties"], name: "index_record_events_on_properties", opclass: :jsonb_path_ops, using: :gin
     t.index ["team_id", "record_type", "record_id"], name: "index_record_histories_by_team_and_record"
+    t.index ["visit_id"], name: "index_record_events_on_visit_id"
   end
 
   create_table "teams", id: :string, force: :cascade do |t|

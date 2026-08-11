@@ -13,6 +13,8 @@ class User < ApplicationRecordYidEnabled
 
   has_many :logins, inverse_of: :user, dependent: :delete_all
   has_many :memberships, class_name: "Member", inverse_of: :user, dependent: :destroy
+  has_many :events, class_name: "RecordEvent", inverse_of: :user, dependent: :delete_all
+  has_many :visits, class_name: "Ahoy::Visit", inverse_of: :user, dependent: :destroy
 
   has_many :teams, through: :memberships
 

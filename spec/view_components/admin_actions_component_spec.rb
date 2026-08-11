@@ -16,7 +16,7 @@ RSpec.describe AdminActionsComponent, type: :component do
 
       expect(rendered.to_html).to have_link("Show this location", href: "/admin/locations/#{location.to_param}")
       expect(rendered.to_html).to have_link("Edit this location", href: "/admin/locations/#{location.to_param}/edit")
-      expect(rendered.to_html).to have_link("History", href: "/admin/record_history?record_id=#{location.to_param}")
+      expect(rendered.to_html).to have_link("Events", href: "/admin/record_events?record_id=#{location.to_param}")
     end
   end
 
@@ -30,7 +30,7 @@ RSpec.describe AdminActionsComponent, type: :component do
 
       expect(rendered.to_html).to have_no_link("Show this location")
       expect(rendered.to_html).to have_link("Edit this location", href: "/admin/locations/#{location.to_param}/edit")
-      expect(rendered.to_html).to have_link("History", href: "/admin/record_history?record_id=#{location.to_param}")
+      expect(rendered.to_html).to have_link("Events", href: "/admin/record_events?record_id=#{location.to_param}")
     end
   end
 end

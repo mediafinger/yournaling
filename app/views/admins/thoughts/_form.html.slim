@@ -14,8 +14,7 @@ article
       - else
         div
           = form.label :team_id
-          =
-          -             form.select :team_id, Team.pluck(:name, :id), selected: form.object.team_id, include_blank: true, required: true
+          = form.select :team_id, Team.pluck(:name, :id), selected: form.object.team_id, include_blank: true, required: true
       div
         = form.label :text
         = form.text_area :text
