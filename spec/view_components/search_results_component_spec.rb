@@ -39,6 +39,10 @@ RSpec.describe SearchResultsComponent, type: :component do
     it "renders links to team browse resource paths" do
       results = [
         {
+          "searchable_id" => team.id,
+          "updated_at" => "2026-08-10T12:00:00Z",
+        },
+        {
           "searchable_id" => location.id,
           "updated_at" => "2026-08-10T12:00:00Z",
         },
@@ -51,6 +55,10 @@ RSpec.describe SearchResultsComponent, type: :component do
       rendered = render_inline(described_class.new(results: results, scope: "general"))
 
       expect(rendered.to_html).to have_link(
+        "Team: #{team.name}",
+        href: "/teams/#{team.to_param}"
+      )
+      expect(rendered.to_html).to have_link(
         "Location: Sierra Nevada Camp",
         href: "/teams/#{team.to_param}/locations/#{location.to_param}"
       )
@@ -59,6 +67,24 @@ RSpec.describe SearchResultsComponent, type: :component do
         href: "/teams/#{team.to_param}/members/#{member.to_param}"
       )
       expect(rendered.to_html).to include("2026-08-10 12:00:00")
+    end
+  end
+
+  context "when results is a Hash (e.g. from ActionController::Parameters)" do
+    it "renders links properly from hash values" do
+      results = {
+        "0" => {
+          "searchable_id" => location.id,
+          "updated_at" => "2026-08-10T12:00:00Z",
+        },
+      }
+
+      rendered = render_inline(described_class.new(results: results, scope: "current_team"))
+
+      expect(rendered.to_html).to have_link(
+        "Location: Sierra Nevada Camp",
+        href: "/current_team/locations/#{location.to_param}"
+      )
     end
   end
 

@@ -19,6 +19,22 @@ RSpec.describe "/current_team/search", type: :request do
       expect(response).to be_successful
       expect(response.body).to include("current-team-area")
     end
+
+    it "renders search results when query is provided and at least 3 characters" do
+      location
+
+      get current_team_new_search_url, params: { query: "Sunset", klass_name: "Location" }
+      expect(response).to be_successful
+      expect(response.body).to include("Sunset Beach")
+    end
+
+    it "does not render search results when query is shorter than 3 characters" do
+      location
+
+      get current_team_new_search_url, params: { query: "Su", klass_name: "Location" }
+      expect(response).to be_successful
+      expect(response.body).not_to include("Sunset Beach")
+    end
   end
 
   describe "POST /current_team/search" do
@@ -28,6 +44,12 @@ RSpec.describe "/current_team/search", type: :request do
       post current_team_search_url, params: { query: "Sunset", klass_name: "Location" }
 
       expect(response).to redirect_to(%r{/current_team/new_search\?klass_name=Location&query=Sunset})
+    end
+
+    it "redirects without query when query is shorter than 3 characters" do
+      post current_team_search_url, params: { query: "Su", klass_name: "Memory" }
+
+      expect(response).to redirect_to(current_team_new_search_url(klass_name: "Memory"))
     end
   end
 end
