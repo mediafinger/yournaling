@@ -88,7 +88,12 @@ RSpec.describe SearchResultsComponent, type: :component do
     end
   end
 
-  it "renders nothing when results are empty" do
+  it "renders an empty notice when query is provided but results are empty" do
+    rendered = render_inline(described_class.new(results: [], query: "missing"))
+    expect(rendered.to_html).to include("No results found.")
+  end
+
+  it "renders nothing when results are empty and no query was provided" do
     rendered = render_inline(described_class.new(results: []))
     expect(rendered.to_html).to be_blank
   end

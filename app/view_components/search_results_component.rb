@@ -13,12 +13,15 @@ class SearchResultsComponent < ApplicationComponent
                   > (updated_at:
                   = ts
                   > )
+    - elsif @query.present?
+      p.empty-notice No results found.
   SLIM
 
   # TODO: display result["content"] as well ?!
 
-  def initialize(results:, scope: "current_team")
+  def initialize(results:, query: nil, scope: "current_team")
     @results = results
+    @query = query
     @scope = scope
   end
 

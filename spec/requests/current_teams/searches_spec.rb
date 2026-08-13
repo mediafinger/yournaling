@@ -28,6 +28,12 @@ RSpec.describe "/current_team/search", type: :request do
       expect(response.body).to include("Sunset Beach")
     end
 
+    it "renders an empty notice when search yields no results" do
+      get current_team_new_search_url, params: { query: "Nonexistent", klass_name: "Location" }
+      expect(response).to be_successful
+      expect(response.body).to include("No results found.")
+    end
+
     it "does not render search results when query is shorter than 3 characters" do
       location
 
