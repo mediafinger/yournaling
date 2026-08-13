@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 class AppCurrentTeamController < ApplicationController
   before_action :authenticate_member!
 
-  # TODO: layout "current_team_area" ?!
+  layout "current_team_area"
 
   private
 
