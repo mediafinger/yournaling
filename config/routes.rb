@@ -5,6 +5,10 @@ Rails.application.routes.draw do
 
   resources :teams, except: %i[show]
   resources :users
+  get "user_password/new", to: "user_passwords#new", as: :new_user_password
+  post "user_password", to: "user_passwords#create", as: :user_password
+  get "user_password/edit/:token", to: "user_passwords#edit", as: :edit_user_password
+  patch "user_password/edit/:token", to: "user_passwords#update"
 
   resources :teams, module: :teams do
     get "", to: "pages#show", as: "home"

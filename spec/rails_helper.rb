@@ -79,6 +79,7 @@ RSpec.configure do |config|
   config.include TeamScope, type: :controller
   config.include RequestContext, type: :controller
 
+  config.include ActiveJob::TestHelper
   config.include ActiveSupport::Testing::TimeHelpers
   config.include ViewComponent::TestHelpers, type: :component
   config.include ViewComponent::SystemTestHelpers, type: :component

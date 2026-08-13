@@ -54,8 +54,12 @@ Rails.application.configure do
   # Highlight code that triggered redirect in logs.
   config.action_dispatch.verbose_redirect_logs = true
 
-  # Suppress logger output for asset requests.
-  config.assets.quiet = true
+  # Don't care if the mailer can't send.
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.perform_caching = false
+  config.action_mailer.delivery_method = :test
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.default_url_options = { host: "localhost", port: AppConf.yournaling_port }
 
   # Set log level to :info or :debug
   config.log_level = AppConf.log_level

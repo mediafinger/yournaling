@@ -11,6 +11,14 @@ class User < ApplicationRecordYidEnabled
   # TODO: check if we want validations: https://api.rubyonrails.org/classes/ActiveModel/SecurePassword/ClassMethods.html
   has_secure_password :password, validations: false
 
+  generates_token_for :password_reset, expires_in: 15.minutes do
+    password_salt&.last(10)
+  end
+
+  generates_token_for :email_change, expires_in: 2.hours do
+    email
+  end
+
   has_many :logins, inverse_of: :user, dependent: :delete_all
   has_many :memberships, class_name: "Member", inverse_of: :user, dependent: :destroy
   has_many :events, class_name: "RecordEvent", inverse_of: :user, dependent: :delete_all
@@ -23,7 +31,7 @@ class User < ApplicationRecordYidEnabled
   normalizes :nickname, with: ->(nickname) { nickname.parameterize.underscore }
 
   validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP, message: "not valid" }
-  validates :password, length: { in: 10..72 }, on: %i[create reset_password] # 72 is a has_secure_password limitation
+  validates :password, length: { in: 10..72 }, if: -> { password.present? } # 72 is a has_secure_password limitation
   validates :password_digest, presence: true
   validates :name, presence: true, length: { in: 3..72 } # display optionally, nickame required for posting anything
   validates :nickname, allow_nil: true, uniqueness: true, length: { in: 7..72 } # make users pay for shorter nicknames

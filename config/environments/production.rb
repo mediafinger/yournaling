@@ -57,8 +57,12 @@ Rails.application.configure do
 
   # config.active_job.queue_name_prefix = "yournaling_production"
 
-  # Prevent health checks from clogging up the logs.
-  config.silence_healthcheck_path = "/up"
+  # ActionMailer configuration for production
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.perform_caching = false
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.default_url_options = { host: AppConf.yournaling_host }
 
   # Don't log any deprecations.
   config.active_support.report_deprecations = false

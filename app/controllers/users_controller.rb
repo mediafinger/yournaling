@@ -1,6 +1,5 @@
 class UsersController < ApplicationController
   def index
-    # raise AuthError unless current_user.persisted?
     authorize! current_user, to: :index?, with: UserPolicy
 
     # users = authorized_scope(User.all, type: :relation, as: :current_team_scope)
@@ -19,7 +18,6 @@ class UsersController < ApplicationController
   end
 
   def edit
-    # raise AuthError unless @user == current_user && @user.persisted?
     @user = User.urlsafe_find!(params[:id])
     authorize! @user
   end
@@ -38,7 +36,6 @@ class UsersController < ApplicationController
   end
 
   def update
-    # raise AuthError unless @user == current_user && @user.persisted?
     @user = User.urlsafe_find!(params[:id])
     authorize! @user
     @user.assign_attributes(update_params)
@@ -53,7 +50,6 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    # raise AuthError unless @user == current_user && @user.persisted?
     @user = User.urlsafe_find!(params[:id])
     authorize! @user
 
@@ -64,7 +60,6 @@ class UsersController < ApplicationController
 
   private
 
-  # Only allow a list of trusted parameters through.
   def create_params
     params.expect(user: %i[name email password])
   end

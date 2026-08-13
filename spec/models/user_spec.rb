@@ -121,4 +121,25 @@ RSpec.describe User, type: :model do
       expect(user.teams).to include(team)
     end
   end
+
+  describe "token generation" do
+    before { user.save! }
+
+    it "generates and finds by password_reset token" do
+      token = user.generate_token_for(:password_reset)
+      expect(described_class.find_by_token_for(:password_reset, token)).to eq(user)
+    end
+
+    it "invalidates password_reset token when password changes" do
+      token = user.generate_token_for(:password_reset)
+      user.update!(password: "new_password1234")
+
+      expect(described_class.find_by_token_for(:password_reset, token)).to be_nil
+    end
+
+    it "generates and finds by email_change token" do
+      token = user.generate_token_for(:email_change)
+      expect(described_class.find_by_token_for(:email_change, token)).to eq(user)
+    end
+  end
 end
