@@ -12,7 +12,7 @@ class SearchesController < ApplicationController
 
     searchable_type = @klass_name if SEARCHABLE_KLASSES.include?(@klass_name)
     scope = { searchable_type: }.compact
-    @results = PgSearch.multisearch(@query).where(**scope).as_json
+    @results = PgSearch.multisearch(@query).where(**scope)
   end
 
   def create

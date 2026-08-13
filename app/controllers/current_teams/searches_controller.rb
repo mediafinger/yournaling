@@ -13,7 +13,7 @@ module CurrentTeams
 
       searchable_type = @klass_name if SEARCHABLE_KLASSES.include?(@klass_name)
       scope = { team_id: current_team.id, searchable_type: }.compact
-      @results = PgSearch.multisearch(@query).where(**scope).as_json
+      @results = PgSearch.multisearch(@query).where(**scope)
     end
 
     def create
