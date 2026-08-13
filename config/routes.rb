@@ -10,6 +10,9 @@ Rails.application.routes.draw do
   get "user_password/edit/:token", to: "user_passwords#edit", as: :edit_user_password
   patch "user_password/edit/:token", to: "user_passwords#update"
 
+  get "search", to: "searches#new", as: :new_search
+  post "search", to: "searches#create", as: :search
+
   resources :teams, module: :teams do
     get "", to: "pages#show", as: "home"
 

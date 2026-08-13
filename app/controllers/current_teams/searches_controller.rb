@@ -1,5 +1,9 @@
+# frozen_string_literal: true
+
 module CurrentTeams
-  class SearchesController < ApplicationController
+  class SearchesController < AppCurrentTeamController
+    SEARCHABLE_KLASSES = %w[Memory Location Picture Thought Weblink Member].freeze
+
     def new
       authorize! current_user, to: :show?, with: CurrentTeamPolicy
 
@@ -16,8 +20,8 @@ module CurrentTeams
 
       # TODO: add date RANGE to search scope
 
-      scope = { team_id: current_team.id, searchable_type: klass_name }.compact
-      results = PgSearch.multisearch(query).where(**scope)
+      scope = { team_id: current_team.id, searchable_type: (klass_name if SEARCHABLE_KLASSES.include?(klass_name)) }.compact
+      results = query.present? ? PgSearch.multisearch(query).where(**scope) : []
 
       redirect_to current_team_new_search_url(query:, klass_name:, results: results.as_json)
     end

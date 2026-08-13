@@ -18,6 +18,10 @@ class ApplicationNavComponent < ApplicationComponent
     - if current_user.persisted?
       = render ApplicationNavLinksComponent.new(link_sections: %w[teams])
 
+    ul
+      li
+        = link_to "Search", new_search_path, role: active_path?(new_search_path) ? "button" : nil
+
     - if current_user.persisted?
       = @login_records_link_tag
 

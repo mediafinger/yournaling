@@ -21,6 +21,7 @@ RSpec.describe ApplicationNavComponent, type: :component do
       expect(rendered.to_html).to have_link("Alpha Squad", href: "/current_team")
       expect(rendered.to_html).to have_link("Logins", href: "/logins")
       expect(rendered.to_html).to have_link("Teams", href: "/teams")
+      expect(rendered.to_html).to have_link("Search", href: "/search")
     end
   end
 
@@ -33,6 +34,7 @@ RSpec.describe ApplicationNavComponent, type: :component do
       expect(rendered.to_html).to have_no_link("Admin Area", href: "/admin")
       expect(rendered.to_html).to have_link("Alpha Squad", href: "/current_team")
       expect(rendered.to_html).to have_link("Teams", href: "/teams")
+      expect(rendered.to_html).to have_link("Search", href: "/search")
     end
   end
 
@@ -46,6 +48,7 @@ RSpec.describe ApplicationNavComponent, type: :component do
 
       expect(rendered.to_html).to have_no_link("Alpha Squad", href: "/current_team")
       expect(rendered.to_html).to have_link("Teams", href: "/teams")
+      expect(rendered.to_html).to have_link("Search", href: "/search")
     end
   end
 
@@ -63,6 +66,7 @@ RSpec.describe ApplicationNavComponent, type: :component do
       expect(rendered.to_html).to have_no_link("Alpha Squad", href: "/current_team")
       expect(rendered.to_html).to have_no_link("Logins", href: "/logins")
       expect(rendered.to_html).to have_no_link("Teams", href: "/teams")
+      expect(rendered.to_html).to have_link("Search", href: "/search")
       expect(rendered.to_html).to have_link("Login", href: "/login")
     end
   end

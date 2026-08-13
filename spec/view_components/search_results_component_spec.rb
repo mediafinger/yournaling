@@ -5,22 +5,61 @@ require "rails_helper"
 RSpec.describe SearchResultsComponent, type: :component do
   let(:team) { FactoryBot.create(:team) }
   let(:location) { FactoryBot.create(:location, team: team, name: "Sierra Nevada Camp") }
+  let(:user) { FactoryBot.create(:user, name: "Jane Doe") }
+  let(:member) { Member.create!(team: team, user: user, roles: %w[editor]) }
 
-  it "renders links to search results" do
-    results = [
-      {
-        "searchable_id" => location.id,
-        "updated_at" => "2026-08-10T12:00:00Z",
-      },
-    ]
+  context "when scope is current_team" do
+    it "renders links to current_team resource paths" do
+      results = [
+        {
+          "searchable_id" => location.id,
+          "updated_at" => "2026-08-10T12:00:00Z",
+        },
+        {
+          "searchable_id" => member.id,
+          "updated_at" => "2026-08-10T12:00:00Z",
+        },
+      ]
 
-    rendered = render_inline(described_class.new(results: results))
+      rendered = render_inline(described_class.new(results: results, scope: "current_team"))
 
-    expect(rendered.to_html).to have_link(
-      "Location: Sierra Nevada Camp",
-      href: "/current_team/locations/#{location.to_param}"
-    )
-    expect(rendered.to_html).to include("2026-08-10 12:00:00")
+      expect(rendered.to_html).to have_link(
+        "Location: Sierra Nevada Camp",
+        href: "/current_team/locations/#{location.to_param}"
+      )
+      expect(rendered.to_html).to have_link(
+        "Member: #{member.name}",
+        href: "/current_team/members/#{member.to_param}"
+      )
+      expect(rendered.to_html).to include("2026-08-10 12:00:00")
+    end
+  end
+
+  context "when scope is general" do
+    it "renders links to team browse resource paths" do
+      results = [
+        {
+          "searchable_id" => location.id,
+          "updated_at" => "2026-08-10T12:00:00Z",
+        },
+        {
+          "searchable_id" => member.id,
+          "updated_at" => "2026-08-10T12:00:00Z",
+        },
+      ]
+
+      rendered = render_inline(described_class.new(results: results, scope: "general"))
+
+      expect(rendered.to_html).to have_link(
+        "Location: Sierra Nevada Camp",
+        href: "/teams/#{team.to_param}/locations/#{location.to_param}"
+      )
+      expect(rendered.to_html).to have_link(
+        "Member: #{member.name}",
+        href: "/teams/#{team.to_param}/members/#{member.to_param}"
+      )
+      expect(rendered.to_html).to include("2026-08-10 12:00:00")
+    end
   end
 
   it "renders nothing when results are empty" do
