@@ -8,15 +8,14 @@ class SearchResultsComponent < ApplicationComponent
           - if (link = record_link(result)).present?
             li
               = link
+              small.content-snippet = result.content.truncate(120)
               i
                 > (updated_at:
-                = result.updated_at.to_fs(:db)
+                = result.searchable.updated_at.to_fs(:db)
                 > )
     - elsif @query.present?
       p.empty-notice No results found.
   SLIM
-
-  # TODO: display result["content"] as well ?!
 
   def initialize(results:, query: nil, scope: "current_team")
     @results = results.presence || []
@@ -25,8 +24,11 @@ class SearchResultsComponent < ApplicationComponent
   end
 
   def record_link(result)
-    record = ApplicationRecordYidEnabled.fynd(result.searchable_id)
-    return if record.blank?
+    record = result.searchable
+    if record.blank?
+      Rails.logger.warn("Stale search index entry: #{result.searchable_type}##{result.searchable_id}")
+      return
+    end
 
     link_to("#{record.class.name}: #{record.name}", record_path(record))
   end

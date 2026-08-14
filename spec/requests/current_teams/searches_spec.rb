@@ -41,6 +41,14 @@ RSpec.describe "/current_team/search", type: :request do
       expect(response).to be_successful
       expect(response.body).not_to include("Sunset Beach")
     end
+
+    it "does not search when klass_name is not in the allowed list" do
+      location
+
+      get current_team_new_search_url, params: { query: "Sunset", klass_name: "InvalidModel" }
+      expect(response).to be_successful
+      expect(response.body).not_to include("Sunset Beach")
+    end
   end
 
   describe "POST /current_team/search" do
@@ -56,6 +64,12 @@ RSpec.describe "/current_team/search", type: :request do
       post current_team_search_url, params: { query: "Su", klass_name: "Memory" }
 
       expect(response).to redirect_to(current_team_new_search_url(klass_name: "Memory"))
+    end
+
+    it "redirects without query when klass_name is not in the allowed list" do
+      post current_team_search_url, params: { query: "Sunset", klass_name: "InvalidModel" }
+
+      expect(response).to redirect_to(current_team_new_search_url(klass_name: "InvalidModel"))
     end
   end
 end

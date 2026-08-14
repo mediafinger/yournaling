@@ -45,6 +45,42 @@ RSpec.describe SearchResultsComponent, type: :component do
     end
   end
 
+  it "displays a content snippet from the search index" do
+    results = PgSearch::Document.where(searchable_type: "Location", searchable_id: location.id)
+
+    rendered = render_inline(described_class.new(results: results, scope: "current_team"))
+
+    doc = results.first
+    expect(rendered.to_html).to include(doc.content.truncate(120))
+  end
+
+  it "displays the record's updated_at, not the search document's" do
+    record_time = 1.hour.ago.change(usec: 0)
+    loc = travel_to(record_time) { FactoryBot.create(:location, team: team, name: "Old Place") }
+
+    # PgSearch::Document was created at record_time; touch it to simulate index rebuild at "now"
+    PgSearch::Document.where(searchable_type: "Location", searchable_id: loc.id)
+      .update_all(updated_at: Time.current)
+
+    results = PgSearch::Document.where(searchable_type: "Location", searchable_id: loc.id)
+    rendered = render_inline(described_class.new(results: results, scope: "current_team"))
+
+    expect(rendered.to_html).to include(record_time.to_fs(:db))
+    expect(rendered.to_html).not_to include(Time.current.to_fs(:db))
+  end
+
+  it "skips stale index entries and logs a warning" do
+    doc = PgSearch::Document.where(searchable_type: "Location", searchable_id: location.id).first
+    location.delete # delete without callbacks, leaves the PgSearch::Document orphaned
+    stale_results = PgSearch::Document.where(id: doc.id)
+
+    expect(Rails.logger).to receive(:warn).with(/Stale search index entry/)
+
+    rendered = render_inline(described_class.new(results: stale_results, scope: "current_team"))
+
+    expect(rendered.to_html).to have_no_link("Location: Sierra Nevada Camp")
+  end
+
   it "renders an empty notice when query is provided but results are empty" do
     rendered = render_inline(described_class.new(results: [], query: "missing"))
     expect(rendered.to_html).to include("No results found.")

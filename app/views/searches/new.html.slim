@@ -1,2 +1,2 @@
-= render partial: "form", locals: { query: @query, klass_name: @klass_name, results: @results, form_legend: "Search" }
+= render SearchFormComponent.new(url: search_path, klass_options: SearchesController::SEARCHABLE_KLASSES, default_klass: "Team", query: @query, klass_name: @klass_name)
 = render SearchResultsComponent.new(results: @results, query: @query, scope: "general")

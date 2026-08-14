@@ -33,6 +33,14 @@ RSpec.describe "/search", type: :request do
       expect(response).to be_successful
       expect(response.body).not_to include("Sunset Beach")
     end
+
+    it "does not search when klass_name is not in the allowed list" do
+      location
+
+      get new_search_url, params: { query: "Sunset", klass_name: "InvalidModel" }
+      expect(response).to be_successful
+      expect(response.body).not_to include("Sunset Beach")
+    end
   end
 
   describe "POST /search" do
@@ -56,6 +64,12 @@ RSpec.describe "/search", type: :request do
       post search_url, params: { query: "Su", klass_name: "Team" }
 
       expect(response).to redirect_to(new_search_url(klass_name: "Team"))
+    end
+
+    it "redirects without query when klass_name is not in the allowed list" do
+      post search_url, params: { query: "Sunset", klass_name: "InvalidModel" }
+
+      expect(response).to redirect_to(new_search_url(klass_name: "InvalidModel"))
     end
   end
 end
