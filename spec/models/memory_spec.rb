@@ -28,12 +28,12 @@ RSpec.describe Memory, type: :model do
       expect(memory).to be_valid
     end
 
-    it "validates memo presence and length between 4 and 500 characters" do
+    it "validates memo presence and length between 4 and 512 characters" do
       memory.memo = "abc"
       expect(memory).not_to be_valid
       expect(memory.errors[:memo]).to be_present
 
-      memory.memo = "a" * 501
+      memory.memo = "a" * 513
       expect(memory).not_to be_valid
 
       memory.memo = "Valid memo text"

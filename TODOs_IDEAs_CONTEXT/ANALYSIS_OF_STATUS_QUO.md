@@ -87,11 +87,11 @@ The model layer sits on top of a custom base hierarchy designed around custom st
   * Validates dimensions (400px–4000px), file size (150KB–6MB), and content types.
   * Generates WebP variants (`thumbnail`, `preview`, `large`) on demand via `ruby-vips`.
 * **`Thought`** (`YID_CODE: "thot"`):
-  * Short text snippets / journal notes (1..512 chars).
+  * Short text snippets / journal notes (1..1024 chars).
 * **`Weblink`** (`YID_CODE: "link"`):
   * Bookmarks / external URLs with automatic HTTPS normalization.
 * **`Memory`** (`YID_CODE: "memo"`):
-  * The central "Post" record. Combines a short text memo (4..500 chars) with optional single references to `location`, `picture`, `thought`, and `weblink`.
+  * The central "Post" record. Combines a short text memo (4..512 chars) with optional single references to `location`, `picture`, `thought`, and `weblink`.
   * Synchronizes visibility states across attached items on save.
 
 ---

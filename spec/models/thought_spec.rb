@@ -32,8 +32,8 @@ RSpec.describe Thought, type: :model do
       expect(thought.errors[:text]).to be_present
     end
 
-    it "validates maximum length of text (512 chars)" do
-      thought.text = "a" * 513
+    it "validates maximum length of text (1024 chars)" do
+      thought.text = "a" * 1025
       expect(thought).not_to be_valid
       expect(thought.errors[:text]).to be_present
     end

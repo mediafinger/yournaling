@@ -25,7 +25,7 @@
 
 ### Thought
 
-* text (unformatted, max. 512 characters)
+* text (unformatted, max. 1024 characters)
 * name (=> generated from start of text)
 * date (optional)
 

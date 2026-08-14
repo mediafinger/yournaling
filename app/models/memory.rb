@@ -25,7 +25,7 @@ class Memory < ApplicationRecordForContentAndPosts
 
   normalizes :memo, with: ->(memo) { memo.strip }
 
-  validates :memo, presence: true, length: { minimum: 4, maximum: 500 }
+  validates :memo, presence: true, length: { minimum: 4, maximum: 512 }
   validates :location, presence: true, if: -> { location_id.present? }
   validates :picture, presence: true, if: -> { picture_id.present? }
   validates :thought, presence: true, if: -> { thought_id.present? }

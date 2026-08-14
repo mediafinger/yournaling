@@ -1,5 +1,11 @@
 # type: Content
 #
+# TODO
+# in the schema we create a virtual column "name":
+# t.virtual "name", type: :string, as: "(\"substring\"(text, 0, 60) || '...'::text)", stored: true
+# in case we only added this for the search, is this then still necessary after we improved the search?
+# If not, we should remove this (and similar now redundant patterns on other tables).
+#
 class Thought < ApplicationRecordForContentAndPosts
   YID_CODE = "thot".freeze
 
@@ -17,6 +23,6 @@ class Thought < ApplicationRecordForContentAndPosts
 
   normalizes :text, with: ->(text) { text.strip }
 
-  validates :text, presence: true, length: { in: 1..512 }
+  validates :text, presence: true, length: { in: 1..1024 }
   validates :visibility, presence: true, inclusion: { in: VISIBILITY_STATES }
 end
