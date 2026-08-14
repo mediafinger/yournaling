@@ -99,4 +99,28 @@ RSpec.describe Memory, type: :model do
       expect(other_memory).to be_present
     end
   end
+
+  describe "search index" do
+    it "creates a PgSearch::Document when saved" do
+      expect { memory.save! }.to change { PgSearch::Document.where(searchable_type: "Memory").count }.by(1)
+    end
+
+    it "indexes the memo in the document content" do
+      memory.save!
+      doc = PgSearch::Document.find_by(searchable_type: "Memory", searchable_id: memory.id)
+      expect(doc.content).to include(memory.memo)
+    end
+
+    it "sets team_id on the document" do
+      memory.save!
+      doc = PgSearch::Document.find_by(searchable_type: "Memory", searchable_id: memory.id)
+      expect(doc.team_id).to eq(team.id)
+    end
+
+    it "returns the record via the searchable association" do
+      memory.save!
+      doc = PgSearch::Document.find_by(searchable_type: "Memory", searchable_id: memory.id)
+      expect(doc.searchable).to eq(memory)
+    end
+  end
 end

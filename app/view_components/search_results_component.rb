@@ -30,7 +30,7 @@ class SearchResultsComponent < ApplicationComponent
       return
     end
 
-    link_to("#{record.class.name}: #{record.name}", record_path(record))
+    link_to("#{record.class.name}: #{result.content.truncate(60)}", record_path(record))
   end
 
   def record_path(record)

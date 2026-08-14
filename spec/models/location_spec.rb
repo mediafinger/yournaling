@@ -120,4 +120,25 @@ RSpec.describe Location, type: :model do
       expect(loc.url).to eq("https://www.google.com/maps/place/36.7491,-2.2425")
     end
   end
+
+  describe "search index" do
+    it "creates a PgSearch::Document when saved" do
+      expect { location.save! }.to change { PgSearch::Document.where(searchable_type: "Location").count }.by(1)
+    end
+
+    it "indexes the name in the document content" do
+      location.save!
+      expect(location.pg_search_document.content).to include(location.name)
+    end
+
+    it "sets team_id on the document" do
+      location.save!
+      expect(location.pg_search_document.team_id).to eq(team.id)
+    end
+
+    it "returns the record via the searchable association" do
+      location.save!
+      expect(location.pg_search_document.searchable).to eq(location)
+    end
+  end
 end

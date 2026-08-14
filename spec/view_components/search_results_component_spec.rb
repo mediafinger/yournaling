@@ -10,39 +10,64 @@ RSpec.describe SearchResultsComponent, type: :component do
 
   context "when scope is current_team" do
     it "renders links to current_team resource paths" do
-      results = PgSearch::Document.where(searchable_type: "Location", searchable_id: location.id)
+      doc = PgSearch::Document.find_by(searchable_type: "Location", searchable_id: location.id)
+      results = PgSearch::Document.where(id: doc.id)
 
       rendered = render_inline(described_class.new(results: results, scope: "current_team"))
 
       expect(rendered.to_html).to have_link(
-        "Location: Sierra Nevada Camp",
         href: "/current_team/locations/#{location.to_param}"
       )
+      expect(rendered.to_html).to include(doc.content.truncate(60))
     end
   end
 
   context "when scope is general" do
     it "renders links to team browse resource paths" do
-      results = PgSearch::Document.where(searchable_type: "Location", searchable_id: location.id)
+      doc = PgSearch::Document.find_by(searchable_type: "Location", searchable_id: location.id)
+      results = PgSearch::Document.where(id: doc.id)
 
       rendered = render_inline(described_class.new(results: results, scope: "general"))
 
       expect(rendered.to_html).to have_link(
-        "Location: Sierra Nevada Camp",
         href: "/teams/#{team.to_param}/locations/#{location.to_param}"
       )
+      expect(rendered.to_html).to include(doc.content.truncate(60))
     end
 
     it "renders links for Team results" do
-      results = PgSearch::Document.where(searchable_type: "Team", searchable_id: team.id)
+      doc = PgSearch::Document.find_by(searchable_type: "Team", searchable_id: team.id)
+      results = PgSearch::Document.where(id: doc.id)
 
       rendered = render_inline(described_class.new(results: results, scope: "general"))
 
       expect(rendered.to_html).to have_link(
-        "Team: #{team.name}",
+        "Team: #{doc.content.truncate(60)}",
         href: "/teams/#{team.to_param}"
       )
     end
+  end
+
+  it "renders Memory results using the content (memo) as display label" do
+    memory = FactoryBot.create(:memory, team: team, memo: "My first memory")
+    doc = PgSearch::Document.find_by(searchable_type: "Memory", searchable_id: memory.id)
+    results = PgSearch::Document.where(id: doc.id)
+
+    rendered = render_inline(described_class.new(results: results, scope: "current_team"))
+
+    expect(rendered.to_html).to have_link("Memory: #{doc.content.truncate(60)}")
+    expect(rendered.to_html).to include("My first memory")
+  end
+
+  it "renders Thought results using the content (text) as display label" do
+    thought = FactoryBot.create(:thought, team: team, text: "An interesting thought")
+    doc = PgSearch::Document.find_by(searchable_type: "Thought", searchable_id: thought.id)
+    results = PgSearch::Document.where(id: doc.id)
+
+    rendered = render_inline(described_class.new(results: results, scope: "current_team"))
+
+    expect(rendered.to_html).to have_link("Thought: #{doc.content.truncate(60)}")
+    expect(rendered.to_html).to include("An interesting thought")
   end
 
   it "displays a content snippet from the search index" do
@@ -78,7 +103,7 @@ RSpec.describe SearchResultsComponent, type: :component do
 
     rendered = render_inline(described_class.new(results: stale_results, scope: "current_team"))
 
-    expect(rendered.to_html).to have_no_link("Location: Sierra Nevada Camp")
+    expect(rendered.to_html).to have_no_link(href: "/current_team/locations/#{location.to_param}")
   end
 
   it "renders an empty notice when query is provided but results are empty" do

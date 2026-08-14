@@ -66,4 +66,25 @@ RSpec.describe Weblink, type: :model do
       expect(memory.reload.weblink_id).to be_nil
     end
   end
+
+  describe "search index" do
+    it "creates a PgSearch::Document when saved" do
+      expect { weblink.save! }.to change { PgSearch::Document.where(searchable_type: "Weblink").count }.by(1)
+    end
+
+    it "indexes the name in the document content" do
+      weblink.save!
+      expect(weblink.pg_search_document.content).to include(weblink.name)
+    end
+
+    it "sets team_id on the document" do
+      weblink.save!
+      expect(weblink.pg_search_document.team_id).to eq(team.id)
+    end
+
+    it "returns the record via the searchable association" do
+      weblink.save!
+      expect(weblink.pg_search_document.searchable).to eq(weblink)
+    end
+  end
 end
