@@ -133,4 +133,24 @@ RSpec.describe Member, type: :model do
       end
     end
   end
+
+  describe "search index" do
+    it "creates a PgSearch::Document when saved" do
+      expect(PgSearch::Document.where(searchable_type: "Member", searchable_id: member.id)).to exist
+    end
+
+    it "indexes user_name and team_name in the document content" do
+      doc = member.pg_search_document
+      expect(doc.content).to include(member.user_name)
+      expect(doc.content).to include(member.team_name)
+    end
+
+    it "sets team_id on the document" do
+      expect(member.pg_search_document.team_id).to eq(member.team_id)
+    end
+
+    it "returns the record via the searchable association" do
+      expect(member.pg_search_document.searchable).to eq(member)
+    end
+  end
 end

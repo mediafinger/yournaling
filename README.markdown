@@ -76,9 +76,25 @@ Instead of using the YIDs in URLs directly, we convert them to their Base64 repr
 
 ---
 
+## Nav Bar Layouts
+
+### Three distinct UI areas
+
+  1. **General / Browse area** – amber theme.  
+     - Shows content from any team.  
+     - Only area accessible to non‑logged‑in guests.  
+  2. **Current‑Team Management area** – green theme.  
+     - Used to create posts/insights, manage members, and edit the team itself.  
+  3. **Admin area** – blue theme.  
+     - Restricted to maintainers/operations staff of the host server.  
+
+---
+
 ## Analytics & SQL Dashboard (Blazer)
 
 Yournaling uses **Blazer** alongside **Ahoy** to provide self-hosted product analytics and database insights without third-party tracking.
+
+---
 
 ### Accessing Blazer
 

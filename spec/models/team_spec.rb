@@ -76,4 +76,25 @@ RSpec.describe Team, type: :model do
       expect(User.find_by(id: user.id)).to be_present # User is not deleted
     end
   end
+
+  describe "search index" do
+    it "creates a PgSearch::Document when saved" do
+      expect { team.save! }.to change { PgSearch::Document.count }.by(1)
+    end
+
+    it "indexes the team name in the document content" do
+      team.save!
+      expect(team.pg_search_document.content).to include(team.name)
+    end
+
+    it "sets team_id to the team's own id on the document" do
+      team.save!
+      expect(team.pg_search_document.team_id).to eq(team.id)
+    end
+
+    it "returns the record via the searchable association" do
+      team.save!
+      expect(team.pg_search_document.searchable).to eq(team)
+    end
+  end
 end

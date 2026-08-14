@@ -80,4 +80,24 @@ RSpec.describe Picture, type: :model do
       expect(variant.variation.transformations[:saver][:quality]).to eq(75)
     end
   end
+
+  describe "search index" do
+    let(:saved_picture) { FactoryBot.create(:picture, team: team, name: "Mountain Summit View") }
+
+    it "creates a PgSearch::Document when saved" do
+      expect(PgSearch::Document.where(searchable_type: "Picture", searchable_id: saved_picture.id)).to exist
+    end
+
+    it "indexes the name in the document content" do
+      expect(saved_picture.pg_search_document.content).to include(saved_picture.name)
+    end
+
+    it "sets team_id on the document" do
+      expect(saved_picture.pg_search_document.team_id).to eq(team.id)
+    end
+
+    it "returns the record via the searchable association" do
+      expect(saved_picture.pg_search_document.searchable).to eq(saved_picture)
+    end
+  end
 end

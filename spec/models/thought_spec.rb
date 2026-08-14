@@ -56,4 +56,22 @@ RSpec.describe Thought, type: :model do
       }.to raise_error(ActiveRecord::ReadonlyAttributeError)
     end
   end
+
+  describe "search index" do
+    it "creates a PgSearch::Document when saved" do
+      expect { thought }.to change { PgSearch::Document.where(searchable_type: "Thought").count }.by(1)
+    end
+
+    it "indexes the text in the document content" do
+      expect(thought.pg_search_document.content).to include(thought.text)
+    end
+
+    it "sets team_id on the document" do
+      expect(thought.pg_search_document.team_id).to eq(team.id)
+    end
+
+    it "returns the record via the searchable association" do
+      expect(thought.pg_search_document.searchable).to eq(thought)
+    end
+  end
 end
