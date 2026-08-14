@@ -12,8 +12,11 @@ class Memory < ApplicationRecordForContentAndPosts
   belongs_to :thought, inverse_of: :memories, optional: true
   belongs_to :weblink, inverse_of: :memories, optional: true
 
+  has_many :chronicle_entries, as: :entry, dependent: :destroy
+  has_many :chronicles, -> { distinct.reorder("chronicles.created_at DESC") }, through: :chronicle_entries
+
   multisearchable(
-    against: %i[memo], # TODO: thought.name, picture.name, weblink.name, location.name
+    against: %i[memo],
     additional_attributes: ->(memory) { { team_id: memory.team_id } }
   )
 

@@ -15,6 +15,38 @@ RSpec.describe Weblink, type: :model do
     }
   end
 
+  describe "associations" do
+    it "has many distinct chronicles through chronicle_entries" do
+      weblink.save!
+      chronicle1 = FactoryBot.create(:chronicle, team: team)
+      chronicle2 = FactoryBot.create(:chronicle, team: team)
+
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle1, team: team, entry: weblink, position: 1)
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle1, team: team, entry: weblink, position: 2)
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle2, team: team, entry: weblink, position: 1)
+
+      expect(weblink.chronicles).to contain_exactly(chronicle1, chronicle2)
+    end
+
+    it "destroys associated chronicle_entries when weblink is destroyed" do
+      weblink.save!
+      chronicle = FactoryBot.create(:chronicle, team: team)
+      entry = FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: weblink)
+
+      expect { weblink.destroy! }.to change { ChronicleEntry.count }.by(-1)
+      expect { entry.reload }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    it "nullifies memory reference when destroyed" do
+      link = described_class.create!(valid_attributes)
+      memory = FactoryBot.create(:memory, team: team, weblink: link)
+
+      expect(memory.reload.weblink_id).to eq(link.id)
+      link.destroy!
+      expect(memory.reload.weblink_id).to be_nil
+    end
+  end
+
   describe "validations" do
     it "is valid with valid attributes" do
       expect(weblink).to be_valid
@@ -53,17 +85,6 @@ RSpec.describe Weblink, type: :model do
     it "strips whitespace from name" do
       link = described_class.create!(valid_attributes.merge(name: "   Camp Spots in Pyrenees   "))
       expect(link.name).to eq("Camp Spots in Pyrenees")
-    end
-  end
-
-  describe "associations" do
-    it "nullifies memory reference when destroyed" do
-      link = described_class.create!(valid_attributes)
-      memory = FactoryBot.create(:memory, team: team, weblink: link)
-
-      expect(memory.reload.weblink_id).to eq(link.id)
-      link.destroy!
-      expect(memory.reload.weblink_id).to be_nil
     end
   end
 

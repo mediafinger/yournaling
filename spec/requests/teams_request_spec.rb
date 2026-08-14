@@ -301,7 +301,7 @@ RSpec.describe "/teams", type: :system do
       it "destroys the requested team and redirects to the teams index page" do
         expect {
           delete team_url(team.urlsafe_id)
-        }.to change { Team.count }.to(0)
+        }.to change { Team.count }.by(-1)
 
         expect(response).to redirect_to(teams_url)
       end

@@ -13,6 +13,29 @@ RSpec.describe Picture, type: :model do
   let(:blob_with_converted_image) { ImageUploadConversionService.call(file: original_file, name: "macbook_photo") }
   let(:team) { FactoryBot.create(:team) }
 
+  describe "associations" do
+    it "has many distinct chronicles through chronicle_entries" do
+      picture.save!
+      chronicle1 = FactoryBot.create(:chronicle, team: team)
+      chronicle2 = FactoryBot.create(:chronicle, team: team)
+
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle1, team: team, entry: picture, position: 1)
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle1, team: team, entry: picture, position: 2)
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle2, team: team, entry: picture, position: 1)
+
+      expect(picture.chronicles).to contain_exactly(chronicle1, chronicle2)
+    end
+
+    it "destroys associated chronicle_entries when picture is destroyed" do
+      picture.save!
+      chronicle = FactoryBot.create(:chronicle, team: team)
+      entry = FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: picture)
+
+      expect { picture.destroy! }.to change { ChronicleEntry.count }.by(-1)
+      expect { entry.reload }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
   describe "validations and normalizations" do
     it "is valid with a converted webp image blob" do
       expect(picture).to be_valid

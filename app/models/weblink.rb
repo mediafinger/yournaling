@@ -4,7 +4,8 @@ class Weblink < ApplicationRecordForContentAndPosts
   YID_CODE = "link".freeze
 
   belongs_to :team, inverse_of: :weblinks
-
+  has_many :chronicle_entries, as: :entry, dependent: :destroy
+  has_many :chronicles, -> { distinct.reorder("chronicles.created_at DESC") }, through: :chronicle_entries
   has_many :memories, class_name: "Memory", inverse_of: :weblink,
     dependent: :nullify
 

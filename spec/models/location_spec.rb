@@ -18,6 +18,29 @@ RSpec.describe Location, type: :model do
     }
   end
 
+  describe "associations" do
+    it "has many distinct chronicles through chronicle_entries" do
+      location.save!
+      chronicle1 = FactoryBot.create(:chronicle, team: team)
+      chronicle2 = FactoryBot.create(:chronicle, team: team)
+
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle1, team: team, entry: location, position: 1)
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle1, team: team, entry: location, position: 2)
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle2, team: team, entry: location, position: 1)
+
+      expect(location.chronicles).to contain_exactly(chronicle1, chronicle2)
+    end
+
+    it "destroys associated chronicle_entries when location is destroyed" do
+      location.save!
+      chronicle = FactoryBot.create(:chronicle, team: team)
+      entry = FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: location)
+
+      expect { location.destroy! }.to change { ChronicleEntry.count }.by(-1)
+      expect { entry.reload }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
   describe "validations and coordinate bounds" do
     it "is valid with valid attributes" do
       expect(location).to be_valid

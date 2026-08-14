@@ -18,6 +18,25 @@ RSpec.describe Thought, type: :model do
       expect(thought.team).to eq(team)
     end
 
+    it "has many distinct chronicles through chronicle_entries" do
+      chronicle1 = FactoryBot.create(:chronicle, team: team)
+      chronicle2 = FactoryBot.create(:chronicle, team: team)
+
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle1, team: team, entry: thought, position: 1)
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle1, team: team, entry: thought, position: 2)
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle2, team: team, entry: thought, position: 1)
+
+      expect(thought.chronicles).to contain_exactly(chronicle1, chronicle2)
+    end
+
+    it "destroys associated chronicle_entries when thought is destroyed" do
+      chronicle = FactoryBot.create(:chronicle, team: team)
+      entry = FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: thought)
+
+      expect { thought.destroy! }.to change { ChronicleEntry.count }.by(-1)
+      expect { entry.reload }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+
     it "nullifies memory reference when thought is destroyed" do
       memory = FactoryBot.create(:memory, team: team, thought: thought)
       thought.destroy!
