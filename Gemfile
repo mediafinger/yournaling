@@ -27,6 +27,7 @@ gem "mission_control-jobs", "~> 1.0" # dashboard for SolidQueue jobs
 # gem "pagy", "~> 5.10" # fast and lightweight pagination solution # TODO: require "pagy/extras/navs"
 gem "pg", "~> 1.1"
 gem "pg_search", "~> 2.3" # Use pg_search for full-text search in PostgreSQL
+gem "positioning", "~> 0.4"
 gem "propshaft" # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "puma", "~> 8.0"
 # gem "pundit", "~> 2.2" # Authorize actions by admin role
