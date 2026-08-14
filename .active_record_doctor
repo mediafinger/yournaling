@@ -64,6 +64,10 @@ ActiveRecordDoctor.configure do
 
   # app only validation sufficient, no need to enforce length in DB
   detector :incorrect_length_validation, ignore_attributes: %w[
+    Chronicle.id
+    Chronicle.name
+    Chronicle.notice
+    ChronicleEntry.id
     Memory.memo
     Picture.name
     Picture.id
