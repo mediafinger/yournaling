@@ -66,6 +66,19 @@ RSpec.describe ChronicleEntry, type: :model do
       expect(chronicle_entry.errors[:entry]).to be_present
     end
 
+    it "validates that position is a positive integer" do
+      [0, -1, 1.5, "abc"].each do |invalid_pos|
+        chronicle_entry.position = invalid_pos
+        expect(chronicle_entry).not_to be_valid
+        expect(chronicle_entry.errors[:position]).to be_present
+      end
+
+      [1, 2, 100].each do |valid_pos|
+        chronicle_entry.position = valid_pos
+        expect(chronicle_entry).to be_valid
+      end
+    end
+
     it "allows the same entry to be attached multiple times in different positions" do
       entry1 = described_class.create!(team: team, chronicle: chronicle, entry: thought, position: 1)
       entry2 = described_class.new(team: team, chronicle: chronicle, entry: thought, position: 2)
@@ -81,6 +94,23 @@ RSpec.describe ChronicleEntry, type: :model do
       expect {
         chronicle_entry.update(team_id: other_team.id)
       }.to raise_error(ActiveRecord::ReadonlyAttributeError)
+    end
+
+    it "validates that entry belongs to the same team as chronicle" do
+      other_team = FactoryBot.create(:team)
+      other_thought = FactoryBot.create(:thought, team: other_team)
+      chronicle_entry.entry = other_thought
+
+      expect(chronicle_entry).not_to be_valid
+      expect(chronicle_entry.errors[:entry]).to include("must belong to the same team as the chronicle")
+    end
+
+    it "validates that team_id matches chronicle team_id" do
+      other_team = FactoryBot.create(:team)
+      chronicle_entry.team = other_team
+
+      expect(chronicle_entry).not_to be_valid
+      expect(chronicle_entry.errors[:team_id]).to include("must match the chronicle team")
     end
   end
 

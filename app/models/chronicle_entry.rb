@@ -15,16 +15,31 @@ class ChronicleEntry < ApplicationRecordYidEnabled
 
   before_validation :assign_team_from_chronicle, if: -> { team_id.blank? && chronicle.present? }
 
-  # TODO: add validation that team_id and chronicle_team_id are always the same
-
   attr_readonly :team_id
 
   validates :entry_type, presence: true, inclusion: { in: VALID_ENTRY_TYPES }
-  validates :position, presence: true # TODO: validate it's a positive integer
+  validates :position, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 1 }
+  validate :team_matches_chronicle
+  validate :entry_belongs_to_same_team
 
   private
 
   def assign_team_from_chronicle
     self.team_id = chronicle.team_id
+  end
+
+  def team_matches_chronicle
+    return if team_id.blank? || chronicle.blank?
+    return if team_id == chronicle.team_id
+
+    errors.add(:team_id, "must match the chronicle team")
+  end
+
+  def entry_belongs_to_same_team
+    return if entry.blank? || chronicle.blank?
+    return unless entry.respond_to?(:team_id)
+    return if entry.team_id == chronicle.team_id
+
+    errors.add(:entry, "must belong to the same team as the chronicle")
   end
 end

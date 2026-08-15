@@ -17,16 +17,7 @@ article id= dom_id(chronicle)
     section
       h4 Entries
       - chronicle.chronicle_entries.each do |chronicle_entry|
-        - if chronicle_entry.entry.is_a?(Picture)
-          = render partial: "teams/pictures/picture", locals: { team:, picture: chronicle_entry.entry }
-        - elsif chronicle_entry.entry.is_a?(Location)
-          = render partial: "teams/locations/location", locals: { team:, location: chronicle_entry.entry }
-        - elsif chronicle_entry.entry.is_a?(Thought)
-          = render partial: "teams/thoughts/thought", locals: { team:, thought: chronicle_entry.entry }
-        - elsif chronicle_entry.entry.is_a?(Weblink)
-          = render partial: "teams/weblinks/weblink", locals: { team:, weblink: chronicle_entry.entry }
-        - elsif chronicle_entry.entry.is_a?(Memory)
-          = render partial: "teams/memories/memory", locals: { team:, memory: chronicle_entry.entry }
+        = render ChronicleEntryComponent.new(chronicle_entry: chronicle_entry, scope: "team", team: team)
 
   footer
     - if action_name != "show"
