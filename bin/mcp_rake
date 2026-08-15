@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+source /opt/homebrew/share/chruby/chruby.sh
+chruby $(cat .ruby-version 2>/dev/null)
+exec bundle exec rake "$@"
