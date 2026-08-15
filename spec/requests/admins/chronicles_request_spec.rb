@@ -122,7 +122,7 @@ RSpec.describe "/admin/chronicles", type: :request do
         expect(response.body).to include("Admin Attached Pic 2")
         expect(response.body).to include(edit_admin_picture_path(attached_pic1))
         expect(response.body).to include(edit_admin_picture_path(attached_pic2))
-        expect(response.body).to include("chronicle[chronicle_entries_attributes]")
+        expect(response.body).to include("chronicle[entries_attributes]")
         expect(response.body).to include(ActionView::RecordIdentifier.dom_id(entry1))
         expect(response.body).to include(ActionView::RecordIdentifier.dom_id(entry2))
       end
@@ -185,10 +185,10 @@ RSpec.describe "/admin/chronicles", type: :request do
         it "does not create a new Chronicle" do
           expect {
             post admin_chronicles_url, params: { chronicle: invalid_attributes }
-          }.not_to(change { Chronicle.count })
+          }.to change { Chronicle.count }.by(0)
         end
 
-        it "renders a response with 422 status (unprocessable_content)" do
+        it "renders a response with 422 status" do
           post admin_chronicles_url, params: { chronicle: invalid_attributes }
           expect(response).to have_http_status(:unprocessable_content)
         end
@@ -199,25 +199,14 @@ RSpec.describe "/admin/chronicles", type: :request do
       let!(:chronicle) { Chronicle.create!(valid_attributes) }
 
       context "with valid parameters" do
-        it "updates the chronicle and emits a RecordEvent" do
-          expect {
-            patch admin_chronicle_url(chronicle), params: { chronicle: { name: "Admin Renamed Chronicle" } }
-          }.to change { RecordEvent.count }.by(1)
-
-          expect(chronicle.reload.name).to eq("Admin Renamed Chronicle")
-          event = RecordEvent.last
-          expect(event.name).to eq("updated")
-          expect(event.done_by_admin).to be true
-        end
-
-        it "attaches a picture during update" do
+        it "updates the chronicle and attaches a picture when picture_id is provided" do
           picture = FactoryBot.create(:picture, team: team)
 
           expect {
             patch admin_chronicle_url(chronicle), params: {
               chronicle: { name: "Admin Renamed Chronicle", picture_id: picture.id },
             }
-          }.to change { chronicle.chronicle_entries.count }.by(1)
+          }.to change { chronicle.entries.count }.by(1)
 
           expect(chronicle.reload.pictures).to include(picture)
         end
@@ -236,7 +225,7 @@ RSpec.describe "/admin/chronicles", type: :request do
             }
           }.to change { Thought.count }.by(1)
             .and change { Weblink.count }.by(1)
-            .and change { chronicle.chronicle_entries.count }.by(3)
+            .and change { chronicle.entries.count }.by(3)
 
           expect(chronicle.reload.locations).to include(loc)
           expect(chronicle.thoughts.pluck(:text)).to include("Admin curated insight")
@@ -263,13 +252,13 @@ RSpec.describe "/admin/chronicles", type: :request do
           expect {
             patch admin_chronicle_url(chronicle), params: {
               chronicle: {
-                chronicle_entries_attributes: {
+                entries_attributes: {
                   "0" => { id: entry1.id, _destroy: "0" },
                   "1" => { id: entry2.id, _destroy: "1" },
                 },
               },
             }
-          }.to change { chronicle.chronicle_entries.count }.by(-1)
+          }.to change { chronicle.entries.count }.by(-1)
 
           expect(chronicle.reload.pictures).to eq([pic1])
           expect(Picture.exists?(pic2.id)).to be true

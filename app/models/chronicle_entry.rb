@@ -8,7 +8,7 @@ class ChronicleEntry < ApplicationRecordYidEnabled
   VALID_ENTRY_TYPES = %w[Memory Picture Location Thought Weblink].freeze
 
   belongs_to :team, inverse_of: false
-  belongs_to :chronicle, inverse_of: :chronicle_entries
+  belongs_to :chronicle, inverse_of: :entries
   belongs_to :entry, polymorphic: true
 
   attribute :position, default: :last
@@ -40,7 +40,7 @@ class ChronicleEntry < ApplicationRecordYidEnabled
   def resolve_symbolic_position
     raw_pos = position_before_type_cast
     if raw_pos == :last || raw_pos == "last" || raw_pos.blank?
-      self.position = (chronicle&.chronicle_entries&.maximum(:position) || 0) + 1
+      self.position = (chronicle&.entries&.maximum(:position) || 0) + 1
     elsif [:first, "first"].include?(raw_pos)
       self.position = 1
     end

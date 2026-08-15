@@ -85,7 +85,7 @@ RSpec.describe ChronicleEntry, type: :model do
 
       expect(entry2).to be_valid
       expect { entry2.save! }.not_to raise_error
-      expect(chronicle.reload.chronicle_entries.pluck(:id)).to contain_exactly(entry1.id, entry2.id)
+      expect(chronicle.reload.entries.pluck(:id)).to contain_exactly(entry1.id, entry2.id)
     end
 
     it "prevents changing team_id via readonly attribute" do

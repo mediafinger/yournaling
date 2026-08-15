@@ -27,7 +27,7 @@ RSpec.describe Chronicle, type: :model do
       expect(chronicle.team).to eq(team)
     end
 
-    it "destroys associated chronicle_entries when chronicle is destroyed" do
+    it "destroys associated entries when chronicle is destroyed" do
       chronicle.save!
       thought = FactoryBot.create(:thought, team: team)
       entry = FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: thought)
@@ -196,9 +196,9 @@ RSpec.describe Chronicle, type: :model do
     it "attaches an existing picture by picture_id" do
       expect {
         chronicle.attach_picture(picture_id: existing_picture.id, user: user)
-      }.to change { chronicle.chronicle_entries.count }.by(1)
+      }.to change { chronicle.entries.count }.by(1)
 
-      entry = chronicle.chronicle_entries.last
+      entry = chronicle.entries.last
       expect(entry.entry).to eq(existing_picture)
       expect(entry.position).to eq(1)
     end
@@ -206,12 +206,12 @@ RSpec.describe Chronicle, type: :model do
     it "attaches an uploaded picture file" do
       expect {
         chronicle.attach_picture(picture_file: uploaded_file, picture_name: "Fresh Photo", user: user)
-      }.to change { Picture.count }.by(1).and change { chronicle.chronicle_entries.count }.by(1)
+      }.to change { Picture.count }.by(1).and change { chronicle.entries.count }.by(1)
 
       new_pic = Picture.last
       expect(new_pic.name).to eq("Fresh Photo")
       expect(new_pic.team).to eq(team)
-      expect(chronicle.chronicle_entries.last.entry).to eq(new_pic)
+      expect(chronicle.entries.last.entry).to eq(new_pic)
     end
 
     it "positions multiple attached pictures sequentially at the end and loads in position order" do
@@ -219,19 +219,19 @@ RSpec.describe Chronicle, type: :model do
       second_picture = FactoryBot.create(:picture, team: team, name: "Second Photo")
       chronicle.attach_picture(picture_id: second_picture.id, user: user)
 
-      entries = chronicle.reload.chronicle_entries
+      entries = chronicle.reload.entries
       expect(entries.map(&:position)).to eq([1, 2])
       expect(entries.map(&:entry)).to eq([existing_picture, second_picture])
     end
 
-    it "orders chronicle_entries by position ASC when loaded via association (regression test)" do
+    it "orders entries by position ASC when loaded via association (regression test)" do
       p1 = FactoryBot.create(:picture, team: team, name: "First Position Picture")
       p2 = FactoryBot.create(:picture, team: team, name: "Second Position Picture")
       # Create entry 2 first, then entry 1 later to verify created_at order does not override position order
       FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: p2, position: 2)
       FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: p1, position: 1)
 
-      entries = chronicle.reload.chronicle_entries
+      entries = chronicle.reload.entries
       expect(entries.map(&:position)).to eq([1, 2])
       expect(entries.map(&:entry)).to eq([p1, p2])
     end
@@ -242,15 +242,15 @@ RSpec.describe Chronicle, type: :model do
 
       expect {
         chronicle.attach_picture(picture_id: other_picture.id, user: user)
-      }.not_to(change { chronicle.chronicle_entries.count })
+      }.not_to(change { chronicle.entries.count })
     end
 
     it "attaches an existing picture by urlsafe_id (regression test)" do
       expect {
         chronicle.attach_picture(picture_id: existing_picture.urlsafe_id, user: user)
-      }.to change { chronicle.chronicle_entries.count }.by(1)
+      }.to change { chronicle.entries.count }.by(1)
 
-      entry = chronicle.chronicle_entries.last
+      entry = chronicle.entries.last
       expect(entry.entry).to eq(existing_picture)
     end
 
@@ -260,7 +260,7 @@ RSpec.describe Chronicle, type: :model do
       chronicle.attach_picture(picture_id: existing_picture.id, user: user)
       chronicle.attach_picture(picture_id: second_picture.id, user: user)
 
-      entries = chronicle.reload.chronicle_entries.reorder(position: :asc)
+      entries = chronicle.reload.entries.reorder(position: :asc)
       expect(entries.map(&:entry)).to eq([existing_picture, second_picture])
       expect(entries.map(&:position)).to eq([1, 2])
       expect(chronicle.pictures).to eq([existing_picture, second_picture])
@@ -269,7 +269,7 @@ RSpec.describe Chronicle, type: :model do
     it "does nothing when neither picture_id nor picture_file is provided" do
       expect {
         chronicle.attach_picture(user: user)
-      }.not_to(change { chronicle.chronicle_entries.count })
+      }.not_to(change { chronicle.entries.count })
     end
   end
 
@@ -282,9 +282,9 @@ RSpec.describe Chronicle, type: :model do
     it "attaches an existing location by id and aligns visibility" do
       expect {
         chronicle.attach_location(location_id: existing_location.id, user: user)
-      }.to change { chronicle.chronicle_entries.count }.by(1)
+      }.to change { chronicle.entries.count }.by(1)
 
-      entry = chronicle.chronicle_entries.last
+      entry = chronicle.entries.last
       expect(entry.entry).to eq(existing_location)
       expect(existing_location.reload.visibility).to eq("published")
     end
@@ -297,9 +297,9 @@ RSpec.describe Chronicle, type: :model do
           location_url: "https://maps.example.com/olympus",
           user: user
         )
-      }.to change { Location.count }.by(1).and change { chronicle.chronicle_entries.count }.by(1)
+      }.to change { Location.count }.by(1).and change { chronicle.entries.count }.by(1)
 
-      new_loc = chronicle.chronicle_entries.last.entry
+      new_loc = chronicle.entries.last.entry
       expect(new_loc.name).to eq("Mount Olympus")
       expect(new_loc.address).to eq("Thessaly, Greece")
       expect(new_loc.team).to eq(team)
@@ -312,7 +312,7 @@ RSpec.describe Chronicle, type: :model do
 
       expect {
         chronicle.attach_location(location_id: other_loc.id, user: user)
-      }.not_to(change { chronicle.chronicle_entries.count })
+      }.not_to(change { chronicle.entries.count })
     end
   end
 
@@ -325,9 +325,9 @@ RSpec.describe Chronicle, type: :model do
     it "attaches an existing thought by id and aligns visibility" do
       expect {
         chronicle.attach_thought(thought_id: existing_thought.id, user: user)
-      }.to change { chronicle.chronicle_entries.count }.by(1)
+      }.to change { chronicle.entries.count }.by(1)
 
-      entry = chronicle.chronicle_entries.last
+      entry = chronicle.entries.last
       expect(entry.entry).to eq(existing_thought)
       expect(existing_thought.reload.visibility).to eq("published")
     end
@@ -335,9 +335,9 @@ RSpec.describe Chronicle, type: :model do
     it "creates and attaches a new thought" do
       expect {
         chronicle.attach_thought(thought_text: "Reflecting on the journey ahead", user: user)
-      }.to change { Thought.count }.by(1).and change { chronicle.chronicle_entries.count }.by(1)
+      }.to change { Thought.count }.by(1).and change { chronicle.entries.count }.by(1)
 
-      new_thot = chronicle.chronicle_entries.last.entry
+      new_thot = chronicle.entries.last.entry
       expect(new_thot.text).to eq("Reflecting on the journey ahead")
       expect(new_thot.team).to eq(team)
       expect(new_thot.visibility).to eq("published")
@@ -349,7 +349,7 @@ RSpec.describe Chronicle, type: :model do
 
       expect {
         chronicle.attach_thought(thought_id: other_thot.id, user: user)
-      }.not_to(change { chronicle.chronicle_entries.count })
+      }.not_to(change { chronicle.entries.count })
     end
   end
 
@@ -362,9 +362,9 @@ RSpec.describe Chronicle, type: :model do
     it "attaches an existing weblink by id and aligns visibility" do
       expect {
         chronicle.attach_weblink(weblink_id: existing_weblink.id, user: user)
-      }.to change { chronicle.chronicle_entries.count }.by(1)
+      }.to change { chronicle.entries.count }.by(1)
 
-      entry = chronicle.chronicle_entries.last
+      entry = chronicle.entries.last
       expect(entry.entry).to eq(existing_weblink)
       expect(existing_weblink.reload.visibility).to eq("published")
     end
@@ -377,9 +377,9 @@ RSpec.describe Chronicle, type: :model do
           weblink_description: "Helpful guide",
           user: user
         )
-      }.to change { Weblink.count }.by(1).and change { chronicle.chronicle_entries.count }.by(1)
+      }.to change { Weblink.count }.by(1).and change { chronicle.entries.count }.by(1)
 
-      new_link = chronicle.chronicle_entries.last.entry
+      new_link = chronicle.entries.last.entry
       expect(new_link.name).to eq("Travel Guide")
       expect(new_link.url).to eq("https://travelguide.example.com")
       expect(new_link.team).to eq(team)
@@ -392,7 +392,7 @@ RSpec.describe Chronicle, type: :model do
 
       expect {
         chronicle.attach_weblink(weblink_id: other_link.id, user: user)
-      }.not_to(change { chronicle.chronicle_entries.count })
+      }.not_to(change { chronicle.entries.count })
     end
   end
 
@@ -420,7 +420,7 @@ RSpec.describe Chronicle, type: :model do
 
       expect {
         chronicle.attach_insights(insight_params, user: user)
-      }.to change { chronicle.chronicle_entries.count }.by(4)
+      }.to change { chronicle.entries.count }.by(4)
         .and change { Thought.count }.by(1)
         .and change { Weblink.count }.by(1)
 

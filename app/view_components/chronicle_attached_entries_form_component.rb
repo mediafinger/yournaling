@@ -2,7 +2,7 @@
 
 class ChronicleAttachedEntriesFormComponent < ApplicationComponent
   slim_template <<~'SLIM'
-    - if @chronicle.chronicle_entries.any?
+    - if @chronicle.entries.any?
       fieldset
         legend Attached Entries
         p
@@ -10,7 +10,7 @@ class ChronicleAttachedEntriesFormComponent < ApplicationComponent
             | Check "Remove" to detach an entry from this chronicle upon saving. Use "Edit" to modify the insight itself.
 
         div style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1rem;"
-          = @form.fields_for :chronicle_entries do |entry_form|
+          = @form.fields_for :entries do |entry_form|
             - c_entry = entry_form.object
             - target = c_entry.entry
             - next if target.blank?

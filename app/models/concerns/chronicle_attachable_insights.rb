@@ -76,7 +76,7 @@ module ChronicleAttachableInsights
 
     return unless target_picture
 
-    chronicle_entries.create!(entry: target_picture, team: team)
+    entries.create!(entry: target_picture, team: team)
   end
 
   def attach_location(location_id: nil, location_name: nil, location_address: nil, location_country_code: nil,
@@ -100,7 +100,7 @@ module ChronicleAttachableInsights
 
     return unless target_location
 
-    chronicle_entries.create!(entry: target_location, team: team)
+    entries.create!(entry: target_location, team: team)
   end
 
   def attach_thought(thought_id: nil, thought_text: nil, user: nil)
@@ -119,7 +119,7 @@ module ChronicleAttachableInsights
 
     return unless target_thought
 
-    chronicle_entries.create!(entry: target_thought, team: team)
+    entries.create!(entry: target_thought, team: team)
   end
 
   def attach_weblink(weblink_id: nil, weblink_name: nil, weblink_url: nil, weblink_description: nil, user: nil)
@@ -140,6 +140,6 @@ module ChronicleAttachableInsights
 
     return unless target_weblink
 
-    chronicle_entries.create!(entry: target_weblink, team: team)
+    entries.create!(entry: target_weblink, team: team)
   end
 end

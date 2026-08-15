@@ -9,40 +9,42 @@ class Chronicle < ApplicationRecordForContentAndPosts
 
   belongs_to :team, inverse_of: :chronicles
 
-  has_many :chronicle_entries, -> { reorder(position: :asc) }, inverse_of: :chronicle, dependent: :destroy
+  has_many :entries, -> {
+    reorder(position: :asc)
+  }, class_name: "ChronicleEntry", inverse_of: :chronicle, dependent: :destroy
 
   has_many :memories, -> {
     reorder("chronicle_entries.position ASC")
-  }, through: :chronicle_entries, source: :entry, source_type: "Memory"
+  }, through: :entries, source: :entry, source_type: "Memory"
   has_many :pictures, -> {
     reorder("chronicle_entries.position ASC")
-  }, through: :chronicle_entries, source: :entry, source_type: "Picture"
+  }, through: :entries, source: :entry, source_type: "Picture"
   has_many :locations, -> {
     reorder("chronicle_entries.position ASC")
-  }, through: :chronicle_entries, source: :entry, source_type: "Location"
+  }, through: :entries, source: :entry, source_type: "Location"
   has_many :thoughts, -> {
     reorder("chronicle_entries.position ASC")
-  }, through: :chronicle_entries, source: :entry, source_type: "Thought"
+  }, through: :entries, source: :entry, source_type: "Thought"
   has_many :weblinks, -> {
     reorder("chronicle_entries.position ASC")
-  }, through: :chronicle_entries, source: :entry, source_type: "Weblink"
+  }, through: :entries, source: :entry, source_type: "Weblink"
 
-  accepts_nested_attributes_for :chronicle_entries, allow_destroy: true
+  accepts_nested_attributes_for :entries, allow_destroy: true
 
   class << self
     # Preloads ActiveStorage file attachments and blobs for all pictures associated
     # with the given chronicles to prevent N+1 queries when rendering images/variants.
-    # Uses in-memory chronicle_entries when already loaded to avoid extra queries.
+    # Uses in-memory entries when already loaded to avoid extra queries.
     #
     # Example:
-    #   chronicles = Chronicle.includes(chronicle_entries: :entry)
+    #   chronicles = Chronicle.includes(entries: :entry)
     #   Chronicle.preload_attachments(chronicles)
     #
     def preload_attachments(chronicles)
       records = Array(chronicles)
       pictures = records.flat_map do |c|
-        if c.chronicle_entries.loaded?
-          c.chronicle_entries.filter_map { |ce| ce.entry if ce.entry_type == "Picture" }
+        if c.entries.loaded?
+          c.entries.filter_map { |ce| ce.entry if ce.entry_type == "Picture" }
         else
           c.pictures
         end
@@ -53,10 +55,10 @@ class Chronicle < ApplicationRecordForContentAndPosts
   end
 
   def first_picture
-    if chronicle_entries.loaded?
-      chronicle_entries.find { |ce| ce.entry_type == "Picture" }&.entry
+    if entries.loaded?
+      entries.find { |ce| ce.entry_type == "Picture" }&.entry
     else
-      chronicle_entries.where(entry_type: "Picture").reorder(position: :asc).first&.entry
+      entries.where(entry_type: "Picture").reorder(position: :asc).first&.entry
     end
   end
 
@@ -82,7 +84,7 @@ class Chronicle < ApplicationRecordForContentAndPosts
 
   # TODO: improve performance when we see Chronicles with dozens of entries
   def cascade_visibility_to_entries
-    chronicle_entries.each do |chronicle_entry|
+    entries.each do |chronicle_entry|
       entry = chronicle_entry.entry
       next if entry.blank?
       next if entry.visibility == visibility

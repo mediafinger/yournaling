@@ -5,12 +5,12 @@ module Admins
     include ChronicleFormHandling
 
     def index
-      @chronicles = Chronicle.includes(chronicle_entries: :entry)
+      @chronicles = Chronicle.includes(entries: :entry)
       Chronicle.preload_attachments(@chronicles)
     end
 
     def show
-      @chronicle = Chronicle.includes(chronicle_entries: :entry).urlsafe_find!(params[:id])
+      @chronicle = Chronicle.includes(entries: :entry).urlsafe_find!(params[:id])
       Chronicle.preload_attachments(@chronicle)
     end
 

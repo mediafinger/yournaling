@@ -15,7 +15,7 @@ module ChronicleFormHandling
         :visibility,
         *additional_keys,
         *ChronicleAttachableInsights::INSIGHT_PARAM_KEYS,
-        { chronicle_entries_attributes: [%i[id entry_type entry_id position _destroy]] },
+        { entries_attributes: [%i[id entry_type entry_id position _destroy]] },
       ]
     )
   end

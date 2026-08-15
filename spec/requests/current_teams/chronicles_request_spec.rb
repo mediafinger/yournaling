@@ -171,7 +171,7 @@ RSpec.describe "/current_team/chronicles", type: :request do
       expect(response.body).to include("Second Attached Picture")
       expect(response.body).to include(edit_current_team_picture_path(attached_pic1))
       expect(response.body).to include(edit_current_team_picture_path(attached_pic2))
-      expect(response.body).to include("chronicle[chronicle_entries_attributes]")
+      expect(response.body).to include("chronicle[entries_attributes]")
       expect(response.body).to include(ActionView::RecordIdentifier.dom_id(entry1))
       expect(response.body).to include(ActionView::RecordIdentifier.dom_id(entry2))
     end
@@ -189,7 +189,7 @@ RSpec.describe "/current_team/chronicles", type: :request do
           start_date: "2026-09-01",
           end_date: "2026-09-10",
           visibility: "internal",
-          chronicle_entries_attributes: [
+          entries_attributes: [
             { entry_type: "Picture", entry_id: picture.id, position: 1 },
             { entry_type: "Thought", entry_id: thought.id, position: 2 },
           ],
@@ -223,7 +223,7 @@ RSpec.describe "/current_team/chronicles", type: :request do
 
         chronicle = Chronicle.first
         expect(chronicle.pictures).to include(picture)
-        expect(chronicle.chronicle_entries.last.position).to eq(1)
+        expect(chronicle.entries.last.position).to eq(1)
       end
 
       it "attaches a newly uploaded picture via picture_file and picture_name" do
@@ -332,9 +332,9 @@ RSpec.describe "/current_team/chronicles", type: :request do
           patch current_team_chronicle_url(chronicle.urlsafe_id), params: {
             chronicle: new_attributes.merge(picture_id: new_pic.id),
           }
-        }.to change { chronicle.chronicle_entries.count }.by(1)
+        }.to change { chronicle.entries.count }.by(1)
 
-        entries = chronicle.reload.chronicle_entries.reorder(position: :asc)
+        entries = chronicle.reload.entries.reorder(position: :asc)
         expect(entries.map(&:entry)).to eq([thought, new_pic])
         expect(entries.map(&:position)).to eq([1, 2])
       end
@@ -350,7 +350,7 @@ RSpec.describe "/current_team/chronicles", type: :request do
           patch current_team_chronicle_url(chronicle_with_pic.urlsafe_id), params: {
             chronicle: { picture_id: second_pic.urlsafe_id },
           }
-        }.to change { chronicle_with_pic.chronicle_entries.count }.by(1)
+        }.to change { chronicle_with_pic.entries.count }.by(1)
 
         expect(response).to redirect_to(current_team_chronicle_url(chronicle_with_pic.urlsafe_id))
         follow_redirect!
@@ -369,13 +369,13 @@ RSpec.describe "/current_team/chronicles", type: :request do
         expect {
           patch current_team_chronicle_url(chronicle_with_pics.urlsafe_id), params: {
             chronicle: {
-              chronicle_entries_attributes: {
+              entries_attributes: {
                 "0" => { id: entry1.id, _destroy: "0" },
                 "1" => { id: entry2.id, _destroy: "1" },
               },
             },
           }
-        }.to change { chronicle_with_pics.chronicle_entries.count }.by(-1)
+        }.to change { chronicle_with_pics.entries.count }.by(-1)
 
         expect(chronicle_with_pics.reload.pictures).to eq([pic1])
         expect(Picture.exists?(pic2.id)).to be true
@@ -394,7 +394,7 @@ RSpec.describe "/current_team/chronicles", type: :request do
               picture_name: "Laptop in Granada"
             ),
           }
-        }.to change { Picture.count }.by(1).and change { chronicle.chronicle_entries.count }.by(1)
+        }.to change { Picture.count }.by(1).and change { chronicle.entries.count }.by(1)
 
         created_pic = Picture.last
         expect(created_pic.name).to eq("Laptop in Granada")
@@ -415,7 +415,7 @@ RSpec.describe "/current_team/chronicles", type: :request do
           }
         }.to change { Thought.count }.by(1)
           .and change { Weblink.count }.by(1)
-          .and change { chronicle.chronicle_entries.count }.by(3)
+          .and change { chronicle.entries.count }.by(3)
 
         expect(chronicle.reload.locations).to include(loc)
         expect(chronicle.thoughts.pluck(:text)).to include("Updated revelation")

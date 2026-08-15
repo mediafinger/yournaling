@@ -14,10 +14,10 @@ article id= dom_id(chronicle)
     = chronicle.notice
 
   - if local_assigns[:full] || action_name == "show"
-    - if chronicle.chronicle_entries.any?
+    - if chronicle.entries.any?
       section
         h4 Entries
-        - chronicle.chronicle_entries.each do |chronicle_entry|
+        - chronicle.entries.each do |chronicle_entry|
           = render ChronicleEntryComponent.new(chronicle_entry: chronicle_entry, scope: "team", team: team)
   - elsif chronicle.first_picture.present?
     p

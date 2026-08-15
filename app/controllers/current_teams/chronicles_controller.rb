@@ -8,13 +8,13 @@ module CurrentTeams
       authorize! current_user, to: :index?, with: ChroniclePolicy
 
       @chronicles = Chronicle.where(team: current_team)
-        .includes(chronicle_entries: :entry)
+        .includes(entries: :entry)
         .order(start_date: :desc, created_at: :desc)
       Chronicle.preload_attachments(@chronicles)
     end
 
     def show
-      @chronicle = Chronicle.includes(chronicle_entries: :entry).urlsafe_find!(params[:id])
+      @chronicle = Chronicle.includes(entries: :entry).urlsafe_find!(params[:id])
       Chronicle.preload_attachments(@chronicle)
       authorize! @chronicle
     end
