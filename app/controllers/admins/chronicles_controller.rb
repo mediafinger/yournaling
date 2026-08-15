@@ -3,11 +3,13 @@
 module Admins
   class ChroniclesController < AdminController
     def index
-      @chronicles = Chronicle.all
+      @chronicles = Chronicle.includes(chronicle_entries: :entry)
+      Chronicle.preload_attachments(@chronicles)
     end
 
     def show
-      @chronicle = Chronicle.urlsafe_find!(params[:id])
+      @chronicle = Chronicle.includes(chronicle_entries: :entry).urlsafe_find!(params[:id])
+      Chronicle.preload_attachments(@chronicle)
     end
 
     def new

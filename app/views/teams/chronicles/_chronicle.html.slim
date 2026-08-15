@@ -13,11 +13,15 @@ article id= dom_id(chronicle)
     strong Notice:
     = chronicle.notice
 
-  - if chronicle.chronicle_entries.any?
-    section
-      h4 Entries
-      - chronicle.chronicle_entries.each do |chronicle_entry|
-        = render ChronicleEntryComponent.new(chronicle_entry: chronicle_entry, scope: "team", team: team)
+  - if action_name == "show"
+    - if chronicle.chronicle_entries.any?
+      section
+        h4 Entries
+        - chronicle.chronicle_entries.each do |chronicle_entry|
+          = render ChronicleEntryComponent.new(chronicle_entry: chronicle_entry, scope: "team", team: team)
+  - elsif chronicle.first_picture.present?
+    p
+      = render partial: "teams/pictures/picture", locals: { team:, picture: chronicle.first_picture }
 
   footer
     - if action_name != "show"

@@ -58,6 +58,26 @@ RSpec.describe Chronicle, type: :model do
     end
   end
 
+  describe "#first_picture" do
+    it "returns nil when there are no pictures" do
+      chronicle.save!
+      expect(chronicle.first_picture).to be_nil
+    end
+
+    it "returns the first picture according to entry position" do
+      chronicle.save!
+      picture1 = FactoryBot.create(:picture, team: team, name: "First Picture")
+      picture2 = FactoryBot.create(:picture, team: team, name: "Second Picture")
+      thought = FactoryBot.create(:thought, team: team)
+
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: thought, position: 1)
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: picture1, position: 2)
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: picture2, position: 3)
+
+      expect(chronicle.first_picture).to eq(picture1)
+    end
+  end
+
   describe "validations and normalizations" do
     it "is valid with valid attributes" do
       expect(chronicle).to be_valid

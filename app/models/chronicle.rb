@@ -17,6 +17,37 @@ class Chronicle < ApplicationRecordForContentAndPosts
 
   accepts_nested_attributes_for :chronicle_entries, allow_destroy: true
 
+  class << self
+    # Preloads ActiveStorage file attachments and blobs for all pictures associated
+    # with the given chronicles to prevent N+1 queries when rendering images/variants.
+    # Uses in-memory chronicle_entries when already loaded to avoid extra queries.
+    #
+    # Example:
+    #   chronicles = Chronicle.includes(chronicle_entries: :entry)
+    #   Chronicle.preload_attachments(chronicles)
+    #
+    def preload_attachments(chronicles)
+      records = Array(chronicles)
+      pictures = records.flat_map do |c|
+        if c.chronicle_entries.loaded?
+          c.chronicle_entries.filter_map { |ce| ce.entry if ce.entry_type == "Picture" }
+        else
+          c.pictures
+        end
+      end
+      ActiveRecord::Associations::Preloader.new(records: pictures, associations: { file_attachment: :blob }).call
+      chronicles
+    end
+  end
+
+  def first_picture
+    if chronicle_entries.loaded?
+      chronicle_entries.find { |ce| ce.entry_type == "Picture" }&.entry
+    else
+      chronicle_entries.where(entry_type: "Picture").reorder(position: :asc).first&.entry
+    end
+  end
+
   multisearchable(
     against: %i[name notice],
     additional_attributes: ->(chronicle) { { team_id: chronicle.team_id } }

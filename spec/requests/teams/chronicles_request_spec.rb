@@ -16,10 +16,17 @@ RSpec.describe "teams/:team_id/chronicles", type: :request do
   end
 
   describe "GET /index" do
-    it "renders a successful response for published chronicles" do
-      Chronicle.create!(valid_attributes)
+    it "renders a successful response for published chronicles displaying the first picture and omitting other entries" do
+      chronicle = Chronicle.create!(valid_attributes)
+      picture = FactoryBot.create(:picture, team: team, name: "Sierra Nevada Sunset")
+      thought = FactoryBot.create(:thought, team: team, text: "Private camping observation")
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: picture, position: 1)
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: thought, position: 2)
+
       get team_chronicles_url(team)
       expect(response).to be_successful
+      expect(response.body).to include("picture_#{picture.id}")
+      expect(response.body).not_to include("Private camping observation")
     end
 
     it "only includes published chronicles in the list" do
@@ -34,10 +41,17 @@ RSpec.describe "teams/:team_id/chronicles", type: :request do
   end
 
   describe "GET /show" do
-    it "renders a successful response when the chronicle is published" do
+    it "renders a successful response with all entries when the chronicle is published" do
       chronicle = Chronicle.create!(valid_attributes)
+      picture = FactoryBot.create(:picture, team: team, name: "Sierra Nevada Sunset")
+      thought = FactoryBot.create(:thought, team: team, text: "Private camping observation")
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: picture, position: 1)
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: thought, position: 2)
+
       get team_chronicle_url(team, chronicle)
       expect(response).to be_successful
+      expect(response.body).to include("Sierra Nevada Sunset")
+      expect(response.body).to include("Private camping observation")
     end
 
     it "renders a 404 when the chronicle is internal" do

@@ -46,9 +46,20 @@ RSpec.describe "/current_team/chronicles", type: :request do
     end
 
     context "when current_team is selected" do
-      it "renders a successful response" do
+      let!(:thought) { FactoryBot.create(:thought, team: team, text: "Secret campsite notes") }
+      let!(:picture) { FactoryBot.create(:picture, team: team, name: "Beach View") }
+
+      before do
+        FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: picture, position: 1)
+        FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: thought, position: 2)
+      end
+
+      it "renders a successful response displaying the first picture and omitting other entries" do
         get current_team_chronicles_url
         expect(response).to be_successful
+        expect(response.body).to include("Roadtrip through Andalusia")
+        expect(response.body).to include("Beach View")
+        expect(response.body).not_to include("Secret campsite notes")
       end
     end
   end
@@ -63,9 +74,11 @@ RSpec.describe "/current_team/chronicles", type: :request do
       FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: thought, position: 2)
     end
 
-    it "renders a successful response" do
+    it "renders a successful response displaying all associated entries" do
       get current_team_chronicle_url(chronicle.urlsafe_id)
       expect(response).to be_successful
+      expect(response.body).to include("Beach View")
+      expect(response.body).to include("Sunset at the campsite")
     end
   end
 

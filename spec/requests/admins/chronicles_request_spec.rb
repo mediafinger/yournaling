@@ -29,18 +29,32 @@ RSpec.describe "/admin/chronicles", type: :request do
     before { sign_in(admin_user) }
 
     describe "GET /admin/chronicles" do
-      it "renders a successful response" do
-        Chronicle.create!(valid_attributes)
+      it "renders a successful response displaying the first picture and omitting other entries" do
+        chronicle = Chronicle.create!(valid_attributes)
+        picture = FactoryBot.create(:picture, team: team, name: "Admin Audit Picture")
+        thought = FactoryBot.create(:thought, team: team, text: "Internal admin note")
+        FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: picture, position: 1)
+        FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: thought, position: 2)
+
         get admin_chronicles_url
         expect(response).to be_successful
+        expect(response.body).to include("Admin Audit Picture")
+        expect(response.body).not_to include("Internal admin note")
       end
     end
 
     describe "GET /admin/chronicles/:id" do
-      it "renders a successful response" do
+      it "renders a successful response displaying all entries" do
         chronicle = Chronicle.create!(valid_attributes)
+        picture = FactoryBot.create(:picture, team: team, name: "Admin Audit Picture")
+        thought = FactoryBot.create(:thought, team: team, text: "Internal admin note")
+        FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: picture, position: 1)
+        FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: thought, position: 2)
+
         get admin_chronicle_url(chronicle)
         expect(response).to be_successful
+        expect(response.body).to include("Admin Audit Picture")
+        expect(response.body).to include("Internal admin note")
       end
     end
 
