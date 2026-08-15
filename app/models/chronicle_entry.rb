@@ -11,9 +11,12 @@ class ChronicleEntry < ApplicationRecordYidEnabled
   belongs_to :chronicle, inverse_of: :chronicle_entries
   belongs_to :entry, polymorphic: true
 
+  attribute :position, default: :last
+
   positioned on: :chronicle
 
   before_validation :assign_team_from_chronicle, if: -> { team_id.blank? && chronicle.present? }
+  before_validation :resolve_symbolic_position
 
   attr_readonly :team_id
 
@@ -23,6 +26,15 @@ class ChronicleEntry < ApplicationRecordYidEnabled
   validate :entry_belongs_to_same_team
 
   private
+
+  def resolve_symbolic_position
+    raw_pos = position_before_type_cast
+    if raw_pos == :last || raw_pos == "last" || raw_pos.blank?
+      self.position = (chronicle&.chronicle_entries&.maximum(:position) || 0) + 1
+    elsif [:first, "first"].include?(raw_pos)
+      self.position = 1
+    end
+  end
 
   def assign_team_from_chronicle
     self.team_id = chronicle.team_id

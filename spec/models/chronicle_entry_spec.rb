@@ -151,5 +151,23 @@ RSpec.describe ChronicleEntry, type: :model do
       expect(e1.reload.position).to eq(1)
       expect(e3.reload.position).to eq(2)
     end
+
+    it "defaults new entries to the last position when position is omitted" do
+      e1 = described_class.create!(team: team, chronicle: chronicle, entry: picture1)
+      e2 = described_class.create!(team: team, chronicle: chronicle, entry: picture2)
+      e3 = described_class.create!(team: team, chronicle: chronicle, entry: picture3)
+
+      expect(e1.reload.position).to eq(1)
+      expect(e2.reload.position).to eq(2)
+      expect(e3.reload.position).to eq(3)
+    end
+
+    it "supports position: :last explicitly" do
+      e1 = described_class.create!(team: team, chronicle: chronicle, entry: picture1, position: 1)
+      e2 = described_class.create!(team: team, chronicle: chronicle, entry: picture2, position: :last)
+
+      expect(e1.reload.position).to eq(1)
+      expect(e2.reload.position).to eq(2)
+    end
   end
 end

@@ -74,11 +74,27 @@ RSpec.describe "/current_team/chronicles", type: :request do
       FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: thought, position: 2)
     end
 
-    it "renders a successful response displaying all associated entries" do
+    it "renders a successful response displaying all associated entries in position order after the notice" do
       get current_team_chronicle_url(chronicle.urlsafe_id)
       expect(response).to be_successful
-      expect(response.body).to include("Beach View")
-      expect(response.body).to include("Sunset at the campsite")
+
+      notice_index = response.body.index(chronicle.notice)
+      entry1_index = response.body.index("Beach View")
+      entry2_index = response.body.index("Sunset at the campsite")
+
+      expect(notice_index).to be < entry1_index
+      expect(entry1_index).to be < entry2_index
+    end
+
+    it "links attached pictures to current_team_picture_path instead of failing public route (regression test)" do
+      picture.update!(visibility: "internal")
+      get current_team_chronicle_url(chronicle.urlsafe_id)
+      expect(response).to be_successful
+      expect(response.body).to include(current_team_picture_path(picture))
+      expect(response.body).not_to include(team_picture_only_path(team, picture))
+
+      get current_team_picture_path(picture)
+      expect(response).to be_successful
     end
   end
 
@@ -86,6 +102,16 @@ RSpec.describe "/current_team/chronicles", type: :request do
     it "renders a successful response" do
       get new_current_team_chronicle_url
       expect(response).to be_successful
+    end
+
+    it "renders picture options with valid representation preview URLs and thumbnail images (regression test)" do
+      FactoryBot.create(:picture, team: team, name: "Mountain View")
+      get new_current_team_chronicle_url
+      expect(response).to be_successful
+      expect(response.body).to include("data-controller=\"picture-select\"")
+      expect(response.body).to include("data-preview-url=\"/rails/active_storage/representations/")
+      expect(response.body).to include("src=\"/rails/active_storage/representations/")
+      expect(response.body).to include("Mountain View")
     end
   end
 
@@ -95,6 +121,16 @@ RSpec.describe "/current_team/chronicles", type: :request do
     it "renders a successful response" do
       get edit_current_team_chronicle_url(chronicle.urlsafe_id)
       expect(response).to be_successful
+    end
+
+    it "renders picture options with valid representation preview URLs and thumbnail images (regression test)" do
+      FactoryBot.create(:picture, team: team, name: "Mountain View")
+      get edit_current_team_chronicle_url(chronicle.urlsafe_id)
+      expect(response).to be_successful
+      expect(response.body).to include("data-controller=\"picture-select\"")
+      expect(response.body).to include("data-preview-url=\"/rails/active_storage/representations/")
+      expect(response.body).to include("src=\"/rails/active_storage/representations/")
+      expect(response.body).to include("Mountain View")
     end
   end
 
@@ -133,6 +169,41 @@ RSpec.describe "/current_team/chronicles", type: :request do
       it "redirects to the created chronicle" do
         post current_team_chronicles_url, params: { chronicle: create_params }
         expect(response).to redirect_to(current_team_chronicle_url(Chronicle.first.urlsafe_id))
+      end
+
+      it "attaches an existing picture via picture_id param" do
+        expect {
+          post current_team_chronicles_url, params: {
+            chronicle: valid_attributes.merge(picture_id: picture.id),
+          }
+        }.to change { Chronicle.count }.by(1).and change { ChronicleEntry.count }.by(1)
+
+        chronicle = Chronicle.first
+        expect(chronicle.pictures).to include(picture)
+        expect(chronicle.chronicle_entries.last.position).to eq(1)
+      end
+
+      it "attaches a newly uploaded picture via picture_file and picture_name" do
+        uploaded_file = Rack::Test::UploadedFile.new(
+          Rails.root.join("spec/support/macbookair_stickered.jpg"),
+          "image/jpeg"
+        )
+
+        expect {
+          post current_team_chronicles_url, params: {
+            chronicle: valid_attributes.merge(
+              picture_file: uploaded_file,
+              picture_name: "MacBook on Desk"
+            ),
+          }
+        }.to change { Chronicle.count }.by(1)
+          .and change { Picture.count }.by(1)
+          .and change { ChronicleEntry.count }.by(1)
+
+        chronicle = Chronicle.first
+        created_pic = Picture.last
+        expect(created_pic.name).to eq("MacBook on Desk")
+        expect(chronicle.pictures).to include(created_pic)
       end
     end
 
@@ -184,6 +255,40 @@ RSpec.describe "/current_team/chronicles", type: :request do
         event = RecordEvent.last
         expect(event.name).to eq("updated")
         expect(event.record_id).to eq(chronicle.id)
+      end
+
+      it "attaches an existing picture via picture_id during update" do
+        new_pic = FactoryBot.create(:picture, team: team, name: "Sunset at Alhambra")
+
+        expect {
+          patch current_team_chronicle_url(chronicle.urlsafe_id), params: {
+            chronicle: new_attributes.merge(picture_id: new_pic.id),
+          }
+        }.to change { chronicle.chronicle_entries.count }.by(1)
+
+        entries = chronicle.reload.chronicle_entries.reorder(position: :asc)
+        expect(entries.map(&:entry)).to eq([thought, new_pic])
+        expect(entries.map(&:position)).to eq([1, 2])
+      end
+
+      it "attaches an uploaded picture via picture_file during update" do
+        uploaded_file = Rack::Test::UploadedFile.new(
+          Rails.root.join("spec/support/macbookair_stickered.jpg"),
+          "image/jpeg"
+        )
+
+        expect {
+          patch current_team_chronicle_url(chronicle.urlsafe_id), params: {
+            chronicle: new_attributes.merge(
+              picture_file: uploaded_file,
+              picture_name: "Laptop in Granada"
+            ),
+          }
+        }.to change { Picture.count }.by(1).and change { chronicle.chronicle_entries.count }.by(1)
+
+        created_pic = Picture.last
+        expect(created_pic.name).to eq("Laptop in Granada")
+        expect(chronicle.reload.pictures).to include(created_pic)
       end
 
       it "redirects to the chronicle" do

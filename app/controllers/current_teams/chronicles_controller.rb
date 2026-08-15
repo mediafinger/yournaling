@@ -19,37 +19,53 @@ module CurrentTeams
 
     def new
       @chronicle = Chronicle.new(team: current_team, start_date: Date.current, visibility: "internal")
+      @team_pictures = Picture.where(team: current_team).with_attached_file.order(created_at: :desc)
       authorize! @chronicle
     end
 
     def edit
       @chronicle = Chronicle.urlsafe_find!(params[:id])
+      @team_pictures = Picture.where(team: current_team).with_attached_file.order(created_at: :desc)
       authorize! @chronicle
     end
 
     def create
-      @chronicle = Chronicle.new(chronicle_params.merge(team: current_team))
+      attrs = chronicle_params
+      picture_id = attrs.delete(:picture_id)
+      picture_file = attrs.delete(:picture_file)
+      picture_name = attrs.delete(:picture_name)
+
+      @chronicle = Chronicle.new(attrs.merge(team: current_team))
       authorize! @chronicle
 
       create_with_event(record: @chronicle)
 
       if @chronicle.persisted?
+        @chronicle.attach_picture(picture_id:, picture_file:, picture_name:, user: current_user)
         redirect_to current_team_chronicle_url(@chronicle.urlsafe_id), notice: "Chronicle was successfully created."
       else
+        @team_pictures = Picture.where(team: current_team).with_attached_file.order(created_at: :desc)
         render :new, status: :unprocessable_content
       end
     end
 
     def update
+      attrs = chronicle_params
+      picture_id = attrs.delete(:picture_id)
+      picture_file = attrs.delete(:picture_file)
+      picture_name = attrs.delete(:picture_name)
+
       @chronicle = Chronicle.urlsafe_find!(params[:id])
       authorize! @chronicle
-      @chronicle.assign_attributes(chronicle_params)
+      @chronicle.assign_attributes(attrs)
 
       update_with_event(record: @chronicle)
 
       if @chronicle.changed? # == chronicle still dirty, not saved
+        @team_pictures = Picture.where(team: current_team).with_attached_file.order(created_at: :desc)
         render :edit, status: :unprocessable_content
       else
+        @chronicle.attach_picture(picture_id:, picture_file:, picture_name:, user: current_user)
         redirect_to current_team_chronicle_url(@chronicle.urlsafe_id), notice: "Chronicle was successfully updated."
       end
     end
@@ -72,6 +88,9 @@ module CurrentTeams
                     :start_date,
                     :end_date,
                     :visibility,
+                    :picture_id,
+                    :picture_file,
+                    :picture_name,
                     { chronicle_entries_attributes: [%i[id entry_type entry_id position _destroy]] }]
       )
     end

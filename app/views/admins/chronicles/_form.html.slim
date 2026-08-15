@@ -1,5 +1,5 @@
 article
-  = form_with(model: [:admin, chronicle]) do |form|
+  = form_with(model: [:admin, chronicle], data: { controller: "picture-select" }) do |form|
     = render partial: "shared_partials/form_validation_errors", locals: { record: chronicle }
     fieldset
       h3
@@ -30,5 +30,44 @@ article
       div
         = form.label :visibility
         = form.select :visibility, Chronicle::VISIBILITY_STATES.map { |v| [v.titleize, v] }, selected: form.object.visibility
+
+    fieldset
+      legend Attach Picture (Optional)
+      - team_pics = chronicle.team ? Picture.where(team: chronicle.team).with_attached_file.order(created_at: :desc) : Picture.with_attached_file.order(created_at: :desc)
+      - selected_pic = team_pics.find { |p| p.id == form.object.picture_id }
       div
-        = form.submit
+        = form.label :picture_id, "Select Existing Picture"
+        = form.hidden_field :picture_id, data: { picture_select_target: "hiddenInput" }
+        details.dropdown data-picture-select-target="dropdown" style="margin-bottom: 1rem;"
+          summary data-picture-select-target="summary"
+            - if selected_pic
+              span style="display: flex; align-items: center; gap: 0.75rem;"
+                img src=rails_representation_path(selected_pic.thumbnail) style="width: 40px; height: 30px; object-fit: cover; border-radius: 3px;" alt=""
+                span = "#{selected_pic.name} (#{selected_pic.team.name})"
+            - else
+              | Choose an existing picture...
+          ul style="max-height: 300px; overflow-y: auto; z-index: 50;"
+            li
+              a href="#" data-action="click->picture-select#selectOption" data-picture-id="" data-picture-name="Choose an existing picture..." data-preview-url=""
+                | None (no picture)
+            - team_pics.each do |pic|
+              - thumb_url = rails_representation_path(pic.thumbnail)
+              - display_label = "#{pic.name} (#{pic.team.name})"
+              li
+                a href="#" data-action="click->picture-select#selectOption" data-picture-id=pic.id data-picture-name=display_label data-preview-url=thumb_url style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem;"
+                  img src=thumb_url style="width: 60px; height: 45px; object-fit: cover; border-radius: 4px; flex-shrink: 0;" alt=pic.name
+                  span style="font-weight: 500;"
+                    = display_label
+
+      div style="margin-top: 1rem;"
+        = form.label :picture_file, "Or Upload New Picture"
+        = form.file_field :picture_file, accept: "image/*", data: { picture_select_target: "fileInput", action: "change->picture-select#updateFilePreview" }
+        div style="margin-top: 0.5rem;"
+          img data-picture-select-target="filePreview" style="display: none; max-width: 200px; max-height: 150px; object-fit: cover; border-radius: 4px;" alt="Uploaded picture preview"
+
+      div
+        = form.label :picture_name, "New Picture Name (Optional)"
+        = form.text_field :picture_name, placeholder: "Defaults to image file name"
+
+    div
+      = form.submit

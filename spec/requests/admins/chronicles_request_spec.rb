@@ -63,6 +63,16 @@ RSpec.describe "/admin/chronicles", type: :request do
         get new_admin_chronicle_url
         expect(response).to be_successful
       end
+
+      it "renders picture options with valid representation preview URLs and thumbnail images (regression test)" do
+        FactoryBot.create(:picture, team: team, name: "Admin Audit Landscape")
+        get new_admin_chronicle_url
+        expect(response).to be_successful
+        expect(response.body).to include("data-controller=\"picture-select\"")
+        expect(response.body).to include("data-preview-url=\"/rails/active_storage/representations/")
+        expect(response.body).to include("src=\"/rails/active_storage/representations/")
+        expect(response.body).to include("Admin Audit Landscape")
+      end
     end
 
     describe "GET /admin/chronicles/:id/edit" do
@@ -70,6 +80,17 @@ RSpec.describe "/admin/chronicles", type: :request do
         chronicle = Chronicle.create!(valid_attributes)
         get edit_admin_chronicle_url(chronicle)
         expect(response).to be_successful
+      end
+
+      it "renders picture options with valid representation preview URLs and thumbnail images (regression test)" do
+        chronicle = Chronicle.create!(valid_attributes)
+        FactoryBot.create(:picture, team: team, name: "Admin Audit Landscape")
+        get edit_admin_chronicle_url(chronicle)
+        expect(response).to be_successful
+        expect(response.body).to include("data-controller=\"picture-select\"")
+        expect(response.body).to include("data-preview-url=\"/rails/active_storage/representations/")
+        expect(response.body).to include("src=\"/rails/active_storage/representations/")
+        expect(response.body).to include("Admin Audit Landscape")
       end
     end
 
@@ -90,6 +111,18 @@ RSpec.describe "/admin/chronicles", type: :request do
         it "redirects to the created chronicle" do
           post admin_chronicles_url, params: { chronicle: valid_attributes }
           expect(response).to redirect_to(admin_chronicle_url(Chronicle.first))
+        end
+
+        it "attaches an existing picture via picture_id param" do
+          picture = FactoryBot.create(:picture, team: team)
+
+          expect {
+            post admin_chronicles_url, params: {
+              chronicle: valid_attributes.merge(picture_id: picture.id),
+            }
+          }.to change { Chronicle.count }.by(1).and change { ChronicleEntry.count }.by(1)
+
+          expect(Chronicle.first.pictures).to include(picture)
         end
       end
 
@@ -120,6 +153,18 @@ RSpec.describe "/admin/chronicles", type: :request do
           event = RecordEvent.last
           expect(event.name).to eq("updated")
           expect(event.done_by_admin).to be true
+        end
+
+        it "attaches a picture during update" do
+          picture = FactoryBot.create(:picture, team: team)
+
+          expect {
+            patch admin_chronicle_url(chronicle), params: {
+              chronicle: { name: "Admin Renamed Chronicle", picture_id: picture.id },
+            }
+          }.to change { chronicle.chronicle_entries.count }.by(1)
+
+          expect(chronicle.reload.pictures).to include(picture)
         end
 
         it "redirects to the chronicle" do

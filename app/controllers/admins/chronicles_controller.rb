@@ -21,13 +21,19 @@ module Admins
     end
 
     def create
-      @chronicle = Chronicle.new(chronicle_params)
+      attrs = chronicle_params
+      picture_id = attrs.delete(:picture_id)
+      picture_file = attrs.delete(:picture_file)
+      picture_name = attrs.delete(:picture_name)
+
+      @chronicle = Chronicle.new(attrs)
 
       Chronicle.create_with_event(
         record: @chronicle, event_params: { team: nil, user: current_user, done_by_admin: true }
       )
 
       if @chronicle.persisted?
+        @chronicle.attach_picture(picture_id:, picture_file:, picture_name:, user: current_user)
         redirect_to admin_chronicle_url(@chronicle), notice: "Chronicle was successfully created."
       else
         render :new, status: :unprocessable_content
@@ -35,8 +41,13 @@ module Admins
     end
 
     def update
+      attrs = chronicle_params
+      picture_id = attrs.delete(:picture_id)
+      picture_file = attrs.delete(:picture_file)
+      picture_name = attrs.delete(:picture_name)
+
       @chronicle = Chronicle.urlsafe_find!(params[:id])
-      @chronicle.assign_attributes(chronicle_params)
+      @chronicle.assign_attributes(attrs)
 
       Chronicle.update_with_event(
         record: @chronicle, event_params: { team: nil, user: current_user, done_by_admin: true }
@@ -45,6 +56,7 @@ module Admins
       if @chronicle.changed? # == chronicle still dirty, not saved
         render :edit, status: :unprocessable_content
       else
+        @chronicle.attach_picture(picture_id:, picture_file:, picture_name:, user: current_user)
         redirect_to admin_chronicle_url(@chronicle), notice: "Chronicle was successfully updated."
       end
     end
@@ -69,6 +81,9 @@ module Admins
                     :end_date,
                     :visibility,
                     :team_id,
+                    :picture_id,
+                    :picture_file,
+                    :picture_name,
                     { chronicle_entries_attributes: [%i[id entry_type entry_id position _destroy]] }]
       )
     end

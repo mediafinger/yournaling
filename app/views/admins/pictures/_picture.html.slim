@@ -5,7 +5,8 @@ article id= dom_id(picture)
     - if picture.date
       = "(#{picture.date})"
 
-  - if action_name == "show"
+  - is_picture_controller = (controller_name == "pictures" || controller_path.to_s.end_with?("pictures"))
+  - if is_picture_controller && action_name == "show"
     p
       > Original:
       = "#{picture.width} x #{picture.height}"
@@ -17,15 +18,21 @@ article id= dom_id(picture)
       = picture.filename
 
   p
-    - if action_name != "show"
-      / / - # Render our 4:3 thumbnails in 3:2 format
+    - if is_picture_controller && action_name == "show"
+      - if picture.visibility == "published"
+        = link_to image_tag(picture.large, style: "max-height: 30rem; width: auto;"), team_picture_only_path(picture.team, picture), target: "_blank", rel: "noopener noreferrer"
+      - else
+        = link_to image_tag(picture.large, style: "max-height: 30rem; width: auto;"), rails_blob_path(picture.file), target: "_blank", rel: "noopener noreferrer"
+    - elsif is_picture_controller
+      / - # Render our 4:3 thumbnails in 3:2 format
       = link_to image_tag(picture.thumbnail, style: "width: 160px; height: 106px; object-fit: cover;"), admin_picture_path(picture)
-      / / - # Render our 4:3 previews in 3:2 format
+      / - # Render our 4:3 previews in 3:2 format
       = link_to image_tag(picture.preview, style: "width: 400px; height: 266px; object-fit: cover;"), admin_picture_path(picture)
     - else
-      / / - # TODO: hide real URL / use expiring token to access image in fullsize
-      / / - # image_tag(picture.file, style: "max-height: 40rem; width: auto;")
-      = link_to image_tag(picture.large, style: "max-height: 30rem; width: auto;"), team_picture_only_path(picture), target: "_blank"
+      = link_to image_tag(picture.preview, style: "width: 400px; height: 266px; object-fit: cover;"), admin_picture_path(picture)
+
+    - if !is_picture_controller || action_name != "show"
+      = link_to "Show this picture", admin_picture_path(picture), role: "button"
 
   hr
 

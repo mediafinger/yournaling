@@ -180,4 +180,75 @@ RSpec.describe Chronicle, type: :model do
       expect(doc.searchable).to eq(chronicle)
     end
   end
+
+  describe "#attach_picture" do
+    let(:user) { FactoryBot.create(:user) }
+    let(:existing_picture) { FactoryBot.create(:picture, team: team, name: "Existing Landscape") }
+    let(:uploaded_file) do
+      Rack::Test::UploadedFile.new(
+        Rails.root.join("spec/support/macbookair_stickered.jpg"),
+        "image/jpeg"
+      )
+    end
+
+    before { chronicle.save! }
+
+    it "attaches an existing picture by picture_id" do
+      expect {
+        chronicle.attach_picture(picture_id: existing_picture.id, user: user)
+      }.to change { chronicle.chronicle_entries.count }.by(1)
+
+      entry = chronicle.chronicle_entries.last
+      expect(entry.entry).to eq(existing_picture)
+      expect(entry.position).to eq(1)
+    end
+
+    it "attaches an uploaded picture file" do
+      expect {
+        chronicle.attach_picture(picture_file: uploaded_file, picture_name: "Fresh Photo", user: user)
+      }.to change { Picture.count }.by(1).and change { chronicle.chronicle_entries.count }.by(1)
+
+      new_pic = Picture.last
+      expect(new_pic.name).to eq("Fresh Photo")
+      expect(new_pic.team).to eq(team)
+      expect(chronicle.chronicle_entries.last.entry).to eq(new_pic)
+    end
+
+    it "positions multiple attached pictures sequentially at the end and loads in position order" do
+      chronicle.attach_picture(picture_id: existing_picture.id, user: user)
+      second_picture = FactoryBot.create(:picture, team: team, name: "Second Photo")
+      chronicle.attach_picture(picture_id: second_picture.id, user: user)
+
+      entries = chronicle.reload.chronicle_entries
+      expect(entries.map(&:position)).to eq([1, 2])
+      expect(entries.map(&:entry)).to eq([existing_picture, second_picture])
+    end
+
+    it "orders chronicle_entries by position ASC when loaded via association (regression test)" do
+      p1 = FactoryBot.create(:picture, team: team, name: "First Position Picture")
+      p2 = FactoryBot.create(:picture, team: team, name: "Second Position Picture")
+      # Create entry 2 first, then entry 1 later to verify created_at order does not override position order
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: p2, position: 2)
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: p1, position: 1)
+
+      entries = chronicle.reload.chronicle_entries
+      expect(entries.map(&:position)).to eq([1, 2])
+      expect(entries.map(&:entry)).to eq([p1, p2])
+    end
+
+    it "does not attach when picture belongs to another team" do
+      other_team = FactoryBot.create(:team)
+      other_picture = FactoryBot.create(:picture, team: other_team)
+
+      expect {
+        chronicle.attach_picture(picture_id: other_picture.id, user: user)
+      }.not_to(change { chronicle.chronicle_entries.count })
+    end
+
+    it "does nothing when neither picture_id nor picture_file is provided" do
+      expect {
+        chronicle.attach_picture(user: user)
+      }.not_to(change { chronicle.chronicle_entries.count })
+    end
+  end
 end
