@@ -2,6 +2,8 @@
 
 module Admins
   class ChroniclesController < AdminController
+    include ChronicleFormHandling
+
     def index
       @chronicles = Chronicle.includes(chronicle_entries: :entry)
       Chronicle.preload_attachments(@chronicles)
@@ -22,9 +24,7 @@ module Admins
 
     def create
       attrs = chronicle_params
-      picture_id = attrs.delete(:picture_id)
-      picture_file = attrs.delete(:picture_file)
-      picture_name = attrs.delete(:picture_name)
+      insight_attrs = Chronicle.extract_insight_params!(attrs)
 
       @chronicle = Chronicle.new(attrs)
 
@@ -33,7 +33,7 @@ module Admins
       )
 
       if @chronicle.persisted?
-        @chronicle.attach_picture(picture_id:, picture_file:, picture_name:, user: current_user)
+        @chronicle.attach_insights(insight_attrs, user: current_user)
         redirect_to admin_chronicle_url(@chronicle), notice: "Chronicle was successfully created."
       else
         render :new, status: :unprocessable_content
@@ -42,9 +42,7 @@ module Admins
 
     def update
       attrs = chronicle_params
-      picture_id = attrs.delete(:picture_id)
-      picture_file = attrs.delete(:picture_file)
-      picture_name = attrs.delete(:picture_name)
+      insight_attrs = Chronicle.extract_insight_params!(attrs)
 
       @chronicle = Chronicle.urlsafe_find!(params[:id])
       @chronicle.assign_attributes(attrs)
@@ -56,7 +54,7 @@ module Admins
       if @chronicle.changed? # == chronicle still dirty, not saved
         render :edit, status: :unprocessable_content
       else
-        @chronicle.attach_picture(picture_id:, picture_file:, picture_name:, user: current_user)
+        @chronicle.attach_insights(insight_attrs, user: current_user)
         redirect_to admin_chronicle_url(@chronicle), notice: "Chronicle was successfully updated."
       end
     end
@@ -74,18 +72,7 @@ module Admins
     private
 
     def chronicle_params
-      params.expect(
-        chronicle: [:name,
-                    :notice,
-                    :start_date,
-                    :end_date,
-                    :visibility,
-                    :team_id,
-                    :picture_id,
-                    :picture_file,
-                    :picture_name,
-                    { chronicle_entries_attributes: [%i[id entry_type entry_id position _destroy]] }]
-      )
+      permit_chronicle_params(additional_keys: [:team_id])
     end
   end
 end

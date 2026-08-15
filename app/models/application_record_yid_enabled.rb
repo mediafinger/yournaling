@@ -42,10 +42,14 @@ class ApplicationRecordYidEnabled < ApplicationRecord
 
     def urlsafe_find(urlsafe_id)
       find_by(id: Base64.urlsafe_decode64(urlsafe_id))
+    rescue ArgumentError
+      nil
     end
 
     def urlsafe_find!(urlsafe_id)
       find(Base64.urlsafe_decode64(urlsafe_id))
+    rescue ArgumentError
+      raise ActiveRecord::RecordNotFound.new("Couldn't find #{name} with [urlsafe_id=#{urlsafe_id}]")
     end
 
     # rubocop:disable Style/ClassVars

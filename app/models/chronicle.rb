@@ -3,6 +3,8 @@
 # type: Post
 #
 class Chronicle < ApplicationRecordForContentAndPosts
+  include ChronicleAttachableInsights
+
   YID_CODE = "cron"
 
   belongs_to :team, inverse_of: :chronicles
@@ -56,32 +58,6 @@ class Chronicle < ApplicationRecordForContentAndPosts
     else
       chronicle_entries.where(entry_type: "Picture").reorder(position: :asc).first&.entry
     end
-  end
-
-  attr_accessor :picture_id, :picture_file, :picture_name
-
-  def attach_picture(picture_id: nil, picture_file: nil, picture_name: nil, user: nil)
-    target_picture = if picture_file.respond_to?(:tempfile)
-                       p_name = picture_name.presence || File.basename(picture_file.original_filename, ".*").titleize
-                       pic = Picture.new(
-                         file: ImageUploadConversionService.call(file: picture_file, name: p_name),
-                         name: p_name,
-                         date: start_date,
-                         team: team,
-                         visibility: visibility
-                       )
-                       Picture.create_with_event(record: pic, event_params: { team: team, user: user })
-                       pic if pic.persisted?
-                     elsif picture_id.present?
-                       team.pictures.find_by(id: picture_id)
-                     end
-
-    return unless target_picture
-
-    chronicle_entries.create!(
-      entry: target_picture,
-      team: team
-    )
   end
 
   multisearchable(

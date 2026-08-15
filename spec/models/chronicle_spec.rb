@@ -245,10 +245,189 @@ RSpec.describe Chronicle, type: :model do
       }.not_to(change { chronicle.chronicle_entries.count })
     end
 
+    it "attaches an existing picture by urlsafe_id (regression test)" do
+      expect {
+        chronicle.attach_picture(picture_id: existing_picture.urlsafe_id, user: user)
+      }.to change { chronicle.chronicle_entries.count }.by(1)
+
+      entry = chronicle.chronicle_entries.last
+      expect(entry.entry).to eq(existing_picture)
+    end
+
+    it "attaches multiple pictures sequentially in correct position order (regression test)" do
+      second_picture = FactoryBot.create(:picture, team: team, name: "Second Picture")
+
+      chronicle.attach_picture(picture_id: existing_picture.id, user: user)
+      chronicle.attach_picture(picture_id: second_picture.id, user: user)
+
+      entries = chronicle.reload.chronicle_entries.reorder(position: :asc)
+      expect(entries.map(&:entry)).to eq([existing_picture, second_picture])
+      expect(entries.map(&:position)).to eq([1, 2])
+      expect(chronicle.pictures).to eq([existing_picture, second_picture])
+    end
+
     it "does nothing when neither picture_id nor picture_file is provided" do
       expect {
         chronicle.attach_picture(user: user)
       }.not_to(change { chronicle.chronicle_entries.count })
+    end
+  end
+
+  describe "#attach_location" do
+    let(:team) { FactoryBot.create(:team) }
+    let(:user) { FactoryBot.create(:user) }
+    let(:chronicle) { FactoryBot.create(:chronicle, team: team, start_date: Date.current, visibility: "published") }
+    let(:existing_location) { FactoryBot.create(:location, team: team, name: "Sunset Beach", visibility: "internal") }
+
+    it "attaches an existing location by id and aligns visibility" do
+      expect {
+        chronicle.attach_location(location_id: existing_location.id, user: user)
+      }.to change { chronicle.chronicle_entries.count }.by(1)
+
+      entry = chronicle.chronicle_entries.last
+      expect(entry.entry).to eq(existing_location)
+      expect(existing_location.reload.visibility).to eq("published")
+    end
+
+    it "creates and attaches a new location with given attributes" do
+      expect {
+        chronicle.attach_location(
+          location_name: "Mount Olympus",
+          location_address: "Thessaly, Greece",
+          location_url: "https://maps.example.com/olympus",
+          user: user
+        )
+      }.to change { Location.count }.by(1).and change { chronicle.chronicle_entries.count }.by(1)
+
+      new_loc = chronicle.chronicle_entries.last.entry
+      expect(new_loc.name).to eq("Mount Olympus")
+      expect(new_loc.address).to eq("Thessaly, Greece")
+      expect(new_loc.team).to eq(team)
+      expect(new_loc.visibility).to eq("published")
+    end
+
+    it "does not attach when location belongs to another team" do
+      other_team = FactoryBot.create(:team)
+      other_loc = FactoryBot.create(:location, team: other_team)
+
+      expect {
+        chronicle.attach_location(location_id: other_loc.id, user: user)
+      }.not_to(change { chronicle.chronicle_entries.count })
+    end
+  end
+
+  describe "#attach_thought" do
+    let(:team) { FactoryBot.create(:team) }
+    let(:user) { FactoryBot.create(:user) }
+    let(:chronicle) { FactoryBot.create(:chronicle, team: team, start_date: Date.current, visibility: "published") }
+    let(:existing_thought) { FactoryBot.create(:thought, team: team, text: "Existing thought", visibility: "internal") }
+
+    it "attaches an existing thought by id and aligns visibility" do
+      expect {
+        chronicle.attach_thought(thought_id: existing_thought.id, user: user)
+      }.to change { chronicle.chronicle_entries.count }.by(1)
+
+      entry = chronicle.chronicle_entries.last
+      expect(entry.entry).to eq(existing_thought)
+      expect(existing_thought.reload.visibility).to eq("published")
+    end
+
+    it "creates and attaches a new thought" do
+      expect {
+        chronicle.attach_thought(thought_text: "Reflecting on the journey ahead", user: user)
+      }.to change { Thought.count }.by(1).and change { chronicle.chronicle_entries.count }.by(1)
+
+      new_thot = chronicle.chronicle_entries.last.entry
+      expect(new_thot.text).to eq("Reflecting on the journey ahead")
+      expect(new_thot.team).to eq(team)
+      expect(new_thot.visibility).to eq("published")
+    end
+
+    it "does not attach when thought belongs to another team" do
+      other_team = FactoryBot.create(:team)
+      other_thot = FactoryBot.create(:thought, team: other_team)
+
+      expect {
+        chronicle.attach_thought(thought_id: other_thot.id, user: user)
+      }.not_to(change { chronicle.chronicle_entries.count })
+    end
+  end
+
+  describe "#attach_weblink" do
+    let(:team) { FactoryBot.create(:team) }
+    let(:user) { FactoryBot.create(:user) }
+    let(:chronicle) { FactoryBot.create(:chronicle, team: team, start_date: Date.current, visibility: "published") }
+    let(:existing_weblink) { FactoryBot.create(:weblink, team: team, name: "Existing Link", url: "https://existing.com", visibility: "internal") }
+
+    it "attaches an existing weblink by id and aligns visibility" do
+      expect {
+        chronicle.attach_weblink(weblink_id: existing_weblink.id, user: user)
+      }.to change { chronicle.chronicle_entries.count }.by(1)
+
+      entry = chronicle.chronicle_entries.last
+      expect(entry.entry).to eq(existing_weblink)
+      expect(existing_weblink.reload.visibility).to eq("published")
+    end
+
+    it "creates and attaches a new weblink" do
+      expect {
+        chronicle.attach_weblink(
+          weblink_name: "Travel Guide",
+          weblink_url: "https://travelguide.example.com",
+          weblink_description: "Helpful guide",
+          user: user
+        )
+      }.to change { Weblink.count }.by(1).and change { chronicle.chronicle_entries.count }.by(1)
+
+      new_link = chronicle.chronicle_entries.last.entry
+      expect(new_link.name).to eq("Travel Guide")
+      expect(new_link.url).to eq("https://travelguide.example.com")
+      expect(new_link.team).to eq(team)
+      expect(new_link.visibility).to eq("published")
+    end
+
+    it "does not attach when weblink belongs to another team" do
+      other_team = FactoryBot.create(:team)
+      other_link = FactoryBot.create(:weblink, team: other_team)
+
+      expect {
+        chronicle.attach_weblink(weblink_id: other_link.id, user: user)
+      }.not_to(change { chronicle.chronicle_entries.count })
+    end
+  end
+
+  describe ".extract_insight_params! and #attach_insights" do
+    let(:team) { FactoryBot.create(:team) }
+    let(:user) { FactoryBot.create(:user) }
+    let(:chronicle) { FactoryBot.create(:chronicle, team: team, start_date: Date.current, visibility: "published") }
+    let(:picture) { FactoryBot.create(:picture, team: team) }
+    let(:location) { FactoryBot.create(:location, team: team) }
+
+    it "extracts insight parameters from attributes and attaches all specified insights" do
+      attrs = {
+        name: "Test Chronicle",
+        picture_id: picture.id,
+        location_id: location.id,
+        thought_text: "A new thought via batch attach",
+        weblink_url: "https://batch.example.com",
+        weblink_name: "Batch Link",
+      }
+
+      insight_params = described_class.extract_insight_params!(attrs)
+      expect(attrs).to eq({ name: "Test Chronicle" })
+      expect(insight_params[:picture_id]).to eq(picture.id)
+      expect(insight_params[:location_id]).to eq(location.id)
+
+      expect {
+        chronicle.attach_insights(insight_params, user: user)
+      }.to change { chronicle.chronicle_entries.count }.by(4)
+        .and change { Thought.count }.by(1)
+        .and change { Weblink.count }.by(1)
+
+      expect(chronicle.pictures).to include(picture)
+      expect(chronicle.locations).to include(location)
+      expect(chronicle.thoughts.pluck(:text)).to include("A new thought via batch attach")
+      expect(chronicle.weblinks.pluck(:name)).to include("Batch Link")
     end
   end
 

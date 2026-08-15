@@ -54,6 +54,20 @@ RSpec.describe "teams/:team_id/chronicles", type: :request do
       expect(response.body).to include("Private camping observation")
     end
 
+    it "displays all pictures when multiple pictures are attached to a published chronicle (regression test)" do
+      chronicle = Chronicle.create!(valid_attributes)
+      picture1 = FactoryBot.create(:picture, team: team, name: "Drone Coast Shot")
+      picture2 = FactoryBot.create(:picture, team: team, name: "Ganesh Statue View")
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: picture1, position: 1)
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: picture2, position: 2)
+
+      get team_chronicle_url(team, chronicle)
+      expect(response).to be_successful
+      expect(response.body).to include("Drone Coast Shot")
+      expect(response.body).to include("Ganesh Statue View")
+      expect(response.body.scan('article id="picture_').count).to eq(2)
+    end
+
     it "renders a 404 when the chronicle is internal" do
       chronicle = Chronicle.create!(valid_attributes.merge(visibility: "internal"))
       get team_chronicle_url(team, chronicle)

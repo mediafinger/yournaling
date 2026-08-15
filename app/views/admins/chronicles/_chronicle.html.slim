@@ -16,7 +16,7 @@ article id= dom_id(chronicle)
     strong Notice:
     = chronicle.notice
 
-  - if action_name == "show"
+  - if local_assigns[:full] || action_name == "show"
     - if chronicle.chronicle_entries.any?
       section
         h4 Entries

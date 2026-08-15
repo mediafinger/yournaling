@@ -56,6 +56,20 @@ RSpec.describe "/admin/chronicles", type: :request do
         expect(response.body).to include("Admin Audit Picture")
         expect(response.body).to include("Internal admin note")
       end
+
+      it "displays all pictures when multiple pictures are attached to a chronicle (regression test)" do
+        chronicle = Chronicle.create!(valid_attributes)
+        pic1 = FactoryBot.create(:picture, team: team, name: "Admin Audit Picture 1")
+        pic2 = FactoryBot.create(:picture, team: team, name: "Admin Audit Picture 2")
+        FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: pic1, position: 1)
+        FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: pic2, position: 2)
+
+        get admin_chronicle_url(chronicle)
+        expect(response).to be_successful
+        expect(response.body).to include("Admin Audit Picture 1")
+        expect(response.body).to include("Admin Audit Picture 2")
+        expect(response.body.scan('article id="picture_').count).to eq(2)
+      end
     end
 
     describe "GET /admin/chronicles/new" do
@@ -92,6 +106,26 @@ RSpec.describe "/admin/chronicles", type: :request do
         expect(response.body).to include("src=\"/rails/active_storage/representations/")
         expect(response.body).to include("Admin Audit Landscape")
       end
+
+      it "renders edit form with attached entries, edit links and remove checkboxes (regression test)",
+        aggregate_failures: true do
+        chronicle = Chronicle.create!(valid_attributes)
+        attached_pic1 = FactoryBot.create(:picture, team: team, name: "Admin Attached Pic 1")
+        attached_pic2 = FactoryBot.create(:picture, team: team, name: "Admin Attached Pic 2")
+        entry1 = FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: attached_pic1, position: 1)
+        entry2 = FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: attached_pic2, position: 2)
+
+        get edit_admin_chronicle_url(chronicle)
+        expect(response).to be_successful
+        expect(response.body).to include("Attached Entries")
+        expect(response.body).to include("Admin Attached Pic 1")
+        expect(response.body).to include("Admin Attached Pic 2")
+        expect(response.body).to include(edit_admin_picture_path(attached_pic1))
+        expect(response.body).to include(edit_admin_picture_path(attached_pic2))
+        expect(response.body).to include("chronicle[chronicle_entries_attributes]")
+        expect(response.body).to include(ActionView::RecordIdentifier.dom_id(entry1))
+        expect(response.body).to include(ActionView::RecordIdentifier.dom_id(entry2))
+      end
     end
 
     describe "POST /admin/chronicles" do
@@ -123,6 +157,27 @@ RSpec.describe "/admin/chronicles", type: :request do
           }.to change { Chronicle.count }.by(1).and change { ChronicleEntry.count }.by(1)
 
           expect(Chronicle.first.pictures).to include(picture)
+        end
+
+        it "attaches Location, Thought, and Weblink on create" do
+          loc = FactoryBot.create(:location, team: team)
+          thot = FactoryBot.create(:thought, team: team)
+          link = FactoryBot.create(:weblink, team: team)
+
+          expect {
+            post admin_chronicles_url, params: {
+              chronicle: valid_attributes.merge(
+                location_id: loc.id,
+                thought_id: thot.id,
+                weblink_id: link.id
+              ),
+            }
+          }.to change { Chronicle.count }.by(1).and change { ChronicleEntry.count }.by(3)
+
+          chronicle = Chronicle.first
+          expect(chronicle.locations).to include(loc)
+          expect(chronicle.thoughts).to include(thot)
+          expect(chronicle.weblinks).to include(link)
         end
       end
 
@@ -167,6 +222,27 @@ RSpec.describe "/admin/chronicles", type: :request do
           expect(chronicle.reload.pictures).to include(picture)
         end
 
+        it "attaches Location, Thought, and Weblink during update" do
+          loc = FactoryBot.create(:location, team: team)
+
+          expect {
+            patch admin_chronicle_url(chronicle), params: {
+              chronicle: {
+                location_id: loc.id,
+                thought_text: "Admin curated insight",
+                weblink_name: "Admin Resource",
+                weblink_url: "https://adminresource.example.com",
+              },
+            }
+          }.to change { Thought.count }.by(1)
+            .and change { Weblink.count }.by(1)
+            .and change { chronicle.chronicle_entries.count }.by(3)
+
+          expect(chronicle.reload.locations).to include(loc)
+          expect(chronicle.thoughts.pluck(:text)).to include("Admin curated insight")
+          expect(chronicle.weblinks.pluck(:name)).to include("Admin Resource")
+        end
+
         it "cascades visibility changes to attached entries when updated by admin" do
           picture = FactoryBot.create(:picture, team: team, visibility: "internal")
           FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: picture)
@@ -176,6 +252,27 @@ RSpec.describe "/admin/chronicles", type: :request do
           expect(response).to redirect_to(admin_chronicle_url(chronicle))
           expect(chronicle.reload.visibility).to eq("published")
           expect(picture.reload.visibility).to eq("published")
+        end
+
+        it "removes an attached picture entry via _destroy nested attribute (regression test)" do
+          pic1 = FactoryBot.create(:picture, team: team, name: "Admin Keep Picture")
+          pic2 = FactoryBot.create(:picture, team: team, name: "Admin Remove Picture")
+          entry1 = FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: pic1, position: 1)
+          entry2 = FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: pic2, position: 2)
+
+          expect {
+            patch admin_chronicle_url(chronicle), params: {
+              chronicle: {
+                chronicle_entries_attributes: {
+                  "0" => { id: entry1.id, _destroy: "0" },
+                  "1" => { id: entry2.id, _destroy: "1" },
+                },
+              },
+            }
+          }.to change { chronicle.chronicle_entries.count }.by(-1)
+
+          expect(chronicle.reload.pictures).to eq([pic1])
+          expect(Picture.exists?(pic2.id)).to be true
         end
 
         it "redirects to the chronicle" do
