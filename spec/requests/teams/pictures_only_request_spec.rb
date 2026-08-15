@@ -31,6 +31,22 @@ RSpec.describe "teams/:team_id/pictures_only", type: :request do
       expect(response).to be_successful
     end
 
+    it "renders a successful response when the picture is attached to a published chronicle" do
+      picture = Picture.create!(valid_attributes.merge(visibility: "internal"))
+      chronicle = Chronicle.create!(
+        team: team,
+        name: "Public Chronicle",
+        notice: "Notice text that is long enough for validations.",
+        start_date: Date.current,
+        visibility: "published"
+      )
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: picture, position: 1)
+
+      get team_picture_only_url(team, picture)
+
+      expect(response).to be_successful
+    end
+
     it "renders a 404 when the picture is not visible" do
       picture = Picture.create! valid_attributes
 

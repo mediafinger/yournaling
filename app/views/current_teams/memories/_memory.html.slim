@@ -15,4 +15,4 @@ article id= dom_id(memory)
   - if action_name != "show"
     = link_to "Show this memory", current_team_memory_path(memory), role: "button"
   = link_to "Edit this memory", edit_current_team_memory_path(memory), role: "button", class: "secondary"
-  = link_to "Change visibility", current_team_content_visibility_path(memory), role: "button", class: "secondary"
+  = link_to "Change visibility", current_team_edit_content_visibility_path(memory), role: "button", class: "secondary"

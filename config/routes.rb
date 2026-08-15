@@ -44,6 +44,7 @@ Rails.application.routes.draw do
     resources :thoughts
     resources :weblinks
 
+    get "/content_visibility/:id", to: "content_visibility#edit"
     get "/content_visibility/:id/edit", to: "content_visibility#edit", as: "edit_content_visibility"
     patch "/content_visibility/:id", to: "content_visibility#update", as: "content_visibility"
 

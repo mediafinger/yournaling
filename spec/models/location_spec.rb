@@ -164,4 +164,33 @@ RSpec.describe Location, type: :model do
       expect(location.pg_search_document.searchable).to eq(location)
     end
   end
+
+  describe "parent visibility constraints" do
+    it "prohibits reducing visibility when location belongs to a published chronicle" do
+      location.visibility = "published"
+      location.save!
+
+      chronicle = FactoryBot.create(:chronicle, team: team, name: "Desert Exploration", visibility: "published")
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: location)
+
+      location.visibility = "internal"
+      expect(location).not_to be_valid
+      expect(location.errors[:visibility]).to be_present
+      expect(location.errors[:visibility].first).to include("cannot be limited to 'internal'")
+      expect(location.errors[:visibility].first).to include("Desert Exploration")
+    end
+
+    it "prohibits reducing visibility when location belongs to a published memory" do
+      location.visibility = "published"
+      location.save!
+
+      FactoryBot.create(:memory, team: team, memo: "At the lighthouse", location: location, visibility: "published")
+
+      location.visibility = "internal"
+      expect(location).not_to be_valid
+      expect(location.errors[:visibility]).to be_present
+      expect(location.errors[:visibility].first).to include("cannot be limited to 'internal'")
+      expect(location.errors[:visibility].first).to include("At the lighthouse")
+    end
+  end
 end

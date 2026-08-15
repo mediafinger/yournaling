@@ -251,4 +251,58 @@ RSpec.describe Chronicle, type: :model do
       }.not_to(change { chronicle.chronicle_entries.count })
     end
   end
+
+  describe "visibility cascading" do
+    let(:team) { FactoryBot.create(:team) }
+    let(:chronicle) { FactoryBot.create(:chronicle, team: team, visibility: "internal") }
+    let(:picture) { FactoryBot.create(:picture, team: team, visibility: "internal") }
+    let(:thought) { FactoryBot.create(:thought, team: team, visibility: "internal") }
+    let(:memory) { FactoryBot.create(:memory, team: team, visibility: "internal") }
+
+    before do
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: picture, position: 1)
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: thought, position: 2)
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: memory, position: 3)
+    end
+
+    it "propagates published visibility to all attached entries when chronicle is published" do
+      chronicle.update!(visibility: "published")
+
+      expect(picture.reload.visibility).to eq("published")
+      expect(thought.reload.visibility).to eq("published")
+      expect(memory.reload.visibility).to eq("published")
+    end
+
+    it "propagates draft visibility to all attached entries when chronicle is changed to draft" do
+      chronicle.update!(visibility: "draft")
+
+      expect(picture.reload.visibility).to eq("draft")
+      expect(thought.reload.visibility).to eq("draft")
+      expect(memory.reload.visibility).to eq("draft")
+    end
+
+    it "aligns entry visibility when attaching an existing entry to a published chronicle" do
+      published_chronicle = FactoryBot.create(:chronicle, team: team, visibility: "published")
+      internal_picture = FactoryBot.create(:picture, team: team, visibility: "internal")
+
+      published_chronicle.attach_picture(picture_id: internal_picture.id)
+
+      expect(internal_picture.reload.visibility).to eq("published")
+    end
+
+    it "gracefully skips lowering visibility of an insight that belongs to another published post" do
+      # Chronicle and a separate Memory are both published
+      chronicle.update!(visibility: "published")
+      FactoryBot.create(:memory, team: team, picture: picture, visibility: "published")
+
+      # Reducing chronicle to internal should update thought and memory, but skip picture because other_memory is published
+      expect {
+        chronicle.update!(visibility: "internal")
+      }.not_to raise_error
+
+      expect(chronicle.reload.visibility).to eq("internal")
+      expect(thought.reload.visibility).to eq("internal")
+      expect(picture.reload.visibility).to eq("published")
+    end
+  end
 end

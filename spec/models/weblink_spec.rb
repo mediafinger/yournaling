@@ -108,4 +108,33 @@ RSpec.describe Weblink, type: :model do
       expect(weblink.pg_search_document.searchable).to eq(weblink)
     end
   end
+
+  describe "parent visibility constraints" do
+    it "prohibits reducing visibility when weblink belongs to a published chronicle" do
+      weblink.visibility = "published"
+      weblink.save!
+
+      chronicle = FactoryBot.create(:chronicle, team: team, name: "Resource Guide", visibility: "published")
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: weblink)
+
+      weblink.visibility = "internal"
+      expect(weblink).not_to be_valid
+      expect(weblink.errors[:visibility]).to be_present
+      expect(weblink.errors[:visibility].first).to include("cannot be limited to 'internal'")
+      expect(weblink.errors[:visibility].first).to include("Resource Guide")
+    end
+
+    it "prohibits reducing visibility when weblink belongs to a published memory" do
+      weblink.visibility = "published"
+      weblink.save!
+
+      FactoryBot.create(:memory, team: team, memo: "Article bookmark", weblink: weblink, visibility: "published")
+
+      weblink.visibility = "internal"
+      expect(weblink).not_to be_valid
+      expect(weblink.errors[:visibility]).to be_present
+      expect(weblink.errors[:visibility].first).to include("cannot be limited to 'internal'")
+      expect(weblink.errors[:visibility].first).to include("Article bookmark")
+    end
+  end
 end

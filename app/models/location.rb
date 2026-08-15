@@ -1,6 +1,8 @@
 # type: Content
 #
 class Location < ApplicationRecordForContentAndPosts
+  include VisibilityConstrainedByParents
+
   YID_CODE = "loc".freeze
 
   belongs_to :team, inverse_of: :locations

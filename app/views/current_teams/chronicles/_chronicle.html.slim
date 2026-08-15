@@ -31,4 +31,4 @@ article id= dom_id(chronicle)
       = link_to "Show this chronicle", current_team_chronicle_path(chronicle), role: "button"
     - if current_team == chronicle.team
       = link_to "Edit this chronicle", edit_current_team_chronicle_path(chronicle), role: "button", class: "secondary"
-      = link_to "Change visibility", current_team_content_visibility_path(chronicle), role: "button", class: "secondary"
+      = link_to "Change visibility", current_team_edit_content_visibility_path(chronicle), role: "button", class: "secondary"

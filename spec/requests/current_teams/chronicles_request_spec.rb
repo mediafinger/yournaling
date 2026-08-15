@@ -96,6 +96,19 @@ RSpec.describe "/current_team/chronicles", type: :request do
       get current_team_picture_path(picture)
       expect(response).to be_successful
     end
+
+    it "renders a working 'Change visibility' button linking to edit visibility form (regression test)" do
+      get current_team_chronicle_url(chronicle.urlsafe_id)
+      expect(response).to be_successful
+      expect(response.body).to include("Change visibility")
+
+      visibility_link_path = current_team_edit_content_visibility_path(chronicle)
+      expect(response.body).to include(visibility_link_path)
+
+      get visibility_link_path
+      expect(response).to be_successful
+      expect(response.body).to include("Edit content visibility")
+    end
   end
 
   describe "GET /new" do

@@ -65,5 +65,21 @@ RSpec.describe "teams/:team_id/chronicles", type: :request do
       get team_chronicle_url(team, chronicle)
       expect(response).to be_not_found
     end
+
+    it "allows viewing attached internal picture and fullsize image when chronicle is published" do
+      chronicle = Chronicle.create!(valid_attributes)
+      picture = FactoryBot.create(:picture, team: team, name: "Sierra Nevada Sunset", visibility: "internal")
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: picture, position: 1)
+
+      get team_chronicle_url(team, chronicle)
+      expect(response).to be_successful
+      expect(response.body).to include(team_picture_path(team, picture))
+
+      get team_picture_url(team, picture)
+      expect(response).to be_successful
+
+      get team_picture_only_url(team, picture)
+      expect(response).to be_successful
+    end
   end
 end

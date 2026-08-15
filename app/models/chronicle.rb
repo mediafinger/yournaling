@@ -94,6 +94,8 @@ class Chronicle < ApplicationRecordForContentAndPosts
   normalizes :name, with: ->(name) { name.strip }
   normalizes :notice, with: ->(notice) { notice.strip }
 
+  after_save :cascade_visibility_to_entries, if: :saved_change_to_visibility?
+
   validates :name, presence: true, uniqueness: { scope: :team_id }
   validates :notice, presence: true, length: { minimum: 20, maximum: 4096 }
   validates :start_date, presence: true
@@ -101,6 +103,18 @@ class Chronicle < ApplicationRecordForContentAndPosts
   validate :validate_date_range
 
   private
+
+  # TODO: improve performance when we see Chronicles with dozens of entries
+  def cascade_visibility_to_entries
+    chronicle_entries.each do |chronicle_entry|
+      entry = chronicle_entry.entry
+      next if entry.blank?
+      next if entry.visibility == visibility
+      next if entry.highest_parent_visibility_level(except_parent: self) > visibility_level
+
+      entry.update(visibility:)
+    end
+  end
 
   def validate_date_range
     return if end_date.blank? || start_date.blank?

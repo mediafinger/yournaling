@@ -4,6 +4,8 @@
 # We keep it this way for now to optimize fast text-only memory creation and querying.
 #
 class Memory < ApplicationRecordForContentAndPosts
+  include VisibilityConstrainedByParents
+
   YID_CODE = "memo".freeze
 
   belongs_to :team, inverse_of: :memories
@@ -24,7 +26,8 @@ class Memory < ApplicationRecordForContentAndPosts
 
   scope :with_includes, -> { includes(:team, :location, :picture, :thought, :weblink) }
 
-  before_save :update_visibilty_of_insights
+  after_save :cascade_visibility_to_insights, if: :saved_change_to_visibility?
+  after_save :align_insights_visibility
 
   normalizes :memo, with: ->(memo) { memo.strip }
 
@@ -37,34 +40,41 @@ class Memory < ApplicationRecordForContentAndPosts
 
   private
 
-  # REFACT: extract this to a service or similar
-  # REFACT: ensure the transaction is rolled back, when the memory can not be saved
-  #
-  # TODO: ensure updated associations are always saved!
-  #
-  # TODO: OR keep insights always internal and never set them to :published,
-  # so they can only be seen in the context of the Memory... (??)
-  #
-  def update_visibilty_of_insights
-    transaction do
-      %i[location picture thought weblink].each do |type|
-        update_visibility_of_removed_insight(type)
+  def cascade_visibility_to_insights
+    %i[location picture thought weblink].each do |type|
+      insight = send(type)
+      next if insight.blank?
+      next if insight.visibility == visibility
+      next if insight.highest_parent_visibility_level(except_parent: self) > visibility_level
 
-        # update visibility of associated insight to the visibility of this memory
-        send(type).presence&.update(visibility:)
-      end
+      insight.update(visibility:)
+    end
+  end
+
+  def align_insights_visibility
+    %i[location picture thought weblink].each do |type|
+      update_visibility_of_removed_insight(type)
+
+      insight = send(type)
+      next if insight.blank?
+      next if insight.visibility == visibility
+      next if insight.highest_parent_visibility_level(except_parent: self) > visibility_level
+
+      insight.update(visibility:)
     end
   end
 
   def update_visibility_of_removed_insight(type)
-    removed_id = send(:"#{type}_id_was")
-    return if removed_id.blank? # no previous Insight present, nothing to do
-    return if removed_id == send(:"#{type}_id") # Insight did not change, nothing to do
+    return unless saved_changes.key?(:"#{type}_id")
+
+    removed_id = saved_changes[:"#{type}_id"].first
+    return if removed_id.blank?
 
     removed_insight = ApplicationRecordYidEnabled.fynd(removed_id)
-    return if removed_insight.blank? # Insight does not exist anymore, nothing to do
-    return if removed_insight.memories.where.not(id:).exists? # Insight still used by other objects, nothing to do
+    return if removed_insight.blank?
+    return if removed_insight.memories.where.not(id:).exists?
+    return if removed_insight.chronicles.exists?
 
-    removed_insight.update(visibility: :internal) # reduce visibility of Insight to owning team
+    removed_insight.update(visibility: :internal)
   end
 end

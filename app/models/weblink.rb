@@ -1,6 +1,8 @@
 # type: Content
 #
 class Weblink < ApplicationRecordForContentAndPosts
+  include VisibilityConstrainedByParents
+
   YID_CODE = "link".freeze
 
   belongs_to :team, inverse_of: :weblinks

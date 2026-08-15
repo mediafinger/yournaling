@@ -167,6 +167,17 @@ RSpec.describe "/admin/chronicles", type: :request do
           expect(chronicle.reload.pictures).to include(picture)
         end
 
+        it "cascades visibility changes to attached entries when updated by admin" do
+          picture = FactoryBot.create(:picture, team: team, visibility: "internal")
+          FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: picture)
+
+          patch admin_chronicle_url(chronicle), params: { chronicle: { visibility: "published" } }
+
+          expect(response).to redirect_to(admin_chronicle_url(chronicle))
+          expect(chronicle.reload.visibility).to eq("published")
+          expect(picture.reload.visibility).to eq("published")
+        end
+
         it "redirects to the chronicle" do
           patch admin_chronicle_url(chronicle), params: { chronicle: { name: "Admin Renamed Chronicle" } }
           expect(response).to redirect_to(admin_chronicle_url(chronicle))

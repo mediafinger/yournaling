@@ -9,6 +9,7 @@
 #
 class Picture < ApplicationRecordForContentAndPosts
   extend ActionView::Helpers::NumberHelper
+  include VisibilityConstrainedByParents
 
   has_one_attached :file
 

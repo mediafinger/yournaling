@@ -123,4 +123,45 @@ RSpec.describe Picture, type: :model do
       expect(saved_picture.pg_search_document.searchable).to eq(saved_picture)
     end
   end
+
+  describe "parent visibility constraints" do
+    it "prohibits reducing visibility when picture belongs to a published chronicle" do
+      picture.visibility = "published"
+      picture.save!
+
+      chronicle = FactoryBot.create(:chronicle, team: team, name: "Summer Voyage", visibility: "published")
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: picture)
+
+      picture.visibility = "internal"
+      expect(picture).not_to be_valid
+      expect(picture.errors[:visibility]).to be_present
+      expect(picture.errors[:visibility].first).to include("cannot be limited to 'internal'")
+      expect(picture.errors[:visibility].first).to include("Summer Voyage")
+    end
+
+    it "prohibits reducing visibility when picture belongs to a published memory" do
+      picture.visibility = "published"
+      picture.save!
+
+      FactoryBot.create(:memory, team: team, memo: "Remembering sunny days", picture: picture,
+        visibility: "published")
+
+      picture.visibility = "internal"
+      expect(picture).not_to be_valid
+      expect(picture.errors[:visibility]).to be_present
+      expect(picture.errors[:visibility].first).to include("cannot be limited to 'internal'")
+      expect(picture.errors[:visibility].first).to include("Remembering sunny days")
+    end
+
+    it "allows reducing visibility when parent chronicle is also internal or less permissive" do
+      picture.visibility = "published"
+      picture.save!
+
+      chronicle = FactoryBot.create(:chronicle, team: team, name: "Internal Draft", visibility: "internal")
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: picture)
+
+      picture.visibility = "internal"
+      expect(picture).to be_valid
+    end
+  end
 end

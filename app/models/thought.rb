@@ -7,6 +7,8 @@
 # If not, we should remove this (and similar now redundant patterns on other tables).
 #
 class Thought < ApplicationRecordForContentAndPosts
+  include VisibilityConstrainedByParents
+
   YID_CODE = "thot".freeze
 
   belongs_to :team, inverse_of: :thoughts

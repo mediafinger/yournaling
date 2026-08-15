@@ -20,12 +20,22 @@ class ChronicleEntry < ApplicationRecordYidEnabled
 
   attr_readonly :team_id
 
+  after_create :align_entry_visibility
+
   validates :entry_type, presence: true, inclusion: { in: VALID_ENTRY_TYPES }
   validates :position, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 1 }
   validate :team_matches_chronicle
   validate :entry_belongs_to_same_team
 
   private
+
+  def align_entry_visibility
+    return if entry.blank? || chronicle.blank?
+    return if entry.visibility == chronicle.visibility
+    return if entry.highest_parent_visibility_level(except_parent: chronicle) > chronicle.visibility_level
+
+    entry.update(visibility: chronicle.visibility)
+  end
 
   def resolve_symbolic_position
     raw_pos = position_before_type_cast
