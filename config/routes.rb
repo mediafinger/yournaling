@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   resources :teams, module: :teams do
     get "", to: "pages#show", as: "home"
 
+    resources :chronicles, only: %i[index show]
     resources :members, only: %i[index show]
     resources :memories, only: %i[index show]
 
@@ -35,6 +36,7 @@ Rails.application.routes.draw do
   namespace :current_team, module: :current_teams do
     get "", to: "pages#show", as: "home"
 
+    resources :chronicles
     resources :locations
     resources :members
     resources :memories

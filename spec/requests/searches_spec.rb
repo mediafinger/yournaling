@@ -20,6 +20,14 @@ RSpec.describe "/search", type: :request do
       expect(response.body).to include("Sunset Beach")
     end
 
+    it "renders search results for chronicles" do
+      FactoryBot.create(:chronicle, team: team, name: "Andalusia Roadtrip")
+
+      get new_search_url, params: { query: "Andalusia", klass_name: "Chronicle" }
+      expect(response).to be_successful
+      expect(response.body).to include("Andalusia Roadtrip")
+    end
+
     it "renders an empty notice when search yields no results" do
       get new_search_url, params: { query: "Nonexistent", klass_name: "Location" }
       expect(response).to be_successful

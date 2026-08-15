@@ -5,7 +5,7 @@ class SearchesController < ApplicationController
 
   skip_verify_authorized only: %i[new create]
 
-  SEARCHABLE_KLASSES = %w[Team Memory Location Picture Thought Weblink Member].freeze
+  SEARCHABLE_KLASSES = %w[Team Chronicle Memory Location Picture Thought Weblink Member].freeze
 
   def new
     @klass_name = query_params[:klass_name].presence

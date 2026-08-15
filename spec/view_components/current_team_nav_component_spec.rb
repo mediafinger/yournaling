@@ -24,6 +24,7 @@ RSpec.describe CurrentTeamNavComponent, type: :component do
   it "renders all resource navigation links" do
     rendered = render_inline(described_class.new)
 
+    expect(rendered.to_html).to have_link("Chronicles", href: "/current_team/chronicles")
     expect(rendered.to_html).to have_link("Memories", href: "/current_team/memories")
     expect(rendered.to_html).to have_link("Thoughts", href: "/current_team/thoughts")
     expect(rendered.to_html).to have_link("Pictures", href: "/current_team/pictures")

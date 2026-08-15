@@ -19,6 +19,6 @@ class CurrentTeamNavComponent < ApplicationComponent
   SLIM
 
   def initialize
-    @sections = %w[memories thoughts pictures locations weblinks members]
+    @sections = %w[chronicles memories thoughts pictures locations weblinks members]
   end
 end

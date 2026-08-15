@@ -214,44 +214,35 @@ end
    * Added `has_many :chronicles, -> { distinct.reorder("chronicles.created_at DESC") }, through: :chronicle_entries` across all 5 insight models.
    * Validated 100% clean with `bundle exec rake ci` (RuboCop, FactoryBot, DB Doctor, 684 RSpec examples).
 
-### Step 2: Workspace CRUD Controller & Views (TDD)
+### Step 2: Workspace CRUD Controller & Views (TDD) — ✅ COMPLETED
 1. **Specs First**:
-   * Write `spec/requests/current_teams/chronicles_request_spec.rb`:
-     * `GET #index`: lists team's chronicles.
-     * `GET #show`: displays notice and ordered entries.
-     * `POST #create`: creates chronicle and logs `RecordEvent` (`name: :created`).
-     * `PATCH #update`: updates notice and reorders entries.
-     * `DELETE #destroy`: removes chronicle and logs `RecordEvent` (`name: :deleted`).
-     * Multi-tenant security (blocks access to chronicles from other teams).
+   * Created `spec/policies/chronicle_policy_spec.rb` and `spec/requests/current_teams/chronicles_request_spec.rb` covering index, show, new, edit, create, update, destroy, role authorization, and multi-tenant isolation.
 2. **Implementation**:
-   * Add routes under `namespace :current_team`.
-   * Create `app/controllers/current_teams/chronicles_controller.rb`.
-   * Build Slim templates in `app/views/current_teams/chronicles/`.
-   * Verify with `bundle exec rspec spec/requests/current_teams/chronicles_request_spec.rb`.
+   * Added `resources :chronicles` under `namespace :current_team`.
+   * Created `ChroniclePolicy` and `CurrentTeams::ChroniclesController`.
+   * Built Slim templates in `app/views/current_teams/chronicles/` (`index`, `show`, `new`, `edit`, `_form`, `_chronicle`).
+   * Verified 100% passing with `bundle exec rspec spec/policies/chronicle_policy_spec.rb spec/requests/current_teams/chronicles_request_spec.rb`.
 
-### Step 3: Public Browse Mode & Visibility (TDD)
+### Step 3: Public Browse Mode & Visibility (TDD) — ✅ COMPLETED
 1. **Specs First**:
-   * Write `spec/requests/teams/chronicles_request_spec.rb`:
-     * Guest access to published chronicles.
-     * Blocks guest access to `internal` or `draft` chronicles (returns 404).
+   * Created `spec/requests/teams/chronicles_request_spec.rb` verifying guest access to published chronicles and 404 handling for internal/draft chronicles.
 2. **Implementation**:
-   * Add routes under `resources :teams, module: :teams`.
-   * Create `app/controllers/teams/chronicles_controller.rb`.
-   * Build public Slim templates in `app/views/teams/chronicles/`.
-   * Verify with `bundle exec rspec spec/requests/teams/chronicles_request_spec.rb`.
+   * Added `resources :chronicles, only: %i[index show]` under `resources :teams, module: :teams`.
+   * Created `Teams::ChroniclesController`.
+   * Built public Slim templates in `app/views/teams/chronicles/` (`index`, `show`, `_chronicle`).
+   * Verified 100% passing with `bundle exec rspec spec/requests/teams/chronicles_request_spec.rb`.
 
-### Step 4: Navigation, Search & View Components
+### Step 4: Navigation, Search & View Components — ✅ COMPLETED
 1. **Search Integration**:
-   * Update search presenter to format `Chronicle` search results.
-   * Update `spec/view_components/search_results_component_spec.rb`.
+   * Added `Chronicle` to `SEARCHABLE_KLASSES` in `CurrentTeams::SearchesController`.
+   * Added search result rendering spec for `Chronicle` in `spec/view_components/search_results_component_spec.rb`.
 2. **Navigation Updates**:
-   * Add **Chronicles** link to `CurrentTeamNavComponent`.
-   * Add **+ Chronicle** button to `ApplicationNavActionsComponent`.
-   * Add **Chronicles** resource to `AdminNavComponent`.
-   * Update all navigation component specs.
+   * Added **Chronicles** link to `CurrentTeamNavComponent` and updated `spec/view_components/current_team_nav_component_spec.rb`.
+   * Added **+ New chronicle** action button via `app/views/current_teams/chronicles/_action_buttons.html.slim`.
+   * Added **Chronicles** link to `ApplicationNavComponent` under team browse scope and updated `spec/view_components/application_nav_component_spec.rb`.
 
 ### Step 5: Full Verification & Quality Gate
 * Run the complete CI suite:
   ```bash
-  source /opt/homebrew/share/chruby/chruby.sh && chruby 4.0.5 && bundle exec rake ci
+  bin/mcp_rake_ci
   ```

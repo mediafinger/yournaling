@@ -52,6 +52,21 @@ RSpec.describe ApplicationNavComponent, type: :component do
     end
   end
 
+  context "when active path is a team page" do
+    before do
+      allow_any_instance_of(described_class).to receive(:params).and_return({ team_id: team.to_param }) # rubocop:disable RSpec/AnyInstance
+      allow_any_instance_of(described_class).to receive(:active_path?).with("/teams/#{team.to_param}").and_return(true) # rubocop:disable RSpec/AnyInstance
+    end
+
+    it "renders team resource links including chronicles, memories, and members" do
+      rendered = render_inline(described_class.new(params: { team_id: team.to_param }))
+
+      expect(rendered.to_html).to have_link("Chronicles", href: "/teams/#{team.to_param}/chronicles")
+      expect(rendered.to_html).to have_link("Memories", href: "/teams/#{team.to_param}/memories")
+      expect(rendered.to_html).to have_link("Members", href: "/teams/#{team.to_param}/members")
+    end
+  end
+
   context "when user is not logged in" do
     let(:user) { User.new }
 

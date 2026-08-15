@@ -13,7 +13,7 @@ class ApplicationNavComponent < ApplicationComponent
           = @team_link_tag
 
     - if @team_scope
-      = render ApplicationNavLinksComponent.new(link_sections: %w[memories members], scope: "team", id: { team_id: params[:team_id] })
+      = render ApplicationNavLinksComponent.new(link_sections: %w[chronicles memories members], scope: "team", id: { team_id: params[:team_id] })
 
     - if current_user.persisted?
       = render ApplicationNavLinksComponent.new(link_sections: %w[teams])

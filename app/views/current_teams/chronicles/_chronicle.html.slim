@@ -1,0 +1,39 @@
+article id= dom_id(chronicle)
+  header
+    h3 = chronicle.name
+    p
+      small
+        strong Dates: 
+        = chronicle.start_date
+        - if chronicle.end_date.present?
+          |  – 
+          = chronicle.end_date
+        |  | 
+        strong Visibility: 
+        = chronicle.visibility
+
+  p
+    strong Notice:
+    = chronicle.notice
+
+  - if chronicle.chronicle_entries.any?
+    section
+      h4 Entries
+      - chronicle.chronicle_entries.each do |chronicle_entry|
+        - if chronicle_entry.entry.is_a?(Picture)
+          = render partial: "current_teams/pictures/picture", locals: { picture: chronicle_entry.entry }
+        - elsif chronicle_entry.entry.is_a?(Location)
+          = render partial: "current_teams/locations/location", locals: { location: chronicle_entry.entry }
+        - elsif chronicle_entry.entry.is_a?(Thought)
+          = render partial: "current_teams/thoughts/thought", locals: { thought: chronicle_entry.entry }
+        - elsif chronicle_entry.entry.is_a?(Weblink)
+          = render partial: "current_teams/weblinks/weblink", locals: { weblink: chronicle_entry.entry }
+        - elsif chronicle_entry.entry.is_a?(Memory)
+          = render partial: "current_teams/memories/memory", locals: { memory: chronicle_entry.entry }
+
+  footer
+    - if action_name != "show"
+      = link_to "Show this chronicle", current_team_chronicle_path(chronicle), role: "button"
+    - if current_team == chronicle.team
+      = link_to "Edit this chronicle", edit_current_team_chronicle_path(chronicle), role: "button", class: "secondary"
+      = link_to "Change visibility", current_team_content_visibility_path(chronicle), role: "button", class: "secondary"

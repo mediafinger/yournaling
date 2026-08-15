@@ -13,8 +13,18 @@ class ChronicleEntry < ApplicationRecordYidEnabled
 
   positioned on: :chronicle
 
+  before_validation :assign_team_from_chronicle, if: -> { team_id.blank? && chronicle.present? }
+
+  # TODO: add validation that team_id and chronicle_team_id are always the same
+
   attr_readonly :team_id
 
   validates :entry_type, presence: true, inclusion: { in: VALID_ENTRY_TYPES }
   validates :position, presence: true # TODO: validate it's a positive integer
+
+  private
+
+  def assign_team_from_chronicle
+    self.team_id = chronicle.team_id
+  end
 end
