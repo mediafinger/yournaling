@@ -84,19 +84,14 @@ class ChronicleAttachInsightsFormComponent < ApplicationComponent
           = @form.text_field :weblink_description, placeholder: "Brief notes about the link"
   SLIM
 
-  def initialize(form:, chronicle:, scope: "current_team", team_pictures: nil, team_locations: nil, team_thoughts: nil,
-                 team_weblinks: nil)
+  def initialize(form:, chronicle:, scope: "current_team")
     @form = form
     @chronicle = chronicle
     @scope = scope
-    @team_pictures = team_pictures
-    @team_locations = team_locations
-    @team_thoughts = team_thoughts
-    @team_weblinks = team_weblinks
   end
 
   def pictures
-    @pictures ||= @team_pictures || begin
+    @pictures ||= begin
       scope_team = @scope == "admin" ? @chronicle.team : current_team
       if scope_team
         Picture.where(team: scope_team).with_attached_file.order(created_at: :desc)
@@ -119,7 +114,7 @@ class ChronicleAttachInsightsFormComponent < ApplicationComponent
   end
 
   def locations
-    @locations ||= @team_locations || begin
+    @locations ||= begin
       scope_team = @scope == "admin" ? @chronicle.team : current_team
       scope_team ? Location.where(team: scope_team).order(created_at: :desc) : Location.order(created_at: :desc)
     end
@@ -133,7 +128,7 @@ class ChronicleAttachInsightsFormComponent < ApplicationComponent
   end
 
   def thoughts
-    @thoughts ||= @team_thoughts || begin
+    @thoughts ||= begin
       scope_team = @scope == "admin" ? @chronicle.team : current_team
       scope_team ? Thought.where(team: scope_team).order(created_at: :desc) : Thought.order(created_at: :desc)
     end
@@ -147,7 +142,7 @@ class ChronicleAttachInsightsFormComponent < ApplicationComponent
   end
 
   def weblinks
-    @weblinks ||= @team_weblinks || begin
+    @weblinks ||= begin
       scope_team = @scope == "admin" ? @chronicle.team : current_team
       scope_team ? Weblink.where(team: scope_team).order(created_at: :desc) : Weblink.order(created_at: :desc)
     end

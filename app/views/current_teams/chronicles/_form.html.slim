@@ -22,7 +22,7 @@ article
         = form.select :visibility, Chronicle::VISIBILITY_STATES.map { |v| [v.titleize, v] }, selected: form.object.visibility
 
     = render ChronicleAttachedEntriesFormComponent.new(form:, scope: "current_team")
-    = render ChronicleAttachInsightsFormComponent.new(form:, chronicle:, scope: "current_team", team_pictures: @team_pictures, team_locations: @team_locations, team_thoughts: @team_thoughts, team_weblinks: @team_weblinks)
+    = render ChronicleAttachInsightsFormComponent.new(form:, chronicle:, scope: "current_team")
 
     div
       = form.submit
