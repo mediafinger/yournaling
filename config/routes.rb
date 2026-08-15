@@ -62,6 +62,7 @@ Rails.application.routes.draw do
 
   namespace :admin, module: "admins", constraints: ->(request) { AdminConstraint.matches?(request) } do
     get "", to: "pages#show", as: "home"
+    resources :chronicles
     resources :locations
     resources :members
     resources :memories # TODO: add controllers and views
