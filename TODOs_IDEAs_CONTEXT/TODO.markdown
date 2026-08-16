@@ -360,7 +360,7 @@ The "vanity board" with detailed statistics could be a paid feature. The alterna
 
 ## Thoughts
 
-* a short text (limited to 512 characters, minimum 4?)
+* a short text (limited to 1024 characters, minimum 4?)
 * optionally a date
 
 ## Website Links

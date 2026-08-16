@@ -15,6 +15,38 @@ RSpec.describe Weblink, type: :model do
     }
   end
 
+  describe "associations" do
+    it "has many distinct chronicles through chronicle_entries" do
+      weblink.save!
+      chronicle1 = FactoryBot.create(:chronicle, team: team)
+      chronicle2 = FactoryBot.create(:chronicle, team: team)
+
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle1, team: team, entry: weblink, position: 1)
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle1, team: team, entry: weblink, position: 2)
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle2, team: team, entry: weblink, position: 1)
+
+      expect(weblink.chronicles).to contain_exactly(chronicle1, chronicle2)
+    end
+
+    it "destroys associated chronicle_entries when weblink is destroyed" do
+      weblink.save!
+      chronicle = FactoryBot.create(:chronicle, team: team)
+      entry = FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: weblink)
+
+      expect { weblink.destroy! }.to change { ChronicleEntry.count }.by(-1)
+      expect { entry.reload }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    it "nullifies memory reference when destroyed" do
+      link = described_class.create!(valid_attributes)
+      memory = FactoryBot.create(:memory, team: team, weblink: link)
+
+      expect(memory.reload.weblink_id).to eq(link.id)
+      link.destroy!
+      expect(memory.reload.weblink_id).to be_nil
+    end
+  end
+
   describe "validations" do
     it "is valid with valid attributes" do
       expect(weblink).to be_valid
@@ -56,17 +88,6 @@ RSpec.describe Weblink, type: :model do
     end
   end
 
-  describe "associations" do
-    it "nullifies memory reference when destroyed" do
-      link = described_class.create!(valid_attributes)
-      memory = FactoryBot.create(:memory, team: team, weblink: link)
-
-      expect(memory.reload.weblink_id).to eq(link.id)
-      link.destroy!
-      expect(memory.reload.weblink_id).to be_nil
-    end
-  end
-
   describe "search index" do
     it "creates a PgSearch::Document when saved" do
       expect { weblink.save! }.to change { PgSearch::Document.where(searchable_type: "Weblink").count }.by(1)
@@ -85,6 +106,35 @@ RSpec.describe Weblink, type: :model do
     it "returns the record via the searchable association" do
       weblink.save!
       expect(weblink.pg_search_document.searchable).to eq(weblink)
+    end
+  end
+
+  describe "parent visibility constraints" do
+    it "prohibits reducing visibility when weblink belongs to a published chronicle" do
+      weblink.visibility = "published"
+      weblink.save!
+
+      chronicle = FactoryBot.create(:chronicle, team: team, name: "Resource Guide", visibility: "published")
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: weblink)
+
+      weblink.visibility = "internal"
+      expect(weblink).not_to be_valid
+      expect(weblink.errors[:visibility]).to be_present
+      expect(weblink.errors[:visibility].first).to include("cannot be limited to 'internal'")
+      expect(weblink.errors[:visibility].first).to include("Resource Guide")
+    end
+
+    it "prohibits reducing visibility when weblink belongs to a published memory" do
+      weblink.visibility = "published"
+      weblink.save!
+
+      FactoryBot.create(:memory, team: team, memo: "Article bookmark", weblink: weblink, visibility: "published")
+
+      weblink.visibility = "internal"
+      expect(weblink).not_to be_valid
+      expect(weblink.errors[:visibility]).to be_present
+      expect(weblink.errors[:visibility].first).to include("cannot be limited to 'internal'")
+      expect(weblink.errors[:visibility].first).to include("Article bookmark")
     end
   end
 end

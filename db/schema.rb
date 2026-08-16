@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2024_11_05_202731) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_14_142100) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -132,6 +132,33 @@ ActiveRecord::Schema[8.1].define(version: 2024_11_05_202731) do
     t.string "status"
     t.datetime "updated_at", null: false
     t.index ["creator_id"], name: "index_blazer_queries_on_creator_id"
+  end
+
+  create_table "chronicle_entries", id: :string, force: :cascade do |t|
+    t.string "chronicle_id", null: false
+    t.datetime "created_at", null: false
+    t.string "entry_id", null: false
+    t.string "entry_type", null: false
+    t.integer "position", null: false
+    t.string "team_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["chronicle_id", "entry_type"], name: "index_chronicle_entries_on_chronicle_id_and_entry_type"
+    t.index ["chronicle_id", "position"], name: "index_chronicle_entries_on_chronicle_id_and_position", unique: true
+    t.index ["entry_id"], name: "index_chronicle_entries_on_entry_id"
+    t.index ["team_id"], name: "index_chronicle_entries_on_team_id"
+  end
+
+  create_table "chronicles", id: :string, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.date "end_date"
+    t.string "name", null: false
+    t.text "notice", null: false
+    t.date "start_date", null: false
+    t.string "team_id", null: false
+    t.datetime "updated_at", null: false
+    t.enum "visibility", default: "internal", null: false, enum_type: "content_visibility"
+    t.index ["team_id", "name"], name: "index_chronicles_on_team_id_and_name", unique: true
+    t.index ["team_id", "start_date"], name: "index_chronicles_on_team_id_and_start_date"
   end
 
   create_table "locations", id: :string, force: :cascade do |t|
@@ -277,6 +304,9 @@ ActiveRecord::Schema[8.1].define(version: 2024_11_05_202731) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "chronicle_entries", "chronicles"
+  add_foreign_key "chronicle_entries", "teams"
+  add_foreign_key "chronicles", "teams"
   add_foreign_key "locations", "teams"
   add_foreign_key "logins", "users"
   add_foreign_key "members", "teams"

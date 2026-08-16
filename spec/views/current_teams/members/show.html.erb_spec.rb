@@ -7,8 +7,8 @@ RSpec.describe "current_teams/members/show", type: :view do
 
   it "renders attributes in <p>" do
     render
-    expect(rendered).to match(/#{member.user.name}/)
-    expect(rendered).to match(/#{member.team.name}/)
+    expect(rendered).to match(/#{CGI.escapeHTML(member.user.name)}/)
+    expect(rendered).to match(/#{CGI.escapeHTML(member.team.name)}/)
     expect(rendered).to match(/#{member.roles}/)
   end
 end

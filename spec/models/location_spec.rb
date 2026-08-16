@@ -18,6 +18,29 @@ RSpec.describe Location, type: :model do
     }
   end
 
+  describe "associations" do
+    it "has many distinct chronicles through chronicle_entries" do
+      location.save!
+      chronicle1 = FactoryBot.create(:chronicle, team: team)
+      chronicle2 = FactoryBot.create(:chronicle, team: team)
+
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle1, team: team, entry: location, position: 1)
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle1, team: team, entry: location, position: 2)
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle2, team: team, entry: location, position: 1)
+
+      expect(location.chronicles).to contain_exactly(chronicle1, chronicle2)
+    end
+
+    it "destroys associated chronicle_entries when location is destroyed" do
+      location.save!
+      chronicle = FactoryBot.create(:chronicle, team: team)
+      entry = FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: location)
+
+      expect { location.destroy! }.to change { ChronicleEntry.count }.by(-1)
+      expect { entry.reload }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
   describe "validations and coordinate bounds" do
     it "is valid with valid attributes" do
       expect(location).to be_valid
@@ -139,6 +162,35 @@ RSpec.describe Location, type: :model do
     it "returns the record via the searchable association" do
       location.save!
       expect(location.pg_search_document.searchable).to eq(location)
+    end
+  end
+
+  describe "parent visibility constraints" do
+    it "prohibits reducing visibility when location belongs to a published chronicle" do
+      location.visibility = "published"
+      location.save!
+
+      chronicle = FactoryBot.create(:chronicle, team: team, name: "Desert Exploration", visibility: "published")
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: location)
+
+      location.visibility = "internal"
+      expect(location).not_to be_valid
+      expect(location.errors[:visibility]).to be_present
+      expect(location.errors[:visibility].first).to include("cannot be limited to 'internal'")
+      expect(location.errors[:visibility].first).to include("Desert Exploration")
+    end
+
+    it "prohibits reducing visibility when location belongs to a published memory" do
+      location.visibility = "published"
+      location.save!
+
+      FactoryBot.create(:memory, team: team, memo: "At the lighthouse", location: location, visibility: "published")
+
+      location.visibility = "internal"
+      expect(location).not_to be_valid
+      expect(location.errors[:visibility]).to be_present
+      expect(location.errors[:visibility].first).to include("cannot be limited to 'internal'")
+      expect(location.errors[:visibility].first).to include("At the lighthouse")
     end
   end
 end

@@ -35,6 +35,19 @@ RSpec.describe SearchResultsComponent, type: :component do
       expect(rendered.to_html).to include(doc.content.truncate(60))
     end
 
+    it "renders links to team chronicle browse paths" do
+      chronicle = FactoryBot.create(:chronicle, team: team, name: "Andalusia Roadtrip")
+      doc = PgSearch::Document.find_by(searchable_type: "Chronicle", searchable_id: chronicle.id)
+      results = PgSearch::Document.where(id: doc.id)
+
+      rendered = render_inline(described_class.new(results: results, scope: "general"))
+
+      expect(rendered.to_html).to have_link(
+        "Chronicle: #{doc.content.truncate(60)}",
+        href: "/teams/#{team.to_param}/chronicles/#{chronicle.to_param}"
+      )
+    end
+
     it "renders links for Team results" do
       doc = PgSearch::Document.find_by(searchable_type: "Team", searchable_id: team.id)
       results = PgSearch::Document.where(id: doc.id)
@@ -68,6 +81,17 @@ RSpec.describe SearchResultsComponent, type: :component do
 
     expect(rendered.to_html).to have_link("Thought: #{doc.content.truncate(60)}")
     expect(rendered.to_html).to include("An interesting thought")
+  end
+
+  it "renders Chronicle results using the content as display label" do
+    chronicle = FactoryBot.create(:chronicle, team: team, name: "Andalusia Roadtrip")
+    doc = PgSearch::Document.find_by(searchable_type: "Chronicle", searchable_id: chronicle.id)
+    results = PgSearch::Document.where(id: doc.id)
+
+    rendered = render_inline(described_class.new(results: results, scope: "current_team"))
+
+    expect(rendered.to_html).to have_link("Chronicle: #{doc.content.truncate(60)}")
+    expect(rendered.to_html).to have_link(href: "/current_team/chronicles/#{chronicle.to_param}")
   end
 
   it "displays a content snippet from the search index" do

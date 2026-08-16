@@ -4,7 +4,7 @@ module CurrentTeams
   class SearchesController < AppCurrentTeamController
     include Searchable
 
-    SEARCHABLE_KLASSES = %w[Memory Location Picture Thought Weblink Member].freeze
+    SEARCHABLE_KLASSES = %w[Chronicle Memory Location Picture Thought Weblink Member].freeze
 
     def new
       authorize! current_user, to: :show?, with: CurrentTeamPolicy

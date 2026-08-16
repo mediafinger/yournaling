@@ -1,0 +1,28 @@
+article id= dom_id(chronicle)
+  header
+    h3 = chronicle.name
+    p
+      small
+        strong Dates: 
+        = chronicle.start_date
+        - if chronicle.end_date.present?
+          |  – 
+          = chronicle.end_date
+
+  p
+    strong Notice:
+    = chronicle.notice
+
+  - if local_assigns[:full] || action_name == "show"
+    - if chronicle.entries.any?
+      section
+        h4 Entries
+        - chronicle.entries.each do |chronicle_entry|
+          = render ChronicleEntryComponent.new(chronicle_entry: chronicle_entry, scope: "team", team: team)
+  - elsif chronicle.first_picture.present?
+    p
+      = render partial: "teams/pictures/picture", locals: { team:, picture: chronicle.first_picture }
+
+  footer
+    - if !local_assigns[:full] && action_name != "show"
+      = link_to "Show this chronicle", team_chronicle_path(team, chronicle), role: "button"

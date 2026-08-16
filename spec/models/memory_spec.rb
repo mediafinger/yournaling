@@ -23,17 +23,40 @@ RSpec.describe Memory, type: :model do
     }
   end
 
+  describe "associations" do
+    it "has many distinct chronicles through chronicle_entries" do
+      memory.save!
+      chronicle1 = FactoryBot.create(:chronicle, team: team)
+      chronicle2 = FactoryBot.create(:chronicle, team: team)
+
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle1, team: team, entry: memory, position: 1)
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle1, team: team, entry: memory, position: 2)
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle2, team: team, entry: memory, position: 1)
+
+      expect(memory.reload.chronicles).to contain_exactly(chronicle1, chronicle2)
+    end
+
+    it "destroys associated chronicle_entries when memory is destroyed" do
+      memory.save!
+      chronicle = FactoryBot.create(:chronicle, team: team)
+      entry = FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: memory)
+
+      expect { memory.destroy! }.to change { ChronicleEntry.count }.by(-1)
+      expect { entry.reload }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
   describe "validations and normalizations" do
     it "is valid with valid attributes" do
       expect(memory).to be_valid
     end
 
-    it "validates memo presence and length between 4 and 500 characters" do
+    it "validates memo presence and length between 4 and 512 characters" do
       memory.memo = "abc"
       expect(memory).not_to be_valid
       expect(memory.errors[:memo]).to be_present
 
-      memory.memo = "a" * 501
+      memory.memo = "a" * 513
       expect(memory).not_to be_valid
 
       memory.memo = "Valid memo text"
@@ -97,6 +120,36 @@ RSpec.describe Memory, type: :model do
       # Still published because other_memory references it
       expect(location.reload.visibility).to eq("published")
       expect(other_memory).to be_present
+    end
+
+    it "gracefully skips lowering visibility of an insight that belongs to another published chronicle" do
+      memory.visibility = "published"
+      memory.save!
+
+      # Picture also belongs to a published chronicle
+      chronicle = FactoryBot.create(:chronicle, team: team, visibility: "published")
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: picture)
+
+      # Reducing memory to internal should skip picture
+      memory.update!(visibility: "internal")
+
+      expect(memory.reload.visibility).to eq("internal")
+      expect(location.reload.visibility).to eq("internal")
+      expect(picture.reload.visibility).to eq("published")
+    end
+
+    it "prohibits reducing visibility when memory belongs to a more permissive chronicle" do
+      memory.visibility = "published"
+      memory.save!
+
+      chronicle = FactoryBot.create(:chronicle, team: team, name: "Epic Journey", visibility: "published")
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: memory)
+
+      memory.visibility = "internal"
+      expect(memory).not_to be_valid
+      expect(memory.errors[:visibility]).to be_present
+      expect(memory.errors[:visibility].first).to include("cannot be limited to 'internal'")
+      expect(memory.errors[:visibility].first).to include("Epic Journey")
     end
   end
 

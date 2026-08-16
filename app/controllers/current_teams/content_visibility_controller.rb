@@ -12,12 +12,14 @@ module CurrentTeams
       @content.visibility = update_params[:visibility]
       authorize! @content, to: :update?, with: ContentVisibilityPolicy
 
-      Memory.update_with_event(record: @content, event_params: { team: current_team, user: current_user })
+      @content.class.update_with_event(record: @content, event_params: { team: current_team, user: current_user })
 
-      if @content.changed? # == content still dirty, not saved
+      if @content.changed? || @content.errors.any? # == content still dirty, not saved
+        @visibility_states = @content.class::VISIBILITY_STATES - %w[draft blocked]
         render :edit, status: :unprocessable_content
       else
-        redirect_to current_team_edit_content_visibility(@content), notice: "Memory was successfully updated."
+        redirect_to current_team_edit_content_visibility_path(@content),
+          notice: "#{@content.class.model_name.human} was successfully updated."
       end
     end
 

@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   resources :teams, module: :teams do
     get "", to: "pages#show", as: "home"
 
+    resources :chronicles, only: %i[index show]
     resources :members, only: %i[index show]
     resources :memories, only: %i[index show]
 
@@ -35,6 +36,7 @@ Rails.application.routes.draw do
   namespace :current_team, module: :current_teams do
     get "", to: "pages#show", as: "home"
 
+    resources :chronicles
     resources :locations
     resources :members
     resources :memories
@@ -42,6 +44,7 @@ Rails.application.routes.draw do
     resources :thoughts
     resources :weblinks
 
+    get "/content_visibility/:id", to: "content_visibility#edit"
     get "/content_visibility/:id/edit", to: "content_visibility#edit", as: "edit_content_visibility"
     patch "/content_visibility/:id", to: "content_visibility#update", as: "content_visibility"
 
@@ -60,6 +63,7 @@ Rails.application.routes.draw do
 
   namespace :admin, module: "admins", constraints: ->(request) { AdminConstraint.matches?(request) } do
     get "", to: "pages#show", as: "home"
+    resources :chronicles
     resources :locations
     resources :members
     resources :memories # TODO: add controllers and views

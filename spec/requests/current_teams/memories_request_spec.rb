@@ -55,6 +55,19 @@ RSpec.describe "/current_team/memories", type: :request do
       get current_team_memory_url(memory.urlsafe_id)
       expect(response).to be_successful
     end
+
+    it "renders a working 'Change visibility' button linking to edit visibility form (regression test)" do
+      get current_team_memory_url(memory.urlsafe_id)
+      expect(response).to be_successful
+      expect(response.body).to include("Change visibility")
+
+      visibility_link_path = current_team_edit_content_visibility_path(memory)
+      expect(response.body).to include(visibility_link_path)
+
+      get visibility_link_path
+      expect(response).to be_successful
+      expect(response.body).to include("Edit content visibility")
+    end
   end
 
   describe "GET /new" do

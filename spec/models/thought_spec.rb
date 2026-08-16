@@ -18,6 +18,25 @@ RSpec.describe Thought, type: :model do
       expect(thought.team).to eq(team)
     end
 
+    it "has many distinct chronicles through chronicle_entries" do
+      chronicle1 = FactoryBot.create(:chronicle, team: team)
+      chronicle2 = FactoryBot.create(:chronicle, team: team)
+
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle1, team: team, entry: thought, position: 1)
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle1, team: team, entry: thought, position: 2)
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle2, team: team, entry: thought, position: 1)
+
+      expect(thought.chronicles).to contain_exactly(chronicle1, chronicle2)
+    end
+
+    it "destroys associated chronicle_entries when thought is destroyed" do
+      chronicle = FactoryBot.create(:chronicle, team: team)
+      entry = FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: thought)
+
+      expect { thought.destroy! }.to change { ChronicleEntry.count }.by(-1)
+      expect { entry.reload }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+
     it "nullifies memory reference when thought is destroyed" do
       memory = FactoryBot.create(:memory, team: team, thought: thought)
       thought.destroy!
@@ -32,8 +51,8 @@ RSpec.describe Thought, type: :model do
       expect(thought.errors[:text]).to be_present
     end
 
-    it "validates maximum length of text (512 chars)" do
-      thought.text = "a" * 513
+    it "validates maximum length of text (1024 chars)" do
+      thought.text = "a" * 1025
       expect(thought).not_to be_valid
       expect(thought.errors[:text]).to be_present
     end
@@ -72,6 +91,33 @@ RSpec.describe Thought, type: :model do
 
     it "returns the record via the searchable association" do
       expect(thought.pg_search_document.searchable).to eq(thought)
+    end
+  end
+
+  describe "parent visibility constraints" do
+    it "prohibits reducing visibility when thought belongs to a published chronicle" do
+      thought.update!(visibility: "published")
+
+      chronicle = FactoryBot.create(:chronicle, team: team, name: "Philosophy 101", visibility: "published")
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: thought)
+
+      thought.visibility = "internal"
+      expect(thought).not_to be_valid
+      expect(thought.errors[:visibility]).to be_present
+      expect(thought.errors[:visibility].first).to include("cannot be limited to 'internal'")
+      expect(thought.errors[:visibility].first).to include("Philosophy 101")
+    end
+
+    it "prohibits reducing visibility when thought belongs to a published memory" do
+      thought.update!(visibility: "published")
+
+      FactoryBot.create(:memory, team: team, memo: "Deep reflection", thought: thought, visibility: "published")
+
+      thought.visibility = "internal"
+      expect(thought).not_to be_valid
+      expect(thought.errors[:visibility]).to be_present
+      expect(thought.errors[:visibility].first).to include("cannot be limited to 'internal'")
+      expect(thought.errors[:visibility].first).to include("Deep reflection")
     end
   end
 end

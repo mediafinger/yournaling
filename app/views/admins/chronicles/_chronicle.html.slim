@@ -1,0 +1,32 @@
+article id= dom_id(chronicle)
+  header
+    h3 = chronicle.name
+    p
+      small
+        strong Dates: 
+        = chronicle.start_date
+        - if chronicle.end_date.present?
+          |  – 
+          = chronicle.end_date
+        |  | 
+        strong Visibility: 
+        = chronicle.visibility
+
+  p
+    strong Notice:
+    = chronicle.notice
+
+  - if local_assigns[:full] || action_name == "show"
+    - if chronicle.entries.any?
+      section
+        h4 Entries
+        - chronicle.entries.each do |chronicle_entry|
+          = render ChronicleEntryComponent.new(chronicle_entry: chronicle_entry, scope: "admin")
+  - elsif chronicle.first_picture.present?
+    p
+      = render partial: "admins/pictures/picture", locals: { picture: chronicle.first_picture }
+
+  hr
+  = render AdminShowTeamComponent.new(team: chronicle.team)
+  = render AdminShowMetaInformationComponent.new(record: chronicle)
+  = render AdminActionsComponent.new(record: chronicle, name: "chronicle")

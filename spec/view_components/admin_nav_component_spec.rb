@@ -19,7 +19,7 @@ RSpec.describe AdminNavComponent, type: :component do
   it "renders all resource navigation links" do
     rendered = render_inline(described_class.new)
 
-    %w[users teams locations pictures thoughts weblinks members record_events].each do |section|
+    %w[users teams chronicles locations pictures thoughts weblinks members record_events].each do |section|
       expect(rendered.to_html).to have_link(section.titleize, href: "/admin/#{section}")
     end
   end

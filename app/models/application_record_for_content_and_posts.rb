@@ -2,9 +2,29 @@ class ApplicationRecordForContentAndPosts < ApplicationRecordYidEnabled
   self.abstract_class = true
 
   VISIBILITY_STATES = %w[draft internal published archived blocked].freeze
+  VISIBILITY_PERMISSIVENESS = {
+    "blocked" => 0,
+    "archived" => 1,
+    "draft" => 2,
+    "internal" => 3,
+    "published" => 4,
+  }.freeze
+
   YID_CODE = "abstract_class_must_not_be_used".freeze
 
   after_initialize :define_visibility_methods
+
+  def visibility_level(val = visibility)
+    VISIBILITY_PERMISSIVENESS.fetch(val.to_s, 0)
+  end
+
+  def more_permissive_than?(other_visibility)
+    visibility_level > visibility_level(other_visibility)
+  end
+
+  def less_permissive_than?(other_visibility)
+    visibility_level < visibility_level(other_visibility)
+  end
 
   private
 

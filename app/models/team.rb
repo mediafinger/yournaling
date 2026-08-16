@@ -3,6 +3,8 @@
 class Team < ApplicationRecordYidEnabled
   YID_CODE = "team"
 
+  has_many :chronicles, class_name: "Chronicle", inverse_of: :team, dependent: :destroy
+  has_many :chronicle_entries, class_name: "ChronicleEntry", inverse_of: :team, dependent: :destroy
   has_many :locations, class_name: "Location", inverse_of: :team, dependent: :destroy
   has_many :members, class_name: "Member", inverse_of: :team, dependent: :destroy
   has_many :memories, class_name: "Memory", inverse_of: :team, dependent: :destroy

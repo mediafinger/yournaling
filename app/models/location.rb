@@ -1,10 +1,13 @@
 # type: Content
 #
 class Location < ApplicationRecordForContentAndPosts
+  include VisibilityConstrainedByParents
+
   YID_CODE = "loc".freeze
 
   belongs_to :team, inverse_of: :locations
-
+  has_many :chronicle_entries, as: :entry, dependent: :destroy
+  has_many :chronicles, -> { distinct.reorder("chronicles.created_at DESC") }, through: :chronicle_entries
   has_many :memories, class_name: "Memory", inverse_of: :location,
     dependent: :nullify
 
