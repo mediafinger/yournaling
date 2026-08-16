@@ -19,7 +19,13 @@ class ChronicleEntryComponent < ApplicationComponent
                    end
 
     partial_path = "#{scope_prefix}/#{type_key.pluralize}/#{type_key}"
-    return unless lookup_context.template_exists?(partial_path, [], true)
+    unless lookup_context.template_exists?(partial_path, [], true)
+      if Rails.env.local?
+        raise "Missing partial '#{partial_path}' for ChronicleEntry with entry_type '#{@chronicle_entry.entry_type}'"
+      end
+
+      return
+    end
 
     locals = { type_key.to_sym => entry }
     locals[:team] = @team if scope_prefix == "teams"

@@ -31,15 +31,19 @@ module CurrentTeams
 
     def create
       attrs = chronicle_params
-      insight_attrs = Chronicle.extract_insight_params!(attrs)
+      insight_attrs = ChronicleInsightAttacher.extract_insight_params!(attrs)
 
       @chronicle = Chronicle.new(attrs.merge(team: current_team))
       authorize! @chronicle
 
-      create_with_event(record: @chronicle)
+      ActiveRecord::Base.transaction do
+        create_with_event(record: @chronicle)
+        if @chronicle.persisted?
+          ChronicleInsightAttacher.call(chronicle: @chronicle, params: insight_attrs, user: current_user)
+        end
+      end
 
       if @chronicle.persisted?
-        @chronicle.attach_insights(insight_attrs, user: current_user)
         redirect_to current_team_chronicle_url(@chronicle.urlsafe_id), notice: "Chronicle was successfully created."
       else
         render :new, status: :unprocessable_content
@@ -48,18 +52,22 @@ module CurrentTeams
 
     def update
       attrs = chronicle_params
-      insight_attrs = Chronicle.extract_insight_params!(attrs)
+      insight_attrs = ChronicleInsightAttacher.extract_insight_params!(attrs)
 
       @chronicle = Chronicle.urlsafe_find!(params[:id])
       authorize! @chronicle
       @chronicle.assign_attributes(attrs)
 
-      update_with_event(record: @chronicle)
+      ActiveRecord::Base.transaction do
+        update_with_event(record: @chronicle)
+        unless @chronicle.changed?
+          ChronicleInsightAttacher.call(chronicle: @chronicle, params: insight_attrs, user: current_user)
+        end
+      end
 
       if @chronicle.changed? # == chronicle still dirty, not saved
         render :edit, status: :unprocessable_content
       else
-        @chronicle.attach_insights(insight_attrs, user: current_user)
         redirect_to current_team_chronicle_url(@chronicle.urlsafe_id), notice: "Chronicle was successfully updated."
       end
     end

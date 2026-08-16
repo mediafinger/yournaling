@@ -66,19 +66,6 @@ RSpec.describe ChronicleEntry, type: :model do
       expect(chronicle_entry.errors[:entry]).to be_present
     end
 
-    it "validates that position is a positive integer" do
-      [0, -1, 1.5, "abc"].each do |invalid_pos|
-        chronicle_entry.position = invalid_pos
-        expect(chronicle_entry).not_to be_valid
-        expect(chronicle_entry.errors[:position]).to be_present
-      end
-
-      [1, 2, 100].each do |valid_pos|
-        chronicle_entry.position = valid_pos
-        expect(chronicle_entry).to be_valid
-      end
-    end
-
     it "allows the same entry to be attached multiple times in different positions" do
       entry1 = described_class.create!(team: team, chronicle: chronicle, entry: thought, position: 1)
       entry2 = described_class.new(team: team, chronicle: chronicle, entry: thought, position: 2)

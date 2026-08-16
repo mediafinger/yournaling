@@ -24,16 +24,21 @@ module Admins
 
     def create
       attrs = chronicle_params
-      insight_attrs = Chronicle.extract_insight_params!(attrs)
+      insight_attrs = ChronicleInsightAttacher.extract_insight_params!(attrs)
 
       @chronicle = Chronicle.new(attrs)
 
-      Chronicle.create_with_event(
-        record: @chronicle, event_params: { team: nil, user: current_user, done_by_admin: true }
-      )
+      ActiveRecord::Base.transaction do
+        Chronicle.create_with_event(
+          record: @chronicle, event_params: { team: nil, user: current_user, done_by_admin: true }
+        )
+
+        if @chronicle.persisted?
+          ChronicleInsightAttacher.call(chronicle: @chronicle, params: insight_attrs, user: current_user)
+        end
+      end
 
       if @chronicle.persisted?
-        @chronicle.attach_insights(insight_attrs, user: current_user)
         redirect_to admin_chronicle_url(@chronicle), notice: "Chronicle was successfully created."
       else
         render :new, status: :unprocessable_content
@@ -42,19 +47,24 @@ module Admins
 
     def update
       attrs = chronicle_params
-      insight_attrs = Chronicle.extract_insight_params!(attrs)
+      insight_attrs = ChronicleInsightAttacher.extract_insight_params!(attrs)
 
       @chronicle = Chronicle.urlsafe_find!(params[:id])
       @chronicle.assign_attributes(attrs)
 
-      Chronicle.update_with_event(
-        record: @chronicle, event_params: { team: nil, user: current_user, done_by_admin: true }
-      )
+      ActiveRecord::Base.transaction do
+        Chronicle.update_with_event(
+          record: @chronicle, event_params: { team: nil, user: current_user, done_by_admin: true }
+        )
+
+        unless @chronicle.changed?
+          ChronicleInsightAttacher.call(chronicle: @chronicle, params: insight_attrs, user: current_user)
+        end
+      end
 
       if @chronicle.changed? # == chronicle still dirty, not saved
         render :edit, status: :unprocessable_content
       else
-        @chronicle.attach_insights(insight_attrs, user: current_user)
         redirect_to admin_chronicle_url(@chronicle), notice: "Chronicle was successfully updated."
       end
     end

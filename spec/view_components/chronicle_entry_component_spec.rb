@@ -65,4 +65,15 @@ RSpec.describe ChronicleEntryComponent, type: :component do
       expect(rendered.to_html).to include("A deep philosophical insight")
     end
   end
+
+  context "when partial is missing" do
+    it "raises an error in test/local environment" do
+      fake_entry = instance_double(Thought, id: "thot_123", team: team)
+      entry = instance_double(ChronicleEntry, entry: fake_entry, entry_type: "UnknownType", team: team)
+
+      expect {
+        render_inline(described_class.new(chronicle_entry: entry, scope: "current_team"))
+      }.to raise_error(RuntimeError, /Missing partial/)
+    end
+  end
 end

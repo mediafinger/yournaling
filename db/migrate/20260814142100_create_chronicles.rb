@@ -21,12 +21,13 @@ class CreateChronicles < ActiveRecord::Migration[8.1]
       t.references :chronicle, type: :string, null: false, foreign_key: true, index: false
       t.string :entry_type, null: false
       t.string :entry_id, null: false
-      t.integer :position, null: false, default: 1
+      t.integer :position, null: false
 
       t.timestamps
     end
 
     add_index :chronicle_entries, %i[chronicle_id position], unique: true
+    add_index :chronicle_entries, %i[chronicle_id entry_type]
     add_index :chronicle_entries, :entry_id
   end
 end

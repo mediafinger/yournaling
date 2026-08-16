@@ -139,9 +139,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_14_142100) do
     t.datetime "created_at", null: false
     t.string "entry_id", null: false
     t.string "entry_type", null: false
-    t.integer "position", default: 1, null: false
+    t.integer "position", null: false
     t.string "team_id", null: false
     t.datetime "updated_at", null: false
+    t.index ["chronicle_id", "entry_type"], name: "index_chronicle_entries_on_chronicle_id_and_entry_type"
     t.index ["chronicle_id", "position"], name: "index_chronicle_entries_on_chronicle_id_and_position", unique: true
     t.index ["entry_id"], name: "index_chronicle_entries_on_entry_id"
     t.index ["team_id"], name: "index_chronicle_entries_on_team_id"

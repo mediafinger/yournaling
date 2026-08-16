@@ -3,9 +3,9 @@
 # type: Post
 #
 class Chronicle < ApplicationRecordForContentAndPosts
-  include ChronicleAttachableInsights
-
   YID_CODE = "cron"
+  # TODO: why do we need to have those all defined here explicitly? Do we actually use them?
+  attr_accessor(*ChronicleInsightAttacher::INSIGHT_PARAM_KEYS)
 
   belongs_to :team, inverse_of: :chronicles
 
@@ -82,9 +82,9 @@ class Chronicle < ApplicationRecordForContentAndPosts
 
   private
 
-  # TODO: improve performance when we see Chronicles with dozens of entries
   def cascade_visibility_to_entries
-    entries.each do |chronicle_entry|
+    entries_list = entries.loaded? ? entries : entries.includes(:entry)
+    entries_list.each do |chronicle_entry|
       entry = chronicle_entry.entry
       next if entry.blank?
       next if entry.visibility == visibility

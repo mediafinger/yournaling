@@ -94,15 +94,20 @@ class ChronicleAttachInsightsFormComponent < ApplicationComponent
     @pictures ||= begin
       scope_team = @scope == "admin" ? @chronicle.team : current_team
       if scope_team
-        Picture.where(team: scope_team).with_attached_file.order(created_at: :desc)
+        Picture.where(team: scope_team).with_attached_file.order(created_at: :desc).limit(50)
       else
-        Picture.with_attached_file.order(created_at: :desc)
+        Picture.with_attached_file.order(created_at: :desc).limit(50)
       end
     end
   end
 
   def selected_picture
-    pictures.find { |p| p.id == @form.object.picture_id || p.urlsafe_id == @form.object.picture_id }
+    pic_id = @form.object.picture_id
+    return nil if pic_id.blank?
+
+    pictures.find do |p|
+      p.id == pic_id || p.urlsafe_id == pic_id
+    end || Picture.find_by(id: pic_id) || Picture.urlsafe_find(pic_id)
   end
 
   def picture_label(pic)
@@ -116,7 +121,8 @@ class ChronicleAttachInsightsFormComponent < ApplicationComponent
   def locations
     @locations ||= begin
       scope_team = @scope == "admin" ? @chronicle.team : current_team
-      scope_team ? Location.where(team: scope_team).order(created_at: :desc) : Location.order(created_at: :desc)
+      relation = scope_team ? Location.where(team: scope_team) : Location
+      relation.order(created_at: :desc).limit(50)
     end
   end
 
@@ -130,7 +136,8 @@ class ChronicleAttachInsightsFormComponent < ApplicationComponent
   def thoughts
     @thoughts ||= begin
       scope_team = @scope == "admin" ? @chronicle.team : current_team
-      scope_team ? Thought.where(team: scope_team).order(created_at: :desc) : Thought.order(created_at: :desc)
+      relation = scope_team ? Thought.where(team: scope_team) : Thought
+      relation.order(created_at: :desc).limit(50)
     end
   end
 
@@ -144,7 +151,8 @@ class ChronicleAttachInsightsFormComponent < ApplicationComponent
   def weblinks
     @weblinks ||= begin
       scope_team = @scope == "admin" ? @chronicle.team : current_team
-      scope_team ? Weblink.where(team: scope_team).order(created_at: :desc) : Weblink.order(created_at: :desc)
+      relation = scope_team ? Weblink.where(team: scope_team) : Weblink
+      relation.order(created_at: :desc).limit(50)
     end
   end
 

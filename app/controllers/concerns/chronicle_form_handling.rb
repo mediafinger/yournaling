@@ -14,7 +14,7 @@ module ChronicleFormHandling
         :end_date,
         :visibility,
         *additional_keys,
-        *ChronicleAttachableInsights::INSIGHT_PARAM_KEYS,
+        *ChronicleInsightAttacher::INSIGHT_PARAM_KEYS,
         { entries_attributes: [%i[id entry_type entry_id position _destroy]] },
       ]
     )
