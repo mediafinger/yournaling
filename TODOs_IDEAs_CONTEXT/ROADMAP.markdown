@@ -38,6 +38,11 @@
 
 - [ ] use in Memories
 
+### Stories
+
+- [ ] use in Chronicles
+- [ ] longer than thoughts and support Markdown (probably via Marksmith: https://github.com/avo-hq/marksmith)
+
 ### Website-Links
 
 - [ ] create Links via URL and description
