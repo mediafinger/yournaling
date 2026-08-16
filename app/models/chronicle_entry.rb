@@ -7,6 +7,8 @@ class ChronicleEntry < ApplicationRecordYidEnabled
 
   VALID_ENTRY_TYPES = %w[Memory Picture Location Thought Weblink].freeze
 
+  default_scope { order(position: :asc) }
+
   belongs_to :team, inverse_of: false
   belongs_to :chronicle, inverse_of: :entries
   belongs_to :entry, polymorphic: true

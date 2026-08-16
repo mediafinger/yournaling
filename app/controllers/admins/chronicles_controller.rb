@@ -43,6 +43,8 @@ module Admins
       else
         render :new, status: :unprocessable_content
       end
+    rescue ActiveRecord::RecordInvalid
+      render :new, status: :unprocessable_content
     end
 
     def update
@@ -67,6 +69,8 @@ module Admins
       else
         redirect_to admin_chronicle_url(@chronicle), notice: "Chronicle was successfully updated."
       end
+    rescue ActiveRecord::RecordInvalid
+      render :edit, status: :unprocessable_content
     end
 
     def destroy

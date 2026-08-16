@@ -48,6 +48,8 @@ module CurrentTeams
       else
         render :new, status: :unprocessable_content
       end
+    rescue ActiveRecord::RecordInvalid
+      render :new, status: :unprocessable_content
     end
 
     def update
@@ -70,6 +72,8 @@ module CurrentTeams
       else
         redirect_to current_team_chronicle_url(@chronicle.urlsafe_id), notice: "Chronicle was successfully updated."
       end
+    rescue ActiveRecord::RecordInvalid
+      render :edit, status: :unprocessable_content
     end
 
     def destroy

@@ -422,6 +422,76 @@ RSpec.describe "/current_team/chronicles", type: :request do
         expect(chronicle.weblinks.pluck(:name)).to include("Update Source")
       end
 
+      it "attaches both an existing picture and a newly uploaded picture during create and edit in sequence",
+        aggregate_failures: true do
+        existing_pic1 = FactoryBot.create(:picture, team: team, name: "Existing Picture 1")
+        existing_pic2 = FactoryBot.create(:picture, team: team, name: "Existing Picture 2")
+        existing_pic3 = FactoryBot.create(:picture, team: team, name: "Existing Picture 3")
+        uploaded_file1 = Rack::Test::UploadedFile.new(
+          Rails.root.join("spec/support/macbookair_stickered.jpg"),
+          "image/jpeg"
+        )
+        uploaded_file2 = Rack::Test::UploadedFile.new(
+          Rails.root.join("spec/support/macbookair_stickered.jpg"),
+          "image/jpeg"
+        )
+
+        # Step 1: Create chronicle with existing_pic1 AND uploaded_file1
+        post current_team_chronicles_url, params: {
+          chronicle: valid_attributes.merge(
+            name: "Full Journey Chronicle",
+            picture_id: existing_pic1.id,
+            picture_file: uploaded_file1,
+            picture_name: "Uploaded Pic 1"
+          ),
+        }
+        expect(response).to have_http_status(:redirect)
+        created_chronicle = Chronicle.find_by(name: "Full Journey Chronicle")
+        expect(created_chronicle.entries.count).to eq(2)
+        expect(created_chronicle.entries.map(&:position)).to eq([1, 2])
+
+        # Step 2: Edit and add existing_pic2
+        patch current_team_chronicle_url(created_chronicle.urlsafe_id), params: {
+          chronicle: {
+            picture_id: existing_pic2.id,
+          },
+        }
+        expect(response).to redirect_to(current_team_chronicle_url(created_chronicle.urlsafe_id))
+        expect(created_chronicle.reload.entries.count).to eq(3)
+        expect(created_chronicle.entries.map(&:position)).to eq([1, 2, 3])
+
+        # Step 3: Edit and add existing_pic3
+        patch current_team_chronicle_url(created_chronicle.urlsafe_id), params: {
+          chronicle: {
+            picture_id: existing_pic3.id,
+          },
+        }
+        expect(response).to redirect_to(current_team_chronicle_url(created_chronicle.urlsafe_id))
+        expect(created_chronicle.reload.entries.count).to eq(4)
+        expect(created_chronicle.entries.map(&:position)).to eq([1, 2, 3, 4])
+
+        # Step 4: Edit and upload a new picture (uploaded_file2)
+        patch current_team_chronicle_url(created_chronicle.urlsafe_id), params: {
+          chronicle: {
+            picture_file: uploaded_file2,
+            picture_name: "Uploaded Pic 2",
+          },
+        }
+        expect(response).to redirect_to(current_team_chronicle_url(created_chronicle.urlsafe_id))
+        expect(created_chronicle.reload.entries.count).to eq(5)
+        expect(created_chronicle.entries.map(&:position)).to eq([1, 2, 3, 4, 5])
+        expect(created_chronicle.entries.last.entry.name).to eq("Uploaded Pic 2")
+
+        # Verify show view renders entries in ascending position order
+        get current_team_chronicle_url(created_chronicle.urlsafe_id)
+        expect(response).to be_successful
+        expect(response.body).to include("Uploaded Pic 1")
+        expect(response.body).to include("Existing Picture 1")
+        expect(response.body).to include("Existing Picture 2")
+        expect(response.body).to include("Existing Picture 3")
+        expect(response.body).to include("Uploaded Pic 2")
+      end
+
       it "redirects to the chronicle" do
         patch current_team_chronicle_url(chronicle.urlsafe_id), params: { chronicle: new_attributes }
         expect(response).to redirect_to(current_team_chronicle_url(chronicle.urlsafe_id))

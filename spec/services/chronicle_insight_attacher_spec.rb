@@ -47,7 +47,7 @@ RSpec.describe ChronicleInsightAttacher do
     end
 
     context "when attaching pictures" do
-      let(:existing_picture) { FactoryBot.create(:picture, team: team, name: "Existing Picture", visibility: "internal") }
+      let!(:existing_picture) { FactoryBot.create(:picture, team: team, name: "Existing Picture", visibility: "internal") }
 
       it "attaches an existing picture by ID and aligns visibility" do
         expect {
@@ -76,11 +76,27 @@ RSpec.describe ChronicleInsightAttacher do
           )
         }.to change { Picture.count }.by(1).and change { chronicle.entries.count }.by(1)
 
-        new_pic = Picture.last
+        new_pic = chronicle.entries.last.entry
         expect(new_pic.name).to eq("Fresh Pic")
         expect(new_pic.team).to eq(team)
         expect(new_pic.visibility).to eq("published")
-        expect(chronicle.entries.last.entry).to eq(new_pic)
+      end
+
+      it "attaches both an existing picture and uploads a new picture in the same call" do
+        expect {
+          described_class.call(
+            chronicle: chronicle,
+            params: {
+              picture_id: existing_picture.id,
+              picture_file: uploaded_file,
+              picture_name: "Fresh Pic",
+            },
+            user: user
+          )
+        }.to change { Picture.count }.by(1).and change { chronicle.entries.count }.by(2)
+
+        expect(chronicle.entries.first.entry).to be_a(Picture)
+        expect(chronicle.entries.last.entry).to be_a(Picture)
       end
 
       it "does not attach a picture from another team" do
@@ -239,6 +255,20 @@ RSpec.describe ChronicleInsightAttacher do
         expect(chronicle.locations).to include(location)
         expect(chronicle.thoughts.pluck(:text)).to include("Batch thought")
         expect(chronicle.weblinks.pluck(:name)).to include("Batch Link")
+      end
+
+      it "maintains sequential 1-based positions" do
+        described_class.call(
+          chronicle: chronicle,
+          params: {
+            picture_id: picture.id,
+            location_id: location.id,
+          },
+          user: user
+        )
+
+        positions = chronicle.entries.pluck(:position)
+        expect(positions).to eq([1, 2])
       end
     end
   end
