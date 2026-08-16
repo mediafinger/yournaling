@@ -271,5 +271,65 @@ RSpec.describe ChronicleInsightAttacher do
         expect(positions).to eq([1, 2])
       end
     end
+
+    context "when insight creation fails validation" do
+      it "raises ActiveRecord::RecordInvalid and adds error to chronicle when thought is invalid" do
+        expect {
+          described_class.call(
+            chronicle: chronicle,
+            params: { thought_text: "a" * 2000 },
+            user: user
+          )
+        }.to raise_error(ActiveRecord::RecordInvalid)
+
+        expect(Thought.count).to eq(0)
+        expect(chronicle.entries.count).to eq(0)
+        expect(chronicle.errors[:thought_text]).to be_present
+      end
+
+      it "raises ActiveRecord::RecordInvalid and adds error to chronicle when location country is invalid" do
+        expect {
+          described_class.call(
+            chronicle: chronicle,
+            params: {
+              location_name: "Invalid Country Place",
+              location_address: "123 Street",
+              location_country_code: "invalid_code",
+            },
+            user: user
+          )
+        }.to raise_error(ActiveRecord::RecordInvalid)
+
+        expect(Location.count).to eq(0)
+        expect(chronicle.entries.count).to eq(0)
+        expect(chronicle.errors[:location_name]).to be_present
+      end
+
+      it "raises ActiveRecord::RecordInvalid and rolls back all attached insights on partial failure" do
+        valid_thought_text = "Good thought before error"
+        invalid_loc_params = {
+          location_name: "Failed Location",
+          location_address: "123 Street",
+          location_country_code: "invalid_code",
+        }
+
+        expect {
+          described_class.call(
+            chronicle: chronicle,
+            params: {
+              thought_text: valid_thought_text,
+              location_name: invalid_loc_params[:location_name],
+              location_address: invalid_loc_params[:location_address],
+              location_country_code: invalid_loc_params[:location_country_code],
+            },
+            user: user
+          )
+        }.to raise_error(ActiveRecord::RecordInvalid)
+
+        expect(Thought.where(text: valid_thought_text)).not_to exist
+        expect(Location.where(name: "Failed Location")).not_to exist
+        expect(chronicle.entries.count).to eq(0)
+      end
+    end
   end
 end
