@@ -8,6 +8,8 @@ article id= dom_id(memory)
     = memory.memo
   - if memory.picture
     = render partial: "current_teams/pictures/picture", locals: { picture: memory.picture }
+  - if memory.thought
+    = render partial: "current_teams/thoughts/thought", locals: { thought: memory.thought }
   - if memory.location
     = render partial: "current_teams/locations/location", locals: { location: memory.location }
   - if memory.weblink

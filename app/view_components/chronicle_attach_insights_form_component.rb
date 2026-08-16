@@ -2,41 +2,7 @@
 
 class ChronicleAttachInsightsFormComponent < ApplicationComponent
   slim_template <<~SLIM
-    fieldset
-      legend Attach Picture (Optional)
-      div
-        = @form.label :picture_id, "Select Existing Picture"
-        = @form.hidden_field :picture_id, data: { picture_select_target: "hiddenInput" }
-        details.dropdown data-picture-select-target="dropdown" style="margin-bottom: 1rem;"
-          summary data-picture-select-target="summary"
-            - if selected_picture
-              span style="display: flex; align-items: center; gap: 0.75rem;"
-                img src=rails_representation_path(selected_picture.thumbnail) style="width: 40px; height: 30px; object-fit: cover; border-radius: 3px;" alt=""
-                span = picture_label(selected_picture)
-            - else
-              | Choose an existing picture...
-          ul style="max-height: 300px; overflow-y: auto; z-index: 50;"
-            li
-              a href="#" data-action="click->picture-select#selectOption" data-picture-id="" data-picture-name="Choose an existing picture..." data-preview-url=""
-                | None (no picture)
-            - pictures.each do |pic|
-              - thumb_url = rails_representation_path(pic.thumbnail)
-              - label = picture_label(pic)
-              li
-                a href="#" data-action="click->picture-select#selectOption" data-picture-id=pic.id data-picture-name=label data-preview-url=thumb_url style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem;"
-                  img src=thumb_url style="width: 60px; height: 45px; object-fit: cover; border-radius: 4px; flex-shrink: 0;" alt=pic.name
-                  span style="font-weight: 500;"
-                    = label
-
-      div style="margin-top: 1rem;"
-        = @form.label :picture_file, "Or Upload New Picture"
-        = @form.file_field :picture_file, accept: "image/*", data: { picture_select_target: "fileInput", action: "change->picture-select#updateFilePreview" }
-        div style="margin-top: 0.5rem;"
-          img data-picture-select-target="filePreview" style="display: none; max-width: 200px; max-height: 150px; object-fit: cover; border-radius: 4px;" alt="Uploaded picture preview"
-
-      div
-        = @form.label :picture_name, "New Picture Name (Optional)"
-        = @form.text_field :picture_name, placeholder: "Defaults to image file name"
+    = render PictureSelectFieldComponent.new(form: @form, team: scope_team, scope: @scope)
 
     fieldset
       legend Attach Location (Optional)
@@ -90,32 +56,8 @@ class ChronicleAttachInsightsFormComponent < ApplicationComponent
     @scope = scope
   end
 
-  def pictures
-    @pictures ||= begin
-      scope_team = @scope == "admin" ? @chronicle.team : current_team
-      if scope_team
-        Picture.where(team: scope_team).with_attached_file.order(created_at: :desc).limit(50)
-      else
-        Picture.with_attached_file.order(created_at: :desc).limit(50)
-      end
-    end
-  end
-
-  def selected_picture
-    pic_id = @form.object.picture_id
-    return nil if pic_id.blank?
-
-    pictures.find do |p|
-      p.id == pic_id || p.urlsafe_id == pic_id
-    end || Picture.find_by(id: pic_id) || Picture.urlsafe_find(pic_id)
-  end
-
-  def picture_label(pic)
-    if @scope == "admin" && pic.team
-      "#{pic.name} (#{pic.team.name})"
-    else
-      pic.name
-    end
+  def scope_team
+    @scope == "admin" ? @chronicle.team : current_team
   end
 
   def locations

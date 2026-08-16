@@ -59,22 +59,33 @@ Following the Chronicle architecture merged in commit `be74754`, this plan refac
 
 ---
 
-### 3. Reusable Form ViewComponents & UI Refactoring
+### 3. ViewComponents & UI Integration
 
 #### [NEW] [`app/view_components/picture_select_field_component.rb`](file:///Users/andy/Dropbox/www/yournaling/app/view_components/picture_select_field_component.rb)
-- Extracts the picture picker UI out of `ChronicleAttachInsightsFormComponent`:
-  - Scoped picture queries with `with_attached_file` and limits to avoid loading all DB records.
-  - Pico CSS `<details class="dropdown">` with image thumbnail list.
-  - File upload field with live thumbnail preview via Stimulus `picture-select`.
-  - Optional picture name text input.
+- Reusable component for selecting an existing picture or uploading a new one.
+- Renders custom dropdown with thumbnail previews scoped to the team (`Picture.where(team: ...).limit(50)`).
+- Wraps upload in collapsible `<details>` with mutual auto-clearing via Stimulus `picture-select` controller.
 
-#### [MODIFY] [`app/view_components/chronicle_attach_insights_form_component.rb`](file:///Users/andy/Dropbox/www/yournaling/app/view_components/chronicle_attach_insights_form_component.rb)
-- Replace inline picture selection markup with `render PictureSelectFieldComponent.new(form: @form, team: scope_team, selected_picture: selected_picture)`.
+#### [NEW] [`app/view_components/memory_attach_insights_form_component.rb`](file:///Users/andy/Dropbox/www/yournaling/app/view_components/memory_attach_insights_form_component.rb)
+- Renders `PictureSelectFieldComponent` + scoped select dropdowns for Location, Thought, and Weblink.
+- Wraps inline creation inputs in collapsible `<details>` sections.
+- Connects `insight-select` Stimulus controller for interactive mutual auto-clearing between selecting existing records and typing new ones.
 
-#### [MODIFY] [`app/views/current_teams/memories/_form.html.slim`](file:///Users/andy/Dropbox/www/yournaling/app/views/current_teams/memories/_form.html.slim)
-- Attach `data: { controller: "picture-select" }` to the form container.
-- Replace `form.select :picture_id, Picture.pluck(...)` with `render PictureSelectFieldComponent.new(form: form, team: current_team, selected_picture: memory.picture)`.
-- Replace raw unscoped select dropdowns for Location, Thought, and Weblink with scoped selects (limited to current team) and inline creation inputs (name, address, country code, URL, etc.).
+#### [NEW] [`app/javascript/controllers/insight_select_controller.js`](file:///Users/andy/Dropbox/www/yournaling/app/javascript/controllers/insight_select_controller.js)
+- Stimulus controller that resets text inputs and closes `<details>` when an existing insight is selected from a `<select>` dropdown, and resets the `<select>` dropdown to blank when the user starts typing in inline creation inputs.
+
+#### [NEW] Mutual Exclusivity Guard (Option C) in [`MemoryInsightAttacher`](file:///Users/andy/Dropbox/www/yournaling/app/services/memory_insight_attacher.rb)
+- Validates that callers do not supply both an existing ID and new creation attributes for the same insight type.
+- Adds user-friendly error messages to `memory.errors` and raises `ActiveRecord::RecordInvalid` with `422 Unprocessable Content`.
+
+---
+
+## Verification & Status
+- **CI Suite (`bin/mcp_rake_ci`)**: **884 examples, 0 failures, 0 offenses, 0 security vulnerabilities**.
+- **Unit Specs**: `spec/services/insight_resolver_spec.rb`, `spec/services/memory_insight_attacher_spec.rb`, `spec/services/chronicle_insight_attacher_spec.rb`.
+- **Component Specs**: `spec/view_components/picture_select_field_component_spec.rb`, `spec/view_components/memory_attach_insights_form_component_spec.rb`.
+- **Request Specs**: `spec/requests/current_teams/memories_request_spec.rb`, `spec/requests/teams/memories_request_spec.rb`.
+- **System Specs**: `spec/system/user_journey_spec.rb`.
 
 ---
 

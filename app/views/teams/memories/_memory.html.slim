@@ -9,6 +9,8 @@ article id= dom_id(memory)
     = memory.memo
   - if memory.picture
     = render partial: "teams/pictures/picture", locals: { team:, picture: memory.picture }
+  - if memory.thought
+    = render partial: "teams/thoughts/thought", locals: { team:, thought: memory.thought }
   - if memory.location
     = render partial: "teams/locations/location", locals: { team:, location: memory.location }
   - if memory.weblink

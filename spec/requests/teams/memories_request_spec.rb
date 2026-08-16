@@ -34,12 +34,20 @@ RSpec.describe "teams/:team_id/memories", type: :request do
   end
 
   describe "GET /show" do
-    it "renders a successful response for published memories" do
-      memory = Memory.create!(valid_attributes)
+    it "renders a successful response for published memories with all attached insights (regression test)" do
+      thought = FactoryBot.create(:thought, team: team, text: "Reflecting on nature", visibility: "published")
+      location = FactoryBot.create(:location, team: team, name: "Cabo de Gata", visibility: "published")
+      weblink = FactoryBot.create(:weblink, team: team, name: "Park Guide", url: "https://guide.com",
+        visibility: "published")
+      memory = Memory.create!(valid_attributes.merge(thought: thought, location: location, weblink: weblink))
+
       get team_memory_url(team, memory)
       expect(response).to be_successful
       expect(response.body).to include(memory.memo)
       expect(response.body).to include("Sunset Beach")
+      expect(response.body).to include("Reflecting on nature")
+      expect(response.body).to include("Cabo de Gata")
+      expect(response.body).to include("Park Guide")
     end
 
     it "renders 404 when memory is internal" do

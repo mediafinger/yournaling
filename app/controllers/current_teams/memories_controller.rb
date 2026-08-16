@@ -1,11 +1,15 @@
+# frozen_string_literal: true
+
 module CurrentTeams
   class MemoriesController < AppCurrentTeamController
+    include MemoryFormHandling
+
     def index
       authorize! current_user, to: :index?, with: MemoryPolicy
 
-      # memories = authorized_scope(Memory.all, type: :relation, as: :current_team_scope)
-
-      @memories = Memory.includes(:team, :picture, :location, :weblink).all
+      @memories = Memory.where(team: current_team)
+        .includes(:team, :picture, :location, :thought, :weblink)
+        .order(created_at: :desc)
     end
 
     def show
@@ -14,7 +18,7 @@ module CurrentTeams
     end
 
     def new
-      @memory = Memory.new(team: current_team)
+      @memory = Memory.new(team: current_team, visibility: "internal")
       authorize! @memory
     end
 
@@ -24,49 +28,61 @@ module CurrentTeams
     end
 
     def create
-      @memory = Memory.new(create_params.compact_blank.merge(team: current_team))
+      attrs = memory_params
+      insight_attrs = MemoryInsightAttacher.extract_insight_params!(attrs)
+
+      @memory = Memory.new(attrs.compact_blank.merge(team: current_team))
       authorize! @memory
 
-      Memory.create_with_event(record: @memory, event_params: { team: current_team, user: current_user })
+      ActiveRecord::Base.transaction do
+        create_with_event(record: @memory)
+        MemoryInsightAttacher.call(memory: @memory, params: insight_attrs, user: current_user) if @memory.persisted?
+      end
 
       if @memory.persisted?
-        redirect_to current_team_memory_url(@memory), notice: "Memory was successfully created."
+        redirect_to current_team_memory_url(@memory.urlsafe_id), notice: "Memory was successfully created."
       else
         render :new, status: :unprocessable_content
       end
+    rescue ActiveRecord::RecordInvalid
+      render :new, status: :unprocessable_content
     end
 
     def update
+      attrs = memory_params
+      insight_attrs = MemoryInsightAttacher.extract_insight_params!(attrs)
+
       @memory = Memory.urlsafe_find!(params[:id])
       authorize! @memory
-      @memory.assign_attributes(update_params.compact_blank)
+      @memory.assign_attributes(attrs.compact_blank)
 
-      Memory.update_with_event(record: @memory, event_params: { team: current_team, user: current_user })
+      ActiveRecord::Base.transaction do
+        update_with_event(record: @memory)
+        MemoryInsightAttacher.call(memory: @memory, params: insight_attrs, user: current_user) unless @memory.changed?
+      end
 
       if @memory.changed? # == memory still dirty, not saved
         render :edit, status: :unprocessable_content
       else
-        redirect_to current_team_memory_url(@memory), notice: "Memory was successfully updated."
+        redirect_to current_team_memory_url(@memory.urlsafe_id), notice: "Memory was successfully updated."
       end
+    rescue ActiveRecord::RecordInvalid
+      render :edit, status: :unprocessable_content
     end
 
     def destroy
       @memory = Memory.urlsafe_find!(params[:id])
       authorize! @memory
 
-      Memory.destroy_with_event(record: @memory, event_params: { team: current_team, user: current_user })
+      destroy_with_event(record: @memory)
 
       redirect_to current_team_memories_url, notice: "Memory was successfully destroyed."
     end
 
     private
 
-    def create_params
-      params.expect(memory: %i[team_id memo picture_id location_id weblink_id])
-    end
-
-    def update_params
-      params.expect(memory: %i[memo picture_id location_id weblink_id])
+    def memory_params
+      permit_memory_params
     end
   end
 end

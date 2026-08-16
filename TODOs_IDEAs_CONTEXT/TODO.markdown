@@ -351,6 +351,10 @@ The "vanity board" with detailed statistics could be a paid feature. The alterna
 
 ## Locations
 
+* fix creation
+* fix updating
+* make fields required mandatory and optional optional
+* enable to fill in either this or that or those - but let's make it logical and UX wise sense
 * a (Google Maps?) link to a place
 * if an address or coordinates exist, (reverse) geocode the information and store it all
   * APIs do not offer this for free, so this has to be limited, higher limit for paid accounts
