@@ -71,9 +71,13 @@ module CurrentTeams
       @thought = Thought.urlsafe_find!(params[:id])
       authorize! @thought
 
-      destroy_with_event(record: @thought)
-
-      redirect_to current_team_thoughts_url, notice: "Thought was successfully destroyed."
+      if @thought.memories.exists? || @thought.chronicle_entries.exists?
+        redirect_to edit_current_team_thought_url(@thought),
+          alert: "Thought cannot be destroyed because it is still referenced by other content."
+      else
+        destroy_with_event(record: @thought)
+        redirect_to current_team_thoughts_url, notice: "Thought was successfully destroyed."
+      end
     end
 
     private

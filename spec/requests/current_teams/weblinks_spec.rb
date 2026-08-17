@@ -171,6 +171,18 @@ RSpec.describe "/current_team/weblinks", type: :request do
       expect(response).to redirect_to(current_team_weblinks_url)
     end
 
+    it "prevents deleting a weblink that is referenced by a memory or chronicle" do
+      weblink = Weblink.create! valid_attributes
+      FactoryBot.create(:memory, team: team, weblink: weblink)
+
+      expect {
+        delete current_team_weblink_url(weblink)
+      }.not_to(change { Weblink.count })
+
+      expect(response).to redirect_to(edit_current_team_weblink_url(weblink))
+      expect(flash[:alert]).to be_present
+    end
+
     context "when member has unauthorized role (editor)" do
       before { member.update!(roles: %w[editor]) }
 

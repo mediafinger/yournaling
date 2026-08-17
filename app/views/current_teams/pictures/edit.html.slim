@@ -1,5 +1,11 @@
-- if current_team == @picture.team
-  = render partial: "form", locals: { picture: @picture, form_legend: "Edit picture" }
-= link_to "Show this picture", current_team_picture_path(@picture), role: "button"
-- if current_team == @picture.team
-  = button_to "Destroy this picture", current_team_picture_path(@picture), method: :delete, class: "secondary", data: { turbo_confirm: "Are you sure you want to destroy this picture?" }
+div data-controller="modal"
+  - if current_team == @picture.team
+    = render partial: "form", locals: { picture: @picture, form_legend: "Edit picture" }
+  div style="display: flex; gap: 0.5rem; align-items: center; margin-top: 1rem;"
+    = link_to "Show this picture", current_team_picture_path(@picture), role: "button"
+    - if current_team == @picture.team
+      button type="button" class="secondary" data-action="click->modal#open" style="margin-bottom: 0;"
+        | Destroy this picture
+
+  - if current_team == @picture.team
+    = render InsightDestroyModalComponent.new(insight: @picture, name: "picture")

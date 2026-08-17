@@ -180,6 +180,17 @@ RSpec.describe "/current_team/locations", type: :request do
       expect(response).to redirect_to(current_team_locations_url)
     end
 
+    it "prevents deleting a location that is referenced by a memory or chronicle" do
+      FactoryBot.create(:memory, team: team, location: location)
+
+      expect {
+        delete current_team_location_url(location)
+      }.not_to(change { Location.count })
+
+      expect(response).to redirect_to(edit_current_team_location_url(location))
+      expect(flash[:alert]).to be_present
+    end
+
     context "when member has unauthorized role (editor)" do
       before { member.update!(roles: %w[editor]) }
 

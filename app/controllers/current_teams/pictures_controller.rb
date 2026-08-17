@@ -85,9 +85,13 @@ module CurrentTeams
       @picture = Picture.urlsafe_find!(params[:id])
       authorize! @picture
 
-      Picture.destroy_with_event(record: @picture, event_params: { team: current_team, user: current_user })
-
-      redirect_to current_team_pictures_url, notice: "Picture was successfully destroyed."
+      if @picture.memories.exists? || @picture.chronicle_entries.exists?
+        redirect_to edit_current_team_picture_url(@picture),
+          alert: "Picture cannot be destroyed because it is still referenced by other content."
+      else
+        Picture.destroy_with_event(record: @picture, event_params: { team: current_team, user: current_user })
+        redirect_to current_team_pictures_url, notice: "Picture was successfully destroyed."
+      end
     end
 
     private

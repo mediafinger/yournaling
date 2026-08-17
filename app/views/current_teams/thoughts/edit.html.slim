@@ -1,5 +1,11 @@
-- if current_team == @thought.team
-  = render partial: "form", locals: { thought: @thought, form_legend: "Edit thought" }
-= link_to "Show this thought", current_team_thought_path(@thought), role: "button"
-- if current_team == @thought.team
-  = button_to "Destroy this thought", current_team_thought_path(@thought), method: :delete, class: "secondary", data: { turbo_confirm: "Are you sure you want to destroy this thought?" }
+div data-controller="modal"
+  - if current_team == @thought.team
+    = render partial: "form", locals: { thought: @thought, form_legend: "Edit thought" }
+  div style="display: flex; gap: 0.5rem; align-items: center; margin-top: 1rem;"
+    = link_to "Show this thought", current_team_thought_path(@thought), role: "button"
+    - if current_team == @thought.team
+      button type="button" class="secondary" data-action="click->modal#open" style="margin-bottom: 0;"
+        | Destroy this thought
+
+  - if current_team == @thought.team
+    = render InsightDestroyModalComponent.new(insight: @thought, name: "thought")

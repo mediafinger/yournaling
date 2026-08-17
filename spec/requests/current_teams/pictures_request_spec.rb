@@ -199,6 +199,17 @@ RSpec.describe "/current_team/pictures", type: :request do
       expect(event.user_id).to eq(user.id)
     end
 
+    it "prevents deleting a picture that is referenced by a memory or chronicle" do
+      FactoryBot.create(:memory, team: team, picture: picture)
+
+      expect {
+        delete current_team_picture_url(picture.urlsafe_id)
+      }.not_to(change { Picture.count })
+
+      expect(response).to redirect_to(edit_current_team_picture_url(picture.urlsafe_id))
+      expect(flash[:alert]).to be_present
+    end
+
     context "when member has unauthorized role (editor)" do
       before { member.update!(roles: %w[editor]) }
 

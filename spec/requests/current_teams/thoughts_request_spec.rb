@@ -169,6 +169,17 @@ RSpec.describe "/current_team/thoughts", type: :request do
         delete current_team_thought_url(thought)
         expect(response).to redirect_to(current_team_thoughts_url)
       end
+
+      it "prevents deleting a thought that is referenced by a memory or chronicle" do
+        FactoryBot.create(:memory, team: team, thought: thought)
+
+        expect {
+          delete current_team_thought_url(thought)
+        }.not_to(change { Thought.count })
+
+        expect(response).to redirect_to(edit_current_team_thought_url(thought))
+        expect(flash[:alert]).to be_present
+      end
     end
 
     context "when member has unauthorized role (editor)" do

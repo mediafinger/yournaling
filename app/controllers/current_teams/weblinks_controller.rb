@@ -70,9 +70,13 @@ module CurrentTeams
       @weblink = Weblink.urlsafe_find!(params[:id])
       authorize! @weblink
 
-      Weblink.destroy_with_event(record: @weblink, event_params: { team: current_team, user: current_user })
-
-      redirect_to current_team_weblinks_url, notice: "Weblink was successfully destroyed."
+      if @weblink.memories.exists? || @weblink.chronicle_entries.exists?
+        redirect_to edit_current_team_weblink_url(@weblink),
+          alert: "Weblink cannot be destroyed because it is still referenced by other content."
+      else
+        Weblink.destroy_with_event(record: @weblink, event_params: { team: current_team, user: current_user })
+        redirect_to current_team_weblinks_url, notice: "Weblink was successfully destroyed."
+      end
     end
 
     private

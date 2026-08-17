@@ -63,9 +63,13 @@ module CurrentTeams
       @location = current_team_scope(Location).urlsafe_find!(params[:id])
       authorize! @location
 
-      destroy_with_event(record: @location)
-
-      redirect_to current_team_locations_url, notice: "Location was successfully destroyed."
+      if @location.memories.exists? || @location.chronicle_entries.exists?
+        redirect_to edit_current_team_location_url(@location),
+          alert: "Location cannot be destroyed because it is still referenced by other content."
+      else
+        destroy_with_event(record: @location)
+        redirect_to current_team_locations_url, notice: "Location was successfully destroyed."
+      end
     end
 
     private
