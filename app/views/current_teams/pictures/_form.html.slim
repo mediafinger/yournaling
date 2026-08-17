@@ -1,20 +1,20 @@
 article
-  = form_with(model: [:current_team, picture]) do |form|
+  = form_with(model: [:current_team, picture], multipart: true, data: { controller: "picture-select" }) do |form|
     = render partial: "shared_partials/form_validation_errors", locals: { record: picture }
     fieldset
       h3
         legend
           = form_legend
       div
-        = form.file_field :file, accept: Picture::ALLOWED_IMAGE_TYPES.map { |type| ".#{type}" }.join(", ")
-      div
-        = form.label :name
-        = form.text_field :name
-        / - # TODO: fill in name from file_field if one selected
-      div
+        = form.label :file, "Image File"
+        = form.file_field :file, accept: Picture::ALLOWED_IMAGE_TYPES.map { |type| ".#{type}" }.join(", "), required: form.object.new_record?, data: { picture_select_target: "fileInput", action: "change->picture-select#updateFilePreview" }
+        div style="margin-top: 0.5rem;"
+          img data-picture-select-target="filePreview" style="display: none; max-width: 240px; max-height: 180px; object-fit: cover; border-radius: 4px;" alt="Selected image preview"
+      div style="margin-top: 0.5rem;"
+        = form.label :name, "Picture Name (Optional)"
+        = form.text_field :name, placeholder: "Defaults to image file name", data: { picture_select_target: "pictureNameInput" }
+      div style="margin-top: 0.5rem;"
         = form.label :date
-        = form.date_field :date, value: Date.current
-        / - # TODO: fill in date from file_field if one selected
-      div
+        = form.date_field :date, value: form.object.date
+      div style="margin-top: 1rem;"
         = form.submit
-        / - # TODO: deactivate button until file_field has been used successfully

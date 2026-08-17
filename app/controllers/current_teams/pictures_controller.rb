@@ -27,8 +27,15 @@ module CurrentTeams
     end
 
     def create
+      @picture = Picture.new(team: current_team)
+      authorize! @picture
+
       unless picture_params[:file].is_a?(ActionDispatch::Http::UploadedFile)
-        raise CustomError.new("File not valid", status: 422, code: :unprocessable_content)
+        respond_to do |format|
+          format.html { raise CustomError.new("File not valid", status: 422, code: :unprocessable_content) }
+          format.json { render json: { errors: ["Please select an image file to upload"] }, status: :unprocessable_content }
+        end
+        return
       end
 
       # IDEA
@@ -40,21 +47,23 @@ module CurrentTeams
       # the variants can be cropped to fit the desired aspect ratio for all preview images on the website
       # create the other variants (consider portrait, square, landscape orginal picture aspect ratios)
       #
-      @picture = Picture.new(
-        file: ImageUploadConversionService.call(file: picture_params[:file], name: picture_params[:name]),
-        name: picture_params[:name], # looks redundant, but image filename is parameterized
-        date: picture_params[:date],
-        team: current_team
-      )
-
-      authorize! @picture
+      @picture.file = ImageUploadConversionService.call(file: picture_params[:file], name: picture_params[:name])
+      @picture.name = picture_params[:name]
+      @picture.date = picture_params[:date]
 
       Picture.create_with_event(record: @picture, event_params: { team: current_team, user: current_user })
 
-      if @picture.persisted?
-        redirect_to current_team_picture_url(@picture), notice: "Picture was successfully created."
-      else
-        render :new, status: :unprocessable_content
+      respond_to do |format|
+        if @picture.persisted?
+          thumb_url = helpers.rails_representation_path(@picture.thumbnail) if @picture.thumbnail
+          format.html { redirect_to current_team_picture_url(@picture), notice: "Picture was successfully created." }
+          format.json do
+            render json: { id: @picture.id, name: @picture.name, thumb_url: thumb_url, type: "picture" }, status: :created
+          end
+        else
+          format.html { render :new, status: :unprocessable_content }
+          format.json { render json: { errors: @picture.errors.full_messages }, status: :unprocessable_content }
+        end
       end
     end
 

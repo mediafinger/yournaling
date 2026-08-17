@@ -82,9 +82,7 @@ RSpec.describe "/admin/chronicles", type: :request do
         FactoryBot.create(:picture, team: team, name: "Admin Audit Landscape")
         get new_admin_chronicle_url
         expect(response).to be_successful
-        expect(response.body).to include("data-controller=\"picture-select\"")
-        expect(response.body).to include("data-preview-url=\"/rails/active_storage/representations/")
-        expect(response.body).to include("src=\"/rails/active_storage/representations/")
+        expect(response.body).to include("data-thumb-url=\"/rails/active_storage/representations/")
         expect(response.body).to include("Admin Audit Landscape")
       end
     end
@@ -101,9 +99,7 @@ RSpec.describe "/admin/chronicles", type: :request do
         FactoryBot.create(:picture, team: team, name: "Admin Audit Landscape")
         get edit_admin_chronicle_url(chronicle)
         expect(response).to be_successful
-        expect(response.body).to include("data-controller=\"picture-select\"")
-        expect(response.body).to include("data-preview-url=\"/rails/active_storage/representations/")
-        expect(response.body).to include("src=\"/rails/active_storage/representations/")
+        expect(response.body).to include("data-thumb-url=\"/rails/active_storage/representations/")
         expect(response.body).to include("Admin Audit Landscape")
       end
 

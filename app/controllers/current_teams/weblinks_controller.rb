@@ -39,10 +39,16 @@ module CurrentTeams
 
       Weblink.create_with_event(record: @weblink, event_params: { team: current_team, user: current_user })
 
-      if @weblink.persisted?
-        redirect_to current_team_weblink_url(@weblink), notice: "Weblink was successfully created."
-      else
-        render :new, status: :unprocessable_content
+      respond_to do |format|
+        if @weblink.persisted?
+          format.html { redirect_to current_team_weblink_url(@weblink), notice: "Weblink was successfully created." }
+          format.json do
+            render json: { id: @weblink.id, name: @weblink.name, url: @weblink.url, type: "weblink" }, status: :created
+          end
+        else
+          format.html { render :new, status: :unprocessable_content }
+          format.json { render json: { errors: @weblink.errors.full_messages }, status: :unprocessable_content }
+        end
       end
     end
 

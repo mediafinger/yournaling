@@ -34,8 +34,8 @@ class Location < ApplicationRecordForContentAndPosts
   validates :team_id, uniqueness: { scope: :name }
   validates :visibility, presence: true, inclusion: { in: VISIBILITY_STATES }
 
-  after_validation :geocode, if: ->(location) { calculate_coordinates?(location) }
-  after_validation :reverse_geocode, if: ->(location) { get_address?(location) }
+  after_validation :safe_geocode, if: ->(location) { calculate_coordinates?(location) }
+  after_validation :safe_reverse_geocode, if: ->(location) { get_address?(location) }
   after_validation :create_gmaps_url, if: ->(location) { location.url.nil? }
   after_validation :set_address, if: ->(location) { location.address.blank? }
 
@@ -142,5 +142,17 @@ class Location < ApplicationRecordForContentAndPosts
       geocoded_address[:county],
       geocoded_address[:state],
     ].compact.join(", ")
+  end
+
+  def safe_geocode
+    geocode
+  rescue Geocoder::Error, SocketError, Timeout::Error => e
+    Rails.logger.warn("Geocoding failed for Location: #{e.class} - #{e.message}")
+  end
+
+  def safe_reverse_geocode
+    reverse_geocode
+  rescue Geocoder::Error, SocketError, Timeout::Error => e
+    Rails.logger.warn("Reverse geocoding failed for Location: #{e.class} - #{e.message}")
   end
 end

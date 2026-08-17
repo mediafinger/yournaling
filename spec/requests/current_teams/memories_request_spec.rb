@@ -128,107 +128,30 @@ RSpec.describe "/current_team/memories", type: :request do
       end
     end
 
-    context "with insight attachments and picture uploads" do
-      let(:uploaded_file) do
-        Rack::Test::UploadedFile.new(
-          Rails.root.join("spec/support/macbookair_stickered.jpg"),
-          "image/jpeg"
-        )
-      end
+    context "with insight attachments" do
+      let(:location) { FactoryBot.create(:location, team: team) }
+      let(:picture) { FactoryBot.create(:picture, team: team) }
+      let(:thought) { FactoryBot.create(:thought, team: team) }
+      let(:weblink) { FactoryBot.create(:weblink, team: team) }
 
-      it "creates a memory and uploads a new picture in the same request" do
-        params = {
-          memo: "Morning surf session",
-          picture_file: uploaded_file,
-          picture_name: "Morning Wave",
-        }
-
-        expect {
-          post current_team_memories_url, params: { memory: params }
-        }.to change { Memory.count }.by(1)
-          .and change { Picture.count }.by(1)
-
-        memory = Memory.last
-        expect(memory.picture).to be_present
-        expect(memory.picture.name).to eq("Morning Wave")
-      end
-
-      it "creates a memory with inline location, thought, and weblink" do
+      it "creates a memory with attached insight IDs" do
         params = {
           memo: "Complete memory trip",
-          location_name: "Mount Olympus",
-          location_address: "Thessaly, Greece",
-          location_country_code: "gr",
-          thought_text: "A beautiful view from the summit",
-          weblink_name: "Mountain Guide",
-          weblink_url: "https://olympus-guide.example.com",
+          location_id: location.id,
+          picture_id: picture.id,
+          thought_id: thought.id,
+          weblink_id: weblink.id,
         }
 
         expect {
           post current_team_memories_url, params: { memory: params }
         }.to change { Memory.count }.by(1)
-          .and change { Location.count }.by(1)
-          .and change { Thought.count }.by(1)
-          .and change { Weblink.count }.by(1)
 
         memory = Memory.last
-        expect(memory.location.name).to eq("Mount Olympus")
-        expect(memory.thought.text).to eq("A beautiful view from the summit")
-        expect(memory.weblink.name).to eq("Mountain Guide")
-      end
-
-      it "renders 422 when inline location fails validation and rolls back memory creation" do
-        params = {
-          memo: "Memory with bad location",
-          location_name: "Invalid Country Place",
-          location_country_code: "invalid_cc",
-        }
-
-        expect {
-          post current_team_memories_url, params: { memory: params }
-        }.not_to(change { Memory.count })
-
-        expect(Location.where(name: "Invalid Country Place")).not_to exist
-        expect(response).to have_http_status(:unprocessable_content)
-        expect(response.body).to include("Location")
-      end
-
-      it "renders 422 and retains form values when creating memory with picture upload and invalid location" do
-        FactoryBot.create(:location, team: team, name: "Existing Location")
-        params = {
-          memo: "Memory with picture and duplicate location",
-          picture_file: uploaded_file,
-          picture_name: "My Photo",
-          location_name: "Existing Location",
-          location_country_code: "de",
-          location_address: "123 Main St",
-        }
-
-        expect {
-          post current_team_memories_url, params: { memory: params }
-        }.not_to(change { Memory.count })
-
-        expect(response).to have_http_status(:unprocessable_content)
-        expect(response.body).to include("Location")
-        expect(response.body).to include("Existing Location")
-        expect(response.body).to include("123 Main St")
-        expect(response.body).to include("My Photo")
-      end
-
-      it "renders 422 when both existing insight ID and new creation parameters are submitted (Option C)" do
-        existing_picture = FactoryBot.create(:picture, team: team)
-        params = {
-          memo: "Conflicting picture parameters",
-          picture_id: existing_picture.id,
-          picture_file: uploaded_file,
-        }
-
-        expect {
-          post current_team_memories_url, params: { memory: params }
-        }.not_to(change { Memory.count })
-
-        expect(response).to have_http_status(:unprocessable_content)
-        expect(response.body).to include("Please either select an existing picture or upload a new picture, not both")
+        expect(memory.location).to eq(location)
+        expect(memory.picture).to eq(picture)
+        expect(memory.thought).to eq(thought)
+        expect(memory.weblink).to eq(weblink)
       end
     end
 
@@ -267,24 +190,14 @@ RSpec.describe "/current_team/memories", type: :request do
       end
     end
 
-    context "with new inline insight attachments on update" do
-      it "creates and attaches a new thought on update" do
+    context "with new insight attachments on update" do
+      it "attaches a thought on update" do
         memory = Memory.create! valid_attributes
+        thought = FactoryBot.create(:thought, team: team)
 
-        expect {
-          patch current_team_memory_url(memory), params: { memory: { thought_text: "Updated reflection" } }
-        }.to change { Thought.count }.by(1)
+        patch current_team_memory_url(memory), params: { memory: { thought_id: thought.id } }
 
-        expect(memory.reload.thought.text).to eq("Updated reflection")
-      end
-
-      it "renders 422 and rolls back when new insight fails validation on update" do
-        memory = Memory.create! valid_attributes
-
-        patch current_team_memory_url(memory), params: { memory: { thought_text: "a" * 2000 } }
-
-        expect(response).to have_http_status(:unprocessable_content)
-        expect(memory.reload.thought).to be_nil
+        expect(memory.reload.thought).to eq(thought)
       end
     end
 

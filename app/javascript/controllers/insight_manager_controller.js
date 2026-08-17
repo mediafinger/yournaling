@@ -1,0 +1,298 @@
+import { Controller } from "@hotwired/stimulus"
+
+export default class extends Controller {
+  static targets = [
+    "attachedContainer",
+    "dropdown",
+    "drawer",
+    "drawerTitle",
+    "drawerError",
+    "drawerFormContainer",
+    "locationTemplate",
+    "pictureTemplate",
+    "thoughtTemplate",
+    "weblinkTemplate",
+    "existingLocationTemplate",
+    "existingPictureTemplate",
+    "existingThoughtTemplate",
+    "existingWeblinkTemplate",
+    "locationIdInput",
+    "pictureIdInput",
+    "thoughtIdInput",
+    "weblinkIdInput",
+    "locationMenuItem",
+    "pictureMenuItem",
+    "thoughtMenuItem",
+    "weblinkMenuItem"
+  ]
+
+  static values = {
+    mode: { type: String, default: "single" }, // "single" for Memory, "multiple" for Chronicle
+    recordName: { type: String, default: "memory" },
+    createLocationUrl: String,
+    createPictureUrl: String,
+    createThoughtUrl: String,
+    createWeblinkUrl: String
+  }
+
+  connect() {
+    this.updateMenuItems()
+  }
+
+  openCreate(event) {
+    event.preventDefault()
+    this.closeDropdown()
+    const type = event.currentTarget.dataset.type
+    this.showDrawer("create", type)
+  }
+
+  openSelect(event) {
+    event.preventDefault()
+    this.closeDropdown()
+    const type = event.currentTarget.dataset.type
+    this.showDrawer("select", type)
+  }
+
+  closeDropdown() {
+    if (this.hasDropdownTarget) {
+      this.dropdownTarget.removeAttribute("open")
+    }
+  }
+
+  closeDrawer(event) {
+    if (event) event.preventDefault()
+    if (this.hasDrawerTarget) {
+      this.drawerTarget.style.display = "none"
+      this.drawerFormContainerTarget.innerHTML = ""
+      this.hideDrawerError()
+    }
+  }
+
+  showDrawer(action, type) {
+    const templateName = action === "create" ? `${type}TemplateTarget` : `existing${this.capitalize(type)}TemplateTarget`
+    if (!this[templateName]) return
+
+    const titles = {
+      location: action === "create" ? "Create New Location" : "Select Existing Location",
+      picture: action === "create" ? "Create New Picture" : "Select Existing Picture",
+      thought: action === "create" ? "Create New Thought" : "Select Existing Thought",
+      weblink: action === "create" ? "Create New Weblink" : "Select Existing Weblink"
+    }
+
+    this.drawerTitleTarget.textContent = titles[type] || "Add Insight"
+    this.drawerFormContainerTarget.innerHTML = this[templateName].innerHTML
+    this.hideDrawerError()
+    this.drawerTarget.style.display = "block"
+    this.drawerTarget.scrollIntoView({ behavior: "smooth", block: "nearest" })
+  }
+
+  showDrawerError(errors) {
+    if (!this.hasDrawerErrorTarget) return
+    const errorList = Array.isArray(errors) ? errors : [errors]
+    this.drawerErrorTarget.innerHTML = `
+      <section style="background-color: var(--pico-form-element-invalid-border-color); color: white; padding: 0.75rem 1rem; border-radius: 4px; margin-bottom: 1rem;">
+        <strong>Please fix the following:</strong>
+        <ul style="margin-bottom: 0; margin-top: 0.25rem;">
+          ${errorList.map(err => `<li>${err}</li>`).join("")}
+        </ul>
+      </section>
+    `
+    this.drawerErrorTarget.style.display = "block"
+  }
+
+  hideDrawerError() {
+    if (this.hasDrawerErrorTarget) {
+      this.drawerErrorTarget.innerHTML = ""
+      this.drawerErrorTarget.style.display = "none"
+    }
+  }
+
+  async submitCreate(event) {
+    event.preventDefault()
+    this.hideDrawerError()
+
+    const form = event.currentTarget.closest("form") || this.drawerFormContainerTarget.querySelector("form")
+    const type = event.currentTarget.dataset.type
+    const submitBtn = event.currentTarget
+
+    const urlMap = {
+      location: this.createLocationUrlValue,
+      picture: this.createPictureUrlValue,
+      thought: this.createThoughtUrlValue,
+      weblink: this.createWeblinkUrlValue
+    }
+    const url = urlMap[type]
+    if (!url) return
+
+    const formData = new FormData(form)
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute("content")
+
+    submitBtn.disabled = true
+    const originalBtnText = submitBtn.textContent
+    submitBtn.textContent = "Creating..."
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Accept": "application/json",
+          "X-CSRF-Token": csrfToken || ""
+        },
+        body: formData
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        this.attachInsight(data)
+        this.closeDrawer()
+      } else {
+        const errors = data.errors || ["Failed to create insight"]
+        this.showDrawerError(errors)
+      }
+    } catch (err) {
+      this.showDrawerError(`Network error: ${err.message}`)
+    } finally {
+      submitBtn.disabled = false
+      submitBtn.textContent = originalBtnText
+    }
+  }
+
+  selectExisting(event) {
+    event.preventDefault()
+    this.hideDrawerError()
+
+    const select = this.drawerFormContainerTarget.querySelector("select")
+    if (!select || !select.value) {
+      this.showDrawerError("Please select an item from the list before adding.")
+      return
+    }
+
+    const type = select.dataset.type
+    const id = select.value
+    const name = select.options[select.selectedIndex].text
+    const thumbUrl = select.options[select.selectedIndex].dataset.thumbUrl || ""
+
+    this.attachInsight({ id, name, thumb_url: thumbUrl, type })
+    this.closeDrawer()
+  }
+
+  attachInsight(data) {
+    const { id, type } = data
+
+    if (this.modeValue === "single") {
+      const inputTarget = `${type}IdInputTarget`
+      if (this[inputTarget]) {
+        this[inputTarget].value = id
+      }
+    } else {
+      let hiddenInput = this.element.querySelector(`input[data-insight-entry-input="${id}"]`)
+      if (!hiddenInput) {
+        hiddenInput = document.createElement("input")
+        hiddenInput.type = "hidden"
+        hiddenInput.name = `${this.recordNameValue}[entry_ids][]`
+        hiddenInput.value = id
+        hiddenInput.dataset.insightEntryInput = id
+        this.element.appendChild(hiddenInput)
+      }
+    }
+
+    this.renderAttachedChip(data)
+    this.updateMenuItems()
+  }
+
+  removeInsight(event) {
+    event.preventDefault()
+    const button = event.currentTarget
+    const type = button.dataset.type
+    const chip = button.closest("[data-insight-chip]")
+    const id = chip?.dataset.id
+
+    if (this.modeValue === "single") {
+      const inputTarget = `${type}IdInputTarget`
+      if (this[inputTarget]) {
+        this[inputTarget].value = ""
+      }
+    } else if (id) {
+      const hiddenInput = this.element.querySelector(`input[data-insight-entry-input="${id}"]`)
+      if (hiddenInput) {
+        hiddenInput.remove()
+      }
+    }
+
+    if (chip) {
+      chip.remove()
+    }
+
+    this.updateMenuItems()
+  }
+
+  renderAttachedChip(data) {
+    const { id, name, text, thumb_url, type, country_code } = data
+    const label = name || text || "Insight"
+
+    // Remove existing chip of same type for single mode
+    if (this.modeValue === "single") {
+      const existing = this.attachedContainerTarget.querySelector(`[data-insight-chip][data-type="${type}"]`)
+      if (existing) existing.remove()
+    }
+
+    const icons = {
+      location: "📍",
+      picture: "🖼",
+      thought: "💭",
+      weblink: "🔗"
+    }
+
+    const icon = icons[type] || "📌"
+    let mediaSnippet = ""
+    if (type === "picture" && thumb_url) {
+      mediaSnippet = `<img src="${thumb_url}" style="width: 40px; height: 30px; object-fit: cover; border-radius: 3px; margin-right: 0.5rem;" alt="" />`
+    }
+
+    const chip = document.createElement("div")
+    chip.dataset.insightChip = "true"
+    chip.dataset.type = type
+    chip.dataset.id = id
+    chip.style.cssText = "display: inline-flex; align-items: center; justify-content: space-between; background: var(--pico-card-background-color); border: 1px solid var(--pico-muted-border-color); border-radius: 6px; padding: 0.5rem 0.75rem; margin: 0.25rem 0.5rem 0.25rem 0; font-size: 0.9rem;"
+
+    chip.innerHTML = `
+      <span style="display: flex; align-items: center; margin-right: 0.75rem;">
+        ${mediaSnippet}
+        <span><strong>${icon} ${this.capitalize(type)}:</strong> ${this.escapeHtml(label)}</span>
+      </span>
+      <button type="button" class="outline secondary" data-action="click->insight-manager#removeInsight" data-type="${type}" style="padding: 0.2rem 0.5rem; margin-bottom: 0; font-size: 0.8rem; line-height: 1;" title="Remove">✕</button>
+    `
+
+    this.attachedContainerTarget.appendChild(chip)
+  }
+
+  updateMenuItems() {
+    if (this.modeValue !== "single") return
+
+    const types = ["location", "picture", "thought", "weblink"]
+    types.forEach(type => {
+      const inputTarget = `${type}IdInputTarget`
+      const menuItemTarget = `${type}MenuItemTarget`
+      const isAttached = this[inputTarget] && Boolean(this[inputTarget].value)
+
+      if (this[menuItemTarget]) {
+        if (isAttached) {
+          this[menuItemTarget].style.display = "none"
+        } else {
+          this[menuItemTarget].style.display = "block"
+        }
+      }
+    })
+  }
+
+  capitalize(str) {
+    if (!str) return ""
+    return str.charAt(0).toUpperCase() + str.slice(1)
+  }
+
+  escapeHtml(str) {
+    if (!str) return ""
+    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;")
+  }
+}

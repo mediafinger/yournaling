@@ -60,6 +60,11 @@ export default class extends Controller {
       }
       reader.readAsDataURL(file)
 
+      if (this.hasPictureNameInputTarget && !this.pictureNameInputTarget.value) {
+        const cleanName = file.name.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " ")
+        this.pictureNameInputTarget.value = cleanName
+      }
+
       // When choosing a file to upload, clear the existing picture selection
       if (this.hasHiddenInputTarget) {
         this.hiddenInputTarget.value = ""

@@ -2,6 +2,7 @@
 
 class ChronicleInsightAttacher
   INSIGHT_PARAM_KEYS = %i[
+    entry_ids
     picture_id picture_file picture_name
     location_id location_name location_address location_country_code location_url location_description
     thought_id thought_text
@@ -37,6 +38,7 @@ class ChronicleInsightAttacher
     return if params.blank?
 
     ActiveRecord::Base.transaction do
+      attach_entry_ids(params[:entry_ids])
       attach_picture(
         picture_id: params[:picture_id],
         picture_file: params[:picture_file],
@@ -66,6 +68,23 @@ class ChronicleInsightAttacher
   private
 
   attr_reader :chronicle, :team, :user, :resolver
+
+  def attach_entry_ids(entry_ids)
+    Array(entry_ids).compact_blank.each do |id|
+      entry_record = find_entry_by_id(id)
+      next unless entry_record
+
+      chronicle.entries.create!(entry: entry_record, team: team)
+    end
+  end
+
+  def find_entry_by_id(id)
+    team.pictures.find_by(id: id) ||
+      team.locations.find_by(id: id) ||
+      team.thoughts.find_by(id: id) ||
+      team.weblinks.find_by(id: id) ||
+      team.memories.find_by(id: id)
+  end
 
   def attach_picture(picture_id: nil, picture_file: nil, picture_name: nil)
     if (uploaded_pic = resolver.resolve_picture_upload(picture_file: picture_file, picture_name: picture_name))

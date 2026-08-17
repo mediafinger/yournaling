@@ -40,10 +40,16 @@ module CurrentTeams
 
       create_with_event(record: @thought)
 
-      if @thought.persisted?
-        redirect_to current_team_thought_url(@thought), notice: "Thought was successfully created."
-      else
-        render :new, status: :unprocessable_content
+      respond_to do |format|
+        if @thought.persisted?
+          format.html { redirect_to current_team_thought_url(@thought), notice: "Thought was successfully created." }
+          format.json do
+            render json: { id: @thought.id, text: @thought.text.truncate(60), type: "thought" }, status: :created
+          end
+        else
+          format.html { render :new, status: :unprocessable_content }
+          format.json { render json: { errors: @thought.errors.full_messages }, status: :unprocessable_content }
+        end
       end
     end
 

@@ -6,10 +6,10 @@ article
         legend
           = form_legend
       div
-        = form.label :text
-        = form.text_field :text
-      div
+        = form.label :text, "Thought Text"
+        = form.text_area :text, rows: 4, placeholder: "Write a memorable thought, quote, or reflection...", required: true
+      div style="margin-top: 0.5rem;"
         = form.label :date
-        = form.date_field :date, value: Date.current
-      div
+        = form.date_field :date, value: form.object.date
+      div style="margin-top: 1rem;"
         = form.submit

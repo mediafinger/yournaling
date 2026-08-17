@@ -32,7 +32,7 @@ article
         = form.select :visibility, Chronicle::VISIBILITY_STATES.map { |v| [v.titleize, v] }, selected: form.object.visibility
 
     = render ChronicleAttachedEntriesFormComponent.new(form:, scope: "admin")
-    = render ChronicleAttachInsightsFormComponent.new(form:, chronicle:, scope: "admin")
+    = render InsightAttachmentManagerComponent.new(form:, scope: "admin", mode: :multiple)
 
     div
       = form.submit

@@ -1,5 +1,5 @@
 article
-  = form_with(model: [:current_team, memory], multipart: true, data: { controller: "picture-select" }) do |form|
+  = form_with(model: [:current_team, memory], multipart: true) do |form|
     = render partial: "shared_partials/form_validation_errors", locals: { record: memory }
     fieldset
       h3
@@ -7,9 +7,9 @@ article
           = form_legend
       div
         = form.label :memo
-        = form.text_area :memo, rows: 4, require: true
+        = form.text_area :memo, rows: 4, required: true, placeholder: "What do you want to remember?"
 
-    = render MemoryAttachInsightsFormComponent.new(form: form, memory: memory)
+    = render InsightAttachmentManagerComponent.new(form: form, scope: "current_team", mode: :single)
 
     div style="margin-top: 1.5rem;"
       = form.submit

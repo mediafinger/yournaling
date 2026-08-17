@@ -88,6 +88,24 @@ RSpec.describe "/current_team/weblinks", type: :request do
       end
     end
 
+    context "with JSON format" do
+      it "creates a weblink and returns JSON response" do
+        post current_team_weblinks_url(format: :json), params: { weblink: valid_attributes }
+        expect(response).to have_http_status(:created)
+        json = response.parsed_body
+        expect(json["id"]).to be_present
+        expect(json["name"]).to eq(valid_attributes[:name])
+        expect(json["type"]).to eq("weblink")
+      end
+
+      it "returns 422 with errors array when invalid" do
+        post current_team_weblinks_url(format: :json), params: { weblink: invalid_attributes }
+        expect(response).to have_http_status(:unprocessable_content)
+        json = response.parsed_body
+        expect(json["errors"]).to be_present
+      end
+    end
+
     context "when member has unauthorized role (publisher)" do
       before { member.update!(roles: %w[publisher]) }
 

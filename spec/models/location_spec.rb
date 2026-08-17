@@ -193,4 +193,42 @@ RSpec.describe Location, type: :model do
       expect(location.errors[:visibility].first).to include("At the lighthouse")
     end
   end
+
+  describe "geocoding resilience" do
+    let(:location_without_coords) do
+      described_class.new(
+        team: team,
+        name: "Cabo de Gata Camping",
+        country_code: "es",
+        address: "Playa de los Genoveses, San Jose",
+        visibility: "internal"
+      )
+    end
+
+    it "does not crash and saves when geocoder raises Geocoder::RequestDenied" do
+      allow(location_without_coords).to receive(:geocode).and_raise(Geocoder::RequestDenied)
+      expect { location_without_coords.valid? }.not_to raise_error
+      expect(location_without_coords.save).to be true
+    end
+
+    it "does not crash and saves when geocoder raises Geocoder::InvalidApiKey" do
+      allow(location_without_coords).to receive(:geocode).and_raise(Geocoder::InvalidApiKey)
+      expect { location_without_coords.valid? }.not_to raise_error
+      expect(location_without_coords.save).to be true
+    end
+
+    it "does not crash and saves when reverse geocoder raises Timeout::Error" do
+      location_with_coords = described_class.new(
+        team: team,
+        name: "Coordinates Place",
+        country_code: "es",
+        lat: 40.0,
+        long: 10.0,
+        visibility: "internal"
+      )
+      allow(location_with_coords).to receive(:reverse_geocode).and_raise(Timeout::Error)
+      expect { location_with_coords.valid? }.not_to raise_error
+      expect(location_with_coords.save).to be true
+    end
+  end
 end

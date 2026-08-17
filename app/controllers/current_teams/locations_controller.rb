@@ -31,10 +31,17 @@ module CurrentTeams
 
       create_with_event(record: @location)
 
-      if @location.persisted?
-        redirect_to current_team_location_url(@location), notice: "Location was successfully created."
-      else
-        render :new, status: :unprocessable_content
+      respond_to do |format|
+        if @location.persisted?
+          format.html { redirect_to current_team_location_url(@location), notice: "Location was successfully created." }
+          format.json do
+            render json: { id: @location.id, name: @location.name, country_code: @location.country_code, type: "location" },
+              status: :created
+          end
+        else
+          format.html { render :new, status: :unprocessable_content }
+          format.json { render json: { errors: @location.errors.full_messages }, status: :unprocessable_content }
+        end
       end
     end
 

@@ -132,9 +132,7 @@ RSpec.describe "/current_team/chronicles", type: :request do
       FactoryBot.create(:picture, team: team, name: "Mountain View")
       get new_current_team_chronicle_url
       expect(response).to be_successful
-      expect(response.body).to include("data-controller=\"picture-select\"")
-      expect(response.body).to include("data-preview-url=\"/rails/active_storage/representations/")
-      expect(response.body).to include("src=\"/rails/active_storage/representations/")
+      expect(response.body).to include("data-thumb-url=\"/rails/active_storage/representations/")
       expect(response.body).to include("Mountain View")
     end
   end
@@ -151,9 +149,7 @@ RSpec.describe "/current_team/chronicles", type: :request do
       FactoryBot.create(:picture, team: team, name: "Mountain View")
       get edit_current_team_chronicle_url(chronicle.urlsafe_id)
       expect(response).to be_successful
-      expect(response.body).to include("data-controller=\"picture-select\"")
-      expect(response.body).to include("data-preview-url=\"/rails/active_storage/representations/")
-      expect(response.body).to include("src=\"/rails/active_storage/representations/")
+      expect(response.body).to include("data-thumb-url=\"/rails/active_storage/representations/")
       expect(response.body).to include("Mountain View")
     end
 
@@ -272,6 +268,24 @@ RSpec.describe "/current_team/chronicles", type: :request do
         expect(chronicle.locations).to include(loc)
         expect(chronicle.thoughts.pluck(:text)).to include("New journey insight")
         expect(chronicle.weblinks.pluck(:name)).to include("New Site")
+      end
+
+      it "attaches multiple sequential entry_ids on create" do
+        pic = FactoryBot.create(:picture, team: team, name: "Sunset Horizon")
+        loc = FactoryBot.create(:location, team: team, name: "Desert Camp")
+
+        expect {
+          post current_team_chronicles_url, params: {
+            chronicle: valid_attributes.merge(
+              entry_ids: [pic.id, loc.id]
+            ),
+          }
+        }.to change { Chronicle.count }.by(1)
+          .and change { ChronicleEntry.count }.by(2)
+
+        chronicle = Chronicle.first
+        expect(chronicle.pictures).to include(pic)
+        expect(chronicle.locations).to include(loc)
       end
     end
 

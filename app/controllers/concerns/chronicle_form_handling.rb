@@ -15,6 +15,7 @@ module ChronicleFormHandling
         :visibility,
         *additional_keys,
         *ChronicleInsightAttacher::INSIGHT_PARAM_KEYS,
+        { entry_ids: [] },
         { entries_attributes: [%i[id entry_type entry_id position _destroy]] },
       ]
     )

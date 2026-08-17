@@ -6,16 +6,16 @@ article
         legend
           = form_legend
       div
-        = form.label :name
-        = form.text_field :name
-      div
+        = form.label :name, "Link Name"
+        = form.text_field :name, placeholder: "e.g. Route Planning Guide", required: true
+      div style="margin-top: 0.5rem;"
+        = form.label :url, "URL"
+        = form.url_field :url, placeholder: "e.g. https://route-planner.example.com", required: true
+      div style="margin-top: 0.5rem;"
         = form.label :date
-        = form.date_field :date, value: Date.current
-      div
-        = form.label :url
-        = form.text_field :url
-      div
-        = form.label :description
-        = form.text_area :description
-      div
+        = form.date_field :date, value: form.object.date
+      div style="margin-top: 0.5rem;"
+        = form.label :description, "Description (Optional)"
+        = form.text_area :description, placeholder: "Brief notes or context about this link..."
+      div style="margin-top: 1rem;"
         = form.submit

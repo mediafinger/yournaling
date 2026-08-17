@@ -1,5 +1,5 @@
 article
-  = form_with(model: [:current_team, chronicle], multipart: true, data: { controller: "picture-select" }) do |form|
+  = form_with(model: [:current_team, chronicle], multipart: true) do |form|
     = render partial: "shared_partials/form_validation_errors", locals: { record: chronicle }
     fieldset
       h3
@@ -22,8 +22,7 @@ article
         = form.select :visibility, Chronicle::VISIBILITY_STATES.map { |v| [v.titleize, v] }, selected: form.object.visibility
 
     = render ChronicleAttachedEntriesFormComponent.new(form:, scope: "current_team")
-    = render ChronicleAttachInsightsFormComponent.new(form:, chronicle:, scope: "current_team")
+    = render InsightAttachmentManagerComponent.new(form:, scope: "current_team", mode: :multiple)
 
-    div
+    div style="margin-top: 1.5rem;"
       = form.submit
-

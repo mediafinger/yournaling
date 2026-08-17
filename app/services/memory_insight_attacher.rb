@@ -14,7 +14,7 @@ class MemoryInsightAttacher
     @resolver = InsightResolver.new(
       parent: memory,
       team: team,
-      date: memory.created_at&.to_date || Date.current,
+      date: memory.created_at&.to_date,
       visibility: memory.visibility,
       user: user
     )

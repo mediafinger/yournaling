@@ -6,31 +6,42 @@ article
         legend
           = form_legend
       div
-        = form.label :name
-        = form.text_field :name
+        = form.label :name, "Location Name"
+        = form.text_field :name, placeholder: "e.g. Cabo de Gata Camping", required: true
       div
         = form.label :date
-        = form.date_field :date, value: Date.current
+        = form.date_field :date, value: form.object.date
       div
-        = form.label :country_code
-        = form.select :country_code, CountriesEnForSelectService.call.map { |k, v| [v, k] }, selected: form.object.country_code || "de"
-        / - # TODO: use select2 or other searchable drop-down
+        = form.label :country_code, "Country"
+        = form.select :country_code, CountriesEnForSelectService.call.map { |k, v| [v, k] }, { selected: form.object.country_code || "de" }, required: true
+
+      div data-controller="tabs" style="margin-top: 1rem; margin-bottom: 1rem;"
+        label
+          strong Location Details (Choose one)
+        div role="group" style="margin-bottom: 0.75rem;"
+          button type="button" data-tabs-target="tab" data-tab-index="0" data-action="click->tabs#select" Address
+          button type="button" data-tabs-target="tab" data-tab-index="1" data-action="click->tabs#select" class="outline secondary" GPS Coordinates
+          button type="button" data-tabs-target="tab" data-tab-index="2" data-action="click->tabs#select" class="outline secondary" Map / Web URL
+
+        div data-tabs-target="panel"
+          = form.label :address, "Street Address / City"
+          = form.text_field :address, placeholder: "e.g. Playa de los Genoveses, San Jose"
+
+        div data-tabs-target="panel" style="display: none;"
+          div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;"
+            div
+              = form.label :lat, "Latitude"
+              = form.text_field :lat, placeholder: "e.g. 36.7491"
+            div
+              = form.label :long, "Longitude"
+              = form.text_field :long, placeholder: "e.g. -2.2425"
+
+        div data-tabs-target="panel" style="display: none;"
+          = form.label :url, "Map / Website URL"
+          = form.url_field :url, placeholder: "e.g. https://maps.google.com/..."
+
       div
-        = form.label :address
-        = form.text_field :address
-      div
-        = form.label :url
-        = form.text_field :url
-      / - # TODO: show either ADDRESS or LAT and LONG fields for either geocoding or reverse-geocoding
-      div
-        = form.label :lat
-        = form.text_field :lat
-      div
-        = form.label :long
-        = form.text_field :long
-      / - # TODO: display Powered by <a href="https://www.geoapify.com/">Geoapify</a>
-      div
-        = form.label :description
-        = form.text_area :description
-      div
+        = form.label :description, "Notes / Description (Optional)"
+        = form.text_area :description, placeholder: "Additional details about this place..."
+      div style="margin-top: 1rem;"
         = form.submit
