@@ -574,6 +574,28 @@ RSpec.describe "/current_team/chronicles", type: :request do
         delete current_team_chronicle_url(chronicle.urlsafe_id)
         expect(response).to redirect_to(current_team_chronicles_url)
       end
+
+      it "destroys orphaned insights when destroy_orphaned_insights is true" do
+        picture = FactoryBot.create(:picture, team: team)
+        FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: picture)
+
+        expect {
+          delete current_team_chronicle_url(chronicle.urlsafe_id), params: { destroy_orphaned_insights: "true" }
+        }.to change { Picture.count }.by(-1)
+
+        expect(Picture.find_by(id: picture.id)).to be_nil
+      end
+
+      it "preserves insights when destroy_orphaned_insights is not true" do
+        picture = FactoryBot.create(:picture, team: team)
+        FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: picture)
+
+        expect {
+          delete current_team_chronicle_url(chronicle.urlsafe_id)
+        }.to change { Picture.count }.by(0)
+
+        expect(Picture.find_by(id: picture.id)).to eq(picture)
+      end
     end
 
     context "when member has unauthorized role (editor)" do

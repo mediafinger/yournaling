@@ -296,6 +296,28 @@ RSpec.describe "/current_team/memories", type: :request do
       expect(response).to redirect_to(current_team_memories_url)
     end
 
+    it "destroys orphaned insights when destroy_orphaned_insights is true" do
+      picture = FactoryBot.create(:picture, team: team)
+      memory_with_pic = FactoryBot.create(:memory, team: team, picture: picture)
+
+      expect {
+        delete current_team_memory_url(memory_with_pic), params: { destroy_orphaned_insights: "true" }
+      }.to change { Picture.count }.by(-1)
+
+      expect(Picture.find_by(id: picture.id)).to be_nil
+    end
+
+    it "preserves insights when destroy_orphaned_insights is not true" do
+      picture = FactoryBot.create(:picture, team: team)
+      memory_with_pic = FactoryBot.create(:memory, team: team, picture: picture)
+
+      expect {
+        delete current_team_memory_url(memory_with_pic)
+      }.to change { Picture.count }.by(0)
+
+      expect(Picture.find_by(id: picture.id)).to eq(picture)
+    end
+
     context "when member has unauthorized role (editor)" do
       before { member.update!(roles: %w[editor]) }
 

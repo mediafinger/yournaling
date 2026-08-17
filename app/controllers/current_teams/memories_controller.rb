@@ -58,7 +58,11 @@ module CurrentTeams
       @memory = Memory.urlsafe_find!(params[:id])
       authorize! @memory
 
-      destroy_with_event(record: @memory)
+      if ActiveRecord::Type::Boolean.new.cast(params[:destroy_orphaned_insights])
+        OrphanedInsightsCleanupService.call(post: @memory, team: current_team, user: current_user)
+      else
+        destroy_with_event(record: @memory)
+      end
 
       redirect_to current_team_memories_url, notice: "Memory was successfully destroyed."
     end

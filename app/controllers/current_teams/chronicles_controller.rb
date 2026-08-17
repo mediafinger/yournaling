@@ -80,7 +80,11 @@ module CurrentTeams
       @chronicle = Chronicle.urlsafe_find!(params[:id])
       authorize! @chronicle
 
-      destroy_with_event(record: @chronicle)
+      if ActiveRecord::Type::Boolean.new.cast(params[:destroy_orphaned_insights])
+        OrphanedInsightsCleanupService.call(post: @chronicle, team: current_team, user: current_user)
+      else
+        destroy_with_event(record: @chronicle)
+      end
 
       redirect_to current_team_chronicles_url, notice: "Chronicle was successfully destroyed."
     end
