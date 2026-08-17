@@ -57,6 +57,7 @@ RSpec.describe "/current_team/memories", type: :request do
     end
 
     it "renders a visibility dropdown and allows changing visibility" do
+      member.update!(roles: %w[owner publisher])
       get current_team_memory_url(memory.urlsafe_id)
       expect(response).to be_successful
       expect(response.body).to include("Change visibility")

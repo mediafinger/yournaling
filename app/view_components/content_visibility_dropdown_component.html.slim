@@ -1,7 +1,7 @@
 details.dropdown data-controller="dropdown" style="display: inline-block; vertical-align: middle; margin-bottom: 0; position: relative;"
   summary role="button" class="outline secondary" style="padding: 0.15rem 0.4rem; font-size: 0.75rem; line-height: 1; margin-left: 0.35rem; margin-bottom: 0; vertical-align: middle; cursor: pointer;" title="Change visibility" aria-label="Change visibility"
     | 👁️
-  ul style="position: absolute; z-index: 100; min-width: 140px; margin-top: 0.25rem; list-style: none; padding: 0.35rem 0; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-radius: 6px; background: var(--pico-card-background-color, #fff);"
+  ul style="position: absolute; z-index: 100; min-width: 140px; margin-top: 0.25rem; list-style: none; padding: 0.35rem 0; box-shadow: var(--pico-dropdown-box-shadow); border-radius: var(--pico-border-radius); background-color: var(--pico-dropdown-background-color); border: var(--pico-border-width) solid var(--pico-dropdown-border-color);"
     - visibility_states.each do |state|
       li style="margin: 0; padding: 0;"
         - if state == @record.visibility
@@ -9,4 +9,4 @@ details.dropdown data-controller="dropdown" style="display: inline-block; vertic
             span = state.capitalize
             span style="font-size: 0.75rem;" ✓
         - else
-          = button_to state.capitalize, current_team_content_visibility_path(@record), method: :patch, params: { visibility: state }, class: "contrast", style: "width: 100%; text-align: left; background: none; border: none; padding: 0.35rem 0.75rem; font-size: 0.8rem; margin-bottom: 0; cursor: pointer; color: var(--pico-primary);"
+          = button_to state.capitalize, current_team_content_visibility_path(@record), method: :patch, params: { visibility: state }, data: { turbo_confirm: "Are you sure you want to change visibility to #{state}?" }, style: "width: 100%; text-align: left; background: none; border: none; padding: 0.35rem 0.75rem; font-size: 0.8rem; margin-bottom: 0; cursor: pointer; color: var(--pico-dropdown-color);", onmouseover: "this.style.backgroundColor='var(--pico-dropdown-hover-background-color)'", onmouseout: "this.style.backgroundColor='transparent'"
