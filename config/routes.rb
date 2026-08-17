@@ -37,6 +37,8 @@ Rails.application.routes.draw do
 
   namespace :current_team, module: :current_teams do
     get "", to: "pages#show", as: "home"
+    get "check_newer", to: "pages#check_newer", as: "check_newer_pages"
+    get "newer", to: "pages#newer", as: "newer_pages"
 
     resources :chronicles
     resources :locations

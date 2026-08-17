@@ -30,6 +30,7 @@ ActiveRecordDoctor.configure do
     solid_queue_recurring_tasks
     solid_queue_scheduled_executions
     solid_queue_semaphores
+    team_artefacts
   ]
 
   global :ignore_models, %w[
@@ -60,6 +61,7 @@ ActiveRecordDoctor.configure do
     SolidQueue::RecurringTask
     SolidQueue::ScheduledExecution
     SolidQueue::Semaphore
+    TeamArtefact
   ]
 
   # app only validation sufficient, no need to enforce length in DB
