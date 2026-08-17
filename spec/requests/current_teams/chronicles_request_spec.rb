@@ -395,6 +395,31 @@ RSpec.describe "/current_team/chronicles", type: :request do
         expect(Picture.exists?(pic2.id)).to be true
       end
 
+      it "reorders attached entries via nested position attributes" do
+        pic1 = FactoryBot.create(:picture, team: team, name: "First Picture")
+        loc1 = FactoryBot.create(:location, team: team, name: "Second Location")
+        th1 = FactoryBot.create(:thought, team: team, text: "Third Thought")
+        chronicle_to_reorder = Chronicle.create!(valid_attributes.merge(name: "Reorder Chronicle"))
+        e1 = FactoryBot.create(:chronicle_entry, chronicle: chronicle_to_reorder, team: team, entry: pic1, position: 1)
+        e2 = FactoryBot.create(:chronicle_entry, chronicle: chronicle_to_reorder, team: team, entry: loc1, position: 2)
+        e3 = FactoryBot.create(:chronicle_entry, chronicle: chronicle_to_reorder, team: team, entry: th1, position: 3)
+
+        patch current_team_chronicle_url(chronicle_to_reorder.urlsafe_id), params: {
+          chronicle: {
+            entries_attributes: {
+              "0" => { id: e1.id, position: 3 },
+              "1" => { id: e2.id, position: 1 },
+              "2" => { id: e3.id, position: 2 },
+            },
+          },
+        }
+
+        expect(response).to redirect_to(current_team_chronicle_url(chronicle_to_reorder.urlsafe_id))
+        entries = chronicle_to_reorder.reload.entries.reorder(position: :asc)
+        expect(entries.map(&:entry)).to eq([loc1, th1, pic1])
+        expect(entries.map(&:position)).to eq([1, 2, 3])
+      end
+
       it "attaches an uploaded picture via picture_file during update" do
         uploaded_file = Rack::Test::UploadedFile.new(
           Rails.root.join("spec/support/macbookair_stickered.jpg"),
