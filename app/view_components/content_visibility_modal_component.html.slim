@@ -1,0 +1,15 @@
+div data-controller="modal" style="display: inline-block; vertical-align: middle; margin-left: 0.35rem;"
+  button.outline.secondary type="button" data-action="click->modal#open" style="padding: 0.15rem 0.4rem; font-size: 0.75rem; line-height: 1; margin-bottom: 0; vertical-align: middle; cursor: pointer;" title="Change visibility" aria-label="Change visibility"
+    | 👁️
+  dialog data-modal-target="dialog"
+    article style="max-width: 400px; text-align: center;"
+      header
+        button aria-label="Close" rel="prev" data-action="click->modal#close" style="float: right;"
+        h4 style="margin-bottom: 0;" Change Visibility
+      div style="display: flex; flex-direction: column; align-items: center; gap: 0.75rem; padding: 1rem 0;"
+        - visibility_states.each do |state|
+          - if state == @record.visibility
+            button disabled="disabled" class="primary" style="width: 220px; padding: 0.5rem 1rem; margin-bottom: 0; cursor: default; opacity: 1; font-weight: bold;"
+              = "#{state.capitalize} ✓"
+          - else
+            = button_to state.capitalize, current_team_content_visibility_path(@record), method: :patch, params: { visibility: state }, form: { style: "width: 220px; margin: 0;" }, class: "outline", style: "width: 100%; padding: 0.5rem 1rem; margin-bottom: 0;"

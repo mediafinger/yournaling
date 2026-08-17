@@ -2,44 +2,60 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = ["dialog"]
+  static values = { dialogId: String }
 
   connect() {
     this.handleBackdropClick = this.handleBackdropClick.bind(this)
-    if (this.hasDialogTarget) {
-      this.dialogTarget.addEventListener("click", this.handleBackdropClick)
+    const dialog = this.dialogElement
+    if (dialog) {
+      dialog.addEventListener("click", this.handleBackdropClick)
     }
   }
 
   disconnect() {
-    if (this.hasDialogTarget) {
-      this.dialogTarget.removeEventListener("click", this.handleBackdropClick)
+    const dialog = this.dialogElement
+    if (dialog) {
+      dialog.removeEventListener("click", this.handleBackdropClick)
     }
+  }
+
+  get dialogElement() {
+    if (this.hasDialogTarget) {
+      return this.dialogTarget
+    }
+    if (this.hasDialogIdValue) {
+      return document.getElementById(this.dialogIdValue)
+    }
+    return this.element.querySelector("dialog")
   }
 
   open(event) {
     if (event) event.preventDefault()
-    if (this.hasDialogTarget) {
-      if (typeof this.dialogTarget.showModal === "function") {
-        this.dialogTarget.showModal()
+    const dialog = this.dialogElement
+    if (dialog) {
+      if (typeof dialog.showModal === "function") {
+        dialog.showModal()
       } else {
-        this.dialogTarget.setAttribute("open", "")
+        dialog.setAttribute("open", "")
       }
     }
   }
 
   close(event) {
     if (event) event.preventDefault()
-    if (this.hasDialogTarget) {
-      if (typeof this.dialogTarget.close === "function") {
-        this.dialogTarget.close()
+    const dialog = this.dialogElement
+    if (dialog) {
+      if (typeof dialog.close === "function") {
+        dialog.close()
       } else {
-        this.dialogTarget.removeAttribute("open")
+        dialog.removeAttribute("open")
       }
     }
   }
 
   handleBackdropClick(event) {
-    if (event.target === this.dialogTarget) {
+    const dialog = this.dialogElement
+    if (dialog && event.target === dialog) {
       this.close()
     }
   }

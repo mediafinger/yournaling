@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ContentVisibilityDropdownComponent < ApplicationComponent
+class ContentVisibilityModalComponent < ApplicationComponent
   def initialize(record:, user: nil, team: nil, member: nil)
     @record = record
     @user = user

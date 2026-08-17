@@ -1,24 +1,5 @@
 article id= dom_id(picture)
-  header style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 1rem;"
-    div
-      h4 style="margin-bottom: 0.25rem;" = picture.name.presence || "Picture"
-      p style="margin-bottom: 0;"
-        small
-          - if picture.date.present?
-            strong Date:&nbsp;
-            = picture.date
-            | &nbsp;|&nbsp;
-          strong Visibility:&nbsp;
-          = picture.visibility
-          - unless local_assigns[:hide_actions]
-            = render ContentVisibilityDropdownComponent.new(record: picture)
-
-    - unless local_assigns[:hide_actions]
-      div style="display: flex; gap: 0.5rem; flex-shrink: 0;"
-        - if action_name != "show"
-          = link_to "Open", current_team_picture_path(picture), role: "button", class: "outline", style: "padding: 0.25rem 0.6rem; font-size: 0.8rem; margin-bottom: 0;"
-        - if respond_to?(:current_user) && current_user.present? && current_team == picture.team && allowed_to?(:update?, picture)
-          = link_to "Rewrite", edit_current_team_picture_path(picture), role: "button", class: "outline secondary", style: "padding: 0.25rem 0.6rem; font-size: 0.8rem; margin-bottom: 0;"
+  = render ManageHeaderComponent.new(record: picture, hide_actions: local_assigns[:hide_actions])
 
   - is_picture_controller = (controller_name == "pictures" || controller_path.to_s.end_with?("pictures"))
   - if is_picture_controller && action_name == "show"
@@ -38,8 +19,5 @@ article id= dom_id(picture)
         = link_to image_tag(picture.large, style: "max-height: 30rem; width: auto;"), team_picture_only_path(current_team, picture), target: "_blank", rel: "noopener noreferrer"
       - else
         = link_to image_tag(picture.large, style: "max-height: 30rem; width: auto;"), rails_blob_path(picture.file), target: "_blank", rel: "noopener noreferrer"
-    - elsif is_picture_controller
-      = link_to image_tag(picture.thumbnail, style: "width: 160px; height: 106px; object-fit: cover;"), current_team_picture_path(picture)
-      = link_to image_tag(picture.preview, style: "width: 400px; height: 266px; object-fit: cover;"), current_team_picture_path(picture)
     - else
       = link_to image_tag(picture.preview, style: "width: 400px; height: 266px; object-fit: cover;"), current_team_picture_path(picture)

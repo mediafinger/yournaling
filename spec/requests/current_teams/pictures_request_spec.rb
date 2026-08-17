@@ -36,7 +36,7 @@ RSpec.describe "/current_team/pictures", type: :request do
       get current_team_pictures_url
 
       expect(response).to be_successful
-      expect(response.body).to match(/#{name}/)
+      expect(response.body).to include(CGI.escapeHTML(name))
     end
   end
 

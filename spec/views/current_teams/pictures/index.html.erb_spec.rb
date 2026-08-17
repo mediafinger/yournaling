@@ -11,6 +11,6 @@ RSpec.describe "current_teams/pictures/index", type: :view do
   it "renders a list of pictures" do
     render
 
-    assert_select "img", src: /macbookair_stickered.jpg/, count: 4 # currently we show each image in 2 sizes
+    assert_select "img", src: /macbookair_stickered.jpg/, count: 2
   end
 end

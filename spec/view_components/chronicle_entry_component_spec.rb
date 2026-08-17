@@ -19,7 +19,7 @@ RSpec.describe ChronicleEntryComponent, type: :component do
       expect(rendered.to_html).to include("A deep philosophical insight")
       expect(rendered.to_html).not_to include("Open")
       expect(rendered.to_html).not_to include("Rewrite")
-      expect(rendered.to_html).not_to include("dropdown")
+      expect(rendered.to_html).not_to include("Change Visibility")
     end
 
     it "renders location entries without action buttons" do
@@ -29,7 +29,7 @@ RSpec.describe ChronicleEntryComponent, type: :component do
       expect(rendered.to_html).to include("Sierra Nevada")
       expect(rendered.to_html).not_to include("Open")
       expect(rendered.to_html).not_to include("Rewrite")
-      expect(rendered.to_html).not_to include("dropdown")
+      expect(rendered.to_html).not_to include("Change Visibility")
     end
 
     it "renders picture entries without action buttons" do
@@ -39,7 +39,7 @@ RSpec.describe ChronicleEntryComponent, type: :component do
       expect(rendered.to_html).to include("Sunset View")
       expect(rendered.to_html).not_to include("Open")
       expect(rendered.to_html).not_to include("Rewrite")
-      expect(rendered.to_html).not_to include("dropdown")
+      expect(rendered.to_html).not_to include("Change Visibility")
     end
 
     it "renders weblink entries without action buttons" do
@@ -49,7 +49,7 @@ RSpec.describe ChronicleEntryComponent, type: :component do
       expect(rendered.to_html).to include("Trail Guide")
       expect(rendered.to_html).not_to include("Open")
       expect(rendered.to_html).not_to include("Rewrite")
-      expect(rendered.to_html).not_to include("dropdown")
+      expect(rendered.to_html).not_to include("Change Visibility")
     end
 
     it "renders memory entries without action buttons" do
@@ -59,7 +59,7 @@ RSpec.describe ChronicleEntryComponent, type: :component do
       expect(rendered.to_html).to include("Remember this moment")
       expect(rendered.to_html).not_to include("Open")
       expect(rendered.to_html).not_to include("Rewrite")
-      expect(rendered.to_html).not_to include("dropdown")
+      expect(rendered.to_html).not_to include("Change Visibility")
     end
   end
 

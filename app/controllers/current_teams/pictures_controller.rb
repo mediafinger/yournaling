@@ -5,8 +5,7 @@ module CurrentTeams
     def index
       authorize! current_user, to: :index?, with: PicturePolicy
 
-      # pictures = authorized_scope(Picture.all, type: :relation, as: :current_team_scope)
-      pictures = Picture.all
+      pictures = authorized_scope(Picture.all, type: :relation, as: :current_team_scope)
 
       @pictures = pictures
     end

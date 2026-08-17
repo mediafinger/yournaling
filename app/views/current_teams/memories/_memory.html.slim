@@ -1,23 +1,5 @@
 article id= dom_id(memory)
-  header style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 1rem;"
-    div
-      h4 style="margin-bottom: 0.25rem;" Memory
-      p style="margin-bottom: 0;"
-        small
-          strong Date:&nbsp;
-          = memory.created_at.to_date
-          | &nbsp;|&nbsp;
-          strong Visibility:&nbsp;
-          = memory.visibility
-          - unless local_assigns[:hide_actions]
-            = render ContentVisibilityDropdownComponent.new(record: memory)
-
-    - unless local_assigns[:hide_actions]
-      div style="display: flex; gap: 0.5rem; flex-shrink: 0;"
-        - if action_name != "show"
-          = link_to "Open", current_team_memory_path(memory), role: "button", class: "outline", style: "padding: 0.25rem 0.6rem; font-size: 0.8rem; margin-bottom: 0;"
-        - if respond_to?(:current_user) && current_user.present? && current_team == memory.team && allowed_to?(:update?, memory)
-          = link_to "Rewrite", edit_current_team_memory_path(memory), role: "button", class: "outline secondary", style: "padding: 0.25rem 0.6rem; font-size: 0.8rem; margin-bottom: 0;"
+  = render ManageHeaderComponent.new(record: memory, hide_actions: local_assigns[:hide_actions])
 
   p
     strong Memo:

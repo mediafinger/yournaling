@@ -30,11 +30,11 @@ RSpec.configure do |config|
       driver_option.add_argument("--no-sandbox")
     end
 
-    page.driver.header "User-Agent", "Rails System Test"
+    page.driver.header "User-Agent", "Rails System Test" if page.driver.respond_to?(:header)
   end
 
   config.after(:suite) do
-    FileUtils.rm_rf(Dir[Rails.root.join("tmp/storage_test/")])
+    FileUtils.rm_rf(Rails.root.glob("tmp/storage_test/"))
   end
 
   # rspec-expectations config goes here. You can use an alternate
