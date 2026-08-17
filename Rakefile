@@ -1,3 +1,9 @@
+# Suppress upstream constant redefinition warnings across subprocesses on Ruby 4.0+
+# NOTE
+#   This does also suppress deprecation and other warnings, therefore it should probably be
+#   conditional, to ensure none of such are thrown.
+ENV["RUBYOPT"] = ["-W0", ENV["RUBYOPT"]].compact.join(" ").strip
+
 require_relative "config/application"
 
 Rails.application.load_tasks

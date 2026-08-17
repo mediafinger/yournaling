@@ -54,6 +54,7 @@ YID are **sortable** **unique** IDs which contain:
 
 YID are:
 
+* globally unique (where globally is defined as within a single 'yournaling-installation')
 * stored in the database field `id` as primary key
 * used in serializers to the frontend
 * used in associations to other objects (with DB foreign_key)
