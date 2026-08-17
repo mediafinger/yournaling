@@ -49,6 +49,30 @@ RSpec.describe "Browse Mode Central Home Feed", type: :system do
     expect(page).to have_text("Matterhorn Trail")
   end
 
+  it "paginates results using endless scroll without showing page numbers or item counts" do
+    # Create 4 more published items (total 7 published items, page limit is 5)
+    4.times do |i|
+      m = FactoryBot.create(:memory, team: team, memo: "Extra Mountain Memory #{i + 1}", visibility: "published")
+      m.publishing.update!(republished_at: (i + 4).hours.ago)
+    end
+
+    visit root_url
+
+    # First page items should be rendered
+    expect(page).to have_text("Matterhorn Trail")
+    expect(page).to have_text("Sunrise at Refugio")
+    expect(page).to have_text("Mont Blanc Summit")
+
+    # Next page turbo-frame should be present for lazy loading
+    expect(page).to have_css("turbo-frame#publishings_page_2[loading='lazy']")
+
+    # No page number or item count text should be rendered
+    expect(page).to have_no_text("Page 1")
+    expect(page).to have_no_text("Showing 1-5")
+    expect(page).to have_no_css(".pagination")
+    expect(page).to have_no_css("nav.pagy")
+  end
+
   it "allows navigating back to browse mode home feed from the team area" do
     visit login_url
     fill_in :email, with: user.email

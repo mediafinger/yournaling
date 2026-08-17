@@ -43,7 +43,7 @@ RSpec.describe "Pages (Home Feed in Browse Mode)", type: :request do
         m
       end
 
-      it "displays the 5 latest published chronicles and memories ordered by republished_at DESC" do
+      it "displays the 5 latest published items on page 1 ordered by republished_at DESC" do
         get root_url
 
         expect(response).to be_successful
@@ -54,6 +54,23 @@ RSpec.describe "Pages (Home Feed in Browse Mode)", type: :request do
         expect(response.body).to include("Summit Sunrise Memo")
         expect(response.body).not_to include("Alps Expedition")
         expect(response.body.index("Glacier Hike Memo")).to be < response.body.index("Summit Sunrise Memo")
+      end
+
+      it "renders endless scroll turbo frames for page 1 and page 2" do
+        get root_url
+
+        expect(response.body).to include("id=\"publishings_page_1\"")
+        expect(response.body).to include("id=\"publishings_page_2\"")
+        expect(response.body).to include("loading=\"lazy\"")
+      end
+
+      it "displays the next page of publishings when requesting page 2" do
+        get root_url(page: 2)
+
+        expect(response).to be_successful
+        expect(response.body).to include("id=\"publishings_page_2\"")
+        expect(response.body).to include("Alps Expedition")
+        expect(response.body).not_to include("Glacier Hike Memo")
       end
 
       it "excludes unpublished posts" do

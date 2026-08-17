@@ -119,6 +119,8 @@ class AppConf
   register :full_backtrace, default: is?(:debug, true)
   # Adds (lograge) Rails logs to the output, only use in development when needed
   register :display_rails_logs, default: is?(:debug, true)
+  # Pagination configuration
+  register :items_per_page, default: 5 # mostly for development will likely be 25 in production
 
   # Logs & Logging
   register :log_level, default: if is?(:debug, true)

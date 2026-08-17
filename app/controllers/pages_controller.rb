@@ -5,6 +5,9 @@ class PagesController < ApplicationController
   skip_verify_authorized only: %i[show]
 
   def show
-    @publishings = Publishing.feed.includes(:team, post: %i[team])
+    @pagy, @publishings = pagy(
+      :offset,
+      Publishing.published.reorder(republished_at: :desc).includes(:team, post: %i[team])
+    )
   end
 end

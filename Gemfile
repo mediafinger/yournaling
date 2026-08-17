@@ -24,7 +24,7 @@ gem "image_processing", "~> 2.0" # Use image_processing for image resizing in Ac
 gem "importmap-rails", "~> 2.0" # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
 # gem "logstasher" # better formatted JSON logs for Logstash
 gem "mission_control-jobs", "~> 1.0" # dashboard for SolidQueue jobs
-# gem "pagy", "~> 5.10" # fast and lightweight pagination solution # TODO: require "pagy/extras/navs"
+gem "pagy", "~> 43.0" # fast and lightweight pagination solution
 gem "pg", "~> 1.1"
 gem "pg_search", "~> 2.3" # Use pg_search for full-text search in PostgreSQL
 gem "positioning", "~> 0.4"
