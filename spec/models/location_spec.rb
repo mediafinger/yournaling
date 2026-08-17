@@ -14,7 +14,7 @@ RSpec.describe Location, type: :model do
       address: "Playa de los Genoveses, San Jose",
       lat: 36.7491,
       long: -2.2425,
-      visibility: "internal",
+      visibility: "draft",
     }
   end
 

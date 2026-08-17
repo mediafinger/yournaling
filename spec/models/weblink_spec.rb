@@ -11,7 +11,7 @@ RSpec.describe Weblink, type: :model do
       team: team,
       name: "Vanlife Route Planning Guide",
       url: "route-planner.example.com/tips",
-      visibility: "internal",
+      visibility: "draft",
     }
   end
 

@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "rails_helper"
+
 RSpec.describe ContentVisibilityPolicy do
   let(:user) { FactoryBot.create(:user) }
   let(:team) { FactoryBot.create(:team) }
@@ -50,6 +52,18 @@ RSpec.describe ContentVisibilityPolicy do
 
     let(:record) { FactoryBot.create(:location, team:, visibility:) }
 
+    context "when visibility is 'draft'" do
+      let(:visibility) { "draft" }
+
+      it "allows owner, manager, editor, and publisher roles" do
+        %w[owner manager editor publisher].each do |role|
+          member.roles = [role]
+
+          expect(allowed_to?).to be true
+        end
+      end
+    end
+
     context "when visibility is 'internal'" do
       let(:visibility) { "internal" }
 
@@ -98,18 +112,7 @@ RSpec.describe ContentVisibilityPolicy do
       end
     end
 
-    context "when visibility is 'draft' or 'blocked'" do
-      it "denies all roles on draft content" do
-        draft_location = FactoryBot.create(:location, team:, visibility: "draft")
-        draft_policy = described_class.new(draft_location, user:, team:, member:)
-
-        Member::VALID_ROLES.each do |role|
-          member.roles = [role]
-
-          expect(draft_policy.apply(:update?)).to be false
-        end
-      end
-
+    context "when visibility is 'blocked'" do
       it "denies all roles on blocked content" do
         blocked_location = FactoryBot.create(:location, team:, visibility: "blocked")
         blocked_policy = described_class.new(blocked_location, user:, team:, member:)

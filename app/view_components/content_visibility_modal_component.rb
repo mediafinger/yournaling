@@ -28,6 +28,6 @@ class ContentVisibilityModalComponent < ApplicationComponent
   end
 
   def visibility_states
-    @record.class::VISIBILITY_STATES - %w[draft blocked]
+    @record.class::VISIBILITY_STATES - %w[blocked]
   end
 end

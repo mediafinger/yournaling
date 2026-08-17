@@ -22,11 +22,23 @@ RSpec.describe ContentVisibilityModalComponent, type: :component do
 
     expect(rendered.to_html).to include("dialog")
     expect(rendered.to_html).to include("Change Visibility")
+    expect(rendered.to_html).to include("Draft")
     expect(rendered.to_html).to include("Internal ✓")
     expect(rendered.to_html).to include("Published")
     expect(rendered.to_html).to include("Archived")
     expect(rendered.to_html).not_to include("turbo_confirm")
     expect(rendered.to_html).not_to include("Cancel")
+  end
+
+  it "renders modal dialog for a draft record" do
+    draft_chronicle = FactoryBot.create(:chronicle, team: team, visibility: "draft")
+    rendered = render_inline(described_class.new(record: draft_chronicle, user: user, team: team, member: member))
+
+    expect(rendered.to_html).to have_css("button[data-action='click->modal#open'][aria-label='Change visibility']")
+    expect(rendered.to_html).to include("Draft ✓")
+    expect(rendered.to_html).to include("Internal")
+    expect(rendered.to_html).to include("Published")
+    expect(rendered.to_html).to include("Archived")
   end
 
   it "does not render when user has no update permission" do

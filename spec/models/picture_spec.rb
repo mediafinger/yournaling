@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe Picture, type: :model do
   subject(:picture) do
-    described_class.new(file: blob_with_converted_image, name: "  Macbook Photo  ", team: team, visibility: "internal")
+    described_class.new(file: blob_with_converted_image, name: "  Macbook Photo  ", team: team, visibility: "draft")
   end
 
   let(:original_content_type) { "image/jpeg" }

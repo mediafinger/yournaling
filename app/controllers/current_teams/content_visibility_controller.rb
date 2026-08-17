@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 module CurrentTeams
   class ContentVisibilityController < AppCurrentTeamController
     def edit
       @content = ApplicationRecordYidEnabled.fynd(Base64.urlsafe_decode64(params[:id]))
       authorize! @content, to: :read?
 
-      @visibility_states = @content.class::VISIBILITY_STATES - %w[draft blocked]
+      @visibility_states = @content.class::VISIBILITY_STATES - %w[blocked]
     end
 
     def update
@@ -15,7 +17,7 @@ module CurrentTeams
       @content.class.update_with_event(record: @content, event_params: { team: current_team, user: current_user })
 
       if @content.changed? || @content.errors.any? # == content still dirty, not saved
-        @visibility_states = @content.class::VISIBILITY_STATES - %w[draft blocked]
+        @visibility_states = @content.class::VISIBILITY_STATES - %w[blocked]
         render :edit, status: :unprocessable_content
       else
         redirect_back_or_to current_team_edit_content_visibility_path(@content),

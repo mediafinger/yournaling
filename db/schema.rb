@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_17_190000) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_17_195500) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -156,7 +156,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_17_190000) do
     t.date "start_date", null: false
     t.string "team_id", null: false
     t.datetime "updated_at", null: false
-    t.enum "visibility", default: "internal", null: false, enum_type: "content_visibility"
+    t.enum "visibility", default: "draft", null: false, enum_type: "content_visibility"
     t.index ["team_id", "name"], name: "index_chronicles_on_team_id_and_name", unique: true
     t.index ["team_id", "start_date"], name: "index_chronicles_on_team_id_and_start_date"
   end
@@ -174,7 +174,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_17_190000) do
     t.string "team_id", null: false
     t.datetime "updated_at", null: false
     t.text "url"
-    t.enum "visibility", default: "internal", null: false, enum_type: "content_visibility"
+    t.enum "visibility", default: "draft", null: false, enum_type: "content_visibility"
     t.index ["country_code"], name: "index_locations_on_country_code"
     t.index ["team_id", "name"], name: "index_locations_on_team_id_and_name", unique: true
   end
@@ -230,7 +230,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_17_190000) do
     t.string "name"
     t.string "team_id", null: false
     t.datetime "updated_at", null: false
-    t.enum "visibility", default: "internal", null: false, enum_type: "content_visibility"
+    t.enum "visibility", default: "draft", null: false, enum_type: "content_visibility"
     t.index ["team_id"], name: "index_pictures_on_team_id"
   end
 
@@ -286,7 +286,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_17_190000) do
     t.string "team_id", null: false
     t.text "text", null: false
     t.datetime "updated_at", null: false
-    t.enum "visibility", default: "internal", null: false, enum_type: "content_visibility"
+    t.enum "visibility", default: "draft", null: false, enum_type: "content_visibility"
     t.index ["team_id", "date"], name: "index_thoughts_on_team_id_and_date"
   end
 
@@ -314,7 +314,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_17_190000) do
     t.string "team_id", null: false
     t.datetime "updated_at", null: false
     t.text "url", null: false
-    t.enum "visibility", default: "internal", null: false, enum_type: "content_visibility"
+    t.enum "visibility", default: "draft", null: false, enum_type: "content_visibility"
     t.index ["team_id", "url"], name: "index_weblinks_on_team_id_and_url", unique: true
   end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ContentVisibilityPolicy < ApplicationPolicy
   def update?
     return false unless current_team_owns_record?
@@ -5,6 +7,8 @@ class ContentVisibilityPolicy < ApplicationPolicy
     return with_role?(:owner, :manager) if record.is_a?(Member)
 
     case record.visibility
+    when "draft"
+      with_role?(:owner, :manager, :editor)
     when "internal"
       with_role?(:owner, :manager, :editor, :publisher)
     when "published"
