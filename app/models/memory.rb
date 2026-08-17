@@ -7,6 +7,7 @@
 #
 class Memory < ApplicationRecordForContentAndPosts
   include VisibilityConstrainedByParents
+  include Publishable
 
   YID_CODE = "memo"
 

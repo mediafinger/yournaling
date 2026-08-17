@@ -13,7 +13,8 @@ article id= dom_id(chronicle)
     strong Notice:
     = chronicle.notice
 
-  - if local_assigns[:full] || action_name == "show"
+  - is_chronicle_show = (controller_name == "chronicles" && action_name == "show")
+  - if local_assigns[:full] || is_chronicle_show
     - if chronicle.entries.any?
       section
         h4 Entries
@@ -24,5 +25,5 @@ article id= dom_id(chronicle)
       = render partial: "teams/pictures/picture", locals: { team:, picture: chronicle.first_picture }
 
   footer
-    - if !local_assigns[:full] && action_name != "show"
+    - if !local_assigns[:full] && !is_chronicle_show
       = link_to "Show this chronicle", team_chronicle_path(team, chronicle), role: "button"

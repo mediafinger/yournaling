@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_14_142100) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_17_190000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -234,6 +234,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_14_142100) do
     t.index ["team_id"], name: "index_pictures_on_team_id"
   end
 
+  create_table "publishings", id: :string, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "first_published_at", null: false
+    t.string "post_id", null: false
+    t.string "post_type", null: false
+    t.integer "published_count", default: 1, null: false
+    t.datetime "republished_at", null: false
+    t.string "team_id", null: false
+    t.datetime "updated_at", null: false
+    t.enum "visibility", null: false, enum_type: "content_visibility"
+    t.index ["post_type", "post_id"], name: "index_publishings_on_post_type_and_post_id", unique: true
+    t.index ["republished_at"], name: "index_publishings_on_republished_at"
+    t.index ["team_id", "republished_at"], name: "index_publishings_on_team_id_and_republished_at"
+    t.index ["visibility", "republished_at"], name: "index_publishings_on_visibility_and_republished_at"
+  end
+
   create_table "record_events", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.boolean "done_by_admin", default: false, null: false
@@ -318,6 +334,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_14_142100) do
   add_foreign_key "memories", "weblinks"
   add_foreign_key "pg_search_documents", "teams"
   add_foreign_key "pictures", "teams"
+  add_foreign_key "publishings", "teams"
   add_foreign_key "thoughts", "teams"
   add_foreign_key "weblinks", "teams"
 end

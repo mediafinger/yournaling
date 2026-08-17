@@ -15,5 +15,6 @@ article id= dom_id(memory)
     = render partial: "teams/locations/location", locals: { team:, location: memory.location }
   - if memory.weblink
     = render partial: "teams/weblinks/weblink", locals: { team:, weblink: memory.weblink }
-  - if action_name != "show"
+  - is_memory_show = (controller_name == "memories" && action_name == "show")
+  - if !is_memory_show
     = link_to "Show this memory", team_memory_path(team, memory), role: "button"

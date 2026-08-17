@@ -3,6 +3,8 @@
 # type: Post
 #
 class Chronicle < ApplicationRecordForContentAndPosts
+  include Publishable
+
   YID_CODE = "cron"
 
   attr_accessor(*ChronicleInsightAttacher::INSIGHT_PARAM_KEYS)

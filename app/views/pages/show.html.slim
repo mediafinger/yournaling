@@ -1,0 +1,10 @@
+#publishings
+  - if @publishings.any?
+    - @publishings.each do |publishing|
+      - if publishing.post_type == "Chronicle" && publishing.post.present?
+        = render partial: "teams/chronicles/chronicle", locals: { team: publishing.team, chronicle: publishing.post }
+      - elsif publishing.post_type == "Memory" && publishing.post.present?
+        = render partial: "teams/memories/memory", locals: { team: publishing.team, memory: publishing.post }
+  - else
+    article
+      p No published stories or memories yet.
