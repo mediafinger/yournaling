@@ -97,17 +97,17 @@ RSpec.describe "/current_team/chronicles", type: :request do
       expect(response).to be_successful
     end
 
-    it "renders a working 'Change visibility' button linking to edit visibility form (regression test)" do
+    it "renders a visibility dropdown and allows changing visibility" do
       get current_team_chronicle_url(chronicle.urlsafe_id)
       expect(response).to be_successful
       expect(response.body).to include("Change visibility")
+      expect(response.body).to include("dropdown")
+      expect(response.body).to include("Published")
 
-      visibility_link_path = current_team_edit_content_visibility_path(chronicle)
-      expect(response.body).to include(visibility_link_path)
-
-      get visibility_link_path
-      expect(response).to be_successful
-      expect(response.body).to include("Edit content visibility")
+      patch current_team_content_visibility_url(chronicle), params: { visibility: "published" },
+        headers: { "HTTP_REFERER" => current_team_chronicle_url(chronicle.urlsafe_id) }
+      expect(response).to redirect_to(current_team_chronicle_url(chronicle.urlsafe_id))
+      expect(chronicle.reload.visibility).to eq("published")
     end
 
     it "displays all attached pictures when multiple pictures are attached to a chronicle (regression test)" do
@@ -119,6 +119,10 @@ RSpec.describe "/current_team/chronicles", type: :request do
       expect(response.body).to include("Beach View")
       expect(response.body).to include("Sunset Over Alhambra")
       expect(response.body.scan('article id="picture_').count).to eq(2)
+
+      # Insight individual action buttons should be suppressed in chronicle show
+      expect(response.body).not_to include("Show this picture")
+      expect(response.body).not_to include("Edit this picture")
     end
   end
 

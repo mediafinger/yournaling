@@ -18,7 +18,7 @@ module CurrentTeams
         @visibility_states = @content.class::VISIBILITY_STATES - %w[draft blocked]
         render :edit, status: :unprocessable_content
       else
-        redirect_to current_team_edit_content_visibility_path(@content),
+        redirect_back_or_to current_team_edit_content_visibility_path(@content),
           notice: "#{@content.class.model_name.human} was successfully updated."
       end
     end

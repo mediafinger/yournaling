@@ -18,7 +18,7 @@ RSpec.describe "/current_team/memories", type: :request do
   let(:weblink) { FactoryBot.create(:weblink, team:) }
   let(:roles) { %i[owner manager editor] }
 
-  let(:valid_attributes) { { team_id: team.id, memo: "Memo Text", weblink: } }
+  let(:valid_attributes) { { team_id: team.id, memo: "Memo Text", weblink:, visibility: "internal" } }
   let(:invalid_attributes) { { team_id: team.id, memo: "." } }
 
   before do
@@ -56,20 +56,20 @@ RSpec.describe "/current_team/memories", type: :request do
       expect(response).to be_successful
     end
 
-    it "renders a working 'Change visibility' button linking to edit visibility form (regression test)" do
+    it "renders a visibility dropdown and allows changing visibility" do
       get current_team_memory_url(memory.urlsafe_id)
       expect(response).to be_successful
       expect(response.body).to include("Change visibility")
+      expect(response.body).to include("dropdown")
+      expect(response.body).to include("Published")
 
-      visibility_link_path = current_team_edit_content_visibility_path(memory)
-      expect(response.body).to include(visibility_link_path)
-
-      get visibility_link_path
-      expect(response).to be_successful
-      expect(response.body).to include("Edit content visibility")
+      patch current_team_content_visibility_url(memory), params: { visibility: "published" },
+        headers: { "HTTP_REFERER" => current_team_memory_url(memory.urlsafe_id) }
+      expect(response).to redirect_to(current_team_memory_url(memory.urlsafe_id))
+      expect(memory.reload.visibility).to eq("published")
     end
 
-    it "renders all attached insights (picture, thought, location, weblink) (regression test)" do
+    it "renders all attached insights (picture, thought, location, weblink)" do
       thought = FactoryBot.create(:thought, team: team, text: "Philosophical thought")
       location = FactoryBot.create(:location, team: team, name: "Alhambra Palace")
       picture = FactoryBot.create(:picture, team: team, name: "Granada View")
@@ -81,6 +81,23 @@ RSpec.describe "/current_team/memories", type: :request do
       expect(response.body).to include("Philosophical thought")
       expect(response.body).to include("Alhambra Palace")
       expect(response.body).to include("Granada View")
+    end
+
+    it "suppresses individual action buttons on embedded insights" do
+      thought = FactoryBot.create(:thought, team: team, text: "Philosophical thought")
+      location = FactoryBot.create(:location, team: team, name: "Alhambra Palace")
+      picture = FactoryBot.create(:picture, team: team, name: "Granada View")
+      memory = Memory.create!(valid_attributes.merge(thought: thought, location: location, picture: picture))
+
+      get current_team_memory_url(memory.urlsafe_id)
+      expect(response.body).not_to include("Show this picture")
+      expect(response.body).not_to include("Edit this picture")
+      expect(response.body).not_to include("Show this thought")
+      expect(response.body).not_to include("Edit this thought")
+      expect(response.body).not_to include("Show this location")
+      expect(response.body).not_to include("Edit this location")
+      expect(response.body).not_to include("Show this weblink")
+      expect(response.body).not_to include("Edit this weblink")
     end
   end
 

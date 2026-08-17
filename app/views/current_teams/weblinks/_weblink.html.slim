@@ -12,7 +12,8 @@ article id= dom_id(weblink)
   p
     strong Team:
     = weblink.team_id
-  - if action_name != "show"
-    = link_to "Show this weblink", current_team_weblink_path(weblink), role: "button"
-  - if current_team == weblink.team
-    = link_to "Edit this weblink", edit_current_team_weblink_path(weblink), role: "button", class: "secondary"
+  - unless local_assigns[:hide_actions]
+    - if action_name != "show"
+      = link_to "Show this weblink", current_team_weblink_path(weblink), role: "button"
+    - if current_team == weblink.team
+      = link_to "Edit this weblink", edit_current_team_weblink_path(weblink), role: "button", class: "secondary"

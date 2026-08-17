@@ -12,39 +12,49 @@ RSpec.describe ChronicleEntryComponent, type: :component do
   let(:memory) { FactoryBot.create(:memory, team: team, memo: "Remember this moment") }
 
   context "when in current_team scope" do
-    it "renders thought entries" do
+    it "renders thought entries without action buttons" do
       entry = FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: thought)
       rendered = render_inline(described_class.new(chronicle_entry: entry, scope: "current_team"))
 
       expect(rendered.to_html).to include("A deep philosophical insight")
+      expect(rendered.to_html).not_to include("Show this thought")
+      expect(rendered.to_html).not_to include("Edit this thought")
     end
 
-    it "renders location entries" do
+    it "renders location entries without action buttons" do
       entry = FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: location)
       rendered = render_inline(described_class.new(chronicle_entry: entry, scope: "current_team"))
 
       expect(rendered.to_html).to include("Sierra Nevada")
+      expect(rendered.to_html).not_to include("Show this location")
+      expect(rendered.to_html).not_to include("Edit this location")
     end
 
-    it "renders picture entries" do
+    it "renders picture entries without action buttons" do
       entry = FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: picture)
       rendered = render_inline(described_class.new(chronicle_entry: entry, scope: "current_team"))
 
       expect(rendered.to_html).to include("Sunset View")
+      expect(rendered.to_html).not_to include("Show this picture")
+      expect(rendered.to_html).not_to include("Edit this picture")
     end
 
-    it "renders weblink entries" do
+    it "renders weblink entries without action buttons" do
       entry = FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: weblink)
       rendered = render_inline(described_class.new(chronicle_entry: entry, scope: "current_team"))
 
       expect(rendered.to_html).to include("Trail Guide")
+      expect(rendered.to_html).not_to include("Show this weblink")
+      expect(rendered.to_html).not_to include("Edit this weblink")
     end
 
-    it "renders memory entries" do
+    it "renders memory entries without action buttons" do
       entry = FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: memory)
       rendered = render_inline(described_class.new(chronicle_entry: entry, scope: "current_team"))
 
       expect(rendered.to_html).to include("Remember this moment")
+      expect(rendered.to_html).not_to include("Show this memory")
+      expect(rendered.to_html).not_to include("Edit this memory")
     end
   end
 

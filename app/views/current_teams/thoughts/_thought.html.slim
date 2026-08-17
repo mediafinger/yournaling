@@ -9,7 +9,8 @@ article id= dom_id(thought)
   p
     strong Team:
     = thought.team_id
-  - if action_name != "show"
-    = link_to "Show this thought", current_team_thought_path(thought), role: "button"
-  - if current_team == thought.team
-    = link_to "Edit this thought", edit_current_team_thought_path(thought), role: "button", class: "secondary"
+  - unless local_assigns[:hide_actions]
+    - if action_name != "show"
+      = link_to "Show this thought", current_team_thought_path(thought), role: "button"
+    - if current_team == thought.team
+      = link_to "Edit this thought", edit_current_team_thought_path(thought), role: "button", class: "secondary"

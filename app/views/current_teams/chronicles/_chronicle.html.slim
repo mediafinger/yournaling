@@ -1,19 +1,29 @@
 article id= dom_id(chronicle)
-  header
-    h3 = chronicle.name
-    p
-      small
-        strong Dates: 
-        = chronicle.start_date
-        - if chronicle.end_date.present?
-          |  – 
-          = chronicle.end_date
-        |  | 
-        strong Visibility: 
-        = chronicle.visibility
+  header style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 1rem;"
+    div
+      h3 style="margin-bottom: 0.25rem;" = chronicle.name
+      p style="margin-bottom: 0;"
+        small
+          strong Dates:&nbsp;
+          = chronicle.start_date
+          - if chronicle.end_date.present?
+            |  – 
+            = chronicle.end_date
+          | &nbsp;|&nbsp;
+          strong Visibility:&nbsp;
+          = chronicle.visibility
+          = render ContentVisibilityDropdownComponent.new(record: chronicle)
+
+    - unless local_assigns[:hide_actions]
+      div style="display: flex; gap: 0.5rem; flex-shrink: 0;"
+        - if !local_assigns[:full] && action_name != "show"
+          = link_to "Open", current_team_chronicle_path(chronicle), role: "button", class: "outline", style: "padding: 0.25rem 0.6rem; font-size: 0.8rem; margin-bottom: 0;"
+        - if respond_to?(:current_user) && current_user.present? && current_team == chronicle.team && allowed_to?(:update?, chronicle)
+          = link_to "Rewrite", edit_current_team_chronicle_path(chronicle), role: "button", class: "outline secondary", style: "padding: 0.25rem 0.6rem; font-size: 0.8rem; margin-bottom: 0;"
 
   p
     strong Notice:
+    br
     = chronicle.notice
 
   - if local_assigns[:full] || action_name == "show"
@@ -24,11 +34,4 @@ article id= dom_id(chronicle)
           = render ChronicleEntryComponent.new(chronicle_entry: chronicle_entry, scope: "current_team")
   - elsif chronicle.first_picture.present?
     p
-      = render partial: "current_teams/pictures/picture", locals: { picture: chronicle.first_picture }
-
-  footer
-    - if !local_assigns[:full] && action_name != "show"
-      = link_to "Show this chronicle", current_team_chronicle_path(chronicle), role: "button"
-    - if current_team == chronicle.team
-      = link_to "Edit this chronicle", edit_current_team_chronicle_path(chronicle), role: "button", class: "secondary"
-      = link_to "Change visibility", current_team_edit_content_visibility_path(chronicle), role: "button", class: "secondary"
+      = render partial: "current_teams/pictures/picture", locals: { picture: chronicle.first_picture, hide_actions: true }

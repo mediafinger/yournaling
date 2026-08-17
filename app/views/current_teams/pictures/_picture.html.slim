@@ -32,8 +32,9 @@ article id= dom_id(picture)
     - else
       = link_to image_tag(picture.preview, style: "width: 400px; height: 266px; object-fit: cover;"), current_team_picture_path(picture)
 
-    - if !is_picture_controller || action_name != "show"
-      = link_to "Show this picture", current_team_picture_path(picture), role: "button"
+    - unless local_assigns[:hide_actions]
+      - if !is_picture_controller || action_name != "show"
+        = link_to "Show this picture", current_team_picture_path(picture), role: "button"
 
-    - if current_team == picture.team
-      = link_to "Edit this picture", edit_current_team_picture_path(picture), role: "button", class: "secondary"
+      - if current_team == picture.team
+        = link_to "Edit this picture", edit_current_team_picture_path(picture), role: "button", class: "secondary"

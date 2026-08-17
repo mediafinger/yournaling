@@ -29,10 +29,11 @@ article id= dom_id(location)
   p
     strong Team:
     = location.team_id
-  - if action_name != "show"
-    = link_to "Show this location", current_team_location_path(location), role: "button"
-  - if current_team == location.team
-    = link_to "Edit this location", edit_current_team_location_path(location), role: "button", class: "secondary"
+  - unless local_assigns[:hide_actions]
+    - if action_name != "show"
+      = link_to "Show this location", current_team_location_path(location), role: "button"
+    - if current_team == location.team
+      = link_to "Edit this location", edit_current_team_location_path(location), role: "button", class: "secondary"
   hr
   - if location.coordinates.present?
     = render MapLinkComponent.new(location: location, width: 600, height: 400)

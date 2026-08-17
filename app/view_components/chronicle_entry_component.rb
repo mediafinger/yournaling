@@ -27,7 +27,7 @@ class ChronicleEntryComponent < ApplicationComponent
       return
     end
 
-    locals = { type_key.to_sym => entry }
+    locals = { type_key.to_sym => entry, hide_actions: true }
     locals[:team] = @team if scope_prefix == "teams"
 
     render partial: partial_path, locals: locals
