@@ -82,6 +82,55 @@ RSpec.describe "Pages (Home Feed in Browse Mode)", type: :request do
         expect(response.body).not_to include("Secret Cave Exploration")
         expect(response.body).not_to include("Private Draft Memo")
       end
+
+      it "renders feed refresh controller markup and banner" do
+        get root_url
+
+        expect(response.body).to include("data-controller=\"feed-refresh\"")
+        expect(response.body).to include("newer posts available, scroll up to load them")
+      end
+    end
+  end
+
+  describe "GET /check_newer" do
+    let!(:memory) do
+      m = FactoryBot.create(:memory, team: team, memo: "Old Memo", visibility: "published")
+      m.publishing.update!(republished_at: 2.hours.ago)
+      m
+    end
+
+    it "returns count 0 when no newer publishings exist" do
+      get check_newer_pages_url, params: { since: 1.hour.ago.iso8601(6) }
+
+      expect(response).to be_successful
+      json = JSON.parse(response.body)
+      expect(json["count"]).to eq(0)
+      expect(json["latest_republished_at"]).to be_nil
+    end
+
+    it "returns count and timestamp when newer publishings exist" do
+      new_chronicle = FactoryBot.create(:chronicle, team: team, name: "Fresh Chronicle", visibility: "published")
+      new_chronicle.publishing.update!(republished_at: 10.minutes.ago)
+
+      get check_newer_pages_url, params: { since: 1.hour.ago.iso8601(6) }
+
+      expect(response).to be_successful
+      json = JSON.parse(response.body)
+      expect(json["count"]).to eq(1)
+      expect(json["latest_republished_at"]).to eq(new_chronicle.publishing.republished_at.iso8601(6))
+    end
+  end
+
+  describe "GET /newer" do
+    it "renders the newly published items since the given timestamp" do
+      new_chronicle = FactoryBot.create(:chronicle, team: team, name: "Fresh Chronicle", visibility: "published")
+      new_chronicle.publishing.update!(republished_at: 10.minutes.ago)
+
+      get newer_pages_url, params: { since: 1.hour.ago.iso8601(6) }
+
+      expect(response).to be_successful
+      expect(response.body).to include("Fresh Chronicle")
+      expect(response.body).to include(new_chronicle.publishing.republished_at.iso8601(6))
     end
   end
 end

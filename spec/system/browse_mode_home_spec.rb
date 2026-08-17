@@ -73,6 +73,14 @@ RSpec.describe "Browse Mode Central Home Feed", type: :system do
     expect(page).to have_no_css("nav.pagy")
   end
 
+  it "renders the newer posts banner and container for scroll-up pagination" do
+    visit root_url
+
+    expect(page).to have_css("div[data-controller='feed-refresh']")
+    expect(page).to have_css("#newer_posts_banner", text: "newer posts available, scroll up to load them", visible: :all)
+    expect(page).to have_css("#newer_posts_container")
+  end
+
   it "allows navigating back to browse mode home feed from the team area" do
     visit login_url
     fill_in :email, with: user.email

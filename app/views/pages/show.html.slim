@@ -1,4 +1,8 @@
-#publishings
+#publishings data-controller="feed-refresh" data-feed-refresh-since-value=@newest_published_at data-feed-refresh-check-url-value=check_newer_pages_path data-feed-refresh-load-url-value=newer_pages_path
+  #top_sentinel data-feed-refresh-target="topSentinel"
+  #newer_posts_banner.newer-posts-banner data-feed-refresh-target="banner" hidden="" data-action="click->feed-refresh#loadNewer"
+    span newer posts available, scroll up to load them
+  #newer_posts_container data-feed-refresh-target="container"
   = turbo_frame_tag "publishings_page_#{@pagy.page}" do
     - if @publishings.any?
       - @publishings.each do |publishing|

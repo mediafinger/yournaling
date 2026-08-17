@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
   root to: "pages#show"
+  get "check_newer", to: "pages#check_newer", as: :check_newer_pages
+  get "newer", to: "pages#newer", as: :newer_pages
 
   get "up" => "health#show", as: :rails_health_check
 
