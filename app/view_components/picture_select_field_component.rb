@@ -9,9 +9,10 @@ class PictureSelectFieldComponent < ApplicationComponent
         = hidden_field_tag "\#{@form.object_name}[picture_id]", picture_id_value, id: "\#{@form.object_name}_picture_id", data: { picture_select_target: "hiddenInput" }
         details.dropdown data-picture-select-target="dropdown" style="margin-bottom: 1rem;"
           summary data-picture-select-target="summary"
-            - if selected_picture
+            - if selected_picture&.persisted? && selected_picture.file.attached?
               span style="display: flex; align-items: center; gap: 0.75rem;"
-                img src=rails_representation_path(selected_picture.thumbnail) style="width: 40px; height: 30px; object-fit: cover; border-radius: 3px;" alt=""
+                - if (thumb = selected_picture.thumbnail)
+                  img src=rails_representation_path(thumb) style="width: 80px; height: 60px; object-fit: cover; border-radius: 3px;" alt=""
                 span = picture_label(selected_picture)
             - else
               | Choose an existing picture...
@@ -28,7 +29,7 @@ class PictureSelectFieldComponent < ApplicationComponent
                   span style="font-weight: 500;"
                     = label
 
-      details data-picture-select-target="uploadDetails" style="margin-top: 1rem;"
+      details data-picture-select-target="uploadDetails" open=(upload_details_open ? "open" : nil) style="margin-top: 1rem;"
         summary Or Upload New Picture
         div style="margin-top: 0.75rem;"
           = label_tag "\#{@form.object_name}_picture_file", "Picture File"
@@ -56,14 +57,15 @@ class PictureSelectFieldComponent < ApplicationComponent
   end
 
   def selected_picture
-    @selected_picture || begin
+    pic = @selected_picture || begin
       pic_id = @form.object.respond_to?(:picture_id) ? @form.object.picture_id : nil
-      return nil if pic_id.blank?
-
-      pictures.find do |p|
-        p.id == pic_id || p.urlsafe_id == pic_id
-      end || Picture.find_by(id: pic_id) || Picture.urlsafe_find(pic_id)
+      if pic_id.present?
+        pictures.find do |p|
+          p.id == pic_id || p.urlsafe_id == pic_id
+        end || Picture.find_by(id: pic_id) || Picture.urlsafe_find(pic_id)
+      end
     end
+    pic if pic&.persisted?
   end
 
   def picture_id_value
@@ -83,6 +85,15 @@ class PictureSelectFieldComponent < ApplicationComponent
       "#{pic.name} (#{pic.team.name})"
     else
       pic.name
+    end
+  end
+
+  def upload_details_open
+    return true if picture_name_value.present?
+    return true if @form.object.respond_to?(:picture_file) && @form.object.picture_file.present?
+
+    @form.object.respond_to?(:errors) && @form.object.errors.attribute_names.any? do |k|
+      k.to_s.start_with?("picture_file", "picture_name")
     end
   end
 end

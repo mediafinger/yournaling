@@ -41,7 +41,7 @@ RSpec.describe InsightResolver do
         resolver.resolve_picture_upload(picture_file: uploaded_file, picture_name: "a" * 300)
       }.to raise_error(ActiveRecord::RecordInvalid)
 
-      expect(parent.errors[:picture_file]).to be_present
+      expect(parent.errors[:picture_name]).to be_present
     end
   end
 
@@ -88,7 +88,7 @@ RSpec.describe InsightResolver do
       expect(resolver.resolve_location(location_id: existing_loc.id)).to eq(existing_loc)
     end
 
-    it "raises ActiveRecord::RecordInvalid when location validation fails" do
+    it "raises ActiveRecord::RecordInvalid and maps error to specific attribute when location validation fails" do
       expect {
         resolver.resolve_location(
           location_name: "Bad Loc",
@@ -96,7 +96,7 @@ RSpec.describe InsightResolver do
         )
       }.to raise_error(ActiveRecord::RecordInvalid)
 
-      expect(parent.errors[:location_name]).to be_present
+      expect(parent.errors[:location_country_code]).to be_present
     end
   end
 

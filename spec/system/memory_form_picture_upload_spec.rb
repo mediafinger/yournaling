@@ -84,22 +84,89 @@ RSpec.describe "Memory Form Picture Upload & Insight Management", type: :system 
     expect(memory.weblink.name).to eq("Park Trail Guide")
   end
 
-  it "detaches an attached picture when choosing None (regression test)" do
+  it "detaches attached insights when choosing None (regression test)" do
     picture = FactoryBot.create(:picture, team: team, name: "Detachable Pic")
+    location = FactoryBot.create(:location, team: team, name: "Detachable Loc")
+    thought = FactoryBot.create(:thought, team: team, text: "Detachable Thought")
+    weblink = FactoryBot.create(:weblink, team: team, name: "Detachable Link")
+
     memory = Memory.create!(
       team: team,
-      memo: "Memory with a photo to detach",
+      memo: "Memory with all insights to detach",
       picture: picture,
+      location: location,
+      thought: thought,
+      weblink: weblink,
       visibility: "published"
     )
 
     visit edit_current_team_memory_url(memory)
 
     find(:field, "memory_picture_id", type: :hidden).set("")
+    select "None (no location)", from: "memory[location_id]"
+    select "None (no thought)", from: "memory[thought_id]"
+    select "None (no weblink)", from: "memory[weblink_id]"
     click_button "Update Memory"
 
     expect(page).to have_text("Memory was successfully updated.")
     memory.reload
     expect(memory.picture).to be_nil
+    expect(memory.location).to be_nil
+    expect(memory.thought).to be_nil
+    expect(memory.weblink).to be_nil
+  end
+
+  it "creates a memory with an inline created location selecting country code" do
+    visit new_current_team_memory_url
+
+    fill_in "memory[memo]", with: "Exploring ancient ruins"
+    find("summary", text: "Or Create New Location").click
+    fill_in "memory[location_name]", with: "Acropolis of Athens"
+    select "Greece 🇬🇷 [GR] Ελλάδα", from: "memory[location_country_code]"
+    fill_in "memory[location_address]", with: "Athens 105 58, Greece"
+    click_button "Create Memory"
+
+    expect(page).to have_text("Memory was successfully created.")
+    expect(page).to have_text("Exploring ancient ruins")
+    expect(page).to have_text("Acropolis of Athens")
+
+    memory = Memory.last
+    expect(memory.location).to be_present
+    expect(memory.location.name).to eq("Acropolis of Athens")
+    expect(memory.location.country_code).to be_present
+  end
+
+  it "renders validation errors cleanly and retains all form fields when creation fails" do
+    FactoryBot.create(:location, team: team, name: "Acropolis of Athens")
+
+    visit new_current_team_memory_url
+
+    fill_in "memory[memo]", with: "Exploring ancient ruins"
+    find("summary", text: "Or Upload New Picture").click
+    attach_file "memory[picture_file]", Rails.root.join("spec/support/macbookair_stickered.jpg")
+    fill_in "memory[picture_name]", with: "Ruins Photo"
+    find("summary", text: "Or Create New Location").click
+    fill_in "memory[location_name]", with: "Acropolis of Athens"
+    select "Greece 🇬🇷 [GR] Ελλάδα", from: "memory[location_country_code]"
+    fill_in "memory[location_address]", with: "Athens Center"
+    find("summary", text: "Or Create New Thought").click
+    fill_in "memory[thought_text]", with: "History is alive here."
+    find("summary", text: "Or Create New Weblink").click
+    fill_in "memory[weblink_name]", with: "Athens Guide"
+    fill_in "memory[weblink_url]", with: "https://athens-guide.example.com"
+    fill_in "memory[weblink_description]", with: "Comprehensive travel tips"
+    click_button "Create Memory"
+
+    expect(page).to have_text("Location")
+    expect(page).to have_current_path(current_team_memories_path)
+    expect(find_field("memory[memo]").value).to eq("Exploring ancient ruins")
+    expect(find_field("memory[location_name]").value).to eq("Acropolis of Athens")
+    expect(find_field("memory[location_address]").value).to eq("Athens Center")
+    expect(find_field("memory[picture_name]").value).to eq("Ruins Photo")
+    expect(find_field("memory[thought_text]").value).to eq("History is alive here.")
+    expect(find_field("memory[weblink_name]").value).to eq("Athens Guide")
+    expect(find_field("memory[weblink_url]").value).to eq("https://athens-guide.example.com")
+    expect(find_field("memory[weblink_description]").value).to eq("Comprehensive travel tips")
+    expect(page).to have_select("memory[location_country_code]", selected: "Greece 🇬🇷 [GR] Ελλάδα")
   end
 end

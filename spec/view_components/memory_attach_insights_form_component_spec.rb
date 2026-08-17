@@ -36,4 +36,37 @@ RSpec.describe MemoryAttachInsightsFormComponent, type: :component do
     expect(rendered.to_html).to include("Or Create New Thought")
     expect(rendered.to_html).to include("Or Create New Weblink")
   end
+
+  it "renders mandatory country code dropdown in location creation section" do
+    view_context = ActionController::Base.new.view_context
+    form = ActionView::Helpers::FormBuilder.new(:memory, memory, view_context, {})
+
+    rendered = render_inline(described_class.new(form: form, memory: memory))
+
+    expect(rendered.to_html).to include("Country")
+    expect(rendered.to_html).to include('name="memory[location_country_code]"')
+    expect(rendered.to_html).to include("Germany")
+    expect(rendered.to_html).to include("Spain")
+  end
+
+  it "renders uniform 'None (no ...)' options across select dropdowns" do
+    view_context = ActionController::Base.new.view_context
+    form = ActionView::Helpers::FormBuilder.new(:memory, memory, view_context, {})
+
+    rendered = render_inline(described_class.new(form: form, memory: memory))
+
+    expect(rendered.to_html).to include("None (no location)")
+    expect(rendered.to_html).to include("None (no thought)")
+    expect(rendered.to_html).to include("None (no weblink)")
+  end
+
+  it "renders details with open attribute when child fields have errors" do
+    memory.errors.add(:location_url, "is invalid")
+    view_context = ActionController::Base.new.view_context
+    form = ActionView::Helpers::FormBuilder.new(:memory, memory, view_context, {})
+
+    rendered = render_inline(described_class.new(form: form, memory: memory))
+
+    expect(rendered.to_html).to include('<details data-insight-select-target="details" open="open"')
+  end
 end

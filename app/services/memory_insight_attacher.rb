@@ -1,20 +1,7 @@
 # frozen_string_literal: true
 
 class MemoryInsightAttacher
-  INSIGHT_PARAM_KEYS = %i[
-    picture_id picture_file picture_name
-    location_id location_name location_address location_country_code location_url location_description
-    thought_id thought_text
-    weblink_id weblink_name weblink_url weblink_description
-  ].freeze
-
   class << self
-    def extract_insight_params!(attrs)
-      INSIGHT_PARAM_KEYS.each_with_object({}) do |key, extracted|
-        extracted[key] = attrs.delete(key) if attrs.key?(key)
-      end
-    end
-
     def call(memory:, params:, user: nil)
       new(memory:, user:).attach(params)
     end
@@ -27,7 +14,7 @@ class MemoryInsightAttacher
     @resolver = InsightResolver.new(
       parent: memory,
       team: team,
-      date: memory.created_at || Date.current,
+      date: memory.created_at&.to_date || Date.current,
       visibility: memory.visibility,
       user: user
     )
@@ -58,7 +45,8 @@ class MemoryInsightAttacher
     end
 
     if params[:location_id].present? && (
-      params[:location_name].present? || params[:location_address].present? || params[:location_url].present?
+      params[:location_name].present? || params[:location_address].present? ||
+      params[:location_url].present? || params[:location_country_code].present?
     )
       memory.errors.add(:location_id, "Please either select an existing location or create a new location, not both")
     end

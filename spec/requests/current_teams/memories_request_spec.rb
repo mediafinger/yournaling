@@ -193,6 +193,28 @@ RSpec.describe "/current_team/memories", type: :request do
         expect(response.body).to include("Location")
       end
 
+      it "renders 422 and retains form values when creating memory with picture upload and invalid location" do
+        FactoryBot.create(:location, team: team, name: "Existing Location")
+        params = {
+          memo: "Memory with picture and duplicate location",
+          picture_file: uploaded_file,
+          picture_name: "My Photo",
+          location_name: "Existing Location",
+          location_country_code: "de",
+          location_address: "123 Main St",
+        }
+
+        expect {
+          post current_team_memories_url, params: { memory: params }
+        }.not_to(change { Memory.count })
+
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(response.body).to include("Location")
+        expect(response.body).to include("Existing Location")
+        expect(response.body).to include("123 Main St")
+        expect(response.body).to include("My Photo")
+      end
+
       it "renders 422 when both existing insight ID and new creation parameters are submitted (Option C)" do
         existing_picture = FactoryBot.create(:picture, team: team)
         params = {
@@ -272,6 +294,42 @@ RSpec.describe "/current_team/memories", type: :request do
         patch current_team_memory_url(memory), params: { memory: invalid_attributes }
 
         expect(response).to have_http_status(:unprocessable_content)
+      end
+
+      it "renders 422 when clearing memo to blank text (regression test for compact_blank bug)" do
+        memory = Memory.create!(team: team, memo: "Original long memo", visibility: "internal")
+
+        patch current_team_memory_url(memory), params: { memory: { memo: "" } }
+
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(memory.reload.memo).to eq("Original long memo")
+      end
+    end
+
+    context "when detaching insights on update" do
+      it "detaches attached insights when blank IDs are submitted" do
+        loc = FactoryBot.create(:location, team: team)
+        thot = FactoryBot.create(:thought, team: team)
+        pic = FactoryBot.create(:picture, team: team)
+        web = FactoryBot.create(:weblink, team: team)
+        memory = Memory.create!(team: team, memo: "Memory with all insights", location: loc, thought: thot, picture: pic,
+          weblink: web, visibility: "internal")
+
+        patch current_team_memory_url(memory), params: {
+          memory: {
+            picture_id: "",
+            location_id: "",
+            thought_id: "",
+            weblink_id: "",
+          },
+        }
+
+        expect(response).to redirect_to(current_team_memory_url(memory))
+        memory.reload
+        expect(memory.picture).to be_nil
+        expect(memory.location).to be_nil
+        expect(memory.thought).to be_nil
+        expect(memory.weblink).to be_nil
       end
     end
 

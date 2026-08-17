@@ -96,6 +96,8 @@ class Picture < ApplicationRecordForContentAndPosts
 
   # NOTE: on demand variants, maybe persist a few sizes
   def create_variant(max_width:, max_height:, quality: 80, format: :webp)
+    return unless persisted? && file.attached?
+
     file.variant(resize_to_limit: [max_width, max_height], format:, saver: { quality: }).processed
   end
 

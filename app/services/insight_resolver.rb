@@ -99,8 +99,14 @@ class InsightResolver
   end
 
   def merge_errors_and_raise!(record, fallback_attribute)
+    prefix_name = fallback_attribute.to_s.split("_").first
     record.errors.each do |error|
-      parent.errors.add(fallback_attribute, error.message)
+      attr_key = if error.attribute == :base
+                   fallback_attribute
+                 else
+                   :"#{prefix_name}_#{error.attribute}"
+                 end
+      parent.errors.add(attr_key, error.message)
     end
     raise ActiveRecord::RecordInvalid.new(parent)
   end

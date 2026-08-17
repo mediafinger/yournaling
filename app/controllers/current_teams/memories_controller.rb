@@ -28,15 +28,12 @@ module CurrentTeams
     end
 
     def create
-      attrs = memory_params
-      insight_attrs = MemoryInsightAttacher.extract_insight_params!(attrs)
-
-      @memory = Memory.new(attrs.compact_blank.merge(team: current_team))
+      @memory = Memory.new(memory_params.merge(team: current_team))
       authorize! @memory
 
       ActiveRecord::Base.transaction do
         create_with_event(record: @memory)
-        MemoryInsightAttacher.call(memory: @memory, params: insight_attrs, user: current_user) if @memory.persisted?
+        MemoryInsightAttacher.call(memory: @memory, params: memory_params, user: current_user) if @memory.persisted?
       end
 
       if @memory.persisted?
@@ -44,21 +41,23 @@ module CurrentTeams
       else
         render :new, status: :unprocessable_content
       end
-    rescue ActiveRecord::RecordInvalid
+    rescue ActiveRecord::RecordInvalid => e
+      @memory = e.record if e.record.is_a?(Memory)
+      @memory.picture = nil if @memory.picture && !@memory.picture.persisted?
+      @memory.location = nil if @memory.location && !@memory.location.persisted?
+      @memory.thought = nil if @memory.thought && !@memory.thought.persisted?
+      @memory.weblink = nil if @memory.weblink && !@memory.weblink.persisted?
       render :new, status: :unprocessable_content
     end
 
     def update
-      attrs = memory_params
-      insight_attrs = MemoryInsightAttacher.extract_insight_params!(attrs)
-
       @memory = Memory.urlsafe_find!(params[:id])
       authorize! @memory
-      @memory.assign_attributes(attrs.compact_blank)
+      @memory.assign_attributes(memory_params)
 
       ActiveRecord::Base.transaction do
         update_with_event(record: @memory)
-        MemoryInsightAttacher.call(memory: @memory, params: insight_attrs, user: current_user) unless @memory.changed?
+        MemoryInsightAttacher.call(memory: @memory, params: memory_params, user: current_user) unless @memory.changed?
       end
 
       if @memory.changed? # == memory still dirty, not saved
@@ -66,7 +65,12 @@ module CurrentTeams
       else
         redirect_to current_team_memory_url(@memory.urlsafe_id), notice: "Memory was successfully updated."
       end
-    rescue ActiveRecord::RecordInvalid
+    rescue ActiveRecord::RecordInvalid => e
+      @memory = e.record if e.record.is_a?(Memory)
+      @memory.picture = nil if @memory.picture && !@memory.picture.persisted?
+      @memory.location = nil if @memory.location && !@memory.location.persisted?
+      @memory.thought = nil if @memory.thought && !@memory.thought.persisted?
+      @memory.weblink = nil if @memory.weblink && !@memory.weblink.persisted?
       render :edit, status: :unprocessable_content
     end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # type: Post
 #
 # Memory.memo and an optional Thought feel like basically the same thing.
@@ -6,7 +8,18 @@
 class Memory < ApplicationRecordForContentAndPosts
   include VisibilityConstrainedByParents
 
-  YID_CODE = "memo".freeze
+  YID_CODE = "memo"
+
+  INSIGHT_PARAM_KEYS = %i[
+    picture_id picture_file picture_name
+    location_id location_name location_address location_country_code location_url location_description
+    thought_id thought_text
+    weblink_id weblink_name weblink_url weblink_description
+  ].freeze
+  INLINE_INSIGHT_ATTRIBUTES = (INSIGHT_PARAM_KEYS - %i[picture_id location_id thought_id weblink_id]).freeze
+  attr_accessor(*INLINE_INSIGHT_ATTRIBUTES)
+
+  normalizes :location_id, :picture_id, :thought_id, :weblink_id, with: ->(id) { id.presence }
 
   belongs_to :team, inverse_of: :memories
   belongs_to :location, inverse_of: :memories, optional: true

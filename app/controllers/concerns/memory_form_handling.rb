@@ -11,7 +11,7 @@ module MemoryFormHandling
         :memo,
         :visibility,
         *additional_keys,
-        *MemoryInsightAttacher::INSIGHT_PARAM_KEYS,
+        *Memory::INSIGHT_PARAM_KEYS,
       ]
     )
   end

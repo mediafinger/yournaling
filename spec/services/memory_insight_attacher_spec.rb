@@ -14,32 +14,6 @@ RSpec.describe MemoryInsightAttacher do
     )
   end
 
-  describe ".extract_insight_params!" do
-    it "extracts insight parameters from attributes and modifies the hash in place" do
-      attrs = {
-        memo: "A memorable day",
-        visibility: "internal",
-        picture_id: "pic_123",
-        location_name: "Mount Olympus",
-        thought_text: "Clear mind",
-        weblink_url: "https://example.com",
-      }
-
-      extracted = described_class.extract_insight_params!(attrs)
-
-      expect(attrs).to eq({
-        memo: "A memorable day",
-        visibility: "internal",
-      })
-      expect(extracted).to eq({
-        picture_id: "pic_123",
-        location_name: "Mount Olympus",
-        thought_text: "Clear mind",
-        weblink_url: "https://example.com",
-      })
-    end
-  end
-
   describe ".call" do
     it "returns without error when params are blank" do
       expect {
@@ -84,6 +58,13 @@ RSpec.describe MemoryInsightAttacher do
 
         expect(memory.reload.picture).to be_nil
       end
+
+      it "detaches an attached picture when picture_id is blank" do
+        memory.update!(picture: existing_picture)
+        described_class.call(memory: memory, params: { picture_id: "" }, user: user)
+
+        expect(memory.reload.picture).to be_nil
+      end
     end
 
     context "when attaching locations" do
@@ -93,6 +74,13 @@ RSpec.describe MemoryInsightAttacher do
         described_class.call(memory: memory, params: { location_id: existing_location.id }, user: user)
 
         expect(memory.reload.location).to eq(existing_location)
+      end
+
+      it "detaches an attached location when location_id is blank" do
+        memory.update!(location: existing_location)
+        described_class.call(memory: memory, params: { location_id: "" }, user: user)
+
+        expect(memory.reload.location).to be_nil
       end
 
       it "creates and attaches a new location inline" do
@@ -122,6 +110,13 @@ RSpec.describe MemoryInsightAttacher do
         expect(memory.reload.thought).to eq(existing_thought)
       end
 
+      it "detaches an attached thought when thought_id is blank" do
+        memory.update!(thought: existing_thought)
+        described_class.call(memory: memory, params: { thought_id: "" }, user: user)
+
+        expect(memory.reload.thought).to be_nil
+      end
+
       it "creates and attaches a new thought inline" do
         expect {
           described_class.call(
@@ -143,6 +138,13 @@ RSpec.describe MemoryInsightAttacher do
         described_class.call(memory: memory, params: { weblink_id: existing_weblink.id }, user: user)
 
         expect(memory.reload.weblink).to eq(existing_weblink)
+      end
+
+      it "detaches an attached weblink when weblink_id is blank" do
+        memory.update!(weblink: existing_weblink)
+        described_class.call(memory: memory, params: { weblink_id: "" }, user: user)
+
+        expect(memory.reload.weblink).to be_nil
       end
 
       it "creates and attaches a new weblink inline" do
