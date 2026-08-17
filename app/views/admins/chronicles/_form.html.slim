@@ -1,5 +1,5 @@
 article
-  = form_with(model: [:admin, chronicle], data: { controller: "picture-select" }) do |form|
+  = form_with(model: [:admin, chronicle], multipart: true, data: { controller: "picture-select" }) do |form|
     = render partial: "shared_partials/form_validation_errors", locals: { record: chronicle }
     fieldset
       h3

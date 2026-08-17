@@ -4,7 +4,7 @@
 #
 class Chronicle < ApplicationRecordForContentAndPosts
   YID_CODE = "cron"
-  # TODO: why do we need to have those all defined here explicitly? Do we actually use them?
+
   attr_accessor(*ChronicleInsightAttacher::INSIGHT_PARAM_KEYS)
 
   belongs_to :team, inverse_of: :chronicles

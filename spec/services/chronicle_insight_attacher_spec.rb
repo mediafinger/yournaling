@@ -302,7 +302,7 @@ RSpec.describe ChronicleInsightAttacher do
 
         expect(Location.count).to eq(0)
         expect(chronicle.entries.count).to eq(0)
-        expect(chronicle.errors[:location_name]).to be_present
+        expect(chronicle.errors[:location_country_code]).to be_present
       end
 
       it "raises ActiveRecord::RecordInvalid and rolls back all attached insights on partial failure" do

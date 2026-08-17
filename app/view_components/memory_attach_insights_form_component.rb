@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-class ChronicleAttachInsightsFormComponent < ApplicationComponent
+class MemoryAttachInsightsFormComponent < ApplicationComponent
   slim_template <<~SLIM
-    = render PictureSelectFieldComponent.new(form: @form, team: scope_team, scope: @scope)
+    = render PictureSelectFieldComponent.new(form: @form, team: team, selected_picture: selected_picture)
 
     fieldset data-controller="insight-select"
       legend Attach Location (Optional)
@@ -55,125 +55,125 @@ class ChronicleAttachInsightsFormComponent < ApplicationComponent
             = text_field_tag "\#{@form.object_name}[weblink_description]", weblink_description_value, id: "\#{@form.object_name}_weblink_description", placeholder: "Brief notes about the link", data: { insight_select_target: "input", action: "input->insight-select#onInputChange" }
   SLIM
 
-  def initialize(form:, chronicle:, scope: "current_team")
+  def initialize(form:, memory:)
     @form = form
-    @chronicle = chronicle
-    @scope = scope
+    @memory = memory
   end
 
-  def scope_team
-    @scope == "admin" ? @chronicle.team : current_team
+  def team
+    @memory.team || current_team
+  end
+
+  def selected_picture
+    @memory.picture if @memory.picture&.persisted?
   end
 
   def selected_location_id
-    nil
+    return nil if @memory.location && !@memory.location.persisted?
+
+    @memory.location_id
   end
 
   def selected_thought_id
-    nil
+    return nil if @memory.thought && !@memory.thought.persisted?
+
+    @memory.thought_id
   end
 
   def selected_weblink_id
-    nil
-  end
+    return nil if @memory.weblink && !@memory.weblink.persisted?
 
-  def location_name_value
-    @chronicle.respond_to?(:location_name) ? @chronicle.location_name : nil
-  end
-
-  def selected_country_code
-    @chronicle.respond_to?(:location_country_code) ? @chronicle.location_country_code : nil
-  end
-
-  def location_address_value
-    @chronicle.respond_to?(:location_address) ? @chronicle.location_address : nil
-  end
-
-  def location_url_value
-    @chronicle.respond_to?(:location_url) ? @chronicle.location_url : nil
-  end
-
-  def thought_text_value
-    @chronicle.respond_to?(:thought_text) ? @chronicle.thought_text : nil
-  end
-
-  def weblink_name_value
-    @chronicle.respond_to?(:weblink_name) ? @chronicle.weblink_name : nil
-  end
-
-  def weblink_url_value
-    @chronicle.respond_to?(:weblink_url) ? @chronicle.weblink_url : nil
-  end
-
-  def weblink_description_value
-    @chronicle.respond_to?(:weblink_description) ? @chronicle.weblink_description : nil
-  end
-
-  def location_details_open
-    return true if location_name_value.present? || selected_country_code.present? ||
-                   location_address_value.present? || location_url_value.present?
-
-    errors = @form.object.respond_to?(:errors) && @form.object.errors.any? ? @form.object.errors : @chronicle.errors
-    errors.attribute_names.any? { |k| k.to_s.start_with?("location") }
-  end
-
-  def thought_details_open
-    return true if thought_text_value.present?
-
-    errors = @form.object.respond_to?(:errors) && @form.object.errors.any? ? @form.object.errors : @chronicle.errors
-    errors.attribute_names.any? { |k| k.to_s.start_with?("thought") }
-  end
-
-  def weblink_details_open
-    return true if weblink_name_value.present? || weblink_url_value.present? || weblink_description_value.present?
-
-    errors = @form.object.respond_to?(:errors) && @form.object.errors.any? ? @form.object.errors : @chronicle.errors
-    errors.attribute_names.any? { |k| k.to_s.start_with?("weblink") }
+    @memory.weblink_id
   end
 
   def country_options
     CountriesEnForSelectService.call.map { |k, v| [v, k] }
   end
 
+  def location_name_value
+    @memory.respond_to?(:location_name) ? @memory.location_name : nil
+  end
+
+  def selected_country_code
+    @memory.respond_to?(:location_country_code) ? @memory.location_country_code : nil
+  end
+
+  def location_address_value
+    @memory.respond_to?(:location_address) ? @memory.location_address : nil
+  end
+
+  def location_url_value
+    @memory.respond_to?(:location_url) ? @memory.location_url : nil
+  end
+
+  def thought_text_value
+    @memory.respond_to?(:thought_text) ? @memory.thought_text : nil
+  end
+
+  def weblink_name_value
+    @memory.respond_to?(:weblink_name) ? @memory.weblink_name : nil
+  end
+
+  def weblink_url_value
+    @memory.respond_to?(:weblink_url) ? @memory.weblink_url : nil
+  end
+
+  def weblink_description_value
+    @memory.respond_to?(:weblink_description) ? @memory.weblink_description : nil
+  end
+
+  def location_details_open
+    return true if location_name_value.present? || selected_country_code.present? ||
+                   location_address_value.present? || location_url_value.present?
+
+    errors = @form.object.respond_to?(:errors) && @form.object.errors.any? ? @form.object.errors : @memory.errors
+    errors.attribute_names.any? { |k| k.to_s.start_with?("location") }
+  end
+
+  def thought_details_open
+    return true if thought_text_value.present?
+
+    errors = @form.object.respond_to?(:errors) && @form.object.errors.any? ? @form.object.errors : @memory.errors
+    errors.attribute_names.any? { |k| k.to_s.start_with?("thought") }
+  end
+
+  def weblink_details_open
+    return true if weblink_name_value.present? || weblink_url_value.present? || weblink_description_value.present?
+
+    errors = @form.object.respond_to?(:errors) && @form.object.errors.any? ? @form.object.errors : @memory.errors
+    errors.attribute_names.any? { |k| k.to_s.start_with?("weblink") }
+  end
+
   def locations
     @locations ||= begin
-      relation = scope_team ? Location.where(team: scope_team) : Location
+      relation = team ? Location.where(team: team) : Location
       relation.order(created_at: :desc).limit(50)
     end
   end
 
   def location_options
-    locations.map do |l|
-      label = @scope == "admin" && l.team ? "#{l.name} (#{l.team.name})" : l.name
-      [label, l.id]
-    end
+    locations.map { |l| [l.name, l.id] }
   end
 
   def thoughts
     @thoughts ||= begin
-      relation = scope_team ? Thought.where(team: scope_team) : Thought
+      relation = team ? Thought.where(team: team) : Thought
       relation.order(created_at: :desc).limit(50)
     end
   end
 
   def thought_options
-    thoughts.map do |t|
-      label = @scope == "admin" && t.team ? "#{t.text.truncate(50)} (#{t.team.name})" : t.text.truncate(60)
-      [label, t.id]
-    end
+    thoughts.map { |t| [t.text.truncate(60), t.id] }
   end
 
   def weblinks
     @weblinks ||= begin
-      relation = scope_team ? Weblink.where(team: scope_team) : Weblink
+      relation = team ? Weblink.where(team: team) : Weblink
       relation.order(created_at: :desc).limit(50)
     end
   end
 
   def weblink_options
-    weblinks.map do |w|
-      label = @scope == "admin" && w.team ? "#{w.name} (#{w.team.name})" : w.name
-      [label, w.id]
-    end
+    weblinks.map { |w| [w.name, w.id] }
   end
 end
