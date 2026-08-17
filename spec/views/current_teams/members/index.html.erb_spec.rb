@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+require "rails_helper"
+
 RSpec.describe "current_teams/members/index", type: :view do
   let(:members) { FactoryBot.create_list(:member, 2) }
 
@@ -7,9 +11,9 @@ RSpec.describe "current_teams/members/index", type: :view do
 
   it "renders a list of members" do
     render
-    cell_selector = Rails::VERSION::STRING >= "7" ? "article>p" : "tr>td"
-    assert_select cell_selector, text: Regexp.new(User.to_s), count: 2
-    assert_select cell_selector, text: Regexp.new(Team.to_s), count: 2
-    assert_select cell_selector, text: Regexp.new("Role"), count: 2
+    members.each do |member|
+      expect(rendered).to match(/#{CGI.escapeHTML(member.user.name)}/)
+      expect(rendered).to include("Roles")
+    end
   end
 end

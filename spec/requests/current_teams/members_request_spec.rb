@@ -53,9 +53,11 @@ RSpec.describe "/current_team/members", type: :request do
       switch_current_team(team)
     end
 
-    it "renders a successful response" do
+    it "renders a successful response with header metadata and controls" do
       get current_team_member_url(member.urlsafe_id)
       expect(response).to be_successful
+      expect(response.body).to include("Visibility:")
+      expect(response.body).to include("Rewrite")
     end
   end
 

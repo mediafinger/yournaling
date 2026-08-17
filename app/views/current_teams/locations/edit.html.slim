@@ -2,7 +2,7 @@ div data-controller="modal"
   - if current_team == @location.team
     = render partial: "form", locals: { location: @location, form_legend: "Edit location" }
   div style="display: flex; gap: 0.5rem; align-items: center; margin-top: 1rem;"
-    = link_to "Show this location", current_team_location_path(@location), role: "button"
+    = link_to "Open", current_team_location_path(@location), role: "button"
     - if current_team == @location.team
       button type="button" class="secondary" data-action="click->modal#open" style="margin-bottom: 0;"
         | Destroy this location

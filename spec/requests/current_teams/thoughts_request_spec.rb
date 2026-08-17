@@ -28,12 +28,14 @@ RSpec.describe "/current_team/thoughts", type: :request do
   end
 
   describe "GET /show" do
-    it "renders a successful response" do
+    it "renders a successful response with header metadata and controls" do
       thought = Thought.create!(valid_attributes)
 
       get current_team_thought_url(thought)
 
       expect(response).to be_successful
+      expect(response.body).to include("Visibility:")
+      expect(response.body).to include("Rewrite")
     end
   end
 

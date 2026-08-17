@@ -1,15 +1,24 @@
 article id= dom_id(member)
+  header style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 1rem;"
+    div
+      h4 style="margin-bottom: 0.25rem;" = member.user.name
+      p style="margin-bottom: 0;"
+        small
+          strong Member since:&nbsp;
+          = member.created_at.to_date
+          | &nbsp;|&nbsp;
+          strong Visibility:&nbsp;
+          = member.visibility
+          - unless local_assigns[:hide_actions]
+            = render ContentVisibilityDropdownComponent.new(record: member)
+
+    - unless local_assigns[:hide_actions]
+      div style="display: flex; gap: 0.5rem; flex-shrink: 0;"
+        - if action_name != "show"
+          = link_to "Open", current_team_member_path(member), role: "button", class: "outline", style: "padding: 0.25rem 0.6rem; font-size: 0.8rem; margin-bottom: 0;"
+        - if respond_to?(:current_user) && current_user.present? && current_team == member.team && allowed_to?(:update?, member)
+          = link_to "Rewrite", edit_current_team_member_path(member), role: "button", class: "outline secondary", style: "padding: 0.25rem 0.6rem; font-size: 0.8rem; margin-bottom: 0;"
 
   p
-    strong User:
-    = member.user.name
-  p
-    strong Team:
-    = member.team.name
-  p
-    strong Roles:
-    = member.roles
-  - if action_name != "show"
-    = link_to "Show this member", current_team_member_path(member), role: "button"
-  = link_to "Edit this member", edit_current_team_member_path(member), role: "button", class: "secondary"
-  = link_to "Change visibility", current_team_content_visibility_path(member), role: "button", class: "secondary"
+    strong Roles:&nbsp;
+    = member.roles.join(", ")

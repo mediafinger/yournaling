@@ -1,3 +1,19 @@
-= render partial: "form", locals: { member: @member, form_legend: "Edit member" }
-= link_to "Show this member", current_team_member_path(@member), role: "button"
-= button_to "Destroy this member", current_team_member_path(@member), method: :delete, class: "secondary"
+div data-controller="modal"
+  = render partial: "form", locals: { member: @member, form_legend: "Edit member" }
+  div style="display: flex; gap: 0.5rem; align-items: center; margin-top: 1rem;"
+    = link_to "Open", current_team_member_path(@member), role: "button"
+    button type="button" class="secondary" data-action="click->modal#open" style="margin-bottom: 0;"
+      | Destroy this member
+
+  dialog data-modal-target="dialog"
+    article style="max-width: 500px;"
+      header
+        button aria-label="Close" rel="prev" data-action="click->modal#close" style="float: right;"
+        h4 style="margin-bottom: 0;" Destroy Member
+      p style="margin-bottom: 1.5rem;"
+        | Are you sure you want to remove 
+        strong = @member.user.name
+        |  from the team?
+      footer
+        div style="display: flex; gap: 0.5rem; justify-content: flex-end; align-items: center;"
+          = button_to "Destroy Member", current_team_member_path(@member), method: :delete, class: "contrast", style: "margin-bottom: 0;"

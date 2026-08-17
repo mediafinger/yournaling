@@ -3,9 +3,7 @@ module CurrentTeams
     def index
       authorize! current_user, to: :index?, with: MemberPolicy
 
-      # members = authorized_scope(Member.all, type: :relation, as: :current_team_scope)
-
-      @members = Member.includes(:user, :team).all
+      @members = authorized_scope(Member.all, type: :relation, as: :current_team_scope)
     end
 
     def show

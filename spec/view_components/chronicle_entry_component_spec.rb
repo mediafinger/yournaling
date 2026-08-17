@@ -17,8 +17,9 @@ RSpec.describe ChronicleEntryComponent, type: :component do
       rendered = render_inline(described_class.new(chronicle_entry: entry, scope: "current_team"))
 
       expect(rendered.to_html).to include("A deep philosophical insight")
-      expect(rendered.to_html).not_to include("Show this thought")
-      expect(rendered.to_html).not_to include("Edit this thought")
+      expect(rendered.to_html).not_to include("Open")
+      expect(rendered.to_html).not_to include("Rewrite")
+      expect(rendered.to_html).not_to include("dropdown")
     end
 
     it "renders location entries without action buttons" do
@@ -26,8 +27,9 @@ RSpec.describe ChronicleEntryComponent, type: :component do
       rendered = render_inline(described_class.new(chronicle_entry: entry, scope: "current_team"))
 
       expect(rendered.to_html).to include("Sierra Nevada")
-      expect(rendered.to_html).not_to include("Show this location")
-      expect(rendered.to_html).not_to include("Edit this location")
+      expect(rendered.to_html).not_to include("Open")
+      expect(rendered.to_html).not_to include("Rewrite")
+      expect(rendered.to_html).not_to include("dropdown")
     end
 
     it "renders picture entries without action buttons" do
@@ -35,8 +37,9 @@ RSpec.describe ChronicleEntryComponent, type: :component do
       rendered = render_inline(described_class.new(chronicle_entry: entry, scope: "current_team"))
 
       expect(rendered.to_html).to include("Sunset View")
-      expect(rendered.to_html).not_to include("Show this picture")
-      expect(rendered.to_html).not_to include("Edit this picture")
+      expect(rendered.to_html).not_to include("Open")
+      expect(rendered.to_html).not_to include("Rewrite")
+      expect(rendered.to_html).not_to include("dropdown")
     end
 
     it "renders weblink entries without action buttons" do
@@ -44,8 +47,9 @@ RSpec.describe ChronicleEntryComponent, type: :component do
       rendered = render_inline(described_class.new(chronicle_entry: entry, scope: "current_team"))
 
       expect(rendered.to_html).to include("Trail Guide")
-      expect(rendered.to_html).not_to include("Show this weblink")
-      expect(rendered.to_html).not_to include("Edit this weblink")
+      expect(rendered.to_html).not_to include("Open")
+      expect(rendered.to_html).not_to include("Rewrite")
+      expect(rendered.to_html).not_to include("dropdown")
     end
 
     it "renders memory entries without action buttons" do
@@ -53,8 +57,9 @@ RSpec.describe ChronicleEntryComponent, type: :component do
       rendered = render_inline(described_class.new(chronicle_entry: entry, scope: "current_team"))
 
       expect(rendered.to_html).to include("Remember this moment")
-      expect(rendered.to_html).not_to include("Show this memory")
-      expect(rendered.to_html).not_to include("Edit this memory")
+      expect(rendered.to_html).not_to include("Open")
+      expect(rendered.to_html).not_to include("Rewrite")
+      expect(rendered.to_html).not_to include("dropdown")
     end
   end
 

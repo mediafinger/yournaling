@@ -12,7 +12,8 @@ article id= dom_id(chronicle)
           | &nbsp;|&nbsp;
           strong Visibility:&nbsp;
           = chronicle.visibility
-          = render ContentVisibilityDropdownComponent.new(record: chronicle)
+          - unless local_assigns[:hide_actions]
+            = render ContentVisibilityDropdownComponent.new(record: chronicle)
 
     - unless local_assigns[:hide_actions]
       div style="display: flex; gap: 0.5rem; flex-shrink: 0;"

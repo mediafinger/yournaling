@@ -9,7 +9,8 @@ article id= dom_id(memory)
           | &nbsp;|&nbsp;
           strong Visibility:&nbsp;
           = memory.visibility
-          = render ContentVisibilityDropdownComponent.new(record: memory)
+          - unless local_assigns[:hide_actions]
+            = render ContentVisibilityDropdownComponent.new(record: memory)
 
     - unless local_assigns[:hide_actions]
       div style="display: flex; gap: 0.5rem; flex-shrink: 0;"

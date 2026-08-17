@@ -36,12 +36,14 @@ RSpec.describe "/current_team/locations", type: :request do
   end
 
   describe "GET /show" do
-    it "renders a successful response" do
+    it "renders a successful response with header metadata and controls" do
       location = Location.create! valid_attributes
 
       get current_team_location_url(location)
 
       expect(response).to be_successful
+      expect(response.body).to include("Visibility:")
+      expect(response.body).to include("Rewrite")
     end
   end
 

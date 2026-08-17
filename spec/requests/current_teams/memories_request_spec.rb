@@ -91,14 +91,13 @@ RSpec.describe "/current_team/memories", type: :request do
       memory = Memory.create!(valid_attributes.merge(thought: thought, location: location, picture: picture))
 
       get current_team_memory_url(memory.urlsafe_id)
-      expect(response.body).not_to include("Show this picture")
-      expect(response.body).not_to include("Edit this picture")
-      expect(response.body).not_to include("Show this thought")
-      expect(response.body).not_to include("Edit this thought")
-      expect(response.body).not_to include("Show this location")
-      expect(response.body).not_to include("Edit this location")
-      expect(response.body).not_to include("Show this weblink")
-      expect(response.body).not_to include("Edit this weblink")
+
+      # Only the memory itself has a Rewrite button, not the embedded insights
+      expect(response.body.scan(">Rewrite<").count).to eq(1)
+
+      %w[picture thought location weblink].each do |type|
+        expect(response.body).not_to include("Show this #{type}", "Edit this #{type}")
+      end
     end
   end
 

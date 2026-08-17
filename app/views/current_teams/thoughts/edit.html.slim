@@ -2,7 +2,7 @@ div data-controller="modal"
   - if current_team == @thought.team
     = render partial: "form", locals: { thought: @thought, form_legend: "Edit thought" }
   div style="display: flex; gap: 0.5rem; align-items: center; margin-top: 1rem;"
-    = link_to "Show this thought", current_team_thought_path(@thought), role: "button"
+    = link_to "Open", current_team_thought_path(@thought), role: "button"
     - if current_team == @thought.team
       button type="button" class="secondary" data-action="click->modal#open" style="margin-bottom: 0;"
         | Destroy this thought
