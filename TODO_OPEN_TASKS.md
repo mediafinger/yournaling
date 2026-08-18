@@ -102,7 +102,7 @@ Both controllers duplicate: `SEARCHABLE_KLASSES`, `query_params`, the validation
 
 ### Automated Tests
 ```bash
-source /opt/homebrew/share/chruby/chruby.sh && chruby 4.0.5 && rake ci
+source /opt/homebrew/share/chruby/chruby.sh && chruby 4.0.6 && rake ci
 ```
 
 ### Specs written first (TDD)
@@ -138,4 +138,3 @@ Failing specs:
 ## Phase 3: Verify
 
 - [x] Run `rake ci` — all green (615 examples, 0 failures)
-
