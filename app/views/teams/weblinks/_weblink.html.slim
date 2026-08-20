@@ -1,21 +1,17 @@
-article id= dom_id(weblink)
-
-  - if action_name == "show"
+- is_weblink_show = local_assigns[:full] || (controller_name == "weblinks" && action_name == "show")
+- if is_weblink_show
+  article id= dom_id(weblink)
     p
-      strong
-        | Name:
+      strong Name:&nbsp;
       = weblink.name
     p
-      strong
-        | Url:
+      strong Url:&nbsp;
       = render ExternalLinkComponent.new(url: weblink.url, text: weblink.url)
-    p
-      strong
-        | Description:
-      = weblink.description
-    p
-      strong
-        | Team:
-      = weblink.team_id
-  - if action_name != "show"
-    = render ExternalLinkComponent.new(url: weblink.url, text: weblink.url)
+    - if weblink.description.present?
+      p
+        strong Description:&nbsp;
+        = weblink.description
+- else
+  a.weblink-chip id= dom_id(weblink) href=weblink.url target="_blank" rel="noopener noreferrer"
+    | 🔗 
+    = weblink.name.presence || weblink.url

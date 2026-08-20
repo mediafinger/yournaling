@@ -1,7 +1,4 @@
-article id= dom_id(thought)
-  = render ManageHeaderComponent.new(record: thought, hide_actions: local_assigns[:hide_actions])
-
-  p
-    strong Text:
-    br
-    = thought.text
+blockquote.thought-quote id= dom_id(thought)
+  - unless local_assigns[:hide_actions]
+    = render ManageHeaderComponent.new(record: thought, hide_actions: local_assigns[:hide_actions])
+  p = thought.text

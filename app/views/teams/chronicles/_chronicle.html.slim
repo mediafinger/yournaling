@@ -1,25 +1,27 @@
-article id= dom_id(chronicle)
-  header
-    h3 = chronicle.name
-    p
-      small
-        strong Dates: 
+article.yournal-card.chronicle-card id= dom_id(chronicle)
+  header.card-header
+    span.card-badge 📖 Chronicle
+    - if chronicle.start_date.present?
+      small.text-muted
         = chronicle.start_date
         - if chronicle.end_date.present?
           |  – 
           = chronicle.end_date
 
+  h3 = chronicle.name
+
   p
-    strong Notice:
+    strong Notice: 
     = chronicle.notice
 
   - is_chronicle_show = (controller_name == "chronicles" && action_name == "show")
   - if local_assigns[:full] || is_chronicle_show
     - if chronicle.entries.any?
-      section
+      section.chronicle-timeline-track
         h4 Entries
         - chronicle.entries.each do |chronicle_entry|
-          = render ChronicleEntryComponent.new(chronicle_entry: chronicle_entry, scope: "team", team: team)
+          .chronicle-entry-item
+            = render ChronicleEntryComponent.new(chronicle_entry: chronicle_entry, scope: "team", team: team)
   - elsif chronicle.first_picture.present?
     p
       = render partial: "teams/pictures/picture", locals: { team:, picture: chronicle.first_picture }

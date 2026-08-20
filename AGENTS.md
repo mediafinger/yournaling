@@ -66,3 +66,32 @@ source /opt/homebrew/share/chruby/chruby.sh && chruby $(cat .ruby-version 2>/dev
 3. **Domain Hierarchy**:
    Keep domain models aligned with the content hierarchy:
    $$\text{Team} \longrightarrow \text{Journey} \longrightarrow \text{Experience} \longrightarrow \text{Chronicle} \longrightarrow \text{Memory} \longrightarrow \text{Insights}$$
+
+## UI, Stylesheets, Assets
+
+Yournaling uses Propshaft - therefore assets need precompiling to be available:
+
+* https://raw.githubusercontent.com/rails/propshaft/refs/heads/main/README.md
+
+Propshaft makes all the assets from all the paths it's been configured with through config.assets.paths available for serving and will copy all of them into public/assets when precompiling. This is unlike Sprockets, which did not copy over assets that hadn't been explicitly included in one of the bundled assets.
+
+You can however exempt directories that have been added through the config.assets.excluded_paths. This is useful if you're for example using app/assets/stylesheets exclusively as a set of inputs to a compiler like Dart Sass for Rails, and you don't want these input files to be part of the load path. (Remember you need to add full paths, like `Rails.root.join("app/assets/stylesheets"))`.
+
+These assets can be referenced through their logical path using the normal helpers like asset_path, image_tag, javascript_include_tag, and all the other asset helper tags. These logical references are automatically converted into digest-aware paths in production when `assets:precompile` has been run (through a JSON mapping file found in public/assets/.manifest.json).
+
+### Bulk stylesheet inclusion with SRI
+
+Propshaft extends stylesheet_link_tag with special symbols for bulk inclusion:
+
+```erb
+<%= stylesheet_link_tag :all, integrity: true %>  <!-- All stylesheets -->
+<%= stylesheet_link_tag :app, integrity: true %>  <!-- Only app/assets stylesheets -->
+```
+
+### Improving performance in development
+
+Before every request Propshaft checks if any asset was updated to decide if a cache sweep is needed. This verification is done using the application's configured file watcher which, by default, is ActiveSupport::FileUpdateChecker.
+
+If you have a lot of assets in your project, you can improve performance by adding the listen gem to the development group in your Gemfile, and this line to the development.rb environment file:
+
+`config.file_watcher = ActiveSupport::EventedFileUpdateChecker`

@@ -1,12 +1,12 @@
-/ - # TODO: create proper memory index and show partials
-article id= dom_id(memory)
+article.yournal-card.memory-card id= dom_id(memory)
+  header.card-header
+    span.card-badge 💡 Memory
+    small.text-muted = memory.team.name
 
   p
-    strong Team:
-    = memory.team.name
-  p
-    strong Memo:
+    strong Memo: 
     = memory.memo
+
   - if memory.picture
     = render partial: "teams/pictures/picture", locals: { team:, picture: memory.picture }
   - if memory.thought
@@ -15,6 +15,8 @@ article id= dom_id(memory)
     = render partial: "teams/locations/location", locals: { team:, location: memory.location }
   - if memory.weblink
     = render partial: "teams/weblinks/weblink", locals: { team:, weblink: memory.weblink }
-  - is_memory_show = (controller_name == "memories" && action_name == "show")
-  - if !is_memory_show
-    = link_to "Show this memory", team_memory_path(team, memory), role: "button"
+
+  footer
+    - is_memory_show = (controller_name == "memories" && action_name == "show")
+    - if !is_memory_show
+      = link_to "Show this memory", team_memory_path(team, memory), role: "button"

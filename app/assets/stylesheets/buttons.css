@@ -1,3 +1,4 @@
-main a[role=button] {
-  margin: 1rem;
+/* Buttons & Actions */
+main a[role="button"] {
+  margin: 1rem 0;
 }

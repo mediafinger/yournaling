@@ -11,7 +11,7 @@ html
     - else
       / - # Using a downloaded version of pico.css for development
       = stylesheet_link_tag "pico.green.css", "data-turbo-track": "reload"
-    = stylesheet_link_tag "application", "data-turbo-track": "reload"
+    = stylesheet_link_tag "general", "buttons", "navbar", "card", "data-turbo-track": "reload"
     = javascript_importmap_tags
   body
     header.current-team-area

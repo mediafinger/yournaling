@@ -20,7 +20,7 @@ RSpec.describe TeamSwitcherAndSessionsComponent, type: :component do
       expect(rendered.to_html).to have_link("🛡️ Admin Area", href: "/admin")
       expect(rendered.to_html).to have_link("Switch Team", href: "/switch_current_teams")
       expect(rendered.to_html).to have_link("👤 Alice Admin", href: "/logins")
-      expect(rendered.to_html).to have_button("Logout")
+      expect(rendered.to_html).to have_link("Logout")
     end
   end
 
@@ -31,7 +31,7 @@ RSpec.describe TeamSwitcherAndSessionsComponent, type: :component do
       expect(rendered.to_html).to have_no_link("🛡️ Admin Area", href: "/admin")
       expect(rendered.to_html).to have_css(".scope-to-team", text: "Scope to Team")
       expect(rendered.to_html).to have_link("👤 Alice Admin", href: "/logins")
-      expect(rendered.to_html).to have_button("Logout")
+      expect(rendered.to_html).to have_link("Logout")
     end
   end
 

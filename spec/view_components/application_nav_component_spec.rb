@@ -30,7 +30,7 @@ RSpec.describe ApplicationNavComponent, type: :component do
       expect(rendered.to_html).to have_link("🛡️ Admin Area", href: "/admin")
       expect(rendered.to_html).to have_link("Switch Team", href: "/switch_current_teams")
       expect(rendered.to_html).to have_link("👤 Alice Admin", href: "/logins")
-      expect(rendered.to_html).to have_button("Logout")
+      expect(rendered.to_html).to have_link("Logout")
     end
   end
 
@@ -46,7 +46,7 @@ RSpec.describe ApplicationNavComponent, type: :component do
       expect(rendered.to_html).to have_link("@Teams", href: "/teams")
       expect(rendered.to_html).to have_link("🔍 Search", href: "/search")
       expect(rendered.to_html).to have_link("👤 Bob Member", href: "/logins")
-      expect(rendered.to_html).to have_button("Logout")
+      expect(rendered.to_html).to have_link("Logout")
     end
   end
 

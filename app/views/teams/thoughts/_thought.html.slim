@@ -1,11 +1,6 @@
-article id= dom_id(thought)
-
-  p
-    strong Text:
-    = thought.text
+blockquote.thought-quote id= dom_id(thought)
+  p = thought.text
   - if thought.date.present?
-    p
-      strong Date:
+    small.text-muted
+      |  — 
       = thought.date
-  - if action_name != "show"
-    = link_to "Show this thought", team_thought_path(team_id: team.to_param, id: thought.to_param), role: "button"

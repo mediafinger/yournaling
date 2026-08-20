@@ -40,7 +40,7 @@ RSpec.describe CurrentTeamNavComponent, type: :component do
     expect(rendered.to_html).to have_link("🔍 Search", href: "/current_team/new_search")
     expect(rendered.to_html).to have_link("Switch Team", href: "/switch_current_teams")
     expect(rendered.to_html).to have_link("👤 Bob Member", href: "/logins")
-    expect(rendered.to_html).to have_button("Logout")
+    expect(rendered.to_html).to have_link("Logout")
   end
 
   context "when user is an admin" do

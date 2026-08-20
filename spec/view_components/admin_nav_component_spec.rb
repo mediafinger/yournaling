@@ -37,6 +37,6 @@ RSpec.describe AdminNavComponent, type: :component do
     expect(rendered.to_html).to have_link("Jobs", href: "/admin/jobs")
     expect(rendered.to_html).to have_css(".scope-to-team", text: "Scope to Team")
     expect(rendered.to_html).to have_link("👤 Alice Admin", href: "/logins")
-    expect(rendered.to_html).to have_button("Logout")
+    expect(rendered.to_html).to have_link("Logout")
   end
 end

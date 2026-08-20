@@ -41,7 +41,7 @@ RSpec.describe "Navigation Bars across Modes", type: :system do
       expect(page).to have_link("🔍 Search", href: "/search")
       expect(page).to have_link("Switch Team", href: "/switch_current_teams")
       expect(page).to have_link("👤 Bob Member", href: "/logins")
-      expect(page).to have_button("Logout")
+      expect(page).to have_link("Logout")
     end
   end
 
@@ -61,7 +61,7 @@ RSpec.describe "Navigation Bars across Modes", type: :system do
       expect(page).to have_link("🔍 Search", href: "/current_team/new_search")
       expect(page).to have_link("Switch Team", href: "/switch_current_teams")
       expect(page).to have_link("👤 Bob Member", href: "/logins")
-      expect(page).to have_button("Logout")
+      expect(page).to have_link("Logout")
     end
   end
 
@@ -84,7 +84,7 @@ RSpec.describe "Navigation Bars across Modes", type: :system do
       expect(page).to have_link("Jobs", href: "/admin/jobs")
       expect(page).to have_css(".scope-to-team", text: "Scope to Team")
       expect(page).to have_link("👤 Alice Admin", href: "/logins")
-      expect(page).to have_button("Logout")
+      expect(page).to have_link("Logout")
     end
   end
 end

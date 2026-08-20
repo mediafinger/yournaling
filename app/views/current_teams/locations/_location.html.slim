@@ -1,43 +1,43 @@
-article id= dom_id(location)
-  = render ManageHeaderComponent.new(record: location, hide_actions: local_assigns[:hide_actions])
-
-  - if location.country_code.present?
-    p
-      strong Country:&nbsp;
+- if local_assigns[:hide_actions]
+  span.location-chip id= dom_id(location)
+    | 📍 
+    = location.name
+    - if location.country_code.present?
       - iso_country = ISO3166::Country.find_country_by_alpha2(location.country_code)
       - if iso_country
-        = iso_country.iso_short_name
-        |  (
-        = iso_country.alpha2
-        | )
+        |  
         = iso_country.emoji_flag
+- else
+  article id= dom_id(location)
+    = render ManageHeaderComponent.new(record: location, hide_actions: local_assigns[:hide_actions])
 
-  - if location.address.present?
-    p
-      strong Address:&nbsp;
-      = location.address
+    - if location.country_code.present?
+      p
+        strong Country:&nbsp;
+        - iso_country = ISO3166::Country.find_country_by_alpha2(location.country_code)
+        - if iso_country
+          = iso_country.iso_short_name
+          |  (
+          = iso_country.alpha2
+          | )
+          = iso_country.emoji_flag
 
-  - if location.url.present?
-    p
-      strong Url:&nbsp;
-      = render ExternalLinkComponent.new(url: location.url, text: location.url)
+    - if location.address.present?
+      p
+        strong Address:&nbsp;
+        = location.address
 
-  - if location.lat.present? || location.long.present?
-    p
-      - if location.lat.present?
-        strong Lat:&nbsp;
-        = location.lat
-        | &nbsp;&nbsp;
-      - if location.long.present?
-        strong Long:&nbsp;
-        = location.long
+    - if location.url.present?
+      p
+        strong Url:&nbsp;
+        = render ExternalLinkComponent.new(url: location.url, text: location.url)
 
-  - if location.description.present?
-    p
-      strong Description:
-      br
-      = location.description
+    - if location.description.present?
+      p
+        strong Description:
+        br
+        = location.description
 
-  - if location.coordinates.present?
-    hr
-    = render MapLinkComponent.new(location: location, width: 600, height: 400)
+    - if location.coordinates.present?
+      hr
+      = render MapLinkComponent.new(location: location, width: 600, height: 400)

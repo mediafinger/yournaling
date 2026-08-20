@@ -34,7 +34,7 @@ RSpec.describe "/teams", type: :system do
         header = page.find("header")
         expect(header).to have_no_text("Logout Guest")
         expect(header).to have_text("👤 #{user.name}")
-        expect(header).to have_button("Logout")
+        expect(header).to have_link("Logout")
 
         expect(page).to have_text(team.name)
       end

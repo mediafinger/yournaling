@@ -1,51 +1,40 @@
-article id= dom_id(location)
-
-  - if action_name == "show"
+- is_location_show = local_assigns[:full] || (controller_name == "locations" && action_name == "show")
+- if is_location_show
+  article id= dom_id(location)
     p
-      strong
-        | Name:
+      strong Name:&nbsp;
       = location.name
-    p
-      strong
-        | Country:
-      - iso_country = ISO3166::Country.find_country_by_alpha2(location.country_code)
-      = iso_country.iso_short_name
-      |  (
-      = iso_country.alpha2
-      | )
-      = iso_country.emoji_flag
-    p
-      strong
-        | Address:
-      = location.address
-    p
-      strong
-        | Url:
-      = render ExternalLinkComponent.new(url: location.url, text: location.url)
-    p
-      strong
-        | Lat:
-      = location.lat
-    p
-      strong
-        | Long:
-      = location.long
-    p
-      strong
-        | Description:
-      = location.description
-    p
-      strong
-        | Team:
-      = location.team_id
-    hr
+    - if location.country_code.present?
+      p
+        strong Country:&nbsp;
+        - iso_country = ISO3166::Country.find_country_by_alpha2(location.country_code)
+        - if iso_country
+          = iso_country.iso_short_name
+          |  (
+          = iso_country.alpha2
+          | )
+          = iso_country.emoji_flag
+    - if location.address.present?
+      p
+        strong Address:&nbsp;
+        = location.address
+    - if location.url.present?
+      p
+        strong Url:&nbsp;
+        = render ExternalLinkComponent.new(url: location.url, text: location.url)
+    - if location.description.present?
+      p
+        strong Description:&nbsp;
+        = location.description
     - if location.coordinates.present?
+      hr
       = render MapLinkComponent.new(location: location, width: 600, height: 400)
-  - if action_name != "show"
+- else
+  span.location-chip id= dom_id(location)
+    | 📍 
     = location.name
-    - iso_country = ISO3166::Country.find_country_by_alpha2(location.country_code)
-    = iso_country.iso_short_name
-    |  (
-    = iso_country.alpha2
-    | )
-    = iso_country.emoji_flag
+    - if location.country_code.present?
+      - iso_country = ISO3166::Country.find_country_by_alpha2(location.country_code)
+      - if iso_country
+        |  
+        = iso_country.emoji_flag

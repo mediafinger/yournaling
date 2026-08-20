@@ -1,13 +1,18 @@
-article id= dom_id(weblink)
-  = render ManageHeaderComponent.new(record: weblink, hide_actions: local_assigns[:hide_actions])
+- if local_assigns[:hide_actions]
+  a.weblink-chip id= dom_id(weblink) href=weblink.url target="_blank" rel="noopener noreferrer"
+    | 🔗 
+    = weblink.name.presence || weblink.url
+- else
+  article id= dom_id(weblink)
+    = render ManageHeaderComponent.new(record: weblink, hide_actions: local_assigns[:hide_actions])
 
-  p
-    strong Url:
-    br
-    = render ExternalLinkComponent.new(url: weblink.url, text: weblink.url)
-
-  - if weblink.description.present?
     p
-      strong Description:
+      strong Url:
       br
-      = weblink.description
+      = render ExternalLinkComponent.new(url: weblink.url, text: weblink.url)
+
+    - if weblink.description.present?
+      p
+        strong Description:
+        br
+        = weblink.description

@@ -1,0 +1,140 @@
+/* Responsive Timeline Grid Layout */
+.timeline-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  width: 100%;
+}
+
+@media (min-width: 1050px) {
+  .timeline-grid {
+    grid-template-columns: repeat(2, minmax(500px, 1fr));
+  }
+}
+
+@media (min-width: 1600px) {
+  .timeline-grid {
+    grid-template-columns: repeat(3, minmax(500px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .timeline-grid {
+    gap: 1rem;
+  }
+}
+
+/* Base Yournal Card Styling */
+article.yournal-card {
+  position: relative;
+  min-width: min(100%, 500px);
+  background-color: var(--pico-card-background-color, var(--pico-background-color));
+  border: 1px solid var(--pico-muted-border-color, #e0e0e0);
+  border-radius: var(--pico-border-radius, 0.5rem);
+  padding: 1.25rem;
+  margin-bottom: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+article.yournal-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Card Header */
+article.yournal-card .card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--pico-muted-border-color, #eaeaea);
+}
+
+article.yournal-card .card-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.25rem;
+  background-color: var(--pico-primary-background, #2e7d32);
+  color: var(--pico-primary-inverse, #ffffff);
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Specific Card Variants */
+article.yournal-card.chronicle-card {
+  border-left: 4px solid var(--pico-primary, #2e7d32);
+}
+
+article.yournal-card.memory-card {
+  border-left: 4px solid var(--pico-muted-border-color, #888888);
+}
+
+/* Thought Pull-Quote Styling */
+blockquote.thought-quote {
+  font-style: italic;
+  font-family: inherit;
+  margin: 0.75rem 0;
+  padding: 0.75rem 1rem;
+  border-left: 3px solid var(--pico-primary, #2e7d32);
+  background-color: rgba(0, 0, 0, 0.02);
+  border-radius: 0 0.25rem 0.25rem 0;
+  color: var(--pico-color);
+}
+
+/* Chips for Locations and Weblinks */
+.location-chip,
+.weblink-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 1rem;
+  background-color: var(--pico-muted-border-color, #f0f0f0);
+  color: var(--pico-color);
+  text-decoration: none;
+  margin-right: 0.5rem;
+  margin-top: 0.5rem;
+  border: 1px solid var(--pico-muted-border-color, #d0d0d0);
+}
+
+.location-chip:hover,
+.weblink-chip:hover {
+  background-color: var(--pico-primary-background);
+  color: var(--pico-primary-inverse);
+  text-decoration: none;
+}
+
+/* Vertical Timeline Track for Chronicle Entries */
+.chronicle-timeline-track {
+  position: relative;
+  margin-top: 1rem;
+  padding-left: 1.25rem;
+  border-left: 2px solid var(--pico-muted-border-color, #e0e0e0);
+}
+
+.chronicle-entry-item {
+  position: relative;
+  margin-bottom: 1.25rem;
+}
+
+.chronicle-entry-item::before {
+  content: "";
+  position: absolute;
+  left: -1.6rem;
+  top: 0.35rem;
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  background-color: var(--pico-primary, #2e7d32);
+  border: 2px solid var(--pico-background-color, #ffffff);
+}
