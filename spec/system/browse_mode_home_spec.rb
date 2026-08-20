@@ -89,9 +89,9 @@ RSpec.describe "Browse Mode Central Home Feed", type: :system do
     visit_switch_current_team(team)
 
     visit current_team_chronicles_url
-    expect(page).to have_link("Browse Mode")
+    expect(page).to have_link("🌐 Yournaling")
 
-    click_link "Browse Mode"
+    click_link "🌐 Yournaling"
     expect(page).to have_current_path(root_path)
     expect(page).to have_text("Matterhorn Trail")
     expect(page).to have_text("Sunrise at Refugio")

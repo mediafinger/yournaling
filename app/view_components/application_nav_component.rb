@@ -1,43 +1,32 @@
 # frozen_string_literal: true
 
 class ApplicationNavComponent < ApplicationComponent
-  slim_template <<~SLIM
-    - if current_user&.admin?
-      ul
-        li
-          = link_to "Admin Area", "/admin"
-
-    - if current_team.present?
-      ul
-        li
-          = @team_link_tag
-
-    - if @team_scope
-      = render ApplicationNavLinksComponent.new(link_sections: %w[chronicles memories members], scope: "team", id: { team_id: params[:team_id] })
-
-    - if current_user.persisted?
-      = render ApplicationNavLinksComponent.new(link_sections: %w[teams])
-
+  slim_template <<~'SLIM'
     ul
       li
-        = link_to "Search", new_search_path, role: active_path?(new_search_path) ? "button" : nil
+        = link_to "🌐 Yournaling", root_path, role: active_path?(root_path) ? "button" : nil
+      - if current_team
+        li
+          = link_to "⚙️ Manage #{current_team.name}", current_team_home_path
+      = render NavNewButtonComponent.new(mode: :browse)
 
-    - if current_user.persisted?
-      = @login_records_link_tag
+    ul
+      - if current_team || params[:team_id].present?
+        - target = params[:team_id] || current_team
+        li
+          = link_to "@Teams", teams_path, role: (active_path?(teams_path) && !active_path?(team_members_path(target))) ? "button" : nil
+        li
+          = link_to "@@Members", team_members_path(target), role: active_path?(team_members_path(target)) ? "button" : nil
+      - else
+        li
+          = link_to "@Teams", teams_path, role: active_path?(teams_path) ? "button" : nil
+      li
+        = link_to "🔍 Search", new_search_path, role: active_path?(new_search_path) ? "button" : nil
 
-    = render TeamSwitcherComponent.new
+    = render TeamSwitcherAndSessionsComponent.new(mode: :browse)
   SLIM
 
   def initialize(params: {})
     @params = params
-  end
-
-  def before_render
-    @team_scope = params[:team_id].present? && active_path?("/teams/#{params[:team_id]}")
-
-    @team_link_tag = link_to "Manage #{current_team.name}", current_team_home_path, role: "button" if current_team
-
-    # TODO: move this into a "profile" section
-    @login_records_link_tag = link_to "Logins", login_records_path, role: active_path?(login_records_path) ? "button" : nil
   end
 end

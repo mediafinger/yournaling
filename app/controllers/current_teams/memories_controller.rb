@@ -18,7 +18,7 @@ module CurrentTeams
     end
 
     def new
-      @memory = Memory.new(team: current_team, visibility: "internal")
+      @memory = Memory.new(team: current_team, visibility: "draft")
       authorize! @memory
     end
 

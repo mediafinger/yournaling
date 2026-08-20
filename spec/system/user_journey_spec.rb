@@ -15,7 +15,8 @@ RSpec.describe "User Journey: Sign in, switch team, upload photo, create memory,
     click_button "Login"
 
     expect(page).to have_current_path("/", ignore_query: true)
-    expect(page).to have_button("Logout Alex Nomad")
+    expect(page).to have_text("👤 Alex Nomad")
+    expect(page).to have_button("Logout")
 
     # 2. Switch Team
     visit_switch_current_team(team)

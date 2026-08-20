@@ -15,7 +15,7 @@ module Admins
     end
 
     def new
-      @chronicle = Chronicle.new(team: current_team, start_date: Date.current, visibility: "internal")
+      @chronicle = Chronicle.new(team: current_team, start_date: Date.current, visibility: "draft")
     end
 
     def edit

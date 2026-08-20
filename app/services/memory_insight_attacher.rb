@@ -3,7 +3,7 @@
 class MemoryInsightAttacher
   class << self
     def call(memory:, params:, user: nil)
-      new(memory:, user:).attach(params)
+      new(memory:, user:).attach!(params)
     end
   end
 
@@ -20,19 +20,25 @@ class MemoryInsightAttacher
     )
   end
 
+  def attach!(params)
+    memory = attach(params)
+
+    memory.save! if memory.changed?
+
+    memory
+  end
+
   def attach(params)
-    return if params.blank?
+    return memory if params.blank?
 
     validate_mutual_exclusivity!(params)
 
-    ActiveRecord::Base.transaction do
-      attach_picture(params)
-      attach_location(params)
-      attach_thought(params)
-      attach_weblink(params)
+    attach_picture(params)
+    attach_location(params)
+    attach_thought(params)
+    attach_weblink(params)
 
-      memory.save! if memory.changed?
-    end
+    memory
   end
 
   private

@@ -20,7 +20,7 @@ module CurrentTeams
     end
 
     def new
-      @chronicle = Chronicle.new(team: current_team, start_date: Date.current, visibility: "internal")
+      @chronicle = Chronicle.new(team: current_team, visibility: "internal")
       authorize! @chronicle
     end
 

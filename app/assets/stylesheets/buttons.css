@@ -1,11 +1,3 @@
-a[role=button] {
+main a[role=button] {
   margin: 1rem;
-}
-
-.logout {
-  margin-top: 1rem;
-  width: 10rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }

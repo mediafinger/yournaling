@@ -1,0 +1,115 @@
+/* Nav Bar Styles */
+
+header > nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: var(--pico-background-color);
+  border-bottom: 1px solid var(--pico-muted-border-color, #e0e0e0);
+  padding: 0.5rem 1rem;
+  margin-bottom: 1.5rem;
+  backdrop-filter: blur(8px);
+}
+
+/* Ensure navbar lists and list items align all children cleanly with flex center */
+nav ul {
+  display: flex !important;
+  align-items: center !important;
+  margin-bottom: 0 !important;
+  margin-top: 0 !important;
+  padding: 0 !important;
+}
+
+nav ul li {
+  display: inline-flex !important;
+  align-items: center !important;
+  margin-bottom: 0 !important;
+  margin-top: 0 !important;
+  padding: 0 !important;
+}
+
+/* Ensure forms (e.g. button_to logout) inside nav li do not introduce block margins or top offsets */
+nav form,
+nav form.button_to,
+nav ul li > form,
+nav ul li > form.button_to {
+  display: inline-flex !important;
+  align-items: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  vertical-align: middle !important;
+}
+
+/* Ensure details.dropdown containers inside nav li align as flex items without top shift */
+nav details.dropdown,
+nav ul li > details,
+nav ul li > details.dropdown {
+  display: inline-flex !important;
+  align-items: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  position: relative !important;
+  vertical-align: middle !important;
+}
+
+/* Unified baseline, line-height, padding, and box-sizing for all nav elements */
+nav a,
+nav a[role="button"],
+nav details.dropdown summary,
+nav details.dropdown summary[role="button"],
+nav button,
+nav button.logout,
+nav form.button_to button,
+nav [role="button"],
+nav [role="link"] {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  font-size: var(--pico-font-size, 1rem) !important;
+  line-height: 1.25 !important;
+  vertical-align: middle !important;
+}
+
+/* Shared styling for all button-like items in nav (Manage, + New, active links, Logout) */
+nav a[role="button"],
+nav details.dropdown summary[role="button"],
+nav button[role="button"],
+nav button.logout,
+nav form.button_to button,
+nav [role="button"] {
+  padding: 0.375rem 0.75rem !important;
+  height: auto !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  border-radius: var(--pico-border-radius, 0.25rem) !important;
+}
+
+/* Reset dropdown summary default arrow offsets and margins */
+nav details.dropdown summary {
+  padding: 0.375rem 0.75rem !important;
+  height: auto !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+}
+
+nav details.dropdown summary::after {
+  margin-top: 0 !important;
+  vertical-align: middle !important;
+}
+
+nav details.dropdown ul {
+  z-index: 110;
+  min-width: 10rem;
+}
+
+.scope-to-team {
+  font-size: 0.85rem;
+  opacity: 0.7;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  border: 1px dashed currentColor;
+}
