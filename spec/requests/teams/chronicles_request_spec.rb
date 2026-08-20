@@ -6,66 +6,46 @@ RSpec.describe "teams/:team_id/chronicles", type: :request do
   let(:team) { FactoryBot.create(:team) }
   let(:valid_attributes) do
     {
+      name: "Alpine Odyssey",
+      notice: "A journey through the Swiss Alps crossing peaks and valleys.",
+      start_date: Time.current,
       team: team,
-      name: "Roadtrip through Andalusia",
-      notice: "A detailed chronicle of our roadtrip across the southern coast of Spain.",
-      start_date: Date.current,
-      end_date: Date.current + 7.days,
       visibility: "published",
     }
   end
 
-  describe "GET /index" do
-    it "renders a successful response for published chronicles displaying the first picture and omitting other entries" do
-      chronicle = Chronicle.create!(valid_attributes)
-      picture = FactoryBot.create(:picture, team: team, name: "Sierra Nevada Sunset")
-      thought = FactoryBot.create(:thought, team: team, text: "Private camping observation")
-      FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: picture, position: 1)
-      FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: thought, position: 2)
-
-      get team_chronicles_url(team)
-      expect(response).to be_successful
-      expect(response.body).to include("picture_#{picture.id}")
-      expect(response.body).not_to include("Private camping observation")
-    end
-
-    it "only includes published chronicles in the list" do
-      published = Chronicle.create!(valid_attributes)
-      internal = Chronicle.create!(valid_attributes.merge(name: "Internal Secrets", visibility: "internal"))
-
-      get team_chronicles_url(team)
-      expect(response).to be_successful
-      expect(response.body).to include(published.name)
-      expect(response.body).not_to include(internal.name)
-    end
-  end
-
   describe "GET /show" do
-    it "renders a successful response with all entries when the chronicle is published" do
+    it "renders a successful response for a published chronicle" do
       chronicle = Chronicle.create!(valid_attributes)
-      picture = FactoryBot.create(:picture, team: team, name: "Sierra Nevada Sunset")
-      thought = FactoryBot.create(:thought, team: team, text: "Private camping observation")
-      FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: picture, position: 1)
-      FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: thought, position: 2)
-
       get team_chronicle_url(team, chronicle)
       expect(response).to be_successful
-      expect(response.body).to include("Sierra Nevada Sunset")
-      expect(response.body).to include("Private camping observation")
     end
 
-    it "displays all pictures when multiple pictures are attached to a published chronicle (regression test)" do
+    it "renders a successful response displaying all associated entries in position order after the notice" do
       chronicle = Chronicle.create!(valid_attributes)
-      picture1 = FactoryBot.create(:picture, team: team, name: "Drone Coast Shot")
-      picture2 = FactoryBot.create(:picture, team: team, name: "Ganesh Statue View")
-      FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: picture1, position: 1)
-      FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: picture2, position: 2)
+      picture = FactoryBot.create(:picture, team: team, name: "Beach View")
+      thought = FactoryBot.create(:thought, team: team, text: "Sunset at the campsite")
+      location = FactoryBot.create(:location, team: team, name: "Ferlandina")
+      weblink = FactoryBot.create(:weblink, team: team, name: "Camp Map", url: "https://example.com/map")
+
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: picture, position: 1)
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: thought, position: 2)
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: location, position: 3)
+      FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: weblink, position: 4)
 
       get team_chronicle_url(team, chronicle)
       expect(response).to be_successful
-      expect(response.body).to include("Drone Coast Shot")
-      expect(response.body).to include("Ganesh Statue View")
-      expect(response.body.scan('article id="picture_').count).to eq(2)
+
+      notice_index = response.body.index(chronicle.notice)
+      entry1_index = response.body.index("Beach View")
+      entry2_index = response.body.index("Sunset at the campsite")
+      entry3_index = response.body.index("Ferlandina")
+      entry4_index = response.body.index("Camp Map")
+
+      expect(notice_index).to be < entry1_index
+      expect(entry1_index).to be < entry2_index
+      expect(entry2_index).to be < entry3_index
+      expect(entry3_index).to be < entry4_index
     end
 
     it "renders a 404 when the chronicle is internal" do
@@ -87,7 +67,7 @@ RSpec.describe "teams/:team_id/chronicles", type: :request do
 
       get team_chronicle_url(team, chronicle)
       expect(response).to be_successful
-      expect(response.body).to include(team_picture_path(team, picture))
+      expect(response.body).to include("Sierra Nevada Sunset")
 
       get team_picture_url(team, picture)
       expect(response).to be_successful

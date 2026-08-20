@@ -17,7 +17,7 @@ RSpec.describe ChronicleEntryComponent, type: :component do
       rendered = render_inline(described_class.new(chronicle_entry: entry, scope: "current_team"))
 
       expect(rendered.to_html).to include("A deep philosophical insight")
-      expect(rendered.to_html).not_to include("Open")
+      expect(rendered).to have_no_css("a", text: /\AOpen\z/)
       expect(rendered.to_html).not_to include("Rewrite")
       expect(rendered.to_html).not_to include("Change Visibility")
     end
@@ -27,7 +27,7 @@ RSpec.describe ChronicleEntryComponent, type: :component do
       rendered = render_inline(described_class.new(chronicle_entry: entry, scope: "current_team"))
 
       expect(rendered.to_html).to include("Sierra Nevada")
-      expect(rendered.to_html).not_to include("Open")
+      expect(rendered).to have_no_css("a", text: /\AOpen\z/)
       expect(rendered.to_html).not_to include("Rewrite")
       expect(rendered.to_html).not_to include("Change Visibility")
     end
@@ -37,7 +37,7 @@ RSpec.describe ChronicleEntryComponent, type: :component do
       rendered = render_inline(described_class.new(chronicle_entry: entry, scope: "current_team"))
 
       expect(rendered.to_html).to include("Sunset View")
-      expect(rendered.to_html).not_to include("Open")
+      expect(rendered).to have_no_css("a", text: /\AOpen\z/)
       expect(rendered.to_html).not_to include("Rewrite")
       expect(rendered.to_html).not_to include("Change Visibility")
     end
@@ -47,7 +47,7 @@ RSpec.describe ChronicleEntryComponent, type: :component do
       rendered = render_inline(described_class.new(chronicle_entry: entry, scope: "current_team"))
 
       expect(rendered.to_html).to include("Trail Guide")
-      expect(rendered.to_html).not_to include("Open")
+      expect(rendered).to have_no_css("a", text: /\AOpen\z/)
       expect(rendered.to_html).not_to include("Rewrite")
       expect(rendered.to_html).not_to include("Change Visibility")
     end
@@ -57,7 +57,7 @@ RSpec.describe ChronicleEntryComponent, type: :component do
       rendered = render_inline(described_class.new(chronicle_entry: entry, scope: "current_team"))
 
       expect(rendered.to_html).to include("Remember this moment")
-      expect(rendered.to_html).not_to include("Open")
+      expect(rendered).to have_no_css("a", text: /\AOpen\z/)
       expect(rendered.to_html).not_to include("Rewrite")
       expect(rendered.to_html).not_to include("Change Visibility")
     end

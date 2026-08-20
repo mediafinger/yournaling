@@ -86,11 +86,12 @@ RSpec.describe "/current_team/chronicles", type: :request do
       expect(entry1_index).to be < entry2_index
     end
 
-    it "links attached pictures to current_team_picture_path instead of failing public route (regression test)" do
+    it "renders attached pictures in lightbox modal instead of failing public route (regression test)" do
       picture.update!(visibility: "internal")
       get current_team_chronicle_url(chronicle.urlsafe_id)
       expect(response).to be_successful
-      expect(response.body).to include(current_team_picture_path(picture))
+      expect(response.body).to include("Beach View")
+      expect(response.body).to include("data-controller=\"modal\"")
       expect(response.body).not_to include(team_picture_only_path(team, picture))
 
       get current_team_picture_path(picture)

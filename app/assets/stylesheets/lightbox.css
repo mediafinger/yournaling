@@ -1,0 +1,43 @@
+
+/* Picture Lightbox Modal */
+.picture-lightbox-container {
+  margin: 0.75rem 0;
+}
+
+.picture-lightbox-trigger {
+  cursor: pointer;
+  display: inline-block;
+  max-width: 100%;
+}
+
+.picture-lightbox-trigger img {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: var(--pico-border-radius, 0.5rem);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.picture-lightbox-trigger:hover img {
+  opacity: 0.95;
+  transform: scale(1.01);
+}
+
+dialog article.picture-lightbox-article {
+  max-width: 90vw;
+  width: auto;
+  text-align: center;
+}
+
+dialog article.picture-lightbox-article img {
+  max-height: 70vh;
+  max-width: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: var(--pico-border-radius, 0.5rem);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}

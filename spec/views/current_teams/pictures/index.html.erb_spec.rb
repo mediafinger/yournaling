@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+require "rails_helper"
+
 RSpec.describe "current_teams/pictures/index", type: :view do
   before do
     assign(:pictures,
@@ -11,6 +15,7 @@ RSpec.describe "current_teams/pictures/index", type: :view do
   it "renders a list of pictures" do
     render
 
-    assert_select "img", src: /macbookair_stickered.jpg/, count: 2
+    assert_select ".picture-lightbox-trigger img", count: 2
+    assert_select "img", src: /macbookair_stickered.jpg/, count: 4
   end
 end
