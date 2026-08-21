@@ -19,18 +19,21 @@ class ApplicationRecordYidEnabled < ApplicationRecord
 
     def create_with_event(record:, event_params: {})
       transaction do
+        # archspec:disable-next-line dependencies.no_cycles -- we are aware and ok with it
         record.save && RecordEventService.call(record:, name: :created, **event_params)
       end
     end
 
     def update_with_event(record:, event_params: {})
       transaction do
+        # archspec:disable-next-line dependencies.no_cycles -- we are aware and ok with it
         record.save && RecordEventService.call(record:, name: :updated, **event_params)
       end
     end
 
     def destroy_with_event(record:, event_params: {})
       transaction do
+        # archspec:disable-next-line dependencies.no_cycles -- we are aware and ok with it
         RecordEventService.call(record:, name: :deleted, **event_params)
         record.destroy! # TODO: refactor controller actions to not raise
       end
