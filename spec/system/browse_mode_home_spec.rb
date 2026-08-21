@@ -3,6 +3,8 @@
 require "rails_helper"
 
 RSpec.describe "Browse Mode Central Home Feed", type: :system do
+  include ActionView::RecordIdentifier
+
   let(:team) { FactoryBot.create(:team, name: "Alpine Explorers") }
   let(:user) { FactoryBot.create(:user, email: "explorer@example.com", name: "Sam Explorer") }
   let!(:member) { Member.create!(team: team, user: user, roles: %w[owner publisher]) }
@@ -41,7 +43,7 @@ RSpec.describe "Browse Mode Central Home Feed", type: :system do
     expect(page).to have_no_text("Secret Route Draft")
 
     # Click on Show this chronicle to navigate to the public chronicle show page
-    within "[id='chronicle_#{chronicle2.id}']" do
+    within "[id='#{dom_id(chronicle2)}']" do
       click_link "Show this chronicle"
     end
 
@@ -53,30 +55,33 @@ RSpec.describe "Browse Mode Central Home Feed", type: :system do
     # Create 4 more published items (total 7 published items, page limit is 5)
     4.times do |i|
       m = FactoryBot.create(:memory, team: team, memo: "Extra Mountain Memory #{i + 1}", visibility: "published")
-      m.publishing.update!(republished_at: (i + 4).hours.ago)
+      m.publishing.update!(republished_at: (30 + i).minutes.ago)
     end
 
     visit root_url
 
-    # First page items should be rendered
+    # First page should show 5 items
+    expect(page).to have_text("Extra Mountain Memory 4")
+    expect(page).to have_text("Extra Mountain Memory 3")
+    expect(page).to have_text("Extra Mountain Memory 2")
+    expect(page).to have_text("Extra Mountain Memory 1")
     expect(page).to have_text("Matterhorn Trail")
-    expect(page).to have_text("Sunrise at Refugio")
-    expect(page).to have_text("Mont Blanc Summit")
 
-    # Next page turbo-frame should be present for lazy loading
-    expect(page).to have_css("turbo-frame#publishings_page_2[loading='lazy']")
+    # Second page items should not yet be loaded until turbo frame triggers
+    expect(page).to have_no_text("Mont Blanc Summit")
 
-    # No page number or item count text should be rendered
-    expect(page).to have_no_text("Page 1")
-    expect(page).to have_no_text("Showing 1-5")
+    # Verify no pagination controls (no page numbers, no 'Page 1 of 2')
     expect(page).to have_no_css(".pagination")
     expect(page).to have_no_css("nav.pagy")
+    expect(page).to have_no_text("Page 1")
+    expect(page).to have_no_text("of 2")
   end
 
-  it "renders the newer posts banner and container for scroll-up pagination" do
+  it "includes Stimulus feed-refresh controller markup for automatic feed update checking" do
     visit root_url
 
-    expect(page).to have_css("div[data-controller='feed-refresh']")
+    expect(page).to have_css("#publishings[data-controller='feed-refresh']")
+    expect(page).to have_css("#top_sentinel")
     expect(page).to have_css("#newer_posts_banner", text: "newer posts available, scroll up to load them", visible: :all)
     expect(page).to have_css("#newer_posts_container")
   end
@@ -93,7 +98,5 @@ RSpec.describe "Browse Mode Central Home Feed", type: :system do
 
     click_link "🌐 Yournaling"
     expect(page).to have_current_path(root_path)
-    expect(page).to have_text("Matterhorn Trail")
-    expect(page).to have_text("Sunrise at Refugio")
   end
 end

@@ -1,0 +1,16 @@
+.browse-card-header style="display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; width: 100%;"
+  div style="display: flex; align-items: baseline; gap: 0.5rem;"
+    - if date.present?
+      small.text-muted style="font-size: 0.85rem;"
+        = date
+    - if @team.present?
+      small.text-muted style="font-size: 0.8rem; opacity: 0.8;"
+        = @team.name
+
+  div style="display: flex; gap: 0.4rem; flex-shrink: 0;"
+    / # TODO: fix 404
+    - if show_open_button?
+      - show_label = "Show this #{@record.class.model_name.human.downcase}"
+      = link_to show_label, show_path, role: "button", class: "outline secondary", style: "padding: 0.2rem 0.5rem; font-size: 0.75rem; margin-bottom: 0;"
+    - if can_rewrite?
+      = link_to "Rewrite", edit_path, role: "button", class: "outline", style: "padding: 0.2rem 0.5rem; font-size: 0.75rem; margin-bottom: 0;"

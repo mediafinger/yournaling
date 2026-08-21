@@ -11,5 +11,4 @@
       - if @pagy.next
         = turbo_frame_tag "team_artefacts_page_#{@pagy.next}", src: current_team_home_path(page: @pagy.next), loading: :lazy
     - elsif @pagy.page == 1
-      article
-        p No team artefacts found.
+      = render EmptyStateComponent.new(icon: "🚀", title: "No team artefacts yet", description: "Get started by recording your team's first memory or creating a new chronicle.", cta_label: "Create a Memory", cta_path: new_current_team_memory_path)

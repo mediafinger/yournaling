@@ -1,0 +1,11 @@
+article.empty-state-card style="text-align: center; padding: 3rem 1.5rem; margin: 2rem auto; max-width: 600px; border-radius: var(--pico-border-radius, 0.5rem); background-color: var(--pico-card-background-color, var(--pico-background-color)); border: 1px dashed var(--pico-muted-border-color, #d0d0d0); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);"
+  - if icon.present?
+    .empty-state-icon style="font-size: 3rem; margin-bottom: 1rem; line-height: 1;"
+      = icon
+  h3 style="margin-bottom: 0.5rem; font-weight: 600;"
+    = title
+  - if description.present?
+    p.text-muted style="margin-bottom: 1.5rem; max-width: 450px; margin-left: auto; margin-right: auto; font-size: 0.95rem;"
+      = description
+  - if cta_label.present? && cta_path.present?
+    = link_to cta_label, cta_path, role: "button", class: "primary", style: "display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 600; padding: 0.5rem 1.25rem; margin-bottom: 0;"

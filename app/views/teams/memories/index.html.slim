@@ -1,3 +1,7 @@
 #memories
-  - @memories.each do |memory|
-    = render partial: "teams/memories/memory", locals: { team:, memory: }
+  - if @memories.any?
+    .timeline-grid
+      - @memories.each do |memory|
+        = render partial: "teams/memories/memory", locals: { team:, memory: }
+  - else
+    = render EmptyStateComponent.new(icon: "💡", title: "No memories published yet", description: "This team has not published any memories yet.")

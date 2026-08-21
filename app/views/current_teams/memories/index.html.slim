@@ -1,3 +1,7 @@
 #memories
-  - @memories.each do |memory|
-    = render partial: "current_teams/memories/memory", locals: { memory: }
+  - if @memories.any?
+    .timeline-grid
+      - @memories.each do |memory|
+        = render partial: "current_teams/memories/memory", locals: { memory: }
+  - else
+    = render EmptyStateComponent.new(icon: "💡", title: "No memories recorded yet", description: "Capture notes, thoughts, locations, and photos from your team journeys.", cta_label: "Create your first memory", cta_path: new_current_team_memory_path)

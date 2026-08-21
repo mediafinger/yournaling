@@ -5,10 +5,19 @@ header > nav {
   top: 0;
   z-index: 100;
   background-color: var(--pico-background-color);
+  border-top: 3px solid var(--pico-primary, #d97706);
   border-bottom: 1px solid var(--pico-muted-border-color, #e0e0e0);
   padding: 0.5rem 1rem;
   margin-bottom: 1.5rem;
   backdrop-filter: blur(8px);
+}
+
+header.current-team-area > nav {
+  border-top: 3px solid var(--pico-primary, #16a34a);
+}
+
+header.admin-area > nav {
+  border-top: 3px solid var(--pico-primary, #2563eb);
 }
 
 /* Ensure navbar lists and list items align all children cleanly with flex center */

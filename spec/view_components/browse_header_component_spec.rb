@@ -1,0 +1,59 @@
+# frozen_string_literal: true
+
+require "rails_helper"
+
+RSpec.describe BrowseHeaderComponent, type: :component do
+  let(:team) { FactoryBot.create(:team, name: "Voyagers") }
+  let(:chronicle) do
+    FactoryBot.create(
+      :chronicle,
+      team: team,
+      name: "Alpine Trek",
+      start_date: Date.new(2026, 7, 1),
+      end_date: Date.new(2026, 7, 15),
+      visibility: "published"
+    )
+  end
+  let(:memory) do
+    mem = FactoryBot.create(
+      :memory,
+      team: team,
+      memo: "A memorable moment on the hill",
+      visibility: "published"
+    )
+    mem.update_column(:created_at, Time.zone.parse("2026-08-01 10:00:00"))
+    mem
+  end
+
+  it "renders chronicle date and link to chronicle show page" do
+    rendered = render_inline(described_class.new(record: chronicle, team: team))
+
+    expect(rendered.to_html).to include("2026-07-01 – 2026-07-15")
+    expect(rendered.to_html).to have_link("Show this chronicle",
+      href: "/teams/#{team.to_param}/chronicles/#{chronicle.to_param}")
+  end
+
+  it "renders memory date and link to memory show page" do
+    rendered = render_inline(described_class.new(record: memory, team: team))
+
+    expect(rendered.to_html).to include("2026-08-01")
+    expect(rendered.to_html).to have_link("Show this memory", href: "/teams/#{team.to_param}/memories/#{memory.to_param}")
+  end
+
+  it "does not render show link when full is true" do
+    rendered = render_inline(described_class.new(record: chronicle, team: team, full: true))
+
+    expect(rendered.to_html).to have_no_link("Show this chronicle")
+  end
+
+  context "when user has edit permission for the team" do
+    let(:user) { FactoryBot.create(:user) }
+    let!(:member) { Member.create!(team: team, user: user, roles: %w[owner publisher]) }
+
+    it "renders rewrite link for authorized team member" do
+      rendered = render_inline(described_class.new(record: chronicle, team: team, user: user, member: member))
+
+      expect(rendered.to_html).to have_link("Rewrite", href: "/current_team/chronicles/#{chronicle.to_param}/edit")
+    end
+  end
+end

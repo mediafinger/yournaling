@@ -1,3 +1,7 @@
 #chronicles
-  - @chronicles.each do |chronicle|
-    = render partial: "current_teams/chronicles/chronicle", locals: { chronicle: }
+  - if @chronicles.any?
+    .timeline-grid
+      - @chronicles.each do |chronicle|
+        = render partial: "current_teams/chronicles/chronicle", locals: { chronicle: }
+  - else
+    = render EmptyStateComponent.new(icon: "📖", title: "No chronicles written yet", description: "Organize your team's adventures into rich, chronological travel journals.", cta_label: "Start your first chronicle", cta_path: new_current_team_chronicle_path)

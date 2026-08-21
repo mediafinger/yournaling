@@ -14,5 +14,4 @@
       - if @pagy.next
         = turbo_frame_tag "publishings_page_#{@pagy.next}", src: root_path(page: @pagy.next), loading: :lazy
     - elsif @pagy.page == 1
-      article
-        p No published stories or memories yet.
+      = render EmptyStateComponent.new(icon: "📖", title: "No published stories or memories yet", description: "Explore the public journals and travel memories shared by teams around the world.")

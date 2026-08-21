@@ -1,10 +1,11 @@
 article.yournal-card.memory-card id= dom_id(memory)
   header.card-header
     span.card-badge 💡 Memory
-    small.text-muted = memory.team.name
+    = render BrowseHeaderComponent.new(record: memory, team: team)
 
   p
-    strong Memo: 
+    strong Memo:
+    br
     = memory.memo
 
   - if memory.picture
@@ -15,8 +16,3 @@ article.yournal-card.memory-card id= dom_id(memory)
     = render partial: "teams/locations/location", locals: { team:, location: memory.location }
   - if memory.weblink
     = render partial: "teams/weblinks/weblink", locals: { team:, weblink: memory.weblink }
-
-  footer
-    - is_memory_show = (controller_name == "memories" && action_name == "show")
-    - if !is_memory_show
-      = link_to "Show this memory", team_memory_path(team, memory), role: "button"
