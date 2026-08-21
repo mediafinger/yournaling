@@ -1,0 +1,152 @@
+workflow:
+  name: multi-model-feature-pipeline
+  description: "End-to-end spec-to-code pipeline with Lead Architect (Claude 5 Opus), Software Craftsman (Gemini 3.7 Flash), and Senior Auditor (Claude 5 Opus)."
+  entry_point: lead_architect
+
+  runtime:
+    provider:
+      name: openai-agents
+      # type: openai
+      # Issue below will be fixed with Pull #421 
+      #  Value error, Structured provider config (base_url/api_key) for name='openai-agents' is not yet implemented; use environment variables for the underlying SDK. [type=value_error, input_value={'name':      │
+      # │ 'openai-agents',...2MYA6tftDobpMr8MiocmjQ'}, input_type=dict] 
+      # base_url: "https://generativelanguage.googleapis.com/v1beta/openai/". # OPENAI_BASE_URL
+      # api_key: "${GEMINI_API_KEY}"  # OPENAI_API_KEY
+      # wire_api: responses
+    default_model: gemini-3.7-flash
+
+  input:
+    feature_request:
+      type: string
+      required: true
+      description: "User specification, requirement, or feature request."
+
+  limits:
+    max_iterations: 15
+    timeout_seconds: 1800
+
+  agents:
+    - name: lead_architect
+      type: agent
+      description: "Creates an architectural design and phased implementation plan."
+      provider: claude-agent-sdk
+      model: claude-opus-5
+      reasoning:
+        effort: high
+      prompt: |
+        You are acting in the role of **Lead System Architect**.
+        
+        Analyze the following feature request/specification:
+        ```markdown
+        {{ workflow.input.feature_request }}
+        ```
+        
+        Explore the repository and codebase context as needed. Then, output a thorough, step-by-step implementation plan. 
+        Your plan must include:
+        1. Architecture & component breakdown.
+        2. Test strategy (unit, integration, edge cases).
+        3. Detailed, phased implementation steps with exact file paths and interfaces.
+        4. Potential risks, trade-offs, and boundary invariants.
+      
+      routes:
+        - to: human_approver
+
+
+    - name: human_approver
+      type: human_gate
+      description: "Human in the loop to ensure the implementation plan matches the requirements and is complete."
+      prompt: |
+        ## Review and ensure it matches the requirements and is complete.
+
+        Implementation Plan provided by the Lead Architect:
+        ```markdown
+        {{ lead_architect.output.result }}
+        ```
+
+      options:
+        - name: approve
+          description: "Approve the implementation plan and proceed."
+        - name: revise
+          description: "Request revision or clarification for the implementation plan."
+        - name: reject
+          description: "Reject the implementation plan and end the workflow."
+
+      routes:
+        - to: software_craftsman
+          when: "{{ human_approver.choice == 'approve' }}"
+        - to: lead_architect
+          when: "{{ human_approver.choice == 'revise' }}"
+        - to: $end
+          when: "{{ human_approver.choice == 'reject' }}"
+
+
+    - name: software_craftsman
+      type: agent
+      description: "Implements the feature following TDD and strict software craftsmanship principles directly via Gemini API."
+      # model: gemini-3.7-flash
+      # reasoning:
+      #   effort: high
+      provider: claude-agent-sdk
+      model: claude-opus-5
+      reasoning:
+        effort: high
+      prompt: |
+        You are acting in the role of an **experienced Software Craftsman and strict TDD practitioner**.
+        
+        Original Feature Request:
+        ```markdown
+        {{ workflow.input.feature_request }}
+        ```
+        
+        Implementation Plan provided by the Lead Architect:
+        ```markdown
+        {{ lead_architect.output.result }}
+        ```
+        
+        Your objective:
+        1. Write clean, idiomatic tests first that thoroughly cover the specification and edge cases.
+        2. Implement the required production code to satisfy the tests.
+        3. Adhere strictly to SOLID principles, minimal duplication, and clean abstractions.
+        4. Summarize all code modifications, test files added/updated, and execution commands.
+
+      routes:
+        - to: software_auditor
+
+
+    - name: software_auditor
+      type: agent
+      description: "Reviews and validates modifications for security, regressions, and quality."
+      provider: claude-agent-sdk
+      model: claude-opus-5
+      reasoning:
+        effort: high
+      prompt: |
+        You are acting in the role of **Senior Software Auditor**.
+        
+        Review the implementation produced by the Software Craftsman against the original plan and spec.
+        
+        Original Specification:
+        ```markdown
+        {{ workflow.input.feature_request }}
+        ```
+        
+        Architect's Plan:
+        ```markdown
+        {{ lead_architect.output.result }}
+        ```
+        
+        Craftsman's Implementation & Tests:
+        ```markdown
+        {{ software_craftsman.output.result }}
+        ```
+        
+        Audit requirements:
+        1. Verify adherence to the original architectural plan and user requirements.
+        2. Inspect test coverage, edge cases, and failure modes.
+        3. Perform static analysis on security, performance bottlenecks, and regressions.
+        4. Provide an audit verdict (`APPROVED`, `APPROVED_WITH_COMMENTS`, or `REJECTED`) along with actionable findings.
+
+      routes:
+        - to: $end
+
+  
