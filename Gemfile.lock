@@ -93,6 +93,8 @@ GEM
       device_detector (>= 1)
       safely_block (>= 0.4)
     amazing_print (2.0.0)
+    archspec (1.0.1)
+      prism (>= 1.0)
     ast (2.4.3)
     base64 (0.3.0)
     bcrypt (3.1.22)
@@ -559,6 +561,7 @@ DEPENDENCIES
   active_storage_validations
   ahoy_matey (~> 5.2)
   amazing_print (~> 2.0)
+  archspec
   bcrypt (~> 3.1)
   blazer (~> 3.1)
   bootsnap

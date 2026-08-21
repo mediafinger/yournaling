@@ -52,6 +52,7 @@ end
 group :development, :test do
   gem "active_record_doctor", "~> 2.0", require: false
   gem "amazing_print", "~> 2.0"
+  gem "archspec"
   gem "bundler-audit", "~> 0.9"
   gem "capybara", "~> 3.19" # for headless browser tests
   gem "factory_bot-awesome_linter", "~> 1.0"

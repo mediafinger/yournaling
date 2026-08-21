@@ -61,6 +61,11 @@ if %w[development test].include? Rails.env
     t.exclude_pattern = "**/{views}/**/*_spec.rb" if ENV["CI"].to_s == "true"
   end
 
+  desc "Check clean Architecture with archspec"
+  task archspec: :environment do
+    sh "bundle exec archspec check"
+  end
+
   namespace :factory_bot do
     desc "Verify that all FactoryBot factories are valid"
     task lint: :environment do
@@ -83,7 +88,7 @@ if %w[development test].include? Rails.env
   SlimLint::RakeTask.new
 
   desc "Run test suite"
-  task ci: %w[rubocop factory_bot:awesome_lint db:doctor rspec bundle:audit:update bundle:audit]
+  task ci: %w[zeitwerk:check rubocop factory_bot:awesome_lint db:doctor rspec archspec bundle:audit:update bundle:audit]
 
   task default: :ci
 end

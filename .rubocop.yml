@@ -101,6 +101,11 @@ Lint/UnusedMethodArgument:
 Metrics:
   Enabled: false
 
+Naming/FileName:
+  Exclude:
+    - "Archspec.rb"
+
+
 Naming/MethodParameterName:
   Exclude:
     - "**/spec/**/*"
