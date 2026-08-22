@@ -337,4 +337,62 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_17_205000) do
   add_foreign_key "publishings", "teams"
   add_foreign_key "thoughts", "teams"
   add_foreign_key "weblinks", "teams"
+
+  create_view "team_artefacts", sql_definition: <<-SQL
+      SELECT chronicles.id AS artefact_id,
+      'Chronicle'::text AS artefact_type,
+      chronicles.team_id,
+      chronicles.visibility,
+      chronicles.updated_at,
+      chronicles.created_at
+     FROM chronicles
+  UNION ALL
+   SELECT memories.id AS artefact_id,
+      'Memory'::text AS artefact_type,
+      memories.team_id,
+      memories.visibility,
+      memories.updated_at,
+      memories.created_at
+     FROM memories
+  UNION ALL
+   SELECT pictures.id AS artefact_id,
+      'Picture'::text AS artefact_type,
+      pictures.team_id,
+      pictures.visibility,
+      pictures.updated_at,
+      pictures.created_at
+     FROM pictures
+  UNION ALL
+   SELECT locations.id AS artefact_id,
+      'Location'::text AS artefact_type,
+      locations.team_id,
+      locations.visibility,
+      locations.updated_at,
+      locations.created_at
+     FROM locations
+  UNION ALL
+   SELECT thoughts.id AS artefact_id,
+      'Thought'::text AS artefact_type,
+      thoughts.team_id,
+      thoughts.visibility,
+      thoughts.updated_at,
+      thoughts.created_at
+     FROM thoughts
+  UNION ALL
+   SELECT weblinks.id AS artefact_id,
+      'Weblink'::text AS artefact_type,
+      weblinks.team_id,
+      weblinks.visibility,
+      weblinks.updated_at,
+      weblinks.created_at
+     FROM weblinks
+  UNION ALL
+   SELECT members.id AS artefact_id,
+      'Member'::text AS artefact_type,
+      members.team_id,
+      members.visibility,
+      members.updated_at,
+      members.created_at
+     FROM members;
+  SQL
 end

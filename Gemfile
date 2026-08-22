@@ -34,6 +34,7 @@ gem "puma", "~> 8.0"
 gem "rack-requestid", "~> 0.2" # always set a request_id with this middleware
 gem "rack-timeout", "~> 0.6", require: "rack/timeout/base" # set a custom timeout in the middleware
 gem "ruby-vips" # Use ruby-vips for image processing with ActiveStorage, requires the vips library
+gem "scenic", "~> 1.9" # Versioned DB views that dump correctly into schema.rb
 gem "slim-rails", "~> 4.0", require: ["slim", "slim/smart"] # Use slim 5.2 for HTML templates
 gem "solid_cable", "~> 4.0"
 gem "solid_cache", "~> 1.0"
