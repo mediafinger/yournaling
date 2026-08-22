@@ -3,12 +3,12 @@
   #newer_posts_banner.newer-posts-banner data-feed-refresh-target="banner" hidden="" data-action="click->feed-refresh#loadNewer"
     span newer posts available, scroll up to load them
   #newer_posts_container data-feed-refresh-target="container"
-  = turbo_frame_tag "team_artefacts_page_#{@pagy.page}" do
+  = turbo_frame_tag "team_artefacts_page_#{@pagy.page}", target: "_top" do
     - if @team_artefacts.any?
       .timeline-grid
         - @team_artefacts.each do |team_artefact|
           = render partial: "current_teams/pages/artefact", locals: { artefact: team_artefact }
       - if @pagy.next
-        = turbo_frame_tag "team_artefacts_page_#{@pagy.next}", src: current_team_home_path(page: @pagy.next), loading: :lazy
+        = turbo_frame_tag "team_artefacts_page_#{@pagy.next}", src: current_team_home_path(page: @pagy.next), loading: :lazy, target: "_top"
     - elsif @pagy.page == 1
       = render EmptyStateComponent.new(icon: "🚀", title: "No team artefacts yet", description: "Get started by recording your team's first memory or creating a new chronicle.", cta_label: "Create a Memory", cta_path: new_current_team_memory_path)

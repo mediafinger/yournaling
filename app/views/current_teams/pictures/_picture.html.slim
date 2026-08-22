@@ -1,22 +1,26 @@
-article id= dom_id(picture)
-  = render ManageHeaderComponent.new(record: picture, hide_actions: local_assigns[:hide_actions])
-
-  - is_picture_controller = (controller_name == "pictures" || controller_path.to_s.end_with?("pictures"))
-  - if is_picture_controller && action_name == "show"
-    p
-      > Original:
-      = "#{picture.width} x #{picture.height}"
-      > |
-      = number_to_human_size(picture.megabytes.megabytes)
-      > |
-      = picture.content_type
-      > |
-      = picture.filename
-
-    p
-      - if picture.visibility == "published"
-        = link_to image_tag(picture.large, style: "max-height: 30rem; width: auto;"), team_picture_only_path(current_team, picture), target: "_blank", rel: "noopener noreferrer"
-      - else
-        = link_to image_tag(picture.large, style: "max-height: 30rem; width: auto;"), rails_blob_path(picture.file), target: "_blank", rel: "noopener noreferrer"
-  - else
+- if local_assigns[:hide_actions]
+  div id= dom_id(picture)
     = render PictureLightboxComponent.new(picture: picture, team: current_team)
+- else
+  article id= dom_id(picture)
+    = render ManageHeaderComponent.new(record: picture, hide_actions: local_assigns[:hide_actions])
+
+    - is_picture_controller = (controller_name == "pictures" || controller_path.to_s.end_with?("pictures"))
+    - if is_picture_controller && action_name == "show"
+      p
+        > Original:
+        = "#{picture.width} x #{picture.height}"
+        > |
+        = number_to_human_size(picture.megabytes.megabytes)
+        > |
+        = picture.content_type
+        > |
+        = picture.filename
+
+      p
+        - if picture.visibility == "published"
+          = link_to image_tag(picture.large, style: "max-height: 30rem; width: auto;"), team_picture_only_path(current_team, picture), target: "_blank", rel: "noopener noreferrer"
+        - else
+          = link_to image_tag(picture.large, style: "max-height: 30rem; width: auto;"), rails_blob_path(picture.file), target: "_blank", rel: "noopener noreferrer"
+    - else
+      = render PictureLightboxComponent.new(picture: picture, team: current_team)

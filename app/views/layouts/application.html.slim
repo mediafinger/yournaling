@@ -14,7 +14,7 @@ html
     = stylesheet_link_tag "general", "buttons", "navbar", "card", "lightbox", "data-turbo-track": "reload"
     = javascript_importmap_tags
   body
-    header
+    header data-controller="navbar"
       nav
         = render ApplicationNavComponent.new
       = render partial: "shared_partials/flash_notifications"

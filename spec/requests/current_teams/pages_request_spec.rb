@@ -49,6 +49,25 @@ RSpec.describe "CurrentTeams::Pages (Manage Timeline)", type: :request do
         expect(response.body).to include("newer posts available, scroll up to load them")
         expect(response.body).to include("id=\"team_artefacts_page_1\"")
       end
+
+      it "marks the pagination frames with target=_top so card links always break out to a full page " \
+         "navigation instead of Turbo trying (and failing) to load them into the pagination frame" do
+        # See the matching regression test in spec/requests/pages_request_spec.rb for why both the
+        # current-page frame AND the next-page lazy placeholder frame need target=_top.
+        12.times { |i| FactoryBot.create(:memory, team: team, memo: "Extra Memory #{i}") }
+
+        get current_team_home_url
+
+        expect(response.body)
+          .to match(/<turbo-frame\b(?=[^>]*\bid="team_artefacts_page_1")(?=[^>]*\btarget="_top")[^>]*>/)
+        expect(response.body)
+          .to match(/<turbo-frame\b(?=[^>]*\bid="team_artefacts_page_2")(?=[^>]*\btarget="_top")[^>]*>/)
+
+        get current_team_home_url(page: 2)
+
+        expect(response.body)
+          .to match(/<turbo-frame\b(?=[^>]*\bid="team_artefacts_page_2")(?=[^>]*\btarget="_top")[^>]*>/)
+      end
     end
 
     context "when logged in as an editor" do

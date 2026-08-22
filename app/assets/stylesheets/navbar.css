@@ -1,23 +1,50 @@
 /* Nav Bar Styles */
 
-header > nav {
+/*
+ * `body > header` (not a bare `header`!) is the sticky element: a sticky
+ * element needs its *parent* to be taller than itself to have any room to
+ * stay pinned while scrolling. The page-level `header` previously wrapped
+ * only `nav` (same height as its child), so nav had nowhere to stick and
+ * scrolled away. `header`'s parent is `body`, which is as tall as the whole
+ * page. Scoping to `body > header` (rather than a bare `header`) also keeps
+ * this from matching each card's own `header.card-header` nested inside
+ * `article.yournal-card` further down the page.
+ */
+body > header {
   position: sticky;
   top: 0;
   z-index: 100;
-  background-color: var(--pico-background-color);
+  background-color: #fdf3e2;
   border-top: 3px solid var(--pico-primary, #d97706);
   border-bottom: 1px solid var(--pico-muted-border-color, #e0e0e0);
-  padding: 0.5rem 1rem;
   margin-bottom: 1.5rem;
-  backdrop-filter: blur(8px);
+  opacity: 1;
+  transition: opacity 0.25s ease;
 }
 
-header.current-team-area > nav {
+body > header > nav {
+  padding: 0.5rem 1rem;
+}
+
+body > header.current-team-area {
+  background-color: #e9f7ef;
   border-top: 3px solid var(--pico-primary, #16a34a);
 }
 
-header.admin-area > nav {
+body > header.admin-area {
+  background-color: #e8f1fd;
   border-top: 3px solid var(--pico-primary, #2563eb);
+}
+
+/*
+ * Fully invisible (background, border, and every link/button/image on the
+ * bar, all together) while scrolled down past 80px. Hover, tap, or scrolling
+ * back up a bit restores it (handled by navbar_controller.js toggling this
+ * class). Pointer events stay enabled while invisible so hovering/tapping
+ * the (still-present) bar is what reveals it.
+ */
+body > header.navbar--transparent:not(.navbar--hover) {
+  opacity: 0;
 }
 
 /* Ensure navbar lists and list items align all children cleanly with flex center */

@@ -50,13 +50,6 @@ class BrowseHeaderComponent < ApplicationComponent
     end
   end
 
-  # TODO: fix 404
-  #   = link_to "Show this chronicle", team_chronicle_path(team, chronicle), role: "button"
-  #
-  # - is_memory_show = (controller_name == "memories" && action_name == "show")
-  # - if !is_memory_show
-  #   = link_to "Show this memory", team_memory_path(team, memory), role: "button"
-
   def show_path
     case @record
     when Chronicle

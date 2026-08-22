@@ -42,9 +42,9 @@ RSpec.describe "Browse Mode Central Home Feed", type: :system do
     # Should not display unpublished items
     expect(page).to have_no_text("Secret Route Draft")
 
-    # Click on Show this chronicle to navigate to the public chronicle show page
+    # Click on Open to navigate to the public chronicle show page
     within "[id='#{dom_id(chronicle2)}']" do
-      click_link "Show this chronicle"
+      click_link "Open"
     end
 
     expect(page).to have_current_path(team_chronicle_path(team, chronicle2))

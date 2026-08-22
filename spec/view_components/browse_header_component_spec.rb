@@ -29,21 +29,20 @@ RSpec.describe BrowseHeaderComponent, type: :component do
     rendered = render_inline(described_class.new(record: chronicle, team: team))
 
     expect(rendered.to_html).to include("2026-07-01 – 2026-07-15")
-    expect(rendered.to_html).to have_link("Show this chronicle",
-      href: "/teams/#{team.to_param}/chronicles/#{chronicle.to_param}")
+    expect(rendered.to_html).to have_link("Open", href: "/teams/#{team.to_param}/chronicles/#{chronicle.to_param}")
   end
 
   it "renders memory date and link to memory show page" do
     rendered = render_inline(described_class.new(record: memory, team: team))
 
     expect(rendered.to_html).to include("2026-08-01")
-    expect(rendered.to_html).to have_link("Show this memory", href: "/teams/#{team.to_param}/memories/#{memory.to_param}")
+    expect(rendered.to_html).to have_link("Open", href: "/teams/#{team.to_param}/memories/#{memory.to_param}")
   end
 
   it "does not render show link when full is true" do
     rendered = render_inline(described_class.new(record: chronicle, team: team, full: true))
 
-    expect(rendered.to_html).to have_no_link("Show this chronicle")
+    expect(rendered.to_html).to have_no_link("Open")
   end
 
   context "when user has edit permission for the team" do

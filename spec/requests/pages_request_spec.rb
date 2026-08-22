@@ -73,6 +73,23 @@ RSpec.describe "Pages (Home Feed in Browse Mode)", type: :request do
         expect(response.body).not_to include("Glacier Hike Memo")
       end
 
+      it "marks the pagination frames with target=_top so card links always break out to a full page " \
+         "navigation instead of Turbo trying (and failing) to load them into the pagination frame" do
+        # Regression test: the *current page* frame previously had target="_top", but the sibling
+        # "next page" placeholder frame (the one that actually persists client-side once lazy-loaded,
+        # since Turbo only ever replaces a frame's inner content, never its own attributes) did not.
+        # Any link clicked on a lazily-loaded page 2+ card was captured by that targetless frame and
+        # rendered Turbo's "Content missing" instead of navigating.
+        get root_url
+
+        expect(response.body).to match(/<turbo-frame\b(?=[^>]*\bid="publishings_page_1")(?=[^>]*\btarget="_top")[^>]*>/)
+        expect(response.body).to match(/<turbo-frame\b(?=[^>]*\bid="publishings_page_2")(?=[^>]*\btarget="_top")[^>]*>/)
+
+        get root_url(page: 2)
+
+        expect(response.body).to match(/<turbo-frame\b(?=[^>]*\bid="publishings_page_2")(?=[^>]*\btarget="_top")[^>]*>/)
+      end
+
       it "excludes unpublished posts" do
         FactoryBot.create(:chronicle, team: team, name: "Secret Cave Exploration", visibility: "internal")
         FactoryBot.create(:memory, team: team, memo: "Private Draft Memo", visibility: "draft")

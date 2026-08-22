@@ -120,7 +120,7 @@ RSpec.describe "/current_team/chronicles", type: :request do
       expect(response).to be_successful
       expect(response.body).to include("Beach View")
       expect(response.body).to include("Sunset Over Alhambra")
-      expect(response.body.scan('article id="picture_').count).to eq(2)
+      expect(response.body.scan('id="picture_').count).to eq(2)
 
       # Insight individual action buttons should be suppressed in chronicle show
       expect(response.body.scan(">Rewrite<").count).to eq(1)
@@ -377,7 +377,7 @@ RSpec.describe "/current_team/chronicles", type: :request do
         follow_redirect!
         expect(response.body).to include("First Picture")
         expect(response.body).to include("Second Picture")
-        expect(response.body.scan('article id="picture_').count).to eq(2)
+        expect(response.body.scan('id="picture_').count).to eq(2)
       end
 
       it "removes an attached picture entry via _destroy nested attribute (regression test)" do
