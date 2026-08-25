@@ -16,7 +16,6 @@ RSpec.describe "/users", type: :request do
   let(:password) { "foobar1234" }
 
   let(:valid_create_attributes) { { name: name, email: email, password: password } }
-  let(:invalid_create_attributes) { { name: name, email: nil, password: nil } }
 
   describe "GET /index" do
     it "renders a successful response" do
@@ -40,13 +39,6 @@ RSpec.describe "/users", type: :request do
     it "renders a successful response" do
       user = User.create! valid_create_attributes
       get user_url(user)
-      expect(response).to be_successful
-    end
-  end
-
-  describe "GET /new" do
-    it "renders a successful response" do
-      get new_user_url
       expect(response).to be_successful
     end
   end
@@ -79,32 +71,22 @@ RSpec.describe "/users", type: :request do
     end
   end
 
-  describe "POST /create" do
-    context "with valid parameters" do
-      it "creates a new User" do
-        expect {
-          post users_url, params: { user: valid_create_attributes }
-        }.to change { User.count }.by(1)
-      end
-
-      it "redirects to the created user" do
+  # Signup was deliberately retired from this controller: RegistrationsController is the only path
+  # that sends the verification mail, and a second, quieter way to create a User would inevitably
+  # drift out of that guarantee. These two examples are what keeps it retired.
+  describe "the retired signup endpoints" do
+    it "does not create a User via POST /users" do
+      expect {
         post users_url, params: { user: valid_create_attributes }
-        expect(response).to redirect_to(user_url(User.first))
-      end
+      }.not_to(change { User.count })
+
+      expect(response).to have_http_status(:not_found)
     end
 
-    context "with invalid parameters" do
-      it "does not create a new User" do
-        expect {
-          post users_url, params: { user: invalid_create_attributes }
-        }.to change { User.count }.by(0)
-      end
+    it "does not serve a signup form at GET /users/new" do
+      get "/users/new"
 
-      it "renders a response with 422 status (i.e. to display the 'new' template)" do
-        post users_url, params: { user: invalid_create_attributes }
-
-        expect(response).to have_http_status(:unprocessable_content)
-      end
+      expect(response).to have_http_status(:not_found)
     end
   end
 

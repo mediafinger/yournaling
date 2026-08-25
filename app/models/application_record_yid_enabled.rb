@@ -14,7 +14,8 @@ class ApplicationRecordYidEnabled < ApplicationRecord
 
   class << self
     def fynd(id)
-      id_code_models[id.split("_").first].find_by(id:)
+      # An unknown prefix means no model claims this id, which is a miss, not a NoMethodError.
+      id_code_models[id.to_s.split("_").first]&.find_by(id:)
     end
 
     def create_with_event(record:, event_params: {})
@@ -40,19 +41,36 @@ class ApplicationRecordYidEnabled < ApplicationRecord
     end
 
     def urlsafe_fynd(urlsafe_id)
-      fynd(Base64.urlsafe_decode64(urlsafe_id))
+      decoded_id = decode_urlsafe_id(urlsafe_id)
+
+      decoded_id && fynd(decoded_id)
     end
 
     def urlsafe_find(urlsafe_id)
-      find_by(id: Base64.urlsafe_decode64(urlsafe_id))
-    rescue ArgumentError
-      nil
+      decoded_id = decode_urlsafe_id(urlsafe_id)
+
+      decoded_id && find_by(id: decoded_id)
     end
 
     def urlsafe_find!(urlsafe_id)
-      find(Base64.urlsafe_decode64(urlsafe_id))
+      decoded_id = decode_urlsafe_id(urlsafe_id)
+
+      raise ActiveRecord::RecordNotFound.new("Couldn't find #{name} with [urlsafe_id=#{urlsafe_id}]") if decoded_id.nil?
+
+      find(decoded_id)
+    end
+
+    # The single gate between an attacker-controlled URL segment and the database. Base64 decoding
+    # accepts far more than the ids this app issues: "new" and "edit" decode to arbitrary bytes,
+    # "12345" is not valid Base64 at all. Neither can denote a record, so both must read as a miss
+    # here -- handing them on raises PG::CharacterNotInRepertoire (invalid UTF-8 in a query) or
+    # NoMethodError, and ErrorHandler can only report those as a 500 where a 404 is the truth.
+    def decode_urlsafe_id(urlsafe_id)
+      decoded_id = Base64.urlsafe_decode64(urlsafe_id.to_s)
+
+      decoded_id if decoded_id.force_encoding(Encoding::UTF_8).valid_encoding?
     rescue ArgumentError
-      raise ActiveRecord::RecordNotFound.new("Couldn't find #{name} with [urlsafe_id=#{urlsafe_id}]")
+      nil
     end
 
     # rubocop:disable Style/ClassVars

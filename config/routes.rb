@@ -6,11 +6,20 @@ Rails.application.routes.draw do
   get "up" => "health#show", as: :rails_health_check
 
   resources :teams, except: %i[show]
-  resources :users
+  # No :new / :create here on purpose: self-service signup lives in RegistrationsController, which
+  # is the only path that sends the verification mail. A second, quieter way to create a User would
+  # inevitably drift out of that guarantee.
+  resources :users, only: %i[index show edit update destroy]
   get "user_password/new", to: "user_passwords#new", as: :new_user_password
   post "user_password", to: "user_passwords#create", as: :user_password
   get "user_password/edit/:token", to: "user_passwords#edit", as: :edit_user_password
   patch "user_password/edit/:token", to: "user_passwords#update"
+
+  # NOTE: "email_verification/new" must stay above "email_verification/:token", or "new" is
+  # swallowed as a token. Both must stay above the "*path" catch-all at the bottom of this file.
+  get "email_verification/new", to: "email_verifications#new", as: :new_email_verification
+  post "email_verification", to: "email_verifications#create", as: :email_verification
+  get "email_verification/:token", to: "email_verifications#show", as: :show_email_verification
 
   get "search", to: "searches#new", as: :new_search
   post "search", to: "searches#create", as: :search
@@ -60,6 +69,9 @@ Rails.application.routes.draw do
 
   # Login Controller
   resources :logins, only: %i[index destroy], as: :login_records
+  # Registration Controller (public signup funnel; see also EmailVerifications below)
+  get "register", to: "registrations#new", as: :new_registration
+  post "register", to: "registrations#create", as: :registration
   # Session Controller
   get "login", to: "sessions#new"
   post "login", to: "sessions#create"

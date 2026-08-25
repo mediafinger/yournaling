@@ -1,0 +1,8 @@
+| Welcome to Yournaling, #{@user.name}!
+
+  Please confirm that this is your email address, so we can reach you about your account:
+
+  #{show_email_verification_url(token: @token)}
+
+  This link expires in 3 days.
+  If you did not create a Yournaling account, please ignore this email.

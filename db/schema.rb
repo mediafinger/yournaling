@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_17_205000) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_22_090100) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -293,16 +293,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_17_205000) do
   create_table "users", id: :string, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email", null: false
+    t.datetime "email_verified_at"
     t.string "name", null: false
     t.string "nickname"
     t.string "password_digest", null: false
     t.jsonb "preferences", default: {}, null: false
     t.string "role", default: "user", null: false
-    t.text "temp_auth_token"
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["nickname"], name: "index_users_on_nickname", unique: true
-    t.index ["temp_auth_token"], name: "index_users_on_temp_auth_token", unique: true
   end
 
   create_table "weblinks", id: :string, force: :cascade do |t|

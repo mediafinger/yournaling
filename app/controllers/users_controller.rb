@@ -12,27 +12,9 @@ class UsersController < ApplicationController
     authorize! @user
   end
 
-  def new
-    @user = User.new
-    authorize! @user
-  end
-
   def edit
     @user = User.urlsafe_find!(params[:id])
     authorize! @user
-  end
-
-  def create
-    @user = User.new(create_params)
-    authorize! @user
-
-    User.create_with_event(record: @user, event_params: { team: Team.new(id: :none), user: @user })
-
-    if @user.persisted?
-      redirect_to @user, notice: "User was successfully created."
-    else
-      render :new, status: :unprocessable_content
-    end
   end
 
   def update
@@ -59,10 +41,6 @@ class UsersController < ApplicationController
   end
 
   private
-
-  def create_params
-    params.expect(user: %i[name email password])
-  end
 
   def update_params
     params.expect(user: %i[name nickname]) # TODO: extract password & email update to extra endpoints

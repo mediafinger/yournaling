@@ -13,6 +13,7 @@ module ErrorHandler
     "ActionController::NotImplemented"             => { code: :not_implemented, status: 501 },
     "ActionController::ParameterMissing"           => { code: :bad_request, status: 400 },
     "ActionController::RoutingError"               => { code: :not_found, status: 404 },
+    "ActionController::TooManyRequests"            => { code: :too_many_requests, status: 429 },
     "ActionController::UnknownFormat"              => { code: :not_acceptable, status: 406 },
     "ActionController::UnknownHttpMethod"          => { code: :method_not_allowed, status: 405 },
     "ActionDispatch::Http::Parameters::ParseError" => { code: :bad_request, status: 400 },

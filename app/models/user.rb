@@ -19,6 +19,14 @@ class User < ApplicationRecordYidEnabled
     email
   end
 
+  EMAIL_VERIFICATION_TOKEN_VALIDITY = 3.days
+
+  # Embedding both the address and the verification timestamp in the payload makes the token
+  # single-use (redeeming it changes email_verified_at) and dead on an address change.
+  generates_token_for :email_verification, expires_in: EMAIL_VERIFICATION_TOKEN_VALIDITY do
+    [email, email_verified_at&.to_i].join(":")
+  end
+
   has_many :logins, inverse_of: :user, dependent: :delete_all
   has_many :memberships, class_name: "Member", inverse_of: :user, dependent: :destroy
   has_many :events, class_name: "RecordEvent", inverse_of: :user, dependent: :delete_all
@@ -26,13 +34,22 @@ class User < ApplicationRecordYidEnabled
 
   has_many :teams, through: :memberships
 
+  scope :email_verified, -> { where.not(email_verified_at: nil) }
+  scope :email_unverified, -> { where(email_verified_at: nil) }
+
   normalizes :email, with: ->(email) { email.strip.downcase }
   normalizes :name, with: ->(name) { name.strip }
   normalizes :nickname, with: ->(nickname) { nickname.parameterize.underscore }
 
   validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP, message: "not valid" }
   validates :password, length: { in: 10..72 }, if: -> { password.present? } # 72 is a has_secure_password limitation
-  validates :password_digest, presence: true
+  # `has_secure_password validations: false` contributes no presence check, so state it here.
+  # Scoped to :create because password_digest, not password, is what a persisted record carries;
+  # an update that does not touch the password must stay valid.
+  validates :password, presence: true, on: :create
+  # On create the rule above already implies a digest (the password= setter writes it), so keeping
+  # this unscoped would only add a second, jargon-laden error to the signup form.
+  validates :password_digest, presence: true, on: :update
   validates :name, presence: true, length: { in: 3..72 } # display optionally, nickame required for posting anything
   validates :nickname, allow_nil: true, uniqueness: true, length: { in: 7..72 } # make users pay for shorter nicknames
   validates :preferences, presence: true, if: proc { |record| record.preferences.to_s == "" }
@@ -40,16 +57,20 @@ class User < ApplicationRecordYidEnabled
     in: USER_ROLES, message: "%{rejected_values} not allowed, role must be in #{USER_ROLES}"
   } # this uses the custom ArrayInclusionValidator
 
-  after_initialize :define_has_role_methods
+  # defines admin?, account_manager?, moderator?, editor?, user? predicates
+  USER_ROLES.each do |user_role|
+    define_method(:"#{user_role}?") { role.to_s == user_role }
+  end
 
-  private
+  def email_verified?
+    email_verified_at.present?
+  end
 
-  # defines owner?, manager?, editor?, publisher?, reader?  methods
-  def define_has_role_methods
-    USER_ROLES.each do |user_role|
-      self.class.send(:define_method, :"#{user_role}?") do
-        role.to_s == user_role.to_s
-      end
-    end
+  # Idempotent on purpose: a verification link that is prefetched by an email scanner and then
+  # clicked by the user must not move the timestamp, or the second visit would look like a replay.
+  def verify_email!
+    return true if email_verified?
+
+    update!(email_verified_at: Time.current)
   end
 end

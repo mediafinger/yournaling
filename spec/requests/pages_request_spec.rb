@@ -84,9 +84,9 @@ RSpec.describe "Pages (Home Feed in Browse Mode)", type: :request do
 
         expect(response.body).to match(/<turbo-frame\b(?=[^>]*\bid="publishings_page_1")(?=[^>]*\btarget="_top")[^>]*>/)
         expect(response.body).to match(/<turbo-frame\b(?=[^>]*\bid="publishings_page_2")(?=[^>]*\btarget="_top")[^>]*>/)
-        
+
         get root_url(page: 2)
-  
+
         expect(response.body).to match(/<turbo-frame\b(?=[^>]*\bid="publishings_page_2")(?=[^>]*\btarget="_top")[^>]*>/)
       end
 
