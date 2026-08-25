@@ -19,7 +19,7 @@ This project provides self-contained wrapper scripts in `bin/` that automaticall
   ```bash
   bin/mcp_rspec [spec_files_or_options...]
   # Examples:
-  bin/mcp_rspec                                      # Runs all specs
+  bin/mcp_rspec                                      # Runs all specs in parallel (4 processes)
   bin/mcp_rspec spec/models/chronicle_spec.rb        # Runs single spec file
   bin/mcp_rspec spec/requests/searches_spec.rb:15    # Runs single example
   ```

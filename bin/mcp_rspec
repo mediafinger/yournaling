@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
 source /opt/homebrew/share/chruby/chruby.sh
 chruby $(cat .ruby-version 2>/dev/null)
-exec bundle exec rspec "$@"
+export PARALLEL_TEST_PROCESSORS="${PARALLEL_TEST_PROCESSORS:-4}"
+
+if [ $# -eq 0 ]; then
+  exec bundle exec parallel_rspec -n 4 spec/
+elif [ $# -eq 1 ] && [[ "$1" == *":"* || ( -f "$1" && "$1" == *_spec.rb ) ]]; then
+  exec bundle exec rspec "$@"
+else
+  exec bundle exec parallel_rspec -n 4 "$@"
+fi

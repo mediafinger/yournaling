@@ -63,16 +63,16 @@ test:
   # unfortunately _test is necessary, as some `rake db:` commands work against dev & test env
   primary:
     <<: *postgres
-    url: <%= "#{AppConf.yournaling_db_url}_test" %>
+    url: <%= "#{AppConf.yournaling_db_url}_test#{ENV['TEST_ENV_NUMBER']}" %>
   cable:
     <<: *cable_config
-    database: <%= "storage/#{AppConf.yournaling_db_name}_test_cable.sqlite3" %>
+    database: <%= "storage/#{AppConf.yournaling_db_name}_test#{ENV['TEST_ENV_NUMBER']}_cable.sqlite3" %>
   cache:
     <<: *cache_config
-    database: <%= "storage/#{AppConf.yournaling_db_name}_test_cache.sqlite3" %>
+    database: <%= "storage/#{AppConf.yournaling_db_name}_test#{ENV['TEST_ENV_NUMBER']}_cache.sqlite3" %>
   queue:
     <<: *queue_config
-    database: <%= "storage/#{AppConf.yournaling_db_name}_test_queue.sqlite3" %>
+    database: <%= "storage/#{AppConf.yournaling_db_name}_test#{ENV['TEST_ENV_NUMBER']}_queue.sqlite3" %>
 
 production:
   primary:

@@ -11,7 +11,9 @@ Rails.application.load_tasks
 if %w[development test].include? Rails.env
   require "active_record_doctor"
   require "active_record_doctor/rake/task"
+  ENV["PARALLEL_TEST_RAKE_EXECUTABLE"] ||= File.exist?("bin/mcp_rake") ? "bin/mcp_rake" : "bundle exec rake"
   require "bundler/audit/task"
+  require "parallel_tests/tasks"
   require "rspec/core/rake_task"
   require "rubocop/rake_task"
   require "slim_lint/rake_task"
@@ -45,19 +47,13 @@ if %w[development test].include? Rails.env
     end
   end
 
-  # setup task rspec
-  RSpec::Core::RakeTask.new(:rspec) do |t|
-    # t.exclude_pattern = "**/{requests,blocknox}/**/*_spec.rb" # example, here how to skip integration specs
+  # setup task rspec to run in parallel
+  desc "Run RSpec test suite in parallel"
+  task rspec: :environment do
+    ENV["PARALLEL_TEST_PROCESSORS"] ||= "4"
+    sh "bundle exec parallel_rspec -n 4 spec/"
 
-    # SKIPPING view specs on CI, as used nokogiri syntax is invalid when not run against bundle libxml2 ?!
-    # on GitHub Actions only:
-    #   WARNING: Nokogiri was built against libxml version 2.13.5, but has dynamically loaded 2.9.14
-    # compare to: https://github.com/sparklemotion/nokogiri/issues/2419#issuecomment-1009614404
-    #
-    # FIX: by telling GitHub Actions to use the bundled libxml2 version instead of the system one?!
-    #
-    # maybe refactor to test view components https://viewcomponent.org/guide/testing.html
-    #
+    # t.exclude_pattern = "**/{requests,controllers}/**/*_spec.rb" # example, here how to skip integration specs
     # t.exclude_pattern = "**/{views}/**/*_spec.rb" if ENV["CI"].to_s == "true"
     # t.exclude_pattern = "**/{system}/**/*_spec.rb"
   end

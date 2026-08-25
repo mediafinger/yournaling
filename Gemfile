@@ -76,6 +76,7 @@ group :development, :test do
 end
 
 group :test do
+  gem "parallel_tests"
   gem "selenium-webdriver", "~> 4.14" # for headless browser tests
   gem "webmock", "~> 3.14"
 end

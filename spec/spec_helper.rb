@@ -34,7 +34,8 @@ RSpec.configure do |config|
   end
 
   config.after(:suite) do
-    FileUtils.rm_rf(Rails.root.glob("tmp/storage_test/"))
+    test_storage_path = "tmp/storage_test#{ENV['TEST_ENV_NUMBER']}"
+    FileUtils.rm_rf(Rails.root.join(test_storage_path))
   end
 
   # rspec-expectations config goes here. You can use an alternate
