@@ -84,10 +84,22 @@ RSpec.describe "Pages (Home Feed in Browse Mode)", type: :request do
 
         expect(response.body).to match(/<turbo-frame\b(?=[^>]*\bid="publishings_page_1")(?=[^>]*\btarget="_top")[^>]*>/)
         expect(response.body).to match(/<turbo-frame\b(?=[^>]*\bid="publishings_page_2")(?=[^>]*\btarget="_top")[^>]*>/)
+        
+        get root_url(page: 2)
+  
+        expect(response.body).to match(/<turbo-frame\b(?=[^>]*\bid="publishings_page_2")(?=[^>]*\btarget="_top")[^>]*>/)
+      end
 
+      # 6 published items at 5 per page makes page 2 the last one. The endless scroll terminates
+      # only because Pagy reports no next page: were `@pagy.next` ever truthy here, the view would
+      # emit another lazy turbo frame and the feed would chain requests forever.
+      it "stops the endless scroll chain on the last page" do
         get root_url(page: 2)
 
-        expect(response.body).to match(/<turbo-frame\b(?=[^>]*\bid="publishings_page_2")(?=[^>]*\btarget="_top")[^>]*>/)
+        expect(response).to be_successful
+        expect(response.body).to include("id=\"publishings_page_2\"")
+        expect(response.body).not_to include("id=\"publishings_page_3\"")
+        expect(response.body).not_to include("loading=\"lazy\"")
       end
 
       it "excludes unpublished posts" do
