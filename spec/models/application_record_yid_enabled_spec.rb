@@ -58,6 +58,28 @@ RSpec.describe ApplicationRecordYidEnabled, type: :model do
           Location.urlsafe_find!(invalid_urlsafe_id)
         }.to raise_error(ActiveRecord::RecordNotFound)
       end
+
+      # A URL segment is attacker-controlled, and Base64.urlsafe_decode64 happily turns plenty of
+      # ordinary-looking strings ("new", "edit", anything a crawler appends) into arbitrary bytes.
+      # Handing those to the database raises PG::CharacterNotInRepertoire, which this app's
+      # ErrorHandler can only report as a 500. An id that cannot denote a record is a 404.
+      %w[new edit 12345].each do |segment|
+        context "when the URL segment '#{segment}' decodes to something that is not a valid id" do
+          it "returns nil from urlsafe_find rather than raising" do
+            expect(Location.urlsafe_find(segment)).to be_nil
+          end
+
+          it "raises ActiveRecord::RecordNotFound from urlsafe_find!" do
+            expect {
+              Location.urlsafe_find!(segment)
+            }.to raise_error(ActiveRecord::RecordNotFound)
+          end
+
+          it "returns nil from urlsafe_fynd rather than raising" do
+            expect(described_class.urlsafe_fynd(segment)).to be_nil
+          end
+        end
+      end
     end
   end
 

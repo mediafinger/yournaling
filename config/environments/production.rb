@@ -48,6 +48,10 @@ Rails.application.configure do
   config.log_level = AppConf.log_level
 
   # Use a different cache store in production.
+  # NOTE: `rate_limit` in RegistrationsController and EmailVerificationsController counts through
+  # `config.action_controller.cache_store`, which Rails defaults to this store. It must therefore
+  # stay shared across processes -- swapping it for a per-process store (:memory_store) would not
+  # fail anything, it would silently multiply every limit by the number of running processes.
   config.cache_store = :solid_cache_store
 
   # Use a real queuing backend for Active Job (and separate queues per environment).

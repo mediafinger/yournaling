@@ -1,0 +1,11 @@
+article
+  = form_with url: email_verification_path do |form|
+    fieldset
+      h3
+        legend
+          = form_legend
+      div
+        = form.label :email
+        = form.email_field :email, required: true, autofocus: true
+      .inline
+        = form.submit "Send Confirmation Link"

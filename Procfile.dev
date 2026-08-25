@@ -1,3 +1,4 @@
 web: bin/rails server -p $YOURNALING_PORT
+jobs: bin/jobs
 log: tail -f log/development.log
 css: bin/rails dartsass:watch
