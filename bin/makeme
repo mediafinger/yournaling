@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+#
+# Usage:
+#
+# bin/makeme Implement the following feature ... more details can be found in path/to/filename.md"
+#  
+# --workspace-instructions — prepends AGENTS.md and CLAUDE.md to every agent prompt. Use this, otherwise the agents will not know about bin/mcp_rake_ci, the TDD rules, or the domain hierarchy.
+# --dry-run — prints the execution plan without calling a model.
+# --web / --web-bg — real-time dashboard; --web-bg returns the URL and detaches. Pair with --web-port <port> to pin the port instead of letting it auto-select.
+# --log-file auto — full debug transcript in a temp file.
+# --skip-gates — ⚠️ auto-selects the first option at every gate. Here that means plan_first at bouncer and approve at human_approver: an unattended run approves its own plan and goes straight to writing code. Never use it on main.
+#
+conductor run .conductor/agent_routing.yml --workspace-instructions --input "feature_request=$@"
+
