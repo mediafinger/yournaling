@@ -25,6 +25,8 @@ The Yournaling app will become a place where single people, couples or teams can
 * libvips library for image manipulation
 * many Ruby gems: https://raw.githubusercontent.com/mediafinger/yournaling/main/Gemfile.lock
 
+Also foreman and sqlite, but those install themselves automagically.
+
 ## Installation
 
 When you have the dependencies installed:
@@ -32,9 +34,10 @@ When you have the dependencies installed:
 * clone the repo to your machine: `git clone git@github.com:mediafinger/yournaling.git`
 * in the new directory, using the correct ruby version: `bundle install`
 * create the database: `bin/rails db:create && db:migrate && db:seed`
+* setup multiple databases for testing: `RAILS_ENV=test bundle exec rake parallel[4]`
 * run the test suite (same is run on CI): `bundle exec rake ci`
 * open a console: `bin/rails c`
-* start the server: `bin/rails s`
+* start the server: `bin/dev` (to run solid queue as well)
 
 ## Deployment
 
@@ -75,7 +78,17 @@ Any YID can be fed to a search, which will determine the object type before retu
 
 Instead of using the YIDs in URLs directly, we convert them to their Base64 representation to be URL-safe. The controllers use a custom finder method to decode them back to the plain text YID format automatically. Probably other symmetric encoding / decoding encryption algorithms are faster than Base64 and we update the implementation.
 
----
+## Reading Development Emails
+
+Development emails are captured by Letter Opener Web instead of being sent to real recipients.
+
+1. Start the application with `bin/dev`.
+2. Trigger an email, for example by registering a new account at `http://localhost:3008/register` or requesting a password reset at `http://localhost:3008/user_password/new`.
+3. Open [`/letter_opener`](http://localhost:3008/letter_opener) to browse the captured messages.
+4. Select a message to inspect its HTML and plain-text versions, then follow its links as you would from an email client.
+
+Verification and password-reset links contain one-time tokens. Following one consumes it, so a second visit should be treated as an invalid or expired link. Captured messages are stored in `tmp/letter_opener` and are local development data only.
+
 
 ## Nav Bar Layouts
 
@@ -89,13 +102,10 @@ Instead of using the YIDs in URLs directly, we convert them to their Base64 repr
   3. **Admin area** – blue theme.  
      - Restricted to maintainers/operations staff of the host server.  
 
----
 
 ## Analytics & SQL Dashboard (Blazer)
 
 Yournaling uses **Blazer** alongside **Ahoy** to provide self-hosted product analytics and database insights without third-party tracking.
-
----
 
 ### Accessing Blazer
 
@@ -122,10 +132,3 @@ Yournaling uses **Blazer** alongside **Ahoy** to provide self-hosted product ana
   ORDER BY created_at DESC
   LIMIT 50;
   ```
-
-### TODO (Production Hardening)
-
-* **Create a Read-Only Database Role**
-  * When deploying to production with Kamal, configure a read-only PostgreSQL user for Blazer in config/blazer.yml to prevent accidental UPDATE/DELETE queries from the UI.
-* **Scheduled SQL Checks & Slack Alerts**
-  * Blazer can automatically run background checks (e.g. alerts when error rates spike or daily signups drop) using rake blazer:run_checks.

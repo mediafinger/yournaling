@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
+
   root to: "pages#show"
   get "check_newer", to: "pages#check_newer", as: :check_newer_pages
   get "newer", to: "pages#newer", as: :newer_pages

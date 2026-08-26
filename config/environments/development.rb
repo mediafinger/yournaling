@@ -57,9 +57,13 @@ Rails.application.configure do
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.perform_caching = false
-  config.action_mailer.delivery_method = :test
+  config.action_mailer.delivery_method = :letter_opener_web
   config.action_mailer.perform_deliveries = true
   config.action_mailer.default_url_options = { host: "localhost", port: AppConf.yournaling_port }
+
+  LetterOpenerWeb.configure do |letter_opener|
+    letter_opener.letters_location = Rails.root.join("tmp/letter_opener")
+  end
 
   # Set log level to :info or :debug
   config.log_level = AppConf.log_level
