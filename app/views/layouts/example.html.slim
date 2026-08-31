@@ -7,6 +7,6 @@ html lang="en"
     title Yournaling — Design Language
     = csrf_meta_tags
     = csp_meta_tag
-    = stylesheet_link_tag "example", "data-turbo-track": "reload"
+    = render "shared_partials/design_head"
   body.ex-body
     = yield

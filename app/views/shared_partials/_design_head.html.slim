@@ -1,0 +1,8 @@
+/ Warm Editorial design language — <head> include.
+/ Preloads the two most-used self-hosted fonts (the roman faces; italic loads
+/ on demand) and links example.css. @font-face rules live in example.css.
+/ Render this from a layout's <head> once that layout has moved onto the
+/ design language (TODO_UI_DESIGN.md Phase 2+).
+= preload_link_tag asset_path("Fraunces-Variable.woff2"), as: "font", type: "font/woff2", crossorigin: "anonymous"
+= preload_link_tag asset_path("Inter-Variable.woff2"), as: "font", type: "font/woff2", crossorigin: "anonymous"
+= stylesheet_link_tag "example", "data-turbo-track": "reload"
