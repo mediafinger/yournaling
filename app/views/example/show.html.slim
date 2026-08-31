@@ -197,7 +197,7 @@ nav.ex-showcase__toc aria-label="Sections"
 / ------------------------------------------------------------------ Icons
 = render(Example::SectionComponent.new(number: "07", title: "Icons", anchor: "icons", description: "A small, consistent, stroke-based set. One IconComponent, three sizes, currentColor throughout — so an icon always matches the text beside it.")) do
   .ex-grid
-    - Example::IconComponent::PATHS.keys.each do |name|
+    - Example::IconComponent::PATHS.each_key do |name|
       .ex-specimen.ex-specimen--center
         .ex-specimen__row
           = render(Example::IconComponent.new(name, size: :lg))

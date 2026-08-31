@@ -8,14 +8,7 @@
     - is_picture_controller = (controller_name == "pictures" || controller_path.to_s.end_with?("pictures"))
     - if is_picture_controller && action_name == "show"
       p
-        > Original:
-        = "#{picture.width} x #{picture.height}"
-        > |
-        = number_to_human_size(picture.megabytes.megabytes)
-        > |
-        = picture.content_type
-        > |
-        = picture.filename
+        = "Original: #{picture.width} x #{picture.height} | #{number_to_human_size(picture.megabytes.megabytes)} | #{picture.content_type} | #{picture.filename}"
 
       p
         - if picture.visibility == "published"

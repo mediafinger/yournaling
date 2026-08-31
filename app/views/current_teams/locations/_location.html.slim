@@ -1,11 +1,11 @@
 - if local_assigns[:hide_actions]
   span.location-chip id= dom_id(location)
-    | 📍 
+    | 📍
     = location.name
     - if location.country_code.present?
       - iso_country = ISO3166::Country.find_country_by_alpha2(location.country_code)
       - if iso_country
-        |  
+        |
         = iso_country.emoji_flag
 - else
   article id= dom_id(location)

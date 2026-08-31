@@ -87,7 +87,7 @@ if %w[development test].include? Rails.env
   SlimLint::RakeTask.new
 
   desc "Run test suite"
-  task ci: %w[zeitwerk:check rubocop factory_bot:awesome_lint db:doctor rspec archspec bundle:audit:update bundle:audit]
+  task ci: %w[zeitwerk:check rubocop slim_lint factory_bot:awesome_lint db:doctor rspec archspec bundle:audit:update bundle:audit]
 
   task default: :ci
 end

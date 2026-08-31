@@ -3,13 +3,13 @@ article id= dom_id(chronicle)
     h3 = chronicle.name
     p
       small
-        strong Dates: 
+        strong Dates:
         = chronicle.start_date
         - if chronicle.end_date.present?
-          |  – 
+          |  –
           = chronicle.end_date
-        |  | 
-        strong Visibility: 
+        |  |
+        strong Visibility:
         = chronicle.visibility
 
   p

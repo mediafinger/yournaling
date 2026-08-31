@@ -7,11 +7,21 @@ linters:
       # - 'app/views/directory_of_files_to_exclude/**/*.slim'
       # - 'specific/file/to/exclude.slim'
 
+  # Slim tag lines in this project carry many attributes (and some inline
+  # styles); line length is enforced on real Ruby by the `rubocop` task instead.
   LineLength:
-    max: 255
+    enabled: false
 
   RedundantDiv:
     enabled: false
 
-  UnknownLineIndicator:
+  # Templates here rely on Slim's `implicit_text` option (plain text without a
+  # leading `|`), so capitalised prose lines look like tag names to the linter.
+  TagCase:
+    enabled: false
+
+  # RuboCop over the Ruby *extracted* from templates is noisy and misfires on
+  # Slim attribute conditionals such as `class=("x" if y)` (the parentheses are
+  # required by Slim). The standalone `rubocop` task lints the real .rb files.
+  RuboCop:
     enabled: false
