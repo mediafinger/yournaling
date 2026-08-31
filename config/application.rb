@@ -33,6 +33,18 @@ module Yournaling
     # defer loading of all image_tag images until they reach the viewport
     config.action_view.image_loading = "lazy"
 
+    # ViewComponent previews (the design-language workbench) live next to the
+    # component specs. Must be set here — before the view_component railtie
+    # initializers — not in config/initializers.
+    config.view_component.previews.paths << Rails.root.join("spec/view_components/previews").to_s
+    config.view_component.previews.default_layout = "component_preview"
+
+    # Lookbook is development-only (see the :development group in the Gemfile).
+    if defined?(Lookbook)
+      config.lookbook.project_name = "Yournaling · Warm Editorial"
+      config.lookbook.preview_paths = config.view_component.previews.paths
+    end
+
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.

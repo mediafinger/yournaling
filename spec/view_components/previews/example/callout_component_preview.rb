@@ -1,0 +1,37 @@
+# frozen_string_literal: true
+
+module Example
+  # @label Callout
+  class CalloutComponentPreview < ViewComponent::Preview
+    # @param variant select [info, success, warning, danger]
+    # @param title text
+    # @param body textarea
+    def playground(variant: :info, title: "Drafts autosave", body: "This memory is saved every few seconds while you write.")
+      render(Example::CalloutComponent.new(variant:, title: title.presence)) { body }
+    end
+
+    def info
+      render(Example::CalloutComponent.new(variant: :info, title: "Drafts autosave")) do
+        "This memory is saved to your account every few seconds while you write."
+      end
+    end
+
+    def success
+      render(Example::CalloutComponent.new(variant: :success, title: "Memory saved")) do
+        "It now appears in the timeline for The Coast Year."
+      end
+    end
+
+    def warning
+      render(Example::CalloutComponent.new(variant: :warning, title: "This experience is still private")) do
+        "Only you can see it. Change its visibility to share it with the team."
+      end
+    end
+
+    def danger
+      render(Example::CalloutComponent.new(variant: :danger, title: "Deleting a chronicle is permanent")) do
+        "Its memories stay, but the timeline and its order are lost."
+      end
+    end
+  end
+end
