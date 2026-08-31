@@ -82,6 +82,15 @@ jobs:
           bundler-cache: true
           cache-version: 1
 
+      - name: Setup Node and install npm packages
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install npm packages
+        run: npm ci
+
       # TODO: install optional JPG, EXIF ... dependencies first?
       # https://github.com/libvips/libvips#optional-dependencies
       #

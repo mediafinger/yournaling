@@ -1,0 +1,15 @@
+{
+  "name": "yournaling",
+  "private": true,
+  "description": "Dev-only toolchain for linting and formatting the hand-authored CSS design system. Does not touch importmap / Propshaft / runtime.",
+  "scripts": {
+    "lint:css": "bin/lint_css",
+    "fix:css": "bin/fix_css"
+  },
+  "devDependencies": {
+    "prettier": "^3.6.2",
+    "stylelint": "^16.25.0",
+    "stylelint-config-recess-order": "^7.4.0",
+    "stylelint-config-standard": "^39.0.1"
+  }
+}

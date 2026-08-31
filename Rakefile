@@ -86,8 +86,14 @@ if %w[development test].include? Rails.env
 
   SlimLint::RakeTask.new
 
+  desc "Lint + format-check the CSS design system (stylelint + prettier)"
+  task :css do # rubocop:disable Rails/RakeEnvironment -- pure Node toolchain, no Rails boot needed
+    sh "bin/lint_css"
+  end
+
   desc "Run test suite"
-  task ci: %w[zeitwerk:check rubocop slim_lint factory_bot:awesome_lint db:doctor rspec archspec bundle:audit:update bundle:audit]
+  task ci: %w[zeitwerk:check rubocop slim_lint factory_bot:awesome_lint db:doctor rspec archspec bundle:audit:update
+              bundle:audit]
 
   task default: :ci
 end

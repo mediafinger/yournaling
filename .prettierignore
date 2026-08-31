@@ -1,0 +1,17 @@
+node_modules/
+app/assets/builds/
+Gemfile.lock
+package-lock.json
+
+# Legacy Pico-era stylesheets — the linted/formatted design system is
+# example.css only; these are removed in the Phase 6 teardown (TODO_UI_DESIGN.md).
+app/assets/stylesheets/admin.css
+app/assets/stylesheets/application.css
+app/assets/stylesheets/buttons.css
+app/assets/stylesheets/card.css
+app/assets/stylesheets/general.css
+app/assets/stylesheets/lightbox.css
+app/assets/stylesheets/navbar.css
+app/assets/stylesheets/pico.*.css
+app/assets/stylesheets/picocss_reset.css
+app/assets/stylesheets/rails_reset.css
