@@ -1,0 +1,13 @@
+= content_tag(wrapper_tag, class: css_class, style: inline_style, href: href) do
+  - if media?
+    .ex-card__media
+      = media
+  - if header?
+    .ex-card__header
+      = header
+  - if content.present?
+    .ex-card__body
+      = content
+  - if footer?
+    .ex-card__footer
+      = footer

@@ -1,0 +1,38 @@
+# frozen_string_literal: true
+
+module Example
+  # A single checkbox or radio option with a label and optional helper text.
+  #
+  #   Example::ChoiceComponent.new("Make this memory public", name: "visibility", type: :checkbox,
+  #                                hint: "Anyone with the link can read it.", checked: true)
+  #   Example::ChoiceComponent.new("Team only", name: "visibility", type: :radio, value: "team")
+  class ChoiceComponent < BaseComponent
+    TYPES = %i[checkbox radio].freeze
+
+    attr_reader :name, :type, :value, :hint, :checked, :disabled
+
+    def initialize(label = nil, name:, type: :checkbox, value: "1", hint: nil, checked: false, disabled: false)
+      super()
+      @label = label
+      @name = name
+      @type = ex_token(type, allowed: TYPES, default: :checkbox)
+      @value = value
+      @hint = hint.presence
+      @checked = checked
+      @disabled = disabled
+    end
+
+    def label_text
+      @label || content
+    end
+
+    slim_template <<~SLIM
+      label.ex-choice class=("ex-choice--disabled" if disabled)
+        input type=type name=name value=value checked=checked disabled=disabled
+        span.ex-choice__text
+          = label_text
+          - if hint
+            small = hint
+    SLIM
+  end
+end

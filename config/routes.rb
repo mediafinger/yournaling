@@ -7,6 +7,9 @@ Rails.application.routes.draw do
 
   get "up" => "health#show", as: :rails_health_check
 
+  # Design-language showcase (see app/view_components/example + app/assets/stylesheets/example.css)
+  get "example", to: "example#show", as: :example
+
   resources :teams, except: %i[show]
   # No :new / :create here on purpose: self-service signup lives in RegistrationsController, which
   # is the only path that sends the verification mail. A second, quieter way to create a User would
