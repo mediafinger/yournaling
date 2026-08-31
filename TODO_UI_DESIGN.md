@@ -373,10 +373,16 @@ reach the browser literally.
       step in CI. Run `bin/fix_css` once and commit the reformat + any rule
       disables as a standalone commit. (scoped to `example.css`; the legacy
       Pico-era stylesheets are `ignoreFiles`'d — they go in Phase 6.)
-- [ ] Add Lookbook (§5); previews for the existing ~20 primitives in
-      `spec/view_components/previews/`.
-- [ ] Add component specs (`spec/view_components/`) for the primitives — render +
+- [x] Add Lookbook (§5); previews for the existing ~20 primitives in
+      `spec/view_components/previews/`. (21 `*Preview` classes; `component_preview`
+      layout renders them in the design-language `<head>`; mounted at `/lookbook`
+      in development. VC previews path set in `config/application.rb`, not an
+      initializer — the railtie reads it too early otherwise.)
+- [x] Add component specs (`spec/view_components/`) for the primitives — render +
       key variants + a11y assertions. `capybara` + `rspec` already available.
+      (80 examples across 16 files; surfaced + fixed the `aria-invalid` boolean-
+      attribute bug in `FieldComponent` and the missing scoping class on the
+      composed cards.)
 - [x] Self-host Fraunces + Inter as `woff2` in `app/assets/fonts/` with
       `@font-face` in `example.css` (Propshaft fingerprints them); drop Google Fonts `<link>`.
 - [x] Shared `shared_partials/_design_head` partial: `@font-face` + `stylesheet_link_tag`.
