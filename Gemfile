@@ -17,7 +17,6 @@ gem "bootsnap", require: false
 gem "chimera_http_client", "~> 1.6" # HTTP client based on Typhoeus / lib_curl
 gem "countries", "~> 8.1" # Lists of countries, their ISO codes, emoji flags and more
 gem "csv", require: false
-gem "dartsass-rails" # https://github.com/rails/cssbundling-rails?tab=readme-ov-file#installation
 gem "device_detector", "~> 1.1"
 gem "dry-validation", "~> 1.10" # Use dry-validation for validations [https://dry-rb.org/gems/dry-validation]
 # gem "exifr", "~> 1.3" # Read EXIF metadata from JPEG images
