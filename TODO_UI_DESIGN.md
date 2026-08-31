@@ -366,26 +366,33 @@ reach the browser literally.
 
 ### Phase 0 — Foundations & tooling (~1–1.5 days)
 
-- [ ] Remove dead `dartsass-rails` setup (§3).
-- [ ] Add **Prettier + Stylelint** (§4): `package.json` (devDeps only),
+- [x] Remove dead `dartsass-rails` setup (§3).
+- [x] Add **Prettier + Stylelint** (§4): `package.json` (devDeps only),
       `.stylelintrc.json`, `.prettierignore`, `bin/lint_css` + `bin/fix_css`, a
       `css` task in the `rake ci` chain, and the `actions/setup-node` + `npm ci`
       step in CI. Run `bin/fix_css` once and commit the reformat + any rule
-      disables as a standalone commit.
+      disables as a standalone commit. (scoped to `example.css`; the legacy
+      Pico-era stylesheets are `ignoreFiles`'d — they go in Phase 6.)
 - [ ] Add Lookbook (§5); previews for the existing ~20 primitives in
       `spec/view_components/previews/`.
 - [ ] Add component specs (`spec/view_components/`) for the primitives — render +
       key variants + a11y assertions. `capybara` + `rspec` already available.
-- [ ] Self-host Fraunces + Inter as `woff2` in `app/assets/fonts/` with
+- [x] Self-host Fraunces + Inter as `woff2` in `app/assets/fonts/` with
       `@font-face` in `example.css` (Propshaft fingerprints them); drop Google Fonts `<link>`.
-- [ ] Shared `shared_partials/_design_head` partial: `@font-face` + `stylesheet_link_tag`.
-- [ ] Decide the `.ex-scope` strategy: scope on `<main>` in each layout.
-- [ ] Heredoc hygiene: fix the `<<-SLIM` in
+- [x] Shared `shared_partials/_design_head` partial: `@font-face` + `stylesheet_link_tag`.
+      (`@font-face` lives in `example.css`; the partial preloads the roman fonts + links the sheet.)
+- [x] Decide the `.ex-scope` strategy: scope on `<main>` in each layout.
+      → **D1** in `TODOs_IDEAs_CONTEXT/DECISIONS_UI_DESIGN.md`.
+- [x] Heredoc hygiene: fix the `<<-SLIM` in
       `admin_index_record_events_component.rb` to `<<~SLIM` (also looks like it is
       missing a `-` before `.each` — verify it renders), and standardise every
       surviving inline template on `<<~SLIM` (`<<~'SLIM'` only where interpolation
       must stay literal). Confirm output unchanged via component specs / Lookbook.
-      Do this before the sweeps so later diffs stay clean.
+      Do this before the sweeps so later diffs stay clean. (was the only `<<-`;
+      the missing `-` was confirmed and fixed with a regression spec. Also
+      noted: `AdminShowRecordEventComponent` has similar inline-text bugs —
+      `strong Event:` swallows the nested `= …`, and it uses `slim/smart` `>`
+      indicators — to be fixed when it is rewritten in Phase 5.)
 
 ### Phase 1 — Namespace, conventions & data-access decision (~1 day)
 
