@@ -14,6 +14,43 @@
      6. Showcase chrome      (.ex-showcase, .ex-section, .ex-swatch …)
    ========================================================================== */
 
+/* 0. ------------------------------------------------------------------ FONTS
+   Self-hosted variable fonts (latin subset) — Propshaft fingerprints the
+   woff2 files in app/assets/fonts/. No external font host.
+   Fraunces: SIL OFL 1.1 · Inter: SIL OFL 1.1                                 */
+
+@font-face {
+  font-family: Fraunces;
+  font-style: normal;
+  font-weight: 100 900;
+  src: url("Fraunces-Variable.woff2") format("woff2");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Fraunces;
+  font-style: italic;
+  font-weight: 100 900;
+  src: url("Fraunces-Variable-Italic.woff2") format("woff2");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 100 900;
+  src: url("Inter-Variable.woff2") format("woff2");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Inter;
+  font-style: italic;
+  font-weight: 100 900;
+  src: url("Inter-Variable-Italic.woff2") format("woff2");
+  font-display: swap;
+}
+
 /* 1. ---------------------------------------------------------------- TOKENS */
 
 :root {
