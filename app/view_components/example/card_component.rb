@@ -16,6 +16,8 @@ module Example
   # accent:  a colour token name (e.g. "accent", "gold", "success") → left border
   # padding: :sm, :md (default), :lg
   # href:    makes the whole card a link
+  # class:   extra class(es) for the card root — used by composed cards
+  #          (`Example::MemoryCardComponent` passes "ex-memory-card")
   class CardComponent < BaseComponent
     VARIANTS = %i[default elevated outline sunken].freeze
     PADDINGS = %i[sm md lg].freeze
@@ -24,15 +26,16 @@ module Example
     renders_one :header
     renders_one :footer
 
-    attr_reader :variant, :accent, :padding, :href, :interactive
+    attr_reader :variant, :accent, :padding, :href, :interactive, :extra_class
 
-    def initialize(variant: :default, accent: nil, padding: :md, href: nil, interactive: false)
+    def initialize(variant: :default, accent: nil, padding: :md, href: nil, interactive: false, class: nil)
       super()
       @variant = ex_token(variant, allowed: VARIANTS, default: :default)
       @accent = accent.presence
       @padding = ex_token(padding, allowed: PADDINGS, default: :md)
       @href = href.presence
       @interactive = interactive || href.present?
+      @extra_class = binding.local_variable_get(:class).presence
     end
 
     def css_class
@@ -42,6 +45,7 @@ module Example
         padding != :md && "ex-card--pad-#{padding}",
         accent && "ex-card--accent",
         interactive && "ex-card--interactive",
+        extra_class,
       )
     end
 

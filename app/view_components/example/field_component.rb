@@ -48,6 +48,11 @@ module Example
       error.present?
     end
 
+    # ARIA needs the string "true", not a boolean attribute.
+    def aria_invalid
+      "true" if invalid?
+    end
+
     def described_by
       ids = []
       ids << "#{field_id}-error" if invalid?

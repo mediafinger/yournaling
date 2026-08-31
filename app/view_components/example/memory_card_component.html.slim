@@ -1,4 +1,4 @@
-= render(Example::CardComponent.new(variant: :default, accent: "gold", href: href)) do |card|
+= render(Example::CardComponent.new(variant: :default, accent: "gold", href: href, class: "ex-memory-card")) do |card|
   - if image
     - card.with_media do
       div style="aspect-ratio: 3 / 2"

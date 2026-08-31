@@ -1,4 +1,4 @@
-= render(Example::CardComponent.new(variant: :elevated, accent: "accent", interactive: href.present?)) do |card|
+= render(Example::CardComponent.new(variant: :elevated, accent: "accent", interactive: href.present?, class: "ex-chronicle-card")) do |card|
   - if cover
     - card.with_media do
       .ex-chronicle-card__cover
@@ -14,7 +14,7 @@
         = render(Example::IconComponent.new("calendar", size: :sm))
         = date_range
 
-  .ex-stack.ex-stack--sm.ex-chronicle-card
+  .ex-stack.ex-stack--sm
     p.ex-chronicle-card__summary = summary
 
     - if entries.any?
