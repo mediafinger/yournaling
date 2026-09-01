@@ -20,7 +20,7 @@ task ci: %w[zeitwerk:check rubocop slim_lint css factory_bot:awesome_lint
 
 ```
 rake ci          (bin/mcp_rake ci — chruby-wrapped equivalent)
-├─ ci:lint        rubocop · slim-lint · css (stylelint+prettier) · actionlint · bundle-lock
+├─ ci:lint        rubocop · slim-lint · css (stylelint+prettier) · actionlint
 ├─ ci:security    brakeman · bundler-audit --update · importmap-audit
 ├─ ci:checks      zeitwerk · db-doctor · factory-lint · archspec
 └─ ci:rspec       full suite, parallel ×4
@@ -88,13 +88,12 @@ never skipped.
 
 ### `ci:lint` — style & format (no DB)
 
-| Gate          | Tool                                  | Checks                                                              |
-| ------------- | ------------------------------------- | ----------------------------------------------------------------- |
-| `rubocop`     | rubocop + plugins¹                    | Ruby style, lint, Rails/RSpec/Performance/Capybara/FactoryBot idioms |
-| `slim_lint`   | slim_lint (`app/` only²)              | Slim template lint                                                |
-| `css`         | `bin/css_lint` → stylelint + prettier | `app/assets/stylesheets/design/**/*.css` lint + format-check      |
-| `actionlint`  | actionlint binary                     | GitHub workflow YAML: bad expressions, deprecated syntax, shell bugs |
-| `bundle_lock` | `bundle lock --check`                 | `Gemfile.lock` satisfies `Gemfile` (no un-committed dependency drift) |
+| Gate         | Tool                                  | Checks                                                              |
+| ------------ | ------------------------------------- | ----------------------------------------------------------------- |
+| `rubocop`    | rubocop + plugins¹                    | Ruby style, lint, Rails/RSpec/Performance/Capybara/FactoryBot idioms |
+| `slim_lint`  | slim_lint (`app/` only²)              | Slim template lint                                                |
+| `css`        | `bin/css_lint` → stylelint + prettier | `app/assets/stylesheets/design/**/*.css` lint + format-check      |
+| `actionlint` | actionlint binary                     | GitHub workflow YAML: bad expressions, deprecated syntax, shell bugs |
 
 ¹ `rubocop-rails`, `-rspec`, `-rspec_rails`, `-capybara`, `-factory_bot`,
 `-faker`, `-performance`, `-rake` (see [.rubocop.yml](.rubocop.yml)).
@@ -150,6 +149,7 @@ everywhere).
 | **`i18n-tasks health`**                 | Locale files are thin today. Add when i18n coverage grows enough that missing / unused keys are a real risk. |
 | **CI job split** (`lint` / `security` / `test` as parallel GHA jobs) | Only wins once suite time ≫ per-job setup (~40 s bundle + ~20 s DB). Not true yet — one job is faster wall-clock. Revisit if `rake ci` passes ~3 min. |
 | **`rubocop --format github` annotations** | Inline PR annotations; needs the harness to surface a machine-readable format alongside the buffered text. Cosmetic. |
+| **Lockfile-drift gate** (`Gemfile.lock` in sync with `Gemfile`) | Bundler 4 dropped `bundle lock --check`, and `bundle check` / `bundle install --frozen` do not reliably fail on drift here. `ruby/setup-ruby` (`bundler-cache: true`) already enforces it on CI. Revisit with a purpose-built check. |
 
 ---
 
@@ -182,8 +182,8 @@ the project's `Co-Authored-By` trailer.
 
 ## Phase 1 — namespaced tasks + parallel harness
 
-Same gates as today, regrouped and parallelised, **plus** `brakeman`,
-`actionlint`, `bundle lock --check`. No behavioural regression.
+Same gates as today, regrouped and parallelised, **plus** `brakeman` and
+`actionlint`. No behavioural regression.
 
 ### 1.1 — extract CI wiring into `lib/tasks/ci.rake`
 
@@ -242,13 +242,15 @@ Same gates as today, regrouped and parallelised, **plus** `brakeman`,
 
   ```ruby
   exit(1) unless CIGate.run_group("lint", {
-    "rubocop"     => %w[bundle exec rubocop --no-server],
-    "slim_lint"   => %w[bundle exec slim-lint app],
-    "css"         => %w[bin/css_lint],
-    "actionlint"  => %w[bin/actionlint],
-    "bundle_lock" => %w[bundle lock --check],
+    "rubocop"    => %w[bundle exec rubocop --no-server],
+    "slim_lint"  => %w[bundle exec slim-lint app],
+    "css"        => %w[bin/css_lint],
+    "actionlint" => %w[bin/actionlint],
   })
   ```
+
+  (A `bundle lock --check` gate was intended here but Bundler 4 removed the
+  switch — see "Refinement ideas for later".)
 
 - Not yet in the `ci` chain — run `rake ci:lint` directly to verify. Commit, push.
 
@@ -351,10 +353,6 @@ picked up as separate branches when their trigger conditions are met.
   `RAILS_ENV=development rake active_record_doctor`). Slow-ish; leave as-is
   unless `ci:checks` becomes the bottleneck, then call `ActiveRecordDoctor`
   in-process.
-- **`bundle lock --check` and the network.** If it turns out to require a
-  remote source check and is flaky offline, drop it from `ci:lint` (it is the
-  least load-bearing gate — `ruby/setup-ruby` already largely enforces lock
-  freshness on CI).
 - **brakeman baseline.** If the first run surfaces many warnings, phase 1.5
   grows a triaged `config/brakeman.ignore` rather than a scramble of fixes.
 - **actionlint locally.** Optional + graceful-skip means a local `rake ci` can

@@ -3,8 +3,8 @@
   "private": true,
   "description": "Dev-only toolchain for linting and formatting the hand-authored CSS design system. Does not touch importmap / Propshaft / runtime.",
   "scripts": {
-    "lint:css": "bin/lint_css",
-    "fix:css": "bin/fix_css"
+    "lint:css": "bin/css_lint",
+    "fix:css": "bin/css_lint -a"
   },
   "devDependencies": {
     "prettier": "^3.6.2",

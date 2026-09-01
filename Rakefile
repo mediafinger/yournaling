@@ -93,7 +93,9 @@ if %w[development test].include? Rails.env
 
   desc "Lint + format-check the CSS design system (stylelint + prettier)"
   task :css do # rubocop:disable Rails/RakeEnvironment -- pure Node toolchain, no Rails boot needed
-    sh "bin/lint_css"
+    # BASH_ENV unset: see bin/css_lint — a personal chruby-in-BASH_ENV setup
+    # otherwise floods every child bash with Bundler warnings under bundle exec.
+    sh({ "BASH_ENV" => nil }, "bin/css_lint")
   end
 
   # `rake ci` / `rake default` are defined in lib/tasks/ci.rake.
