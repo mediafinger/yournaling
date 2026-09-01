@@ -91,9 +91,12 @@ jobs:
       - name: Install npm packages
         run: npm ci
 
-      # TODO: install optional JPG, EXIF ... dependencies first?
-      # https://github.com/libvips/libvips#optional-dependencies
-      #
+      # libvips covers every format the app touches — Picture::ALLOWED_IMAGE_TYPES
+      # is gif/jpeg/png/tiff/webp, all converted to webp for ActiveStorage
+      # variants. The JPEG, PNG, TIFF, WebP and libexif codecs are hard
+      # `Depends:` of the apt libvips package, so no separate "optional
+      # dependencies" install is needed (that list only matters when building
+      # libvips from source). libpoppler-glib8 is for PDF thumbnailing.
       - name: Install libvips
         run: |
           sudo apt-get update -qq
