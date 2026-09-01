@@ -43,6 +43,13 @@ module Yournaling
     if defined?(Lookbook)
       config.lookbook.project_name = "Yournaling · Warm Editorial"
       config.lookbook.preview_paths = config.view_component.previews.paths
+
+      # Watch the split stylesheet so a save reloads the open preview — edit CSS
+      # in your editor with no manual refresh. Needs the evented file watcher
+      # (config/environments/development.rb) + the `listen` gem.
+      config.lookbook.live_updates = true
+      config.lookbook.listen_paths << Rails.root.join("app/assets/stylesheets/design").to_s
+      config.lookbook.listen_extensions << "css"
     end
 
     # Please, add to the `ignore` list any other `lib` subdirectories that do

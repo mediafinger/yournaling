@@ -49,6 +49,7 @@ group :development do
   # gem "rails-erd"
   gem "fix-db-schema-conflicts" # to keep the schema.rb file sorted alphabetically without strong_migrations
   gem "letter_opener_web", "~> 3.0"
+  gem "listen", "~> 3.9" # evented file watcher — Propshaft dev perf + Lookbook CSS auto-reload
   gem "lookbook", "~> 2.3" # component workbench (ViewComponent previews) at /lookbook
   gem "web-console"
 end

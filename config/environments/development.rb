@@ -6,6 +6,11 @@ Rails.application.configure do
   # Make code changes take effect immediately without server restart.
   config.enable_reloading = true
 
+  # Evented (inotify/FSEvents) file watching via the `listen` gem — faster asset
+  # checks with a large Propshaft tree, and the prerequisite for Lookbook's
+  # live CSS reload (config.lookbook.live_updates, see config/application.rb).
+  config.file_watcher = ActiveSupport::EventedFileUpdateChecker
+
   # Do not eager load code on boot.
   config.eager_load = false
 
