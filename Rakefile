@@ -13,7 +13,9 @@ Rails.application.load_tasks
 if %w[development test].include? Rails.env
   require "active_record_doctor"
   require "active_record_doctor/rake/task"
-  ENV["PARALLEL_TEST_RAKE_EXECUTABLE"] ||= File.exist?("bin/mcp_rake") ? "bin/mcp_rake" : "bundle exec rake"
+  # Portable: `rake ci` runs on CI and on machines without chruby, so never
+  # route parallel_tests' internal rake calls through a `bin/mcp_*` wrapper.
+  ENV["PARALLEL_TEST_RAKE_EXECUTABLE"] ||= "bundle exec rake"
   require "bundler/audit/task"
   require "parallel_tests/tasks"
   require "rspec/core/rake_task"
