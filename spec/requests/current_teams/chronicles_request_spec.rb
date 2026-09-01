@@ -91,7 +91,7 @@ RSpec.describe "/current_team/chronicles", type: :request do
       get current_team_chronicle_url(chronicle.urlsafe_id)
       expect(response).to be_successful
       expect(response.body).to include("Beach View")
-      expect(response.body).to include("data-controller=\"modal\"")
+      expect(response.body).to include("data-controller=\"yui-modal\"")
       expect(response.body).not_to include(team_picture_only_path(team, picture))
 
       get current_team_picture_path(picture)
@@ -103,7 +103,7 @@ RSpec.describe "/current_team/chronicles", type: :request do
       get current_team_chronicle_url(chronicle.urlsafe_id)
       expect(response).to be_successful
       expect(response.body).to include("Change visibility")
-      expect(response.body).to include("data-controller=\"modal\"")
+      expect(response.body).to include("data-controller=\"yui-modal\"")
       expect(response.body).to include("Published")
 
       patch current_team_content_visibility_url(chronicle), params: { visibility: "published" },

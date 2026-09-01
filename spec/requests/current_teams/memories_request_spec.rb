@@ -63,7 +63,7 @@ RSpec.describe "/current_team/memories", type: :request do
       get current_team_memory_url(memory.urlsafe_id)
       expect(response).to be_successful
       expect(response.body).to include("Change visibility")
-      expect(response.body).to include("data-controller=\"modal\"")
+      expect(response.body).to include("data-controller=\"yui-modal\"")
       expect(response.body).to include("Published")
 
       patch current_team_content_visibility_url(memory), params: { visibility: "published" },

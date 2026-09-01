@@ -38,4 +38,18 @@
     flex-shrink: 0;
     gap: var(--ex-space-3xs);
   }
+
+  /* ContentVisibilityModalComponent — a stack of full-width choice buttons. */
+  .ex-visibility-choices {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ex-space-2xs);
+  }
+
+  /* stylelint-disable-next-line selector-class-pattern */
+  .ex-visibility-choices form.button_to,
+  .ex-visibility-choices .ex-btn {
+    display: block;
+    width: 100%;
+  }
 }
