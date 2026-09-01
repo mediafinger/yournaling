@@ -220,6 +220,13 @@ nav.ex-showcase__toc aria-label="Sections"
       = render(Yui::ChoiceComponent.new("Let the team comment on this memory", name: "comments", type: :checkbox, hint: "You can turn this off later.", checked: true))
       = render(Yui::FieldComponent.new(label: "Location", name: "loc", disabled: true, value: "Locked while syncing…"))
     .ex-specimen
+      span.ex-specimen__label
+        | YuiFormBuilder — labels, values, required &amp; errors straight from the model
+      = form_with model: Memory.new(memo: "hi").tap(&:valid?), url: "#", builder: YuiFormBuilder, class: "ex-stack ex-stack--sm" do |form|
+        = form.text_field :memo, label: "One-line memory", hint: "The model's own presence + length rules become the required marker and the error."
+        = form.select :visibility, Memory::VISIBILITY_STATES.map { |v| [v.titleize, v] }
+        = form.submit "Save memory"
+    .ex-specimen
       span.ex-specimen__label dropdown menu
       .ex-dropdown
         a.ex-dropdown__item href="#forms"
