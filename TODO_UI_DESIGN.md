@@ -326,7 +326,7 @@ As shipped (`.stylelintrc.json`, extends `stylelint-config-standard` +
 - `ignoreFiles`: `node_modules/**`, `app/assets/builds/**`.
 
 **Scope**: only the hand-authored design system is linted/formatted —
-`bin/lint_css` / `bin/fix_css` glob `app/assets/stylesheets/design/**/*.css`, and
+`bin/css_lint` (add `-a` to auto-correct) globs `app/assets/stylesheets/design/**/*.css`, and
 `.prettierignore` excludes `app/assets/stylesheets/*.css` (the legacy Pico-era
 sheets, gone in Phase 6) plus `builds/`, `Gemfile.lock`, `package-lock.json`.
 (The plan originally said `stylesheets/**` — narrowing to `design/` is the right
@@ -335,9 +335,9 @@ call and what shipped.)
 **Wiring** (mirrors the `bin/mcp_*` convention) — all done in Phase 0
 (`18dd913`, `fdcb2b8`):
 
-- `bin/lint_css` → `stylelint` + `prettier --check` on the `design/` glob.
-- `bin/fix_css` → `stylelint --fix` + `prettier --write` (the `bin/mcp_rubocop -A`
-  equivalent).
+- `bin/css_lint` → `stylelint` + `prettier --check` on the `design/` glob.
+- `bin/css_lint -a` (or `autocorrect`) → `stylelint --fix` + `prettier --write`
+  (the `bin/mcp_rubocop -A` equivalent).
 - `Rakefile`: a `css` task in the `ci` chain (`zeitwerk:check rubocop slim_lint
   css factory_bot:awesome_lint db:doctor rspec …`).
 - CI: `actions/setup-node@v4` (`node-version: "22"`, `cache: "npm"`) + `npm ci`
@@ -530,10 +530,10 @@ layer to maintain, no coverage lost.
 
 - [x] Remove dead `dartsass-rails` setup (§3).
 - [x] Add **Prettier + Stylelint** (§4): `package.json` (devDeps only),
-      `.stylelintrc.json`, `.prettierignore`, `bin/lint_css` + `bin/fix_css`, a
-      `css` task in the `rake ci` chain, and the `actions/setup-node` + `npm ci`
-      step in CI. Run `bin/fix_css` once and commit the reformat + any rule
-      disables as a standalone commit. (scoped to `example.css`; the legacy
+      `.stylelintrc.json`, `.prettierignore`, `bin/css_lint` (`-a` to
+      auto-correct), a `css` task in the `rake ci` chain, and the
+      `actions/setup-node` + `npm ci` step in CI. Run `bin/css_lint -a` once and
+      commit the reformat + any rule disables as a standalone commit. (scoped to `example.css`; the legacy
       Pico-era stylesheets are `ignoreFiles`'d — they go in Phase 6.)
 - [x] Add Lookbook (§5); previews for the existing ~20 primitives in
       `spec/view_components/previews/`. (21 `*Preview` classes; `component_preview`
