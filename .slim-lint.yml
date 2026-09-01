@@ -1,4 +1,10 @@
 exclude:
+  # CI installs gems into vendor/bundle (bundler-cache), which ships .slim test
+  # fixtures (slim, view_component, …). slim_lint has no default vendor exclude,
+  # so without this the `slim_lint` task passes locally but fails on CI.
+  - 'vendor/**/*'
+  - 'node_modules/**/*'
+  - 'tmp/**/*'
   # - 'exclude/files/in/this/directory/from/all/linters/**/*.slim'
 
 linters:

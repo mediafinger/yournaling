@@ -36,8 +36,15 @@ module Yournaling
     # ViewComponent previews (the design-language workbench) live next to the
     # component specs. Must be set here — before the view_component railtie
     # initializers — not in config/initializers.
-    config.view_component.previews.paths << Rails.root.join("spec/view_components/previews").to_s
+    previews_path = Rails.root.join("spec/view_components/previews").to_s
+    config.view_component.previews.paths << previews_path
     config.view_component.previews.default_layout = "component_preview"
+
+    # Let `bin/rails zeitwerk:check` verify the preview classes, and let CI
+    # (test env, eager_load = true) boot-check them — otherwise a mis-named
+    # preview only surfaces when someone opens /lookbook. Guarded because spec/
+    # is not shipped to production.
+    config.eager_load_paths << previews_path unless Rails.env.production?
 
     # Lookbook is development-only (see the :development group in the Gemfile).
     if defined?(Lookbook)
