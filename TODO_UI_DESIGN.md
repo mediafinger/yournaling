@@ -23,7 +23,7 @@ the primitives are `Yui::`; fonts self-hosted; Lookbook installed.
 ### Styling stack
 
 | Piece          | Detail                                                                                                                                                                                                                                 |
-|----------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Asset pipeline | **Propshaft** (no Sprockets, no `cssbundling-rails`)                                                                                                                                                                                   |
 | CSS framework  | **Pico.css**, loaded per layout — `unpkg` CDN in production, a checked-in copy in development. Three colour themes: `pico.amber` (public / user), `pico.green` (team workspace), `pico.blue` (admin).                                  |
 | Custom CSS     | `general.css`, `buttons.css`, `navbar.css`, `card.css`, `lightbox.css`, `admin.css` + two reset files, linked by logical name; each is its own request. Heavy use of `var(--pico-*)`.                                                  |
@@ -88,7 +88,7 @@ Rationale:
 Third-party libraries were considered and rejected:
 
 | Option                              | Why not                                                                                                                                                                                                                                  |
-|-------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **DaisyUI**                         | CSS-only (Turbo-friendly, no JS to re-init) and easy to _theme_, but its rounded "SaaS" aesthetic is the opposite of Warm Editorial; re-skinning it to match = the work we've already done. Best when you have _no_ system. We have one. |
 | **Flowbite / Preline / Franken UI** | Ship their own vanilla JS that must be re-initialised on every Turbo navigation / frame render — a recurring papercut. Heavier. "Copy the markup" rather than semantic classes.                                                          |
 | **Tailwind Plus (ex-Tailwind UI)**  | High quality, no runtime, but paid and React-flavoured; still needs porting to Slim/ViewComponent. Keep as a _reference_ for focus states / ARIA wiring only.                                                                            |
@@ -171,7 +171,7 @@ provide, and adopting Sass would re-introduce exactly the build step that §2 an
 ### What Sass would give us — and the native-CSS equivalent
 
 | Sass feature                                           | Our situation                                                                                                                                                                                                                                      |
-|--------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `$variables`                                           | We use CSS custom properties (`--ex-*`). Strictly **better** here: runtime, cascade-aware, devtools-inspectable — and the reason the `prefers-color-scheme` dark-mode token swap works at all. Sass variables are compile-time and cannot do that. |
 | Nesting, `&`                                           | **Native CSS nesting** ships in every browser we support (Baseline 2023). Adopt freely, zero tooling.                                                                                                                                              |
 | `darken()` / `lighten()` / `mix()`                     | **`color-mix()`** (already used in `design/callout.css` for the borders), relative colour syntax `hsl(from var(--c) h s calc(l * .9))`, `light-dark()`. Native colour math is here.                                                                |
@@ -307,7 +307,7 @@ choice.
 importmap / Propshaft / runtime; importmap pins live in `config/importmap.rb`):
 
 | Package                         | Role                                                                                                                                   |
-|---------------------------------|----------------------------------------------------------------------------------------------------------------------------------------|
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
 | `prettier`                      | formatter (CSS + Markdown + JSON + YAML)                                                                                               |
 | `stylelint`                     | linter                                                                                                                                 |
 | `stylelint-config-standard`     | baseline rules (Stylelint 16 dropped stylistic rules → no Prettier conflict; `stylelint-config-prettier` is deprecated and not needed) |
@@ -462,7 +462,7 @@ touched during the phases below.
 #### Template placement
 
 | Template                                              | Where it lives                                                                                     |
-|-------------------------------------------------------|----------------------------------------------------------------------------------------------------|
+| ----------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
 | > ~5 lines, or any `- if` / `- each` / multiple slots | Sidecar file, the DEFAULT — `app/view_components/yui/button_component.html.slim` next to the `.rb` |
 | ≤ ~5 lines, no logic                                  | Inline `slim_template <<~SLIM` but only for existing files                                         |
 | Trivial wrapper (1–2 lines, one element)              | No template — override `call` / use `content_tag`                                                  |
@@ -581,7 +581,7 @@ layer to maintain, no coverage lost.
       (`ApplicationComponent` subclasses) or the controller/view, never inside a
       `Yui::` primitive. Document this rule in `Yui::BaseComponent`.
 - [x] Implement **form strategy**: a thin `YuiFormBuilder <
-  ActionView::Helpers::FormBuilder` whose `text_field` / `select` / `collection`
+ActionView::Helpers::FormBuilder` whose `text_field` / `select` / `collection`
       helpers emit `.ex-field` markup (wrapping `Yui::FieldComponent`). Used
       opt-in per form (e.g. `form_with ..., builder: YuiFormBuilder`) during migration
       so existing forms migrate incrementally without breaking. Prototype against one form.
@@ -594,7 +594,7 @@ layer to maintain, no coverage lost.
       4 trivial → `def call`; no inline `slim_template` left in `Yui::`.)
 - [x] **Split the stylesheet** (§4): create `app/assets/stylesheets/design/`,
       declare `@layer tokens, base, layout, typography, components, composed,
-  showcase;` in `design/tokens.css`, move `example.css` into per-concern /
+showcase;` in `design/tokens.css`, move `example.css` into per-concern /
       per-component files each wrapped in its layer, move the showcase chrome to
       `design/showcase.css` in its own `showcase` layer (loaded only by
       `/example` + Lookbook). Update `_design_head`, the `/example` layout and
@@ -761,23 +761,35 @@ pictures_only,pages}` — index / show / `_record` (public, read-only)
   `InsightDestroyModalComponent`, `InsightsDropdownComponent`,
   `PictureLightboxComponent`, `PictureSelectFieldComponent`
 
-#### Cards & CSS
+#### Cards & CSS — done (`03a06eb` … `0fa6d1b`)
 
-- [ ] Port `card.css` (`.timeline-grid`, `.yournal-card`, `.card-badge`, chips,
-      `.chronicle-timeline-track`) into `design/card.css` /
-      `design/memory-card.css` / `design/chronicle-card.css`, de-`--pico-*`'d —
-      `Yui::MemoryCard` / `Yui::ChronicleCard` already cover most of it. Delete
-      `card.css` from `legacy.css`.
-- [ ] Adopt `Yui::MemoryCard` / `Yui::ChronicleCard` in the `_memory` /
-      `_chronicle` partials (`teams/*` and `current_teams/*`). The partial maps
-      the record + policy → the pure component's props/slots; the header row is
-      `BrowseHeaderComponent` / `ManageHeaderComponent` (convert those too).
-- [ ] Replace `.timeline-grid` with a design-system grid — tune the column
-      `minmax()` so up to 3 columns fit within `--ex-container` (90rem) and the
-      grid centres (`margin-inline: auto`); 1 / 2 / 3 columns responsively.
-- [ ] Restyle the nested insight partials
-      (`teams|current_teams/{pictures,thoughts,locations,weblinks}/_record`) and
-      the lightbox (`PictureLightboxComponent` + its Stimulus).
+- [x] **Port `card.css`, de-pico'd** (`03a06eb`): moved to `design/record.css`
+      (`@layer composed`), every `var(--pico-*)` → `--ex-*`; dropped from
+      `legacy.css` and deleted. (`record.css` was transitional — the following
+      commits emptied it; it is gone as of `a7a3e43`.)
+- [x] **`_memory` / `_chronicle` → `Yui::Card`** (`3527e78`, + spec fixup
+      `6be2831`): the 4 partials compose `Yui::CardComponent` (accent gold /
+      accent, class `ex-memory-card` / `ex-chronicle-card`) with
+      `Browse`/`ManageHeaderComponent` (already Yui from Phase 2) + `Yui::Badge`
+      / `Yui::Eyebrow` in the header slot. Chronicle entries →
+      `.ex-timeline` / `.ex-timeline__item`. (Kept the app partials on
+      `Yui::Card` + primitives rather than the pure `Yui::MemoryCard` /
+      `ChronicleCard` — the pure components have no slots for the real header
+      component + nested insight partials; they stay the literal-data version
+      for `/example` + Lookbook.)
+- [x] **`.timeline-grid` → `.ex-record-grid`** (`7063601`): new class in
+      `design/layout.css`, `repeat(auto-fill, minmax(min(100%, 28rem), 1fr))` —
+      1 / 2 / 3 columns responsively, centred by `<main>`'s 90rem container,
+      `align-items: start`. Swapped in the 6 feed/index templates.
+- [x] **Nested insight partials** (`2d3ead3`, `a7a3e43`, `de77ca1`, `0fa6d1b`):
+      chips → `Yui::Tag` (gained `external:` / `id:`); `blockquote.thought-quote`
+      → `Yui::Blockquote` (`variant: :card`, gained `id:`); location / weblink
+      detail views → `Yui::Card` + `dl.ex-details`, with the inline ISO3166
+      lookup extracted to `Location#country` / `#country_name` / `#country_label`
+      (unit-tested); `PictureLightboxComponent` rewritten on `Yui::Modal`
+      (`yui-modal` controller), `lightbox.css` → `design/lightbox.css` and
+      deleted. `legacy.css` is now just `general.css` + `buttons.css`.
+      Retired `spec/views/teams/{locations,weblinks}/show`.
 
 #### Feed & pagination
 
@@ -879,11 +891,11 @@ teams,users,pages,record_events}` — mostly index + edit + destroy, plus
 ### Effort summary
 
 | Phase                                                        | Size                                                       |
-|--------------------------------------------------------------|------------------------------------------------------------|
-| 0 — foundations & tooling                                    | ~1–1.5 days ✅                                              |
-| 1 — namespace / conventions / CSS split / data / forms       | ~1.5 days ✅                                                |
-| 2 — shared chrome + Stimulus                                 | ~2 days ✅                                                  |
-| 3 — public layout (auth / account / users / teams-top-level) | ~1.5–2 days ✅ (record-card cluster → Phase 4)              |
+| ------------------------------------------------------------ | ---------------------------------------------------------- |
+| 0 — foundations & tooling                                    | ~1–1.5 days ✅                                             |
+| 1 — namespace / conventions / CSS split / data / forms       | ~1.5 days ✅                                               |
+| 2 — shared chrome + Stimulus                                 | ~2 days ✅                                                 |
+| 3 — public layout (auth / account / users / teams-top-level) | ~1.5–2 days ✅ (record-card cluster → Phase 4)             |
 | 4 — records, feed & team workspace                           | ~3–4 days                                                  |
 | 5 — admin                                                    | ~1 day                                                     |
 | 6 — teardown + CSP                                           | ~0.5–1 day                                                 |
