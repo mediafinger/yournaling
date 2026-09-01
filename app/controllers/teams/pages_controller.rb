@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Teams
   class PagesController < AppTeamsController
     # TODO: use index as "team_home"

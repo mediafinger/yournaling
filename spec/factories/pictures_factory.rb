@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :picture do
     file { Rack::Test::UploadedFile.new("spec/support/macbookair_stickered.jpg", "image/jpeg") }

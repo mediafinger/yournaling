@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Instead of using ENV variables in the code,
 #   read them at startup and store them in this AppConf object.
 # This allows to:

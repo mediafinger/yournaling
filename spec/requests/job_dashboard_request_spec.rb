@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe "/admin/jobs", type: :system do
   let(:user) { FactoryBot.create(:user, role: role) }
 

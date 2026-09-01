@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ApplicationContract < Dry::Validation::Contract
   VALID_UUID_REGEX = /\A[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}\z/i
 

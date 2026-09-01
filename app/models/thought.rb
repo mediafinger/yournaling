@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # type: Content
 #
 # TODO
@@ -9,7 +11,7 @@
 class Thought < ApplicationRecordForContentAndPosts
   include VisibilityConstrainedByParents
 
-  YID_CODE = "thot".freeze
+  YID_CODE = "thot"
 
   belongs_to :team, inverse_of: :thoughts
   has_many :chronicle_entries, as: :entry, dependent: :destroy

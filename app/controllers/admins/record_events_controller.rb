@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Admins
   class RecordEventsController < AdminController
     def index

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe "current_teams/locations/index", type: :view do
   let(:locations) { FactoryBot.create_list(:location, 2) }
 

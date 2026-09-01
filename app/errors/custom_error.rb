@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Define custom errors by inheriting from the generic CustomError:
 #
 # class SpecificError < CustomError

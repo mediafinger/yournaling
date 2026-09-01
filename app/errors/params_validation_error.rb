@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ParamsValidationError < CustomError
   attr_reader :validation_result
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Login < ApplicationRecord
   belongs_to :user, inverse_of: :logins
 

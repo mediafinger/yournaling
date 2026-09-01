@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ApplicationRecordForContentAndPosts < ApplicationRecordYidEnabled
   self.abstract_class = true
 
@@ -10,7 +12,7 @@ class ApplicationRecordForContentAndPosts < ApplicationRecordYidEnabled
     "published" => 4,
   }.freeze
 
-  YID_CODE = "abstract_class_must_not_be_used".freeze
+  YID_CODE = "abstract_class_must_not_be_used"
 
   after_initialize :define_visibility_methods
 

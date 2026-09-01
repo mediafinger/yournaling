@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class InsightPolicy < ApplicationPolicy
   def read?
     guest?

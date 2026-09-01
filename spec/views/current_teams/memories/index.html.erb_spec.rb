@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe "current_teams/memories/index", type: :view do
   let(:memories) { FactoryBot.create_list(:memory, 2) }
 

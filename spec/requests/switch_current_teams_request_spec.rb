@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe "/switch_current_teams", type: :system do
   let(:member) { FactoryBot.create(:member) }
   let(:user) { member.user }

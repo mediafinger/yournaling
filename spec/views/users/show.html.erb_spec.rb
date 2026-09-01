@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe "users/show", type: :view do
   let(:user) { FactoryBot.create(:user) }
 

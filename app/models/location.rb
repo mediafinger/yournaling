@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 # type: Content
 #
 class Location < ApplicationRecordForContentAndPosts
   include VisibilityConstrainedByParents
 
-  YID_CODE = "loc".freeze
+  YID_CODE = "loc"
 
   belongs_to :team, inverse_of: :locations
   has_many :chronicle_entries, as: :entry, dependent: :destroy

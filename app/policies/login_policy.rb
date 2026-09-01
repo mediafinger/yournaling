@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LoginPolicy < ApplicationPolicy
   def index?
     logged_in?

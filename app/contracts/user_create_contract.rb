@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UserCreateContract < ApplicationContract
   params do
     required(:email).filled(:string)

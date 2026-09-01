@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class User < ApplicationRecordYidEnabled
   USER_ROLES = [
     "admin", # can access the jobs interface and other internal UIs, is also editor, moderator and account_manager
@@ -6,7 +8,7 @@ class User < ApplicationRecordYidEnabled
     "editor", # can update content of the homepage and I18n resources
     "user", # the default role, a user without any special permissions
   ].freeze
-  YID_CODE = "user".freeze
+  YID_CODE = "user"
 
   # TODO: check if we want validations: https://api.rubyonrails.org/classes/ActiveModel/SecurePassword/ClassMethods.html
   has_secure_password :password, validations: false

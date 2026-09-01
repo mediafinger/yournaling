@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "slim/smart" # https://github.com/slim-template/slim/blob/main/doc/smart.md
 
 Slim::Engine.set_options(

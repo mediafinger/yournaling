@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # from: https://github.com/sciencehistory/kithe/blob/master/app/validators/array_inclusion_validator.rb
 # and slightly refactored
 #

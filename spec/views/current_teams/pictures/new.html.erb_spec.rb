@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe "current_teams/pictures/new", type: :view do
   let(:user) { FactoryBot.create(:user) }
   let(:team) { FactoryBot.create(:team) }

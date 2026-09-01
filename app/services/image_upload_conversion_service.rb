@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # NOTE: this service need the libvips library installed, to convert images
 # installing optional dependencies for JPG, EXIF, ... might be necessary as well
 # https://github.com/libvips/libvips#optional-dependencies

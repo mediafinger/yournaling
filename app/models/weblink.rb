@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 # type: Content
 #
 class Weblink < ApplicationRecordForContentAndPosts
   include VisibilityConstrainedByParents
 
-  YID_CODE = "link".freeze
+  YID_CODE = "link"
 
   belongs_to :team, inverse_of: :weblinks
   has_many :chronicle_entries, as: :entry, dependent: :destroy

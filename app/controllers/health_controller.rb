@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # NOTE: this controller takes inspiration from Rails::HealthController defined in the Rails code base
 # but inherits from our ApplicationController, to ensure the normal includes do not break our app
 # and it makes one DB request to ensure the DB is up and running

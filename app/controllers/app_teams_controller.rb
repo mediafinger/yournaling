@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AppTeamsController < ApplicationController
   #
   # TODO: implement finer grained view controls

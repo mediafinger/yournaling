@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # type: Content
 #
 # file uploads are limited to images: content_type: %w[image/gif image/jpeg image/webp image/png]
@@ -21,7 +23,7 @@ class Picture < ApplicationRecordForContentAndPosts
   MIN_PIXEL_HEIGHT = 400
   MAX_PIXEL_WIDTH = 4000
   MIN_PIXEL_WIDTH = 400
-  YID_CODE = "pic".freeze
+  YID_CODE = "pic"
 
   belongs_to :team, inverse_of: :pictures
   has_many :chronicle_entries, as: :entry, dependent: :destroy

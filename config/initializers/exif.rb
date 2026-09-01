@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Monkey-patch ActiveStorage::Analyzer::ImageAnalyzer to extract GPS data from JPEGs with the exifr gem
 #
 # inspiration: https://ledermann.dev/blog/2018/05/15/exif-analyzer-for-active-storage/

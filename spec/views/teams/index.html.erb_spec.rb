@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe "teams/index", type: :view do
   before do
     assign(:teams,

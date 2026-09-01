@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AuthError < CustomError
   def initialize(message = "Not Authorized to access #{Current.path}")
     super(message, status: 403, code: :forbidden)

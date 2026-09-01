@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ExternalLinkComponent < ApplicationComponent
   slim_template <<~SLIM
     span class="external_link"

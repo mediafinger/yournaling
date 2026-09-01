@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Archivable concern to implement "archive" functionality in a consistent way.
 #
 # AR table of models including this concern must have a `archived_at` datetime column.
