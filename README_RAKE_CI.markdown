@@ -5,26 +5,24 @@ repo. The same task runs locally and on GitHub Actions, so "green locally" means
 "green on CI".
 
 This document is both the **reference** for the gate suite (top half) and the
-**implementation plan** for building it on the `quality-gates` branch (bottom
-half). Until the plan lands, the live task still looks like the flat list in
-[Rakefile](Rakefile):
-
-```ruby
-task ci: %w[zeitwerk:check rubocop slim_lint css factory_bot:awesome_lint
-            db:doctor rspec archspec bundle:audit:update bundle:audit]
-```
+**implementation plan** it was built from (bottom half). Phase 1 is implemented
+in [lib/tasks/ci.rake](lib/tasks/ci.rake) + [lib/tasks/support/ci_gate.rb](lib/tasks/support/ci_gate.rb);
+the "Later phases" are still just plan.
 
 ---
 
 ## At a glance
 
 ```
-rake ci          (bin/mcp_rake ci — chruby-wrapped equivalent)
-├─ ci:lint        rubocop · slim-lint · css (stylelint+prettier) · actionlint
-├─ ci:security    brakeman · bundler-audit --update · importmap-audit
-├─ ci:checks      zeitwerk · db-doctor · factory-lint · archspec
-└─ ci:rspec       full suite, parallel ×4
+rake ci                                              ~65 s
+├─ ci:lint     rubocop · slim-lint · css · actionlint          ~5 s
+├─ ci:security brakeman · bundler-audit --update · importmap-audit  ~12 s
+├─ ci:checks   zeitwerk · db-doctor · factory-lint · archspec       ~8 s
+└─ ci:rspec    full suite, parallel ×4                             ~50 s
 ```
+
+(Wall times from a local run; each step's gates run in parallel, so a step
+is roughly as slow as its slowest gate.)
 
 - **The four steps run serially and fail fast.** If `ci:lint` fails, `rake ci`
   stops there — you do not wait for the suite to learn your style is off.
@@ -174,16 +172,27 @@ Branch: `quality-gates` (off `main`). Small commits, at least one per numbered
 step; every commit pushed to `origin/quality-gates`. Commit messages end with
 the project's `Co-Authored-By` trailer.
 
-## Phase 0 — this document
+## Phase 0 — this document ✅
 
 - **0.1** Add `README_RAKE_CI.markdown`. Commit, push branch.
 - **0.2** Fold in review feedback: `bundler-audit` always `--update`; no CI-only
   gates (schema-drift → "Refinement ideas"); add `ci:rspec`. Commit, push.
 
-## Phase 1 — namespaced tasks + parallel harness
+## Phase 1 — namespaced tasks + parallel harness ✅
 
-Same gates as today, regrouped and parallelised, **plus** `brakeman` and
-`actionlint`. No behavioural regression.
+Same gates as before, regrouped and parallelised, **plus** `brakeman` and
+`actionlint`. No behavioural regression. Steps 1.1–1.10 below all landed as
+their own commits.
+
+Deviations from the plan as written:
+
+- The `bundle lock --check` gate was dropped (Bundler 4 removed the switch) —
+  see "Refinement ideas for later".
+- Extra commit: `PARALLEL_TEST_RAKE_EXECUTABLE` was pinned to `bundle exec
+  rake` (it had resolved to the chruby-only `bin/mcp_rake`), so `rake ci`
+  stays portable to CI and non-chruby machines.
+- brakeman's first scan was clean (0 warnings), so there is no
+  `config/brakeman.ignore` yet.
 
 ### 1.1 — extract CI wiring into `lib/tasks/ci.rake`
 
@@ -323,9 +332,9 @@ task default: :ci
 
 ### 1.10 — docs
 
-- Replace the "still looks like the flat list" note at the top of this file with
-  the real task; refresh timings once measured on CI. Update `bin/setup` /
-  [README.md](README.md) hints that mention `rake ci` internals. Commit, push.
+- Refresh the top of this file (drop the "not yet built" framing, add measured
+  wall times, mark Phase 1 done). `bin/setup`'s npm hint already points at
+  `bin/css_lint`; the repo has no top-level `README.md` to update. Commit, push.
 
 ### Phase 1 verification
 
