@@ -104,18 +104,24 @@ RSpec.describe "/current_team/memories", type: :request do
   end
 
   describe "GET /new" do
-    it "renders a successful response" do
+    it "renders the memory form with the memo field" do
       get new_current_team_memory_url
       expect(response).to be_successful
+      assert_select "form[action=?][method=?]", current_team_memories_path, "post" do
+        assert_select "textarea[name=?]", "memory[memo]"
+      end
     end
   end
 
   describe "GET /edit" do
     let!(:memory) { Memory.create! valid_attributes }
 
-    it "renders a successful response" do
+    it "renders the memory form with the memo field" do
       get edit_current_team_memory_url(memory.urlsafe_id)
       expect(response).to be_successful
+      assert_select "form[action=?][method=?]", current_team_memory_path(memory), "post" do
+        assert_select "textarea[name=?]", "memory[memo]"
+      end
     end
   end
 

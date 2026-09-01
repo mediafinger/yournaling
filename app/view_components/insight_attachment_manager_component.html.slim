@@ -1,0 +1,222 @@
+fieldset.ex-insight-manager data-controller="insight-manager" data-insight-manager-mode-value=@mode data-insight-manager-record-name-value=record_name data-insight-manager-create-location-url-value=create_location_url data-insight-manager-create-picture-url-value=create_picture_url data-insight-manager-create-thought-url-value=create_thought_url data-insight-manager-create-weblink-url-value=create_weblink_url
+  legend.ex-insight-manager__legend
+    h4.ex-h4 Attached Insights
+    p.ex-text.ex-text--sm.ex-text--muted
+      - if @mode == "single"
+        | Add up to 1 of each insight type (Location, Picture, Thought, Weblink).
+      - else
+        | Add insights to this chronicle.
+
+  - if @mode == "single"
+    = @form.hidden_field :location_id, data: { insight_manager_target: "locationIdInput" }
+    = @form.hidden_field :picture_id, data: { insight_manager_target: "pictureIdInput" }
+    = @form.hidden_field :thought_id, data: { insight_manager_target: "thoughtIdInput" }
+    = @form.hidden_field :weblink_id, data: { insight_manager_target: "weblinkIdInput" }
+
+  .ex-insight-chips data-insight-manager-target="attachedContainer"
+    - if @record.respond_to?(:location) && @record.location.present?
+      .ex-insight-chip data-insight-chip="true" data-type="location" data-id=@record.location.id
+        span
+          strong 📍 Location:&nbsp;
+          = @record.location.name
+        button.ex-insight-chip__remove type="button" data-action="click->insight-manager#removeInsight" data-type="location" title="Remove" ✕
+
+    - if @record.respond_to?(:picture) && @record.picture.present?
+      .ex-insight-chip data-insight-chip="true" data-type="picture" data-id=@record.picture.id
+        span.ex-insight-chip__label
+          - if @record.picture.thumbnail
+            img.ex-insight-chip__thumb src=rails_representation_path(@record.picture.thumbnail) alt=""
+          span
+            strong 🖼 Picture:&nbsp;
+            = @record.picture.name
+        button.ex-insight-chip__remove type="button" data-action="click->insight-manager#removeInsight" data-type="picture" title="Remove" ✕
+
+    - if @record.respond_to?(:thought) && @record.thought.present?
+      .ex-insight-chip data-insight-chip="true" data-type="thought" data-id=@record.thought.id
+        span
+          strong 💭 Thought:&nbsp;
+          = @record.thought.text.truncate(60)
+        button.ex-insight-chip__remove type="button" data-action="click->insight-manager#removeInsight" data-type="thought" title="Remove" ✕
+
+    - if @record.respond_to?(:weblink) && @record.weblink.present?
+      .ex-insight-chip data-insight-chip="true" data-type="weblink" data-id=@record.weblink.id
+        span
+          strong 🔗 Weblink:&nbsp;
+          = @record.weblink.name
+        button.ex-insight-chip__remove type="button" data-action="click->insight-manager#removeInsight" data-type="weblink" title="Remove" ✕
+
+  / "+ Add Insight" disclosure menu
+  details.ex-insight-menu data-insight-manager-target="dropdown"
+    summary.ex-btn.ex-btn--secondary.ex-btn--sm role="button" + Add Insight
+    ul
+      li data-insight-manager-target="locationMenuItem"
+        span.ex-insight-menu__group 📍 Location
+        div
+          a href="#" data-action="click->insight-manager#openCreate" data-type="location" + Create New Location
+          a href="#" data-action="click->insight-manager#openSelect" data-type="location" Select Existing Location...
+        hr
+
+      li data-insight-manager-target="pictureMenuItem"
+        span.ex-insight-menu__group 🖼 Picture
+        div
+          a href="#" data-action="click->insight-manager#openCreate" data-type="picture" + Upload New Picture
+          a href="#" data-action="click->insight-manager#openSelect" data-type="picture" Select Existing Picture...
+        hr
+
+      li data-insight-manager-target="thoughtMenuItem"
+        span.ex-insight-menu__group 💭 Thought
+        div
+          a href="#" data-action="click->insight-manager#openCreate" data-type="thought" + Create New Thought
+          a href="#" data-action="click->insight-manager#openSelect" data-type="thought" Select Existing Thought...
+        hr
+
+      li data-insight-manager-target="weblinkMenuItem"
+        span.ex-insight-menu__group 🔗 Weblink
+        div
+          a href="#" data-action="click->insight-manager#openCreate" data-type="weblink" + Create New Weblink
+          a href="#" data-action="click->insight-manager#openSelect" data-type="weblink" Select Existing Weblink...
+
+  / In-flow drawer
+  article.ex-card.ex-insight-drawer data-insight-manager-target="drawer" style="display: none;"
+    .ex-cluster.ex-cluster--between
+      h4.ex-h4 data-insight-manager-target="drawerTitle"
+      button.ex-btn.ex-btn--ghost.ex-btn--sm type="button" data-action="click->insight-manager#closeDrawer" title="Close" ✕
+    div data-insight-manager-target="drawerError" style="display: none;"
+    div data-insight-manager-target="drawerFormContainer"
+
+  / Templates for in-flow creation
+  template data-insight-manager-target="locationTemplate"
+    form.ex-stack.ex-stack--sm
+      .ex-field
+        label.ex-label for="drawer_location_name" Location Name
+        input.ex-input type="text" id="drawer_location_name" name="location[name]" placeholder="e.g. Cabo de Gata Camping" required=true
+      .ex-field
+        label.ex-label for="drawer_location_country_code" Country
+        select.ex-select id="drawer_location_country_code" name="location[country_code]" required=true
+          - CountriesEnForSelectService.call.each do |code, name|
+            option value=code selected=(code == "de") = name
+      div data-controller="yui-tabs"
+        label.ex-label
+          strong Location Details (Choose one)
+        .ex-btn-group role="group"
+          button.ex-tabs__tab type="button" data-yui-tabs-target="tab" data-tab-index="0" data-action="click->yui-tabs#select" Address
+          button.ex-tabs__tab type="button" data-yui-tabs-target="tab" data-tab-index="1" data-action="click->yui-tabs#select" GPS Coordinates
+          button.ex-tabs__tab type="button" data-yui-tabs-target="tab" data-tab-index="2" data-action="click->yui-tabs#select" Map / Web URL
+        .ex-field data-yui-tabs-target="panel"
+          label.ex-label for="drawer_location_address" Street Address / City
+          input.ex-input type="text" id="drawer_location_address" name="location[address]" placeholder="e.g. Playa de los Genoveses, San Jose"
+        .ex-field data-yui-tabs-target="panel" hidden=true
+          .ex-grid-pair
+            .ex-field
+              label.ex-label for="drawer_location_lat" Latitude
+              input.ex-input type="text" id="drawer_location_lat" name="location[lat]" placeholder="e.g. 36.7491"
+            .ex-field
+              label.ex-label for="drawer_location_long" Longitude
+              input.ex-input type="text" id="drawer_location_long" name="location[long]" placeholder="e.g. -2.2425"
+        .ex-field data-yui-tabs-target="panel" hidden=true
+          label.ex-label for="drawer_location_url" Map / Web URL
+          input.ex-input type="url" id="drawer_location_url" name="location[url]" placeholder="e.g. https://maps.google.com/..."
+      .ex-field
+        label.ex-label for="drawer_location_date" Date
+        input.ex-input type="date" id="drawer_location_date" name="location[date]"
+      .ex-field
+        label.ex-label for="drawer_location_description" Notes / Description (Optional)
+        textarea.ex-textarea id="drawer_location_description" name="location[description]" placeholder="Additional details about this place..."
+      .ex-cluster
+        button.ex-btn.ex-btn--primary.ex-btn--sm type="button" data-action="click->insight-manager#submitCreate" data-type="location" Create Location
+        button.ex-btn.ex-btn--secondary.ex-btn--sm type="button" data-action="click->insight-manager#closeDrawer" Cancel
+
+  template data-insight-manager-target="pictureTemplate"
+    form.ex-stack.ex-stack--sm data-controller="picture-select"
+      .ex-field
+        label.ex-label for="drawer_picture_file" Image File
+        input.ex-input type="file" id="drawer_picture_file" name="picture[file]" accept=allowed_image_types_accept required=true data-picture-select-target="fileInput" data-action="change->picture-select#updateFilePreview"
+        img.ex-insight-drawer__preview data-picture-select-target="filePreview" style="display: none;" alt="Selected image preview"
+      .ex-field
+        label.ex-label for="drawer_picture_name" Picture Name (Optional)
+        input.ex-input type="text" id="drawer_picture_name" name="picture[name]" placeholder="Defaults to image file name" data-picture-select-target="pictureNameInput"
+      .ex-field
+        label.ex-label for="drawer_picture_date" Date
+        input.ex-input type="date" id="drawer_picture_date" name="picture[date]"
+      .ex-cluster
+        button.ex-btn.ex-btn--primary.ex-btn--sm type="button" data-action="click->insight-manager#submitCreate" data-type="picture" Create Picture
+        button.ex-btn.ex-btn--secondary.ex-btn--sm type="button" data-action="click->insight-manager#closeDrawer" Cancel
+
+  template data-insight-manager-target="thoughtTemplate"
+    form.ex-stack.ex-stack--sm
+      .ex-field
+        label.ex-label for="drawer_thought_text" Thought Text
+        textarea.ex-textarea id="drawer_thought_text" name="thought[text]" rows="4" placeholder="Write a memorable thought, quote, or reflection..." required=true
+      .ex-field
+        label.ex-label for="drawer_thought_date" Date
+        input.ex-input type="date" id="drawer_thought_date" name="thought[date]"
+      .ex-cluster
+        button.ex-btn.ex-btn--primary.ex-btn--sm type="button" data-action="click->insight-manager#submitCreate" data-type="thought" Create Thought
+        button.ex-btn.ex-btn--secondary.ex-btn--sm type="button" data-action="click->insight-manager#closeDrawer" Cancel
+
+  template data-insight-manager-target="weblinkTemplate"
+    form.ex-stack.ex-stack--sm
+      .ex-field
+        label.ex-label for="drawer_weblink_name" Link Name
+        input.ex-input type="text" id="drawer_weblink_name" name="weblink[name]" placeholder="e.g. Route Planning Guide" required=true
+      .ex-field
+        label.ex-label for="drawer_weblink_url" URL
+        input.ex-input type="url" id="drawer_weblink_url" name="weblink[url]" placeholder="e.g. https://route-planner.example.com" required=true
+      .ex-field
+        label.ex-label for="drawer_weblink_description" Description (Optional)
+        textarea.ex-textarea id="drawer_weblink_description" name="weblink[description]" placeholder="Brief notes or context about this link..."
+      .ex-field
+        label.ex-label for="drawer_weblink_date" Date
+        input.ex-input type="date" id="drawer_weblink_date" name="weblink[date]"
+      .ex-cluster
+        button.ex-btn.ex-btn--primary.ex-btn--sm type="button" data-action="click->insight-manager#submitCreate" data-type="weblink" Create Weblink
+        button.ex-btn.ex-btn--secondary.ex-btn--sm type="button" data-action="click->insight-manager#closeDrawer" Cancel
+
+  / Templates for existing selection
+  template data-insight-manager-target="existingLocationTemplate"
+    .ex-stack.ex-stack--sm
+      .ex-field
+        label.ex-label for="select_existing_location" Select from your team's locations:
+        select.ex-select id="select_existing_location" data-type="location"
+          option value="" -- Choose a Location --
+          - team_locations.each do |loc|
+            option value=loc.id = "#{loc.name} (#{loc.country_code&.upcase})"
+      .ex-cluster
+        button.ex-btn.ex-btn--primary.ex-btn--sm type="button" data-action="click->insight-manager#selectExisting" Add Location
+        button.ex-btn.ex-btn--secondary.ex-btn--sm type="button" data-action="click->insight-manager#closeDrawer" Cancel
+
+  template data-insight-manager-target="existingPictureTemplate"
+    .ex-stack.ex-stack--sm
+      .ex-field
+        label.ex-label for="select_existing_picture" Select from your team's pictures:
+        select.ex-select id="select_existing_picture" data-type="picture"
+          option value="" -- Choose a Picture --
+          - team_pictures.each do |pic|
+            option value=pic.id data-thumb-url=(rails_representation_path(pic.thumbnail) if pic.thumbnail) = pic.name
+      .ex-cluster
+        button.ex-btn.ex-btn--primary.ex-btn--sm type="button" data-action="click->insight-manager#selectExisting" Add Picture
+        button.ex-btn.ex-btn--secondary.ex-btn--sm type="button" data-action="click->insight-manager#closeDrawer" Cancel
+
+  template data-insight-manager-target="existingThoughtTemplate"
+    .ex-stack.ex-stack--sm
+      .ex-field
+        label.ex-label for="select_existing_thought" Select from your team's thoughts:
+        select.ex-select id="select_existing_thought" data-type="thought"
+          option value="" -- Choose a Thought --
+          - team_thoughts.each do |th|
+            option value=th.id = th.text.truncate(60)
+      .ex-cluster
+        button.ex-btn.ex-btn--primary.ex-btn--sm type="button" data-action="click->insight-manager#selectExisting" Add Thought
+        button.ex-btn.ex-btn--secondary.ex-btn--sm type="button" data-action="click->insight-manager#closeDrawer" Cancel
+
+  template data-insight-manager-target="existingWeblinkTemplate"
+    .ex-stack.ex-stack--sm
+      .ex-field
+        label.ex-label for="select_existing_weblink" Select from your team's weblinks:
+        select.ex-select id="select_existing_weblink" data-type="weblink"
+          option value="" -- Choose a Weblink --
+          - team_weblinks.each do |wl|
+            option value=wl.id = "#{wl.name} (#{wl.url})"
+      .ex-cluster
+        button.ex-btn.ex-btn--primary.ex-btn--sm type="button" data-action="click->insight-manager#selectExisting" Add Weblink
+        button.ex-btn.ex-btn--secondary.ex-btn--sm type="button" data-action="click->insight-manager#closeDrawer" Cancel
