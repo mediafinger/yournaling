@@ -4,7 +4,7 @@ Status: **planning** · Owner: andy · Created 2026-08-31
 
 This document is the plan for moving Yournaling's UI from Pico.css to the
 bespoke **"Warm Editorial"** design language that already lives under
-`/example`. It also records, at the end, the alternative we are *not* taking
+`/example`. It also records, at the end, the alternative we are _not_ taking
 (switching to Tailwind CSS) with its trade-offs, so the decision is traceable.
 
 ---
@@ -12,12 +12,13 @@ bespoke **"Warm Editorial"** design language that already lives under
 ## 1. Starting point (snapshot, 2026-08-31)
 
 This section is a **frozen snapshot** of the codebase when the plan was written —
-it is not updated as work lands. Progress is tracked by the checkboxes in §7;
-as of 2026-09-01, Phases 0–2 are done (`example.css` is now
-`app/assets/stylesheets/design/*.css`, the primitives are `Yui::`, fonts are
-self-hosted, Lookbook is installed; the nav, flash and interactive chrome —
-menu / modal / tabs — run on `Yui::` components while each area's `<main>`
-still renders Pico until Phases 3–5).
+it is not updated as work lands. Progress is tracked by the checkboxes in §7.
+As of 2026-09-01: Phases 0–2 done; Phase 3 done bar the record-card cluster
+(auth / account / users / teams top-level swept, `<body>` on the design ground,
+`spec/views/{users,teams top-level}` retired). Phase 4 now owns the shared
+`teams/*` + `current_teams/*` record partials, the feed, and the `pico/amber` +
+`pico/green` teardown. `example.css` is `app/assets/stylesheets/design/*.css`;
+the primitives are `Yui::`; fonts self-hosted; Lookbook installed.
 
 ### Styling stack
 
@@ -42,7 +43,7 @@ Committed in `6bdcc9a` ("Draft new UI design and show under `/example`"):
   components (`.ex-btn`, `.ex-card`, `.ex-field`, `.ex-badge`, `.ex-callout`,
   `.ex-input`, `.ex-dropdown`, …), composed records (`.ex-memory-card`,
   `.ex-chronicle-card`), showcase chrome.
-  - **Scoped, not global**: everything hangs off `.ex-body` *or* `.ex-scope`.
+  - **Scoped, not global**: everything hangs off `.ex-body` _or_ `.ex-scope`.
     It sets **no global reset and no bare-element styles**, so it can be dropped
     onto a subtree of an existing page without fighting Pico.
   - Accessibility bar is already good: `:focus-visible` ring, `prefers-reduced-motion`,
@@ -88,9 +89,9 @@ Third-party libraries were considered and rejected:
 
 | Option                              | Why not                                                                                                                                                                                                                                  |
 |-------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **DaisyUI**                         | CSS-only (Turbo-friendly, no JS to re-init) and easy to *theme*, but its rounded "SaaS" aesthetic is the opposite of Warm Editorial; re-skinning it to match = the work we've already done. Best when you have *no* system. We have one. |
+| **DaisyUI**                         | CSS-only (Turbo-friendly, no JS to re-init) and easy to _theme_, but its rounded "SaaS" aesthetic is the opposite of Warm Editorial; re-skinning it to match = the work we've already done. Best when you have _no_ system. We have one. |
 | **Flowbite / Preline / Franken UI** | Ship their own vanilla JS that must be re-initialised on every Turbo navigation / frame render — a recurring papercut. Heavier. "Copy the markup" rather than semantic classes.                                                          |
-| **Tailwind Plus (ex-Tailwind UI)**  | High quality, no runtime, but paid and React-flavoured; still needs porting to Slim/ViewComponent. Keep as a *reference* for focus states / ARIA wiring only.                                                                            |
+| **Tailwind Plus (ex-Tailwind UI)**  | High quality, no runtime, but paid and React-flavoured; still needs porting to Slim/ViewComponent. Keep as a _reference_ for focus states / ARIA wiring only.                                                                            |
 | **RubyUI / Phlex component kits**   | Phlex-based; we're on ViewComponent + Slim. Mismatch.                                                                                                                                                                                    |
 
 The full Tailwind alternative is documented in **§9** for completeness.
@@ -141,7 +142,7 @@ The `design/*.css` files are **scoped** (`.ex-scope` / `.ex-body`) and their
   `@font-face` in `design/tokens.css` (Propshaft fingerprints them) — done in
   Phase 0; the Google CDN dependency is gone and CSP is simpler.
 - ✅ **Retire the `example.css` filename** by splitting it into
-  `app/assets/stylesheets/design/` (see §4 → *CSS file organisation*) — done in
+  `app/assets/stylesheets/design/` (see §4 → _CSS file organisation_) — done in
   Phase 1 alongside the `Yui::` rename.
 - **CSP**: when re-enabled (Phase 6), no external style/script host is needed if
   fonts are self-hosted. The `csp_meta_tag` is already in the layouts.
@@ -165,7 +166,7 @@ native CSS nesting and `@layer` where it aids readability.**
 The inert `dartsass-rails` setup (see §1) tempts a "reactivate it properly"
 move. We won't. Modern CSS has absorbed almost everything Sass existed to
 provide, and adopting Sass would re-introduce exactly the build step that §2 and
-§3 are built around *not* having.
+§3 are built around _not_ having.
 
 ### What Sass would give us — and the native-CSS equivalent
 
@@ -194,15 +195,15 @@ Not worth it.
 
 ### Drawbacks of plain CSS, and how we mitigate them
 
-- **No bundling of partials.** Addressed head-on — see *CSS file organisation*
+- **No bundling of partials.** Addressed head-on — see _CSS file organisation_
   below. We split now (workflow reasons) and keep the cascade correct with
   `@layer` rather than file order.
 - **No loops for repetitive rules.** Accept the handful of repeated lines in the
-  scale modifiers; they are stable and read fine. A large *generated* utility
+  scale modifiers; they are stable and read fine. A large _generated_ utility
   layer is a Tailwind-shaped need and belongs in the §9 conversation, not a Sass
   one.
 - **No minification.** Rely on the brotli/gzip compression already applied at the
-  edge. Revisit only if CSS payload becomes a *measured* problem — and then reach
+  edge. Revisit only if CSS payload becomes a _measured_ problem — and then reach
   for **Lightning CSS** (via `cssbundling-rails`), which is purpose-built for
   "author modern CSS, ship minified + autoprefixed + old-browser-downlevelled
   CSS", rather than Sass.
@@ -276,7 +277,7 @@ design/
   showcase.css     # @layer showcase — /example + Lookbook only
 ```
 
-If request count or payload is ever *measured* as a problem, that is the trigger
+If request count or payload is ever _measured_ as a problem, that is the trigger
 for Lightning CSS / a concat step — unchanged from the minification note above.
 
 ### CSS linting & formatting: Prettier + Stylelint (not Biome)
@@ -339,7 +340,7 @@ call and what shipped.)
 - `bin/css_lint -a` (or `autocorrect`) → `stylelint --fix` + `prettier --write`
   (the `bin/mcp_rubocop -A` equivalent).
 - `Rakefile`: a `css` task in the `ci` chain (`zeitwerk:check rubocop slim_lint
-  css factory_bot:awesome_lint db:doctor rspec …`).
+css factory_bot:awesome_lint db:doctor rspec …`).
 - CI: `actions/setup-node@v4` (`node-version: "22"`, `cache: "npm"`) + `npm ci`
   in the tests job; `package-lock.json` committed. `bin/setup` runs
   `npm install`.
@@ -363,7 +364,7 @@ Why:
 - Integrates natively with ViewComponent previews.
 - Isolated per-state previews, live-editable params (`@param` magic comments),
   YARD notes, a11y panel (axe), viewport switcher.
-- Removes the need to hand-maintain a showcase *for development* — every
+- Removes the need to hand-maintain a showcase _for development_ — every
   component gets a preview with all its variants, for free, next to the code.
 
 Setup:
@@ -415,7 +416,7 @@ fast loop:
   `development.rb` — also a Propshaft dev-perf win.
 
 - **Read-only "CSS" inspector panel** — shipped via `Lookbook.add_panel("css",
-  …)` in a dev-guarded initializer (`config/initializers/lookbook_panels.rb`).
+…)` in a dev-guarded initializer (`config/initializers/lookbook_panels.rb`).
   `DesignCssPanel` maps `Yui::ButtonComponentPreview` → `design/button.css`
   (dasherised), with a shared fallback for primitives whose rules sit in a layer
   file (typography / layout / field). Rendered read-only + highlighted; the
@@ -492,15 +493,18 @@ spec fails otherwise). See §4 for the layer order and rationale.
 
 #### Retiring the scaffold `spec/views/` layer
 
-`spec/views/` holds ~29 `type: :view` template specs (`current_teams/{locations,
+`spec/views/` held ~29 `type: :view` template specs (`current_teams/{locations,
 members,memories,pictures,weblinks}` CRUD, plus bits of `teams` / `users`).
 They are **Rails scaffold output, partially and unevenly upgraded** — loose
 `assert_select "article"` / `rendered.include?("Name")` assertions, a
 `Rails::VERSION` ternary, commented-out `# TODO` blocks. Almost everything they
-check is already covered *better* by the request specs (which render the same
+check is already covered _better_ by the request specs (which render the same
 view through the real controller + routing + auth + layout and assert real
-data), and the template sweeps in Phases 3–5 would break every `assert_select`
+data), and the template sweeps in Phases 3–4 would break every `assert_select`
 in them for near-zero return.
+
+`spec/views/users/*` and `spec/views/teams/{new,edit,index,show}` were retired
+in Phase 3 (`d81d2d9`, `a5d2628`). The rest go in Phase 4.
 
 **Decision: retire this layer.** As each area is swept:
 
@@ -519,7 +523,7 @@ in them for near-zero return.
    `teams/locations/_location.html.slim`**
    (`ISO3166::Country.find_country_by_alpha2(...).iso_short_name`). When that
    partial is swept, extract it to a `Location#country_name` (or a
-   `LocationPresenter`) and unit-test *that*; failing an extraction, assert it in
+   `LocationPresenter`) and unit-test _that_; failing an extraction, assert it in
    the `teams/locations` request spec (`response.body` includes `"Spain"`).
    Either way — **not** a `type: :view` spec.
 
@@ -564,7 +568,7 @@ layer to maintain, no coverage lost.
 
 ### Phase 1 — Namespace, conventions, CSS split & data-access decision (~1.5 days)
 
-- [x] **Namespace**: `Example::` reads as throwaway. Rename the *primitives* to
+- [x] **Namespace**: `Example::` reads as throwaway. Rename the _primitives_ to
       **`Yui::`** ("Yournaling UI" — a deliberately app-specific prefix so the
       namespace stays unique even if a third-party component library is added
       later). Keep `Example::` only for showcase chrome. This is cheapest now
@@ -577,7 +581,7 @@ layer to maintain, no coverage lost.
       (`ApplicationComponent` subclasses) or the controller/view, never inside a
       `Yui::` primitive. Document this rule in `Yui::BaseComponent`.
 - [x] Implement **form strategy**: a thin `YuiFormBuilder <
-      ActionView::Helpers::FormBuilder` whose `text_field` / `select` / `collection`
+  ActionView::Helpers::FormBuilder` whose `text_field` / `select` / `collection`
       helpers emit `.ex-field` markup (wrapping `Yui::FieldComponent`). Used
       opt-in per form (e.g. `form_with ..., builder: YuiFormBuilder`) during migration
       so existing forms migrate incrementally without breaking. Prototype against one form.
@@ -590,7 +594,7 @@ layer to maintain, no coverage lost.
       4 trivial → `def call`; no inline `slim_template` left in `Yui::`.)
 - [x] **Split the stylesheet** (§4): create `app/assets/stylesheets/design/`,
       declare `@layer tokens, base, layout, typography, components, composed,
-      showcase;` in `design/tokens.css`, move `example.css` into per-concern /
+  showcase;` in `design/tokens.css`, move `example.css` into per-concern /
       per-component files each wrapped in its layer, move the showcase chrome to
       `design/showcase.css` in its own `showcase` layer (loaded only by
       `/example` + Lookbook). Update `_design_head`, the `/example` layout and
@@ -682,51 +686,151 @@ New primitives needed here (not yet in `/example`): `Navbar` ✓, `NavItem` ✓,
 `EmptyStateComponent` — restyle it). Still open: `Pagination`, `Table`,
 `Breadcrumb`, `EmptyState` restyle.
 
-### Phase 3 — Public / `application` layout (~1–2 days)
+### Phase 3 — Public / `application` layout (~1.5–2 days)
 
-Templates under the default layout: `pages/*` (feed, show, error),
-`searches/*`, `users/*`, `logins/*`, `registrations/*`, `passwords/*`,
-`email_verifications/*`, `teams/*` (public views), `switch_current_teams/*`.
+Templates under the default layout: `pages/*`, `searches/*`, `users/*`,
+`logins/*`, `registrations/*`, `user_passwords/*`, `email_verifications/*`,
+`sessions/*`, `teams/*` (public), `switch_current_teams/*`.
 
-- [ ] Sweep each template: replace bare elements with `Yui::*`, delete inline
-      `style="…"`, replace `role="button" class="secondary"` →
-      `Yui::ButtonComponent`.
-- [ ] Convert `SearchFormComponent`, `SearchResultsComponent`,
-      `ExternalLinkComponent`, `MapLinkComponent`, `DeviceComponent` — sidecar
-      their templates while touched.
-- [ ] Retire the `spec/views/{teams,users}/**` scaffold specs (see *Retiring the
-      scaffold `spec/views/` layer* above): port any `new`/`edit` form-field
-      assertions into the `teams` / `users` request specs, then delete. Replace
-      `spec/views/teams/locations/show*_spec.rb` with a real `country_code` →
-      `"Spain (ES)"` humanisation spec (helper/decorator spec, or a
-      `teams/locations` request-spec assertion) — **not** a `type: :view` spec.
-- [ ] Drop `pico.amber` link from `layouts/application`.
-- [ ] QA against screenshots taken in Phase 0.
+Done in commits `10b71b4` … `a5d2628`:
 
-### Phase 4 — Team workspace / `current_team_area` (~2–3 days)
+- [x] **Prep** (`10b71b4`): `<main>` is a centred container (`--ex-container`
+      72→90rem for large screens), `.ex-narrow` for forms / single records;
+      `EmptyStateComponent` restyled to `.ex-empty-state` composing Yui
+      primitives (API unchanged); `_form_validation_errors` → `Yui::Callout`;
+      `Yui::FieldComponent` + `YuiFormBuilder` gained `autofocus` /
+      `autocomplete` passthrough.
+- [x] **Auth + account forms** (`4e35f30`): `sessions` / `registrations` /
+      `user_passwords` / `email_verifications` → `Yui::Card` + `YuiFormBuilder` +
+      `Yui::Headline` / `Yui::Link`.
+- [x] **users / logins / switch_current_teams** (`d81d2d9`): record partials →
+      `Yui::Card` + `dl.ex-details`; `button_to` keeps its `<form>` but wears
+      `.ex-btn` (`form.button_to` display fix). `Yui::CardComponent` gained
+      `id:` / `data:` passthrough so a card can be a Turbo-stream target.
+      Retired `spec/views/users/*` (form contract → `users_request_spec`).
+- [x] **`<body>` painted** (`8040d58`): `.ex-body` on the three layouts — the
+      whole page carries `--ex-paper`, so `main`'s own ground blends in.
+- [x] **pages/error** (`ae53e01`) + `design/base.css` safety nets: unclassed
+      `<a>` and raw `<img>` inside `.ex-scope` / `.ex-body`, `ul.ex-stack` drops
+      markers.
+- [x] **The 5 shared components** (`8ad3bc6`): `ExternalLink` / `MapLink` /
+      `Device` / `DeviceLocation` / `SearchForm` / `SearchResults` → sidecar
+      templates + Yui markup; specs updated.
+- [x] **teams/ top-level** (`a5d2628`): index / show / `_team` / form / new /
+      edit → `Yui::Card` + `dl.ex-details`. Retired
+      `spec/views/teams/{new,edit,index,show}`.
 
-The largest area: `current_teams/{chronicles,memories,thoughts,weblinks,
-locations,pictures,members,pages}` — index / show / new / edit / `_form` /
-`_record` partials, plus `InsightAttachmentManagerComponent`,
-`ChronicleAttachedEntriesFormComponent`, `ChronicleEntryComponent`,
-`ContentVisibilityModalComponent`, `InsightDestroyModalComponent`,
-`InsightsDropdownComponent`, `PictureLightboxComponent`,
-`PictureSelectFieldComponent`, `DeviceLocationComponent`.
+**Deferred to Phase 4** — the record-card cluster (`teams/{chronicles,memories,
+locations,thoughts,members,weblinks,pictures}/*` + `pages/show` + `pages/newer`)
+renders `article.yournal-card` / `.card-badge` / `.chronicle-timeline-track`
+(from `card.css`) plus `BrowseHeaderComponent` / `ChronicleEntryComponent` and
+nested insight partials. That is Phase 4's `card.css` port + `Yui::MemoryCard` /
+`Yui::ChronicleCard` adoption, and the partials are shared with
+`current_teams/*` — so it is one job, done once, for both areas.
+Consequently **`pico/amber` cannot drop until Phase 4** (bare `h3`/`h4`/`p`
+still live in those partials), and Phase 3's old "drop pico.amber" + "QA"
+bullets move there too.
 
-- [ ] Lean on the form strategy from Phase 1 — this area is form-heavy and has
-      the `role="group"` / inline-`grid` partials.
-- [ ] Port `card.css` (`.timeline-grid`, `.yournal-card`, chips, timeline track)
-      into `design/card.css` / `design/memory-card.css` / `design/chronicle-card.css`,
-      de-`--pico-*`'d — the `Yui::MemoryCard` / `Yui::ChronicleCard` already
-      cover most of it.
-- [ ] Restyle the lightbox (`PictureLightboxComponent` + its Stimulus).
+- [x] **Final QA** — full `rake ci` green (1254 examples, 0 failures; the one
+      `pending` is a pre-existing `js: true` system spec). Guest render smoke on
+      `/login`, `/register`, `/user_password/new`, `/email_verification/new`,
+      `/search`, `/users`, the 404 page: all 200 with the expected `.ex-*`
+      markup and **no `--pico-*` leakage**. Authenticated paths (`/teams`,
+      `/login_records`, `/switch_current_teams`, `users#edit`) are exercised by
+      their request specs, all green in the CI run. (No Phase 0 screenshots
+      exist; the spec suite is the behavioural net.)
+
+**Phase 3 is closed.** Remaining public-facing work (the record-card cluster,
+the feed, `pico/amber` teardown) lives in Phase 4.
+
+### Phase 4 — Records, feed & team workspace (~3–4 days)
+
+The largest area, and the home of the shared **record-card** vocabulary. Covers
+both the public browse views deferred from Phase 3 (`teams/*`) **and** the team
+workspace (`current_teams/*`), because they render the same partials:
+
+- `current_teams/{chronicles,memories,thoughts,weblinks,locations,pictures,
+members,pages}` — index / show / new / edit / `_form` / `_record`
+- `teams/{chronicles,memories,locations,thoughts,members,weblinks,pictures,
+pictures_only,pages}` — index / show / `_record` (public, read-only)
+- `pages/show` + `pages/newer` (public feed) and `current_teams/pages/show` +
+  `newer` (team feed)
+- components: `BrowseHeaderComponent`, `ManageHeaderComponent`,
+  `ChronicleEntryComponent`, `ChronicleAttachedEntriesFormComponent`,
+  `InsightAttachmentManagerComponent`, `ContentVisibilityModalComponent`,
+  `InsightDestroyModalComponent`, `InsightsDropdownComponent`,
+  `PictureLightboxComponent`, `PictureSelectFieldComponent`
+
+#### Cards & CSS
+
+- [ ] Port `card.css` (`.timeline-grid`, `.yournal-card`, `.card-badge`, chips,
+      `.chronicle-timeline-track`) into `design/card.css` /
+      `design/memory-card.css` / `design/chronicle-card.css`, de-`--pico-*`'d —
+      `Yui::MemoryCard` / `Yui::ChronicleCard` already cover most of it. Delete
+      `card.css` from `legacy.css`.
+- [ ] Adopt `Yui::MemoryCard` / `Yui::ChronicleCard` in the `_memory` /
+      `_chronicle` partials (`teams/*` and `current_teams/*`). The partial maps
+      the record + policy → the pure component's props/slots; the header row is
+      `BrowseHeaderComponent` / `ManageHeaderComponent` (convert those too).
+- [ ] Replace `.timeline-grid` with a design-system grid — tune the column
+      `minmax()` so up to 3 columns fit within `--ex-container` (90rem) and the
+      grid centres (`margin-inline: auto`); 1 / 2 / 3 columns responsively.
+- [ ] Restyle the nested insight partials
+      (`teams|current_teams/{pictures,thoughts,locations,weblinks}/_record`) and
+      the lightbox (`PictureLightboxComponent` + its Stimulus).
+
+#### Feed & pagination
+
+Currently endless-scroll Turbo frames — _functionally_ green, but unstyled and
+unaudited.
+
+- [ ] Audit the endless-scroll mechanism against pagy 43 (`@pagy.next` /
+      `@pagy.page`; `pagy(:offset, …)`; `Pagy::OPTIONS[:limit]`). It works today
+      (`spec/requests/pages_request_spec.rb` proves the frame chain stops on the
+      last page) — add a comment / regression guard so a pagy upgrade can't
+      silently make `@pagy.next` truthy on the last page and chain requests
+      forever.
+- [ ] Give the lazy next-page `turbo_frame_tag` a **visible loading affordance**
+      (a `Yui::` spinner / "loading more…" row inside the frame) — right now the
+      feed just stops until the next frame resolves, which reads as broken on a
+      slow connection.
+- [ ] Restyle the "newer posts" banner + sentinel (`#newer_posts_banner`
+      `.newer-posts-banner`, `#top_sentinel`, the `feed-refresh` Stimulus
+      controller) — `.newer-posts-banner` is a legacy `general.css` class with
+      `--pico-*` fallbacks; move it to `design/feed.css` as a `Yui::`-styled
+      pill. Verify `feed-refresh` still toggles it (browse + team feeds).
+- [ ] Confirm the `current_teams/pages` feed uses a consistent `@newest_*`
+      ivar name across `show` / `newer` / `check_newer` (currently
+      `@newest_updated_at`; the public one is `@newest_published_at`).
+- [ ] Build `Yui::Pagination` for the admin section, where a classic numbered pager will be
+      needed (admin lists, Phase 5). The public/team feeds do not use one
+      (`have_no_css("nav.pagy")` is asserted) — don't add one there.
+
+#### Forms & specs
+
+- [ ] Lean on `YuiFormBuilder` — this area is form-heavy and has the
+      `role="group"` / inline-`grid` `_form` partials.
 - [ ] Sidecar the template of every component rewritten in this area.
-- [ ] Retire the `spec/views/current_teams/**` scaffold specs (the bulk of the
-      layer — `locations` / `members` / `memories` / `pictures` / `weblinks`
-      CRUD): port each `new`/`edit` form-field contract into the matching
-      `spec/requests/current_teams/*` spec's `GET /new` + `GET /edit`, then
-      delete. Keep `spec/views/design_head_spec.rb`.
-- [ ] Drop `pico.green` link.
+- [ ] Retire the remaining `spec/views/**` scaffold specs
+      (`current_teams/{locations,members,memories,pictures,weblinks}` CRUD, and
+      `teams/{locations,weblinks}/show`): port each `new`/`edit` form-field
+      contract into the matching `spec/requests/*` spec, then delete. Keep
+      `spec/views/design_head_spec.rb`.
+- [ ] Replace `spec/views/teams/locations/show*_spec.rb` with a real
+      `country_code` → `"Spain (ES)"` humanisation spec. The logic is inline in
+      `teams/locations/_location.html.slim`
+      (`ISO3166::Country.find_country_by_alpha2(...).iso_short_name`) — extract
+      it to `Location#country_name` (or a presenter) and unit-test _that_;
+      failing an extraction, assert it in the `teams/locations` request spec.
+      **Not** a `type: :view` spec.
+
+#### Teardown for this area
+
+- [ ] Drop the `pico/amber` link from `layouts/application` and `pico/green`
+      from `layouts/current_team_area` — safe once every public + team template
+      is converted (no bare `h3`/`h4`/`p`/`table`/`article` left).
+- [ ] QA: system specs green + manual pass on `/` (public feed), a team home
+      feed, a chronicle show, a memory show, the pictures lightbox.
 
 ### Phase 5 — Admin / `admin_area` (~1 day)
 
@@ -759,25 +863,31 @@ teams,users,pages,record_events}` — mostly index + edit + destroy, plus
 - [ ] Re-enable and tighten CSP now that there is no external CSS/JS/font host.
 - [ ] Confirm no `example.css` / `Example::` stylesheet references linger (the
       `design/` split in Phase 1 already retired the filename).
+- [ ] The Ruby primitives are `Yui::`, but the CSS
+      classes and tokens are still `.ex-*` / `--ex-*` (originally "example");
+      `.stylelintrc`'s `custom-property-pattern` already accepts both). Now one atomic
+      `ex` → `yui` rename (`.ex-` → `.yui-`, `--ex-` → `--yui-`, `.ex-scope` /
+      `.ex-body` too) across `design/**`, the `.slim` templates, and the
+      component `ex_class` / `ex_token` helpers — a mechanical `git grep -l`
+      sweep + one commit.
 - [ ] Add a `slim_lint` / grep check that new templates don't reintroduce bare
       unstyled elements or inline `style=`.
 - [ ] Add a grep gate: no `<<-SLIM` / bare `<<SLIM` heredocs, and no inline
       `slim_template` over ~5 lines — enforces the Component & template
       conventions for future components.
-- [ ] Final screenshot-diff pass on key screens.
 
 ### Effort summary
 
-| Phase                                                  | Size                                                       |
-|--------------------------------------------------------|------------------------------------------------------------|
-| 0 — foundations & tooling                              | ~1–1.5 days                                                |
-| 1 — namespace / conventions / CSS split / data / forms | ~1.5 days                                                  |
-| 2 — shared chrome + Stimulus                           | ~2 days                                                    |
-| 3 — public layout                                      | ~1–2 days                                                  |
-| 4 — team workspace                                     | ~2–3 days                                                  |
-| 5 — admin                                              | ~1 day                                                     |
-| 6 — teardown + CSP                                     | ~0.5–1 day                                                 |
-| **Total**                                              | **~10–13 focused days**, shippable at every phase boundary |
+| Phase                                                        | Size                                                       |
+|--------------------------------------------------------------|------------------------------------------------------------|
+| 0 — foundations & tooling                                    | ~1–1.5 days ✅                                              |
+| 1 — namespace / conventions / CSS split / data / forms       | ~1.5 days ✅                                                |
+| 2 — shared chrome + Stimulus                                 | ~2 days ✅                                                  |
+| 3 — public layout (auth / account / users / teams-top-level) | ~1.5–2 days ✅ (record-card cluster → Phase 4)              |
+| 4 — records, feed & team workspace                           | ~3–4 days                                                  |
+| 5 — admin                                                    | ~1 day                                                     |
+| 6 — teardown + CSP                                           | ~0.5–1 day                                                 |
+| **Total**                                                    | **~11–14 focused days**, shippable at every phase boundary |
 
 ---
 
@@ -871,7 +981,7 @@ evaluates Tailwind on its own merits, as if starting the CSS decision fresh.
 - **Preflight resets everything** — you still have to restyle every one of the
   ~167 classless templates. The template-sweep lift is identical to the
   chosen path; only the "what do I type" differs (utilities vs `Yui::*`).
-- **Utility soup in Slim** unless you *also* wrap everything in ViewComponents —
+- **Utility soup in Slim** unless you _also_ wrap everything in ViewComponents —
   in which case you have built a component system anyway, just with Tailwind as
   the implementation detail.
 - Holding a distinctive editorial identity in utility classes takes discipline;
