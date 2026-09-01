@@ -1,12 +1,10 @@
-article.yournal-card.memory-card id= dom_id(memory)
-  header.card-header
-    span.card-badge 💡 Memory
-    = render ManageHeaderComponent.new(record: memory, hide_actions: local_assigns[:hide_actions])
+= render Yui::CardComponent.new(id: dom_id(memory), accent: "gold", class: "ex-memory-card") do |card|
+  - card.with_header do
+    .ex-cluster.ex-cluster--between
+      = render Yui::BadgeComponent.new("Memory", icon: "feather")
+      = render ManageHeaderComponent.new(record: memory, hide_actions: local_assigns[:hide_actions])
 
-  p
-    strong Memo:
-    br
-    = memory.memo
+  p.ex-memory-card__memo = memory.memo
 
   - if memory.picture
     = render partial: "current_teams/pictures/picture", locals: { picture: memory.picture, hide_actions: true }

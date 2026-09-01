@@ -61,16 +61,16 @@ RSpec.describe "Responsive Timeline Grid & Card Redesign", type: :system do
       visit root_url
 
       expect(page).to have_css(".timeline-grid")
-      expect(page).to have_css("article.yournal-card.chronicle-card[id='#{dom_id(chronicle)}']")
-      expect(page).to have_css("article.yournal-card.memory-card[id='#{dom_id(memory)}']")
+      expect(page).to have_css("article.ex-chronicle-card[id='#{dom_id(chronicle)}']")
+      expect(page).to have_css("article.ex-memory-card[id='#{dom_id(memory)}']")
 
-      within("article.chronicle-card") do
-        expect(page).to have_css(".card-badge", text: /Chronicle/)
+      within("article.ex-chronicle-card") do
+        expect(page).to have_css(".ex-eyebrow", text: /Chronicle/)
         expect(page).to have_text("Alpine Expedition 2026")
       end
 
-      within("article.memory-card") do
-        expect(page).to have_css(".card-badge", text: /Memory/)
+      within("article.ex-memory-card") do
+        expect(page).to have_css(".ex-badge", text: /Memory/)
         expect(page).to have_text("Sunset over Lake Geneva")
       end
     end
@@ -80,7 +80,7 @@ RSpec.describe "Responsive Timeline Grid & Card Redesign", type: :system do
 
       visit root_url
 
-      within("article.memory-card") do
+      within("article.ex-memory-card") do
         expect(page).to have_css("blockquote.thought-quote", text: "The mountains are calling and I must go right now.")
         expect(page).to have_css(".location-chip", text: /Matterhorn Base Camp/)
         expect(page).to have_css(".weblink-chip", text: /Swiss Alpine Club/)
@@ -95,8 +95,8 @@ RSpec.describe "Responsive Timeline Grid & Card Redesign", type: :system do
       visit current_team_home_url
 
       expect(page).to have_css(".timeline-grid")
-      expect(page).to have_css("article.yournal-card.chronicle-card")
-      expect(page).to have_css("article.yournal-card.memory-card")
+      expect(page).to have_css("article.ex-chronicle-card")
+      expect(page).to have_css("article.ex-memory-card")
     end
   end
 end

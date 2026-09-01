@@ -1,20 +1,19 @@
-article.yournal-card.chronicle-card id= dom_id(chronicle)
-  header.card-header
-    span.card-badge 📖 Chronicle
-    = render ManageHeaderComponent.new(record: chronicle, hide_actions: local_assigns[:hide_actions], full: local_assigns[:full])
+= render Yui::CardComponent.new(id: dom_id(chronicle), variant: :elevated, accent: "accent", class: "ex-chronicle-card") do |card|
+  - card.with_header do
+    .ex-cluster.ex-cluster--between
+      = render Yui::EyebrowComponent.new("Chronicle")
+      = render ManageHeaderComponent.new(record: chronicle, hide_actions: local_assigns[:hide_actions], full: local_assigns[:full])
 
-  p
-    strong Notice:
-    br
-    = chronicle.notice
+  - if chronicle.notice.present?
+    p.ex-chronicle-card__summary = chronicle.notice
 
   - if local_assigns[:full] || action_name == "show"
     - if chronicle.entries.any?
-      section.chronicle-timeline-track
-        h4 Entries
-        - chronicle.entries.each do |chronicle_entry|
-          .chronicle-entry-item
-            = render ChronicleEntryComponent.new(chronicle_entry: chronicle_entry, scope: "current_team")
+      section.ex-stack.ex-stack--sm
+        = render Yui::HeadlineComponent.new("Entries", level: 4)
+        .ex-timeline
+          - chronicle.entries.each do |chronicle_entry|
+            .ex-timeline__item
+              = render ChronicleEntryComponent.new(chronicle_entry: chronicle_entry, scope: "current_team")
   - elsif chronicle.first_picture.present?
-    p
-      = render partial: "current_teams/pictures/picture", locals: { picture: chronicle.first_picture, hide_actions: true }
+    = render partial: "current_teams/pictures/picture", locals: { picture: chronicle.first_picture, hide_actions: true }

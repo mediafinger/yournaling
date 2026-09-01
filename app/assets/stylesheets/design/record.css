@@ -1,10 +1,8 @@
 @layer composed {
-  /* Transitional — the legacy card.css markup (`article.yournal-card`,
-     `.card-badge`, `.timeline-grid`, chips, the chronicle timeline track),
-     de-`--pico-*`'d and moved out of `@layer legacy` so it survives the
-     `pico/*` teardown. Phase 4 bullets 2–4 replace this markup with
-     `Yui::MemoryCard` / `Yui::ChronicleCard` / `Yui::Tag` / `.ex-timeline`,
-     emptying this file; it is then deleted. */
+  /* Transitional — what's left of the legacy card.css after the record-card
+     markup moved to Yui::MemoryCard / Yui::ChronicleCard (Phase 4 bullet 2).
+     `.timeline-grid` goes in bullet 3; the chips + `.thought-quote` go in
+     bullet 4 (nested insight partials); then this file is deleted. */
 
   /* --- responsive timeline grid (bullet 3 tunes the columns) --- */
   .timeline-grid {
@@ -33,59 +31,7 @@
     }
   }
 
-  /* --- the card shell --- */
-  article.yournal-card {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    min-width: min(100%, 500px);
-    padding: var(--ex-space-md);
-    color: var(--ex-ink);
-    background-color: var(--ex-surface);
-    border: var(--ex-border-hairline);
-    border-radius: var(--ex-radius-lg);
-    box-shadow: var(--ex-shadow-sm);
-    transition:
-      transform var(--ex-transition),
-      box-shadow var(--ex-transition);
-  }
-
-  article.yournal-card:hover {
-    box-shadow: var(--ex-shadow-md);
-    transform: translateY(-2px);
-  }
-
-  article.yournal-card .card-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-bottom: var(--ex-space-2xs);
-    margin-bottom: var(--ex-space-xs);
-    border-bottom: var(--ex-border-hairline);
-  }
-
-  article.yournal-card .card-badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.2rem 0.5rem;
-    font-size: var(--ex-text-xs);
-    font-weight: var(--ex-weight-semibold);
-    color: var(--ex-ink-soft);
-    text-transform: uppercase;
-    letter-spacing: var(--ex-tracking-wide);
-    background-color: var(--ex-surface-sunken);
-    border-radius: var(--ex-radius-xs);
-  }
-
-  article.yournal-card.chronicle-card {
-    border-inline-start: 4px solid var(--ex-accent);
-  }
-
-  article.yournal-card.memory-card {
-    border-inline-start: 4px solid var(--ex-border-strong);
-  }
-
-  /* --- thought pull-quote --- */
+  /* --- thought pull-quote (bullet 4) --- */
   blockquote.thought-quote {
     padding: var(--ex-space-xs) var(--ex-space-sm);
     margin: var(--ex-space-xs) 0;
@@ -97,7 +43,7 @@
     border-radius: 0 var(--ex-radius-xs) var(--ex-radius-xs) 0;
   }
 
-  /* --- location / weblink chips --- */
+  /* --- location / weblink chips (bullet 4) --- */
   .location-chip,
   .weblink-chip {
     display: inline-flex;
@@ -119,30 +65,5 @@
     color: var(--ex-accent);
     background-color: var(--ex-accent-soft);
     border-color: var(--ex-accent);
-  }
-
-  /* --- chronicle entry timeline track --- */
-  .chronicle-timeline-track {
-    position: relative;
-    padding-left: var(--ex-space-md);
-    margin-top: var(--ex-space-sm);
-    border-left: 2px solid var(--ex-border);
-  }
-
-  .chronicle-entry-item {
-    position: relative;
-    margin-bottom: var(--ex-space-md);
-  }
-
-  .chronicle-entry-item::before {
-    position: absolute;
-    top: 0.35rem;
-    left: -1.6rem;
-    width: 0.6rem;
-    height: 0.6rem;
-    content: "";
-    background-color: var(--ex-accent);
-    border: 2px solid var(--ex-paper);
-    border-radius: 50%;
   }
 }
