@@ -15,28 +15,4 @@
     border-inline-start: 3px solid var(--ex-accent);
     border-radius: 0 var(--ex-radius-xs) var(--ex-radius-xs) 0;
   }
-
-  /* --- location / weblink chips (bullet 4) --- */
-  .location-chip,
-  .weblink-chip {
-    display: inline-flex;
-    gap: 0.35rem;
-    align-items: center;
-    padding: 0.25rem 0.6rem;
-    margin-top: var(--ex-space-2xs);
-    margin-right: var(--ex-space-2xs);
-    font-size: var(--ex-text-sm);
-    color: var(--ex-ink-soft);
-    text-decoration: none;
-    background-color: var(--ex-surface);
-    border: var(--ex-border-hairline);
-    border-radius: var(--ex-radius-pill);
-  }
-
-  .location-chip:hover,
-  .weblink-chip:hover {
-    color: var(--ex-accent);
-    background-color: var(--ex-accent-soft);
-    border-color: var(--ex-accent);
-  }
 }

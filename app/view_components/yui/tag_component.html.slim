@@ -1,10 +1,10 @@
 - if href.present?
-  = link_to(href, class: "ex-tag") do
+  = link_to(href, **link_options) do
     - if icon
       = render(Yui::IconComponent.new(icon, size: :sm))
     = label
 - else
-  span.ex-tag
+  span.ex-tag id=dom_id
     - if icon
       = render(Yui::IconComponent.new(icon, size: :sm))
     = label

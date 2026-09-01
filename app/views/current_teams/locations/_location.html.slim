@@ -1,12 +1,10 @@
 - if local_assigns[:hide_actions]
-  span.location-chip id= dom_id(location)
-    | 📍
+  = render Yui::TagComponent.new(icon: "map-pin", id: dom_id(location)) do
     = location.name
     - if location.country_code.present?
       - iso_country = ISO3166::Country.find_country_by_alpha2(location.country_code)
       - if iso_country
-        |
-        = iso_country.emoji_flag
+        = " #{iso_country.emoji_flag}"
 - else
   article id= dom_id(location)
     = render ManageHeaderComponent.new(record: location, hide_actions: local_assigns[:hide_actions])

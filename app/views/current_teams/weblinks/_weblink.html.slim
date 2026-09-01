@@ -1,7 +1,5 @@
 - if local_assigns[:hide_actions]
-  a.weblink-chip id= dom_id(weblink) href=weblink.url target="_blank" rel="noopener noreferrer"
-    | 🔗
-    = weblink.name.presence || weblink.url
+  = render Yui::TagComponent.new(weblink.name.presence || weblink.url, href: weblink.url, external: true, icon: "link", id: dom_id(weblink))
 - else
   article id= dom_id(weblink)
     = render ManageHeaderComponent.new(record: weblink, hide_actions: local_assigns[:hide_actions])
