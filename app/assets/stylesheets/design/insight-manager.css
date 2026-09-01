@@ -136,10 +136,4 @@
     object-fit: cover;
     border-radius: var(--ex-radius-xs);
   }
-
-  .ex-grid-pair {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--ex-space-sm);
-  }
 }

@@ -89,6 +89,13 @@
     gap: var(--ex-space-md);
   }
 
+  /* Two equal columns that collapse to one on narrow screens. */
+  .ex-grid-pair {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+    gap: var(--ex-space-sm);
+  }
+
   /* Record-card feed — 1 / 2 / 3 columns responsively, centred by `<main>`'s
      90rem container (3 × 28rem + gaps fits). `start` so a short card doesn't
      stretch to the tallest in its row. */

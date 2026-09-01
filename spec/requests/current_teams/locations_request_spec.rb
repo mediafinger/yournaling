@@ -50,20 +50,38 @@ RSpec.describe "/current_team/locations", type: :request do
   end
 
   describe "GET /new" do
-    it "renders a successful response" do
+    it "renders the location form with its fields" do
       get new_current_team_location_url
 
       expect(response).to be_successful
+      assert_select "form[action=?][method=?]", current_team_locations_path, "post" do
+        assert_select "input[name=?]", "location[name]"
+        assert_select "select[name=?]", "location[country_code]"
+        assert_select "input[name=?]", "location[address]"
+        assert_select "input[name=?]", "location[lat]"
+        assert_select "input[name=?]", "location[long]"
+        assert_select "input[name=?]", "location[url]"
+        assert_select "textarea[name=?]", "location[description]"
+      end
     end
   end
 
   describe "GET /edit" do
-    it "renders a successful response" do
+    it "renders the location form with its fields" do
       location = Location.create! valid_attributes
 
       get edit_current_team_location_url(location)
 
       expect(response).to be_successful
+      assert_select "form[action=?][method=?]", current_team_location_path(location), "post" do
+        assert_select "input[name=?]", "location[name]"
+        assert_select "select[name=?]", "location[country_code]"
+        assert_select "input[name=?]", "location[address]"
+        assert_select "input[name=?]", "location[lat]"
+        assert_select "input[name=?]", "location[long]"
+        assert_select "input[name=?]", "location[url]"
+        assert_select "textarea[name=?]", "location[description]"
+      end
     end
   end
 
