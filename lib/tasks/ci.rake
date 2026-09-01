@@ -42,9 +42,14 @@ if %w[development test].include?(Rails.env)
     end
   end
 
-  desc "Run the full quality-gate suite"
-  task ci: %w[zeitwerk:check rubocop slim_lint css factory_bot:awesome_lint db:doctor rspec archspec
-              bundle:audit:update bundle:audit]
+  # Alias of the top-level `rspec` task (defined in the Rakefile), named for
+  # symmetry with the other steps. Declared here at top level so the `:rspec`
+  # prerequisite resolves to `rake rspec`, not to itself.
+  desc "Run the RSpec suite in parallel (alias of `rake rspec`)"
+  task "ci:rspec" => "rspec"
+
+  desc "Run the full quality-gate suite (lint -> security -> checks -> rspec, fail-fast)"
+  task ci: %w[ci:lint ci:security ci:checks ci:rspec]
 
   task default: :ci
 end
