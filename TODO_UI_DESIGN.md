@@ -768,15 +768,24 @@ pictures_only,pages}` — index / show / `_record` (public, read-only)
       `legacy.css` and deleted. (`record.css` was transitional — the following
       commits emptied it; it is gone as of `a7a3e43`.)
 - [x] **`_memory` / `_chronicle` → `Yui::Card`** (`3527e78`, + spec fixup
-      `6be2831`): the 4 partials compose `Yui::CardComponent` (accent gold /
-      accent, class `ex-memory-card` / `ex-chronicle-card`) with
-      `Browse`/`ManageHeaderComponent` (already Yui from Phase 2) + `Yui::Badge`
-      / `Yui::Eyebrow` in the header slot. Chronicle entries →
-      `.ex-timeline` / `.ex-timeline__item`. (Kept the app partials on
-      `Yui::Card` + primitives rather than the pure `Yui::MemoryCard` /
-      `ChronicleCard` — the pure components have no slots for the real header
-      component + nested insight partials; they stay the literal-data version
-      for `/example` + Lookbook.)
+      `6be2831`), then **→ app-level components** (`57c459e`): `MemoryCardComponent`
+      / `ChronicleCardComponent` (`ApplicationComponent`, take the record +
+      `scope: :browse | :manage`) hold the composition — `Yui::Card` (accent
+      gold / accent, `.ex-memory-card` / `.ex-chronicle-card`) + `Yui::Badge` /
+      `Yui::Eyebrow` + the scope's `Browse` / `ManageHeaderComponent` + the memo
+      / notice + the nested insight partials (via `InsightPartialRendering`).
+      The four `teams|current_teams/{memories,chronicles}/_*` partials are now
+      one-line `render …Component.new(…)` adapters. Pure `Yui::MemoryCard` /
+      `Yui::ChronicleCard` **deleted** — the app components are the single
+      source of truth; `/example` and Lookbook render them.
+- [ ] **Records — refined component previews.** The card components need an
+      auth / routing context to render their real header (`BrowseHeaderComponent`
+      → `team_memory_path`, Action Policy). For now `/example` and the Lookbook
+      previews pass `actions: false`, which swaps the header for a plain
+      `.ex-meta` line. Refine: give previews a guest `User.new(name: "Guest")` +
+      a stubbed `current_team` / route set so the real header renders (with no
+      buttons, since the guest fails every policy). Small; do it when the
+      preview-auth story matters.
 - [x] **`.timeline-grid` → `.ex-record-grid`** (`7063601`): new class in
       `design/layout.css`, `repeat(auto-fill, minmax(min(100%, 28rem), 1fr))` —
       1 / 2 / 3 columns responsively, centred by `<main>`'s 90rem container,

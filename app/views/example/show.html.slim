@@ -1,5 +1,4 @@
 - photo = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='960' height='640'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23edc79a'/%3E%3Cstop offset='.55' stop-color='%23c9793c'/%3E%3Cstop offset='1' stop-color='%238f3d13'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='960' height='640' fill='url(%23g)'/%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='.22' stroke-width='2'%3E%3Ccircle cx='740' cy='150' r='70'/%3E%3Cpath d='M0 520 Q240 430 480 520 T960 520'/%3E%3Cpath d='M0 570 Q240 480 480 570 T960 570'/%3E%3C/g%3E%3C/svg%3E"
-- cover = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='520'%3E%3Cdefs%3E%3ClinearGradient id='c' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23b5541e'/%3E%3Cstop offset='1' stop-color='%232a2520'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='1200' height='520' fill='url(%23c)'/%3E%3Cg fill='none' stroke='%23f2ead9' stroke-opacity='.28' stroke-width='2'%3E%3Cpath d='M0 360 Q300 280 600 360 T1200 360'/%3E%3Cpath d='M0 420 Q300 340 600 420 T1200 420'/%3E%3Ccircle cx='980' cy='120' r='54'/%3E%3C/g%3E%3C/svg%3E"
 
 / ------------------------------------------------------------------ Hero
 header.ex-showcase__hero
@@ -287,14 +286,13 @@ nav.ex-showcase__toc aria-label="Sections"
           = render(Yui::AvatarComponent.new(name: "The Coast Year", size: :xl))
 
 / ------------------------------------------------------------------ Records
-- records_desc = "The primitives, assembled. A Memory card and a Chronicle card — everything on them is a component from the sections above."
-- rec = record_examples(photo:, cover:)
+- records_desc = "The primitives, assembled. MemoryCardComponent and ChronicleCardComponent — the same components the app renders, here with actions: false (no auth context)."
 = render(Example::SectionComponent.new(number: "11", title: "Records", anchor: "records", description: records_desc)) do
   .ex-grid.ex-grid--wide style="align-items: start"
-    = render(Yui::MemoryCardComponent.new(**rec[:sand_dollar]))
-    = render(Yui::MemoryCardComponent.new(**rec[:storm_night]))
+    = render(MemoryCardComponent.new(memory: example_memory, scope: :browse, actions: false))
+    = render(MemoryCardComponent.new(memory: example_memory, scope: :manage, actions: false))
   .ex-stack style="margin-top: 1.5rem"
-    = render(Yui::ChronicleCardComponent.new(**rec[:coast_year]))
+    = render(ChronicleCardComponent.new(chronicle: example_chronicle, scope: :browse, full: true, actions: false))
 
 footer.ex-section style="border-bottom: 0"
   .ex-container.ex-container--narrow.ex-align-center

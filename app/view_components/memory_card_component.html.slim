@@ -1,0 +1,13 @@
+= render Yui::CardComponent.new(id: helpers.dom_id(memory), accent: "gold", class: "ex-memory-card") do |card|
+  - card.with_header do
+    .ex-cluster.ex-cluster--between
+      = render Yui::BadgeComponent.new("Memory", icon: "feather")
+      - if actions?
+        = render header_component
+      - elsif static_meta.present?
+        span.ex-meta = static_meta
+
+  p.ex-memory-card__memo = memory.memo
+
+  - attachments.each do |attachment|
+    = render partial: insight_partial_path(attachment), locals: insight_partial_locals(attachment)
