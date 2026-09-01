@@ -1,16 +1,12 @@
-article id= dom_id(login)
-
-  p
-    strong Last login at:
-    = login.updated_at.rfc822
-  p
-    strong Device:
-    = render DeviceComponent.new(user_agent: login.user_agent)
-  p
-    strong Location:
-    = render DeviceLocationComponent.new(ip_address: login.ip_address)
+= render Yui::CardComponent.new(id: dom_id(login)) do
+  dl.ex-details
+    dt Last login
+    dd = login.updated_at.rfc822
+    dt Device
+    dd = render DeviceComponent.new(user_agent: login.user_agent)
+    dt Location
+    dd = render DeviceLocationComponent.new(ip_address: login.ip_address)
   - if login.device_id == session[:device_id]
-    i
-      | Current login session
+    = render Yui::BadgeComponent.new("Current session", variant: :success)
   - else
-    = button_to "Destroy this session", login_record_path(login), method: :delete, class: "secondary"
+    = button_to "Destroy this session", login_record_path(login), method: :delete, class: "ex-btn ex-btn--danger ex-btn--sm"

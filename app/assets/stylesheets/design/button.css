@@ -128,4 +128,12 @@
     flex-wrap: wrap;
     gap: var(--ex-space-2xs);
   }
+
+  /* Rails `button_to` wraps its <button class="ex-btn …"> in a <form> — keep it
+     inline so it sits in a cluster like an <a> button. (`.button_to` is a
+     Rails-generated class name, hence the lint exemption.) */
+  /* stylelint-disable-next-line selector-class-pattern */
+  form.button_to {
+    display: inline-block;
+  }
 }

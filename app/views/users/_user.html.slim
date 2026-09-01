@@ -1,11 +1,10 @@
-article id= dom_id(user)
-
-  p
-    strong Name:
-    = user.name
-  p
-    strong Email:
-    = user.email
-  - if action_name != "show"
-    = link_to "Show this user", user, role: "button"
-  = link_to "Edit this user", edit_user_path(user), role: "button", class: "secondary"
+= render Yui::CardComponent.new(id: dom_id(user)) do
+  dl.ex-details
+    dt Name
+    dd = user.name
+    dt Email
+    dd = user.email
+  .ex-cluster
+    - if action_name != "show"
+      = render Yui::ButtonComponent.new("Show this user", href: user_path(user), variant: :secondary, size: :sm)
+    = render Yui::ButtonComponent.new("Edit this user", href: edit_user_path(user), variant: :secondary, size: :sm)

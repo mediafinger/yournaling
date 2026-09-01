@@ -90,6 +90,25 @@
     color: var(--ex-ink-faint);
   }
 
+  /* Key/value list for record detail pages (dl > dt + dd pairs). */
+  .ex-details {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--ex-space-3xs) var(--ex-space-md);
+    margin: 0;
+    font-size: var(--ex-text-sm);
+  }
+
+  .ex-details dt {
+    font-weight: var(--ex-weight-semibold);
+    color: var(--ex-ink-faint);
+  }
+
+  .ex-details dd {
+    margin: 0;
+    color: var(--ex-ink);
+  }
+
   .ex-text--sm {
     font-size: var(--ex-text-sm);
     line-height: var(--ex-leading-normal);

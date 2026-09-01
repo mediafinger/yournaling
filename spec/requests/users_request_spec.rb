@@ -56,6 +56,18 @@ RSpec.describe "/users", type: :request do
       expect(response).to be_successful
     end
 
+    it "renders the edit form with the user fields" do
+      sign_in(user)
+
+      get edit_user_url(user)
+
+      assert_select "form[action=?][method=?]", user_path(user), "post" do
+        assert_select "input[name=?]", "user[name]"
+        assert_select "input[name=?]", "user[email]"
+        assert_select "input[name=?]", "user[password]"
+      end
+    end
+
     it "is forbidden for guests" do
       get edit_user_url(user)
 

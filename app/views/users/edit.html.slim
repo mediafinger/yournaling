@@ -1,3 +1,5 @@
-= render partial: "form", locals: { user: @user, form_legend: "Edit user" }
-= link_to "Show this user", @user, role: "button"
-= button_to "Destroy this user", user_path(@user), method: :delete, class: "secondary"
+.ex-narrow.ex-stack
+  = render partial: "form", locals: { user: @user, form_legend: "Edit user" }
+  .ex-cluster
+    = render Yui::ButtonComponent.new("Show this user", href: user_path(@user), variant: :secondary)
+    = button_to "Destroy this user", user_path(@user), method: :delete, class: "ex-btn ex-btn--danger"
