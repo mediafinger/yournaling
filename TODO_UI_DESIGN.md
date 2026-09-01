@@ -492,27 +492,31 @@ spec fails otherwise). See §4 for the layer order and rationale.
 
 ### Phase 1 — Namespace, conventions, CSS split & data-access decision (~1.5 days)
 
-- [ ] **Namespace**: `Example::` reads as throwaway. Rename the *primitives* to
+- [x] **Namespace**: `Example::` reads as throwaway. Rename the *primitives* to
       **`Yui::`** ("Yournaling UI" — a deliberately app-specific prefix so the
       namespace stays unique even if a third-party component library is added
       later). Keep `Example::` only for showcase chrome. This is cheapest now
-      (≈0 production call sites). Update `/example` + previews.
-- [ ] **Data access**: primitives inherit `ViewComponent::Base`, so they cannot
+      (≈0 production call sites). Update `/example` + previews. (CSS classes /
+      tokens stay `.ex-*` / `--ex-*` — the token rename, if any, is later.)
+- [x] **Data access**: primitives inherit `ViewComponent::Base`, so they cannot
       see `current_user` / policies / helpers. **Keep them pure**: callers pass
       plain values (`href:`, `title:`, `author_name:`, …). Authorization and
       record → view-model mapping happen in **app-level wrapper components**
       (`ApplicationComponent` subclasses) or the controller/view, never inside a
       `Yui::` primitive. Document this rule in `Yui::BaseComponent`.
-- [ ] Implement **form strategy**: a thin `YuiFormBuilder <
+- [x] Implement **form strategy**: a thin `YuiFormBuilder <
       ActionView::Helpers::FormBuilder` whose `text_field` / `select` / `collection`
       helpers emit `.ex-field` markup (wrapping `Yui::FieldComponent`). Used
       opt-in per form (e.g. `form_with ..., builder: YuiFormBuilder`) during migration
       so existing forms migrate incrementally without breaking. Prototype against one form.
-- [ ] Adopt the **Component & template conventions** above: author every `Yui::`
+      (input family + textarea + select + collection_select + check_box + submit;
+      spec in `spec/form_builders/`; prototyped as a specimen in the /example Forms section.)
+- [x] Adopt the **Component & template conventions** above: author every `Yui::`
       primitive with a sidecar `.slim` (or no template for trivial wrappers);
       move the ~20 renamed `Example::*` templates to sidecar as part of the
-      rename. Add the rule to `Yui::BaseComponent`'s doc comment.
-- [ ] **Split the stylesheet** (§4): create `app/assets/stylesheets/design/`,
+      rename. Add the rule to `Yui::BaseComponent`'s doc comment. (13 → sidecar,
+      4 trivial → `def call`; no inline `slim_template` left in `Yui::`.)
+- [x] **Split the stylesheet** (§4): create `app/assets/stylesheets/design/`,
       declare `@layer tokens, base, layout, typography, components, composed;` in
       `design/tokens.css`, move `example.css` into per-concern / per-component
       files each wrapped in its layer, move the showcase chrome to
@@ -520,7 +524,8 @@ spec fails otherwise). See §4 for the layer order and rationale.
       `_design_head`, the `/example` layout and the Lookbook preview layout to
       the ordered `<link>` list; add the "every `design/*.css` is referenced"
       guard spec. Land the mechanical move as its own commit. Point Stylelint
-      (`.stylelintrc.json` glob) and `.prettierignore` at the new dir.
+      (`.stylelintrc.json` glob) and `.prettierignore` at the new dir. (17 files;
+      `_design_head` takes `showcase:`; guard in `spec/views/design_head_spec.rb`.)
 
 ### Phase 2 — Shared chrome (~2 days)
 
