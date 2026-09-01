@@ -1,6 +1,0 @@
-= render(Example::CardComponent.new(variant: :elevated)) do |card|
-  - card.with_header do
-    = render(Example::HeadlineComponent.new("Northern beach", level: 4, eyebrow: "Memory"))
-  p.ex-text.ex-text--sm The tide took the rest.
-  - card.with_footer do
-    = render(Example::ButtonComponent.new("Open", size: :sm, variant: :secondary))

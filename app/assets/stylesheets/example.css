@@ -1,7 +1,7 @@
 /* =============================================================================
    Yournaling — "Warm Editorial" Design Language
    -----------------------------------------------------------------------------
-   A self-contained design system used by the Example::* ViewComponents and the
+   A self-contained design system used by the Yui::* + Example::* ViewComponents and the
    /example showcase page. It does NOT depend on Pico or any existing stylesheet
    and is safe to load in isolation.
 

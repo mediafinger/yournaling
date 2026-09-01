@@ -6,7 +6,7 @@ module Example
   #   = render(Example::SectionComponent.new(number: "02", title: "Typography",
   #            anchor: "typography", description: "Fraunces for display, Inter for UI.")) do
   #     ...
-  class SectionComponent < BaseComponent
+  class SectionComponent < Yui::BaseComponent
     attr_reader :number, :title, :anchor, :description
 
     def initialize(title:, anchor:, number: nil, description: nil)
@@ -23,7 +23,7 @@ module Example
           header.ex-section__head
             - if number
               span.ex-section__number = "#{number} —"
-            = render(Example::HeadlineComponent.new(title, level: 2))
+            = render(Yui::HeadlineComponent.new(title, level: 2))
             - if description
               p.ex-section__desc = description
           = content
