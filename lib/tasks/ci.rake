@@ -30,6 +30,16 @@ if %w[development test].include?(Rails.env)
         "importmap_audit" => %w[bin/importmap audit],
       })
     end
+
+    desc "Integrity gates that boot the app (zeitwerk, db:doctor, factory lint, archspec)"
+    task :checks do # rubocop:disable Rails/RakeEnvironment -- each gate is its own `bundle exec rake` subprocess
+      exit(1) unless CIGate.run_group("checks", {
+        "zeitwerk"     => %w[bundle exec rake zeitwerk:check],
+        "db_doctor"    => %w[bundle exec rake db:doctor],
+        "factory_lint" => %w[bundle exec rake factory_bot:awesome_lint],
+        "archspec"     => %w[bundle exec archspec check],
+      })
+    end
   end
 
   desc "Run the full quality-gate suite"
