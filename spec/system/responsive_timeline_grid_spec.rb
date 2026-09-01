@@ -57,10 +57,10 @@ RSpec.describe "Responsive Timeline Grid & Card Redesign", type: :system do
   end
 
   describe "Browse Mode Timeline Grid & Cards" do
-    it "renders timeline items inside a responsive .timeline-grid with card styling" do
+    it "renders timeline items inside a responsive .ex-record-grid with card styling" do
       visit root_url
 
-      expect(page).to have_css(".timeline-grid")
+      expect(page).to have_css(".ex-record-grid")
       expect(page).to have_css("article.ex-chronicle-card[id='#{dom_id(chronicle)}']")
       expect(page).to have_css("article.ex-memory-card[id='#{dom_id(memory)}']")
 
@@ -89,12 +89,12 @@ RSpec.describe "Responsive Timeline Grid & Card Redesign", type: :system do
   end
 
   describe "Manage Mode Timeline Grid & Cards" do
-    it "renders manage mode artefacts in .timeline-grid with cards" do
+    it "renders manage mode artefacts in .ex-record-grid with cards" do
       visit_sign_in(user)
       visit_switch_current_team(team)
       visit current_team_home_url
 
-      expect(page).to have_css(".timeline-grid")
+      expect(page).to have_css(".ex-record-grid")
       expect(page).to have_css("article.ex-chronicle-card")
       expect(page).to have_css("article.ex-memory-card")
     end

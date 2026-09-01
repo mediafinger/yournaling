@@ -89,6 +89,17 @@
     gap: var(--ex-space-md);
   }
 
+  /* Record-card feed — 1 / 2 / 3 columns responsively, centred by `<main>`'s
+     90rem container (3 × 28rem + gaps fits). `start` so a short card doesn't
+     stretch to the tallest in its row. */
+  .ex-record-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 28rem), 1fr));
+    gap: var(--ex-space-md);
+    align-items: start;
+    margin-block: var(--ex-space-md) var(--ex-space-xl);
+  }
+
   .ex-grid--wide {
     grid-template-columns: repeat(auto-fill, minmax(min(100%, 24rem), 1fr));
   }

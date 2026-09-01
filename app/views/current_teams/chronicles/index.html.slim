@@ -1,6 +1,6 @@
 #chronicles
   - if @chronicles.any?
-    .timeline-grid
+    .ex-record-grid
       - @chronicles.each do |chronicle|
         = render partial: "current_teams/chronicles/chronicle", locals: { chronicle: }
   - else

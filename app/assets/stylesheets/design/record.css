@@ -1,35 +1,8 @@
 @layer composed {
-  /* Transitional — what's left of the legacy card.css after the record-card
-     markup moved to Yui::MemoryCard / Yui::ChronicleCard (Phase 4 bullet 2).
-     `.timeline-grid` goes in bullet 3; the chips + `.thought-quote` go in
-     bullet 4 (nested insight partials); then this file is deleted. */
-
-  /* --- responsive timeline grid (bullet 3 tunes the columns) --- */
-  .timeline-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--ex-space-md);
-    width: 100%;
-    margin-block: var(--ex-space-sm) var(--ex-space-lg);
-  }
-
-  @media (width >= 1050px) {
-    .timeline-grid {
-      grid-template-columns: repeat(2, minmax(500px, 1fr));
-    }
-  }
-
-  @media (width >= 1600px) {
-    .timeline-grid {
-      grid-template-columns: repeat(3, minmax(500px, 1fr));
-    }
-  }
-
-  @media (width <= 768px) {
-    .timeline-grid {
-      gap: var(--ex-space-sm);
-    }
-  }
+  /* Transitional — what's left of the legacy card.css. The chips +
+     `.thought-quote` go in Phase 4 bullet 4 (nested insight partials); then
+     this file is deleted. (The card shell moved to Yui::Card in bullet 2;
+     `.timeline-grid` → `.ex-record-grid` in design/layout.css in bullet 3.) */
 
   /* --- thought pull-quote (bullet 4) --- */
   blockquote.thought-quote {

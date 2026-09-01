@@ -5,7 +5,7 @@
   #newer_posts_container data-feed-refresh-target="container"
   = turbo_frame_tag "publishings_page_#{@pagy.page}", target: "_top" do
     - if @publishings.any?
-      .timeline-grid
+      .ex-record-grid
         - @publishings.each do |publishing|
           - if publishing.post_type == "Chronicle" && publishing.post.present?
             = render partial: "teams/chronicles/chronicle", locals: { team: publishing.team, chronicle: publishing.post }
