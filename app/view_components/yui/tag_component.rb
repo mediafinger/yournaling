@@ -22,7 +22,8 @@ module Yui
 
     def link_options
       opts = { class: "ex-tag", id: dom_id }
-      opts.merge!(target: "_blank", rel: "noopener noreferrer") if external
+      opts[:target] = "_blank" if external
+      opts[:rel] = "noopener noreferrer" if external
       opts
     end
 
