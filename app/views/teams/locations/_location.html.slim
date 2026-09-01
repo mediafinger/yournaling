@@ -1,38 +1,25 @@
 - is_location_show = local_assigns[:full] || (controller_name == "locations" && action_name == "show")
 - if is_location_show
-  article id= dom_id(location)
-    p
-      strong Name:&nbsp;
-      = location.name
-    - if location.country_code.present?
-      p
-        strong Country:&nbsp;
-        - iso_country = ISO3166::Country.find_country_by_alpha2(location.country_code)
-        - if iso_country
-          = iso_country.iso_short_name
-          |  (
-          = iso_country.alpha2
-          | )
-          = iso_country.emoji_flag
-    - if location.address.present?
-      p
-        strong Address:&nbsp;
-        = location.address
-    - if location.url.present?
-      p
-        strong Url:&nbsp;
-        = render ExternalLinkComponent.new(url: location.url, text: location.url)
-    - if location.description.present?
-      p
-        strong Description:&nbsp;
-        = location.description
+  = render Yui::CardComponent.new(id: dom_id(location)) do
+    dl.ex-details
+      dt Name
+      dd = location.name
+      - if location.country_label
+        dt Country
+        dd = location.country_label
+      - if location.address.present?
+        dt Address
+        dd = location.address
+      - if location.url.present?
+        dt URL
+        dd = render ExternalLinkComponent.new(url: location.url, text: location.url)
+      - if location.description.present?
+        dt Description
+        dd = location.description
     - if location.coordinates.present?
-      hr
       = render MapLinkComponent.new(location: location, width: 600, height: 400)
 - else
   = render Yui::TagComponent.new(icon: "map-pin", id: dom_id(location)) do
     = location.name
-    - if location.country_code.present?
-      - iso_country = ISO3166::Country.find_country_by_alpha2(location.country_code)
-      - if iso_country
-        = " #{iso_country.emoji_flag}"
+    - if location.country
+      = " #{location.country.emoji_flag}"

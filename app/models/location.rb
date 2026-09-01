@@ -92,6 +92,23 @@ class Location < ApplicationRecordForContentAndPosts
     "https://www.google.com/maps/place/#{lat},#{long}"
   end
 
+  # ISO3166 country for `country_code` (a lower-case alpha-2), or nil.
+  def country
+    ISO3166::Country.find_country_by_alpha2(country_code) if country_code.present?
+  end
+
+  # "Spain" — humanised country name, or nil.
+  def country_name
+    country&.iso_short_name
+  end
+
+  # "Spain (ES) 🇪🇸" — name + code + flag, or nil.
+  def country_label
+    return if country.nil?
+
+    "#{country.iso_short_name} (#{country.alpha2}) #{country.emoji_flag}"
+  end
+
   def map(width:, height:, style: "osm-carto", zoom: 14)
     "https://maps.geoapify.com/v1/staticmap?" \
       "style=#{style}&width=#{width}&height=#{height}&" \
