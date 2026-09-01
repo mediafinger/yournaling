@@ -615,6 +615,7 @@ DEPENDENCIES
   lookbook (~> 2.3)
   mission_control-jobs (~> 1.0)
   pagy (~> 43.0)
+  parallel
   parallel_tests
   pg (~> 1.1)
   pg_search (~> 2.3)

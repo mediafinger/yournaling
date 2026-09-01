@@ -64,6 +64,7 @@ group :development, :test do
   gem "factory_bot_rails", "~> 6.2"
   gem "faker", "~> 3.2"
   gem "kamal"
+  gem "parallel" # explicit: `rake ci` runs gate groups via Parallel (also a parallel_tests dep)
   gem "rspec-rails", "~> 8.0"
   gem "rubocop-capybara", "~> 3.0"
   gem "rubocop-factory_bot", "~> 2.26"
