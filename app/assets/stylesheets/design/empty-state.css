@@ -1,0 +1,29 @@
+@layer components {
+  /* Empty state — rendered by EmptyStateComponent (an app component that
+     composes Yui:: primitives). */
+
+  .ex-empty-state {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ex-space-sm);
+    align-items: center;
+    max-width: 34rem;
+    padding: var(--ex-space-2xl) var(--ex-space-lg);
+    margin: var(--ex-space-2xl) auto;
+    text-align: center;
+    background-color: var(--ex-surface-sunken);
+    border: 1px dashed var(--ex-border-strong);
+    border-radius: var(--ex-radius-lg);
+  }
+
+  .ex-empty-state__icon {
+    font-size: 2.5rem;
+    line-height: 1;
+  }
+
+  .ex-empty-state__body {
+    max-width: 28rem;
+    margin: 0;
+    color: var(--ex-ink-soft);
+  }
+}

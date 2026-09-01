@@ -3,13 +3,14 @@
 
   - if kind == :textarea
     textarea.ex-textarea(id=field_id name=name rows=rows placeholder=placeholder
-      required=required disabled=disabled aria-describedby=described_by aria-invalid=aria_invalid)
+      required=required disabled=disabled autofocus=autofocus autocomplete=autocomplete
+      aria-describedby=described_by aria-invalid=aria_invalid)
       = value
 
   - elsif kind == :select
     .ex-select-wrap
       select.ex-select(id=field_id name=name required=required disabled=disabled
-        aria-describedby=described_by aria-invalid=aria_invalid)
+        autofocus=autofocus aria-describedby=described_by aria-invalid=aria_invalid)
         - Array(options).each do |option|
           - option_label, option_value = option.is_a?(Array) ? option : [option, option]
           option value=option_value selected=(option_value.to_s == value.to_s)
@@ -18,7 +19,8 @@
 
   - else
     input.ex-input(type=type id=field_id name=name value=value placeholder=placeholder
-      required=required disabled=disabled aria-describedby=described_by aria-invalid=aria_invalid)
+      required=required disabled=disabled autofocus=autofocus autocomplete=autocomplete
+      aria-describedby=described_by aria-invalid=aria_invalid)
 
   - if hint.present?
     span.ex-hint id="#{field_id}-hint"

@@ -76,6 +76,8 @@ class YuiFormBuilder < ActionView::Helpers::FormBuilder
       error: field_error(method),
       required: options.fetch(:required, required_field?(method)),
       disabled: options[:disabled] || false,
+      autofocus: options[:autofocus] || false,
+      autocomplete: options[:autocomplete],
       options: choices,
       rows: options[:rows] || 4
     ))

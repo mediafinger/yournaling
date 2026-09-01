@@ -15,15 +15,18 @@ module Yui
   #
   # as:   :input (default), :textarea, :select
   # type: any HTML input type (used when as: :input)
+  # autofocus / autocomplete: passed straight through to the control (auth forms
+  #   want focus-on-load and password-manager hints like "current-password").
   class FieldComponent < BaseComponent
     KINDS = %i[input textarea select].freeze
 
     attr_reader :label, :name, :kind, :type, :value, :placeholder, :hint, :error,
-      :required, :disabled, :options, :rows
+      :required, :disabled, :options, :rows, :autofocus, :autocomplete
 
     def initialize(
       label:, name:, as: :input, type: "text", value: nil, placeholder: nil,
-      hint: nil, error: nil, required: false, disabled: false, options: [], rows: 4
+      hint: nil, error: nil, required: false, disabled: false, options: [], rows: 4,
+      autofocus: false, autocomplete: nil
     )
       super()
       @label = label
@@ -38,6 +41,8 @@ module Yui
       @disabled = disabled
       @options = options
       @rows = rows
+      @autofocus = autofocus
+      @autocomplete = autocomplete.presence
     end
 
     def field_id

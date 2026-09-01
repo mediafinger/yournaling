@@ -1,11 +1,5 @@
 - if record.errors.any?
-  section
-    h2
-      = pluralize(record.errors.count, "error")
-      |  prohibited this
-      = record.class.name
-      |  from being saved:
-    ul
+  = render Yui::CalloutComponent.new(variant: :danger, title: "#{pluralize(record.errors.count, "error")} prohibited this from being saved") do
+    ul.ex-stack.ex-stack--xs
       - record.errors.each do |error|
-        li
-          = error.full_message
+        li = error.full_message

@@ -12,6 +12,21 @@
     max-width: var(--ex-container-narrow);
   }
 
+  /* The layout's <main> — centred, generous on large screens, vertical rhythm.
+     Content that reads better narrow (forms, a single record) wraps its inner
+     block in .ex-narrow. */
+  main.ex-scope {
+    width: 100%;
+    max-width: var(--ex-container);
+    padding: var(--ex-space-xl) clamp(1.25rem, 0.5rem + 3vw, 3rem);
+    margin-inline: auto;
+  }
+
+  .ex-narrow {
+    max-width: var(--ex-container-narrow);
+    margin-inline: auto;
+  }
+
   /* Vertical rhythm: consistent gap between direct children */
   .ex-stack {
     display: flex;
