@@ -21,6 +21,15 @@ if %w[development test].include?(Rails.env)
         "actionlint" => %w[bin/actionlint],
       })
     end
+
+    desc "Security gates (brakeman, bundler-audit, importmap audit)"
+    task :security do # rubocop:disable Rails/RakeEnvironment -- gates shell out; no Rails boot needed
+      exit(1) unless CIGate.run_group("security", {
+        "brakeman"        => %w[bundle exec brakeman --quiet --no-pager --no-progress --exit-on-warn],
+        "bundler_audit"   => %w[bin/bundler-audit check --update],
+        "importmap_audit" => %w[bin/importmap audit],
+      })
+    end
   end
 
   desc "Run the full quality-gate suite"
