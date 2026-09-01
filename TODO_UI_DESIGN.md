@@ -535,29 +535,26 @@ Convert the components every layout renders, then start pulling Pico.
 all three cheap; ship them before the chrome sweep so editing `design/*.css` is
 fast throughout.
 
-- [ ] **DevTools Workspace** — write up the one-time setup in
+- [x] **DevTools Workspace** — write up the one-time setup in
       `app/assets/stylesheets/design/README.md` (open a preview in its own tab
       → Sources → add `design/` as a Workspace folder → Styles-pane edits save
       into the right file; `git checkout` to discard). Zero code; highest
       leverage for token work.
-- [ ] **Editor + auto-reload** — add `listen` to the `:development` group, set
+- [x] **Editor + auto-reload** — `listen` in the `:development` group,
       `config.file_watcher = ActiveSupport::EventedFileUpdateChecker` in
-      `development.rb` (already a Propshaft dev-perf recommendation, §1), and
-      point Lookbook at the stylesheet dir so a save reloads the preview:
-
-      ```ruby
-      config.lookbook.listen_paths      << Rails.root.join("app/assets/stylesheets/design")
-      config.lookbook.listen_extensions << "css"
-      ```
-
-- [ ] **Read-only "CSS" inspector panel** — a custom Lookbook panel that maps
-      the previewed component to its stylesheet by naming convention
-      (`Yui::ButtonComponent` → `design/button.css`) and shows that file
-      read-only with syntax highlighting; degrade gracefully when there is no
-      1:1 file (composed cards, base, layout-only primitives). Confirm the
-      Lookbook 2.3 API — it is a `config.lookbook.preview_inspector` config
-      object, not the `drawer_panels` shape quoted in §5. Low priority relative
-      to the two loops above, but the mapping is now trivial.
+      `development.rb`, and in `config/application.rb`:
+      `config.lookbook.live_updates = true` +
+      `listen_paths << …/design` + `listen_extensions << "css"`.
+      (`live_updates` is the extra bit the §5 snippet missed — without it the
+      watcher reloads previews server-side but the browser doesn't refresh.
+      `Lookbook::Engine.auto_refresh?` is now `true`.)
+- [x] **Read-only "CSS" inspector panel** — `Lookbook.add_panel("css", …)` in a
+      dev-guarded initializer; `DesignCssPanel.name_for` maps
+      `Yui::ButtonComponentPreview` → `design/button.css` (dasherised), with a
+      SHARED fallback for primitives whose rules live in a layer file
+      (typography / layout / field). Rendered read-only + highlighted via
+      `lookbook_render :code`; the `"*"` in `drawer_panels` slots it next to
+      Source/Notes/Params — no `preview_inspector` config needed.
 
 **Shared chrome.**
 
