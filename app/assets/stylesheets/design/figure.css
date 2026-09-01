@@ -1,6 +1,17 @@
 @layer components {
   /* 4g. ---------------------------------------------------------- FIGURE */
 
+  /* A link whose content is media (a map thumbnail, a photo) — no underline. */
+  .ex-media-link {
+    display: inline-block;
+    overflow: clip;
+    border-radius: var(--ex-radius-md);
+  }
+
+  .ex-media-link img {
+    display: block;
+  }
+
   .ex-figure {
     display: flex;
     flex-direction: column;

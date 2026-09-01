@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
+# One-line "City 🇨🇨 Country" from a geolocated IP address.
 class DeviceLocationComponent < ApplicationComponent
-  slim_template <<~SLIM
-    = @infos.compact.join(" ")
-  SLIM
+  attr_reader :infos
 
   def initialize(ip_address:)
     @ip_address = ip_address

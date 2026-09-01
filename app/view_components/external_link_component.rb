@@ -1,17 +1,11 @@
 # frozen_string_literal: true
 
+# A text link to an external site (new tab, rel=noopener, trailing ↗).
 class ExternalLinkComponent < ApplicationComponent
-  slim_template <<~SLIM
-    span class="external_link"
-      = @link_tag
-  SLIM
+  attr_reader :url, :text
 
   def initialize(url:, text:)
     @url = url
     @text = text
-  end
-
-  def before_render
-    @link_tag = link_to(@text, @url, target: "_blank", rel: "noopener")
   end
 end

@@ -1,21 +1,18 @@
 # frozen_string_literal: true
 
+# A static map thumbnail that links out to Google Maps.
 class MapLinkComponent < ApplicationComponent
-  slim_template <<~SLIM
-    span class="map_link"
-      = @link_tag
-  SLIM
-
   def initialize(location:, width:, height:)
     @location = location
     @width = width
     @height = height
   end
 
-  def before_render
-    @image_tag = image_tag(
-      @location.map(width: @width, height: @height), size: "#{@width}x#{@height}", alt: @location.address)
+  attr_reader :location, :width, :height
 
-    @link_tag = link_to(@image_tag, @location.gmaps_coordinates_url, target: "_blank", rel: "noopener")
+  def image_tag_for_map
+    image_tag(
+      location.map(width:, height:), size: "#{width}x#{height}", alt: location.address
+    )
   end
 end

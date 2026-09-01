@@ -1,12 +1,8 @@
 # frozen_string_literal: true
 
+# One-line human summary of a device parsed from a User-Agent string.
 class DeviceComponent < ApplicationComponent
-  slim_template <<~SLIM
-    ul
-      - @infos.each do |info|
-        li
-          = info
-  SLIM
+  attr_reader :infos
 
   def initialize(user_agent:)
     device = DeviceDetector.new(user_agent)

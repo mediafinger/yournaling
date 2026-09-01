@@ -1,21 +1,7 @@
 # frozen_string_literal: true
 
 class SearchResultsComponent < ApplicationComponent
-  slim_template <<~SLIM
-    - if @results.present?
-      ul
-        - @results.each do |result|
-          - if (link = record_link(result)).present?
-            li
-              = link
-              small.content-snippet = result.content.truncate(120)
-              i
-                > (updated_at:
-                = result.searchable.updated_at.to_fs(:db)
-                > )
-    - elsif @query.present?
-      p.empty-notice No results found.
-  SLIM
+  attr_reader :results, :query
 
   def initialize(results:, query: nil, scope: "current_team")
     @results = results.presence || []
@@ -30,7 +16,7 @@ class SearchResultsComponent < ApplicationComponent
       return
     end
 
-    link_to("#{record.class.name}: #{result.content.truncate(60)}", record_path(record))
+    link_to("#{record.class.name}: #{result.content.truncate(60)}", record_path(record), class: "ex-link")
   end
 
   def record_path(record)
