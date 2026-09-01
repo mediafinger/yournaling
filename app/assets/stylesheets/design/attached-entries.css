@@ -1,0 +1,100 @@
+@layer components {
+  /* ChronicleAttachedEntriesFormComponent — the drag-sortable list of entries
+     already attached to a chronicle, each with reorder nudges and a Remove
+     checkbox. Drag state (opacity) is set inline by the `sortable` controller. */
+
+  .ex-attached-entries {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ex-space-2xs);
+    padding: 0;
+    margin: 0;
+    border: 0;
+  }
+
+  .ex-attached-entries__legend {
+    display: block;
+    padding: 0;
+  }
+
+  .ex-attached-entries__legend .ex-h4 {
+    margin-bottom: var(--ex-space-3xs);
+  }
+
+  .ex-attached-entries__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ex-space-xs);
+  }
+
+  .ex-attached-entry {
+    display: flex;
+    gap: var(--ex-space-sm);
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--ex-space-xs);
+    background-color: var(--ex-surface);
+    border: var(--ex-border-hairline);
+    border-radius: var(--ex-radius-sm);
+  }
+
+  .ex-attached-entry__main {
+    display: flex;
+    gap: var(--ex-space-2xs);
+    align-items: center;
+    min-width: 0;
+  }
+
+  .ex-attached-entry__handle {
+    padding-right: var(--ex-space-3xs);
+    font-size: 1.25rem;
+    line-height: 1;
+    color: var(--ex-ink-faint);
+    cursor: grab;
+    user-select: none;
+  }
+
+  .ex-attached-entry__nudge {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-right: var(--ex-space-3xs);
+  }
+
+  .ex-attached-entry__thumb {
+    flex-shrink: 0;
+    width: 60px;
+    height: 45px;
+    object-fit: cover;
+    border-radius: var(--ex-radius-xs);
+  }
+
+  .ex-attached-entry__body {
+    min-width: 0;
+    font-size: var(--ex-text-sm);
+  }
+
+  .ex-attached-entry__title {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .ex-attached-entry__actions {
+    display: flex;
+    flex-shrink: 0;
+    gap: var(--ex-space-sm);
+    align-items: center;
+  }
+
+  .ex-attached-entry__remove {
+    display: flex;
+    gap: var(--ex-space-3xs);
+    align-items: center;
+    margin-bottom: 0;
+    font-size: var(--ex-text-sm);
+    color: var(--ex-danger);
+    cursor: pointer;
+  }
+}
