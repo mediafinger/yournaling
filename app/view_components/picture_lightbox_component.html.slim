@@ -1,25 +1,15 @@
-.picture-lightbox-container data-controller="modal"
-  .picture-lightbox-trigger data-action="click->modal#open" role="button" aria-haspopup="dialog" aria-label="Enlarge picture" style="cursor: pointer;"
-    = image_tag(picture.send(size), alt: picture_title, style: "width: 400px; height: 266px; object-fit: cover; border-radius: 0.5rem;")
+= render Yui::ModalComponent.new(title: modal_title, size: :lg) do |modal|
+  - modal.with_trigger do
+    button.ex-lightbox-trigger type="button" aria-label="Enlarge #{modal_title}"
+      = image_tag(picture.send(size), alt: (picture.name.presence || "Picture"), class: "ex-lightbox-thumb", loading: "lazy")
 
-  dialog data-modal-target="dialog" aria-label=picture_title
-    article.picture-lightbox-article
-      header
-        button.close aria-label="Close" rel="prev" type="button" data-action="click->modal#close"
-        h4 style="margin-bottom: 0;"
-          = picture_title
-          - if picture.date
-            |  (
-            = picture.date
-            | )
-      .picture-lightbox-body style="text-align: center; padding: 0.5rem 0;"
-        - if original_picture_url
-          = link_to original_picture_url, target: "_blank", rel: "noopener noreferrer", title: "Click to open full original in new tab" do
-            = image_tag(picture.large, alt: picture_title, style: "max-height: 75vh; max-width: 100%; width: auto; height: auto; object-fit: contain; border-radius: 0.5rem;")
-        - else
-          = image_tag(picture.large, alt: picture_title, style: "max-height: 75vh; max-width: 100%; width: auto; height: auto; object-fit: contain; border-radius: 0.5rem;")
-      footer style="display: flex; justify-content: flex-end; gap: 0.75rem; align-items: center; margin-top: 0.5rem;"
-        - if original_picture_url
-          = link_to "Open original in new tab ↗", original_picture_url, target: "_blank", rel: "noopener noreferrer", role: "button", style: "margin-bottom: 0;"
-        button.secondary.outline type="button" data-action="click->modal#close" style="margin-bottom: 0;"
-          | Close
+  .ex-lightbox-body
+    - if original_picture_url
+      = link_to original_picture_url, target: "_blank", rel: "noopener noreferrer", title: "Open the full original in a new tab", class: "ex-media-link" do
+        = image_tag(picture.large, alt: (picture.name.presence || "Picture"), class: "ex-lightbox-full")
+    - else
+      = image_tag(picture.large, alt: (picture.name.presence || "Picture"), class: "ex-lightbox-full")
+
+  - if original_picture_url
+    - modal.with_footer do
+      = link_to "Open original in new tab ↗", original_picture_url, target: "_blank", rel: "noopener noreferrer", class: "ex-btn ex-btn--secondary ex-btn--sm"

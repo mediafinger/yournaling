@@ -1,0 +1,40 @@
+@layer components {
+  /* Picture lightbox — thumbnail trigger + enlarged image inside a Yui::Modal. */
+
+  .ex-lightbox-trigger {
+    display: inline-block;
+    padding: 0;
+    cursor: zoom-in;
+    background: none;
+    border: 0;
+  }
+
+  .ex-lightbox-thumb {
+    display: block;
+    width: 100%;
+    max-width: 25rem;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    border-radius: var(--ex-radius-md);
+    box-shadow: var(--ex-shadow-sm);
+    transition:
+      transform var(--ex-transition),
+      opacity var(--ex-transition);
+  }
+
+  .ex-lightbox-trigger:hover .ex-lightbox-thumb {
+    opacity: 0.95;
+    transform: scale(1.01);
+  }
+
+  .ex-lightbox-body {
+    text-align: center;
+  }
+
+  .ex-lightbox-full {
+    max-width: 100%;
+    max-height: 75vh;
+    object-fit: contain;
+    border-radius: var(--ex-radius-md);
+  }
+}

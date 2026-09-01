@@ -21,11 +21,11 @@ RSpec.describe "Picture Lightbox Modal", type: :system do
     visit root_url
 
     within("article.ex-memory-card[id='#{dom_id(memory)}']") do
-      expect(page).to have_css("div[data-controller='modal']")
-      expect(page).to have_css("[data-action='click->modal#open']")
-      expect(page).to have_css("dialog[data-modal-target='dialog']")
+      expect(page).to have_css("div[data-controller='yui-modal']")
+      expect(page).to have_css("[data-action='click->yui-modal#open']")
+      expect(page).to have_css("dialog[data-yui-modal-target='dialog']")
 
-      within("dialog[data-modal-target='dialog']") do
+      within("dialog[data-yui-modal-target='dialog']") do
         expect(page).to have_text("Sunset on Mont Blanc")
         expect(page).to have_link(
           "Open original in new tab ↗",

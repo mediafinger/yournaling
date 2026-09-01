@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# A picture thumbnail that opens the enlarged image in a Yui::Modal, with a
+# link out to the full original.
 class PictureLightboxComponent < ApplicationComponent
   attr_reader :picture, :team, :size
 
@@ -22,7 +24,8 @@ class PictureLightboxComponent < ApplicationComponent
     end
   end
 
-  def picture_title
-    picture.name.presence || "Picture"
+  def modal_title
+    name = picture.name.presence || "Picture"
+    picture.date ? "#{name} (#{picture.date})" : name
   end
 end

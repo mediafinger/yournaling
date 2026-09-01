@@ -3,4 +3,3 @@
    shared selectors during the migration. Files are deleted in Phase 6. */
 @import url("general.css") layer(legacy);
 @import url("buttons.css") layer(legacy);
-@import url("lightbox.css") layer(legacy);
