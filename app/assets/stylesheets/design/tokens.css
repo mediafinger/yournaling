@@ -32,7 +32,7 @@
   font-display: swap;
 }
 
-@layer tokens, base, layout, typography, components, composed;
+@layer tokens, base, layout, typography, components, composed, showcase;
 
 @layer tokens {
   /* 1. ---------------------------------------------------------------- TOKENS */

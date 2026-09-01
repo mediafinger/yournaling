@@ -9,7 +9,13 @@ bespoke **"Warm Editorial"** design language that already lives under
 
 ---
 
-## 1. Where we are today
+## 1. Starting point (snapshot, 2026-08-31)
+
+This section is a **frozen snapshot** of the codebase when the plan was written —
+it is not updated as work lands. Progress is tracked by the checkboxes in §7;
+as of 2026-09-01, Phases 0–1 and the CSS-feedback-loop items of Phase 2 are
+done (`example.css` is now `app/assets/stylesheets/design/*.css`, the primitives
+are `Yui::`, fonts are self-hosted, Lookbook is installed).
 
 ### Styling stack
 
@@ -69,8 +75,9 @@ Rationale:
 - We already have the infrastructure (ViewComponent is used heavily) **and ~80%
   of the component vocabulary is built and reviewed**.
 - Zero new runtime dependencies suits a Hotwire + importmap + Propshaft app.
-  `example.css` is served directly by Propshaft — **no build step, no Node, no
-  watcher, no CI asset step.**
+  The `design/*.css` files are served directly by Propshaft — **no build step,
+  no runtime Node, no watcher, no CI asset compilation.** (A dev-only Node
+  toolchain lints/formats the CSS — see §4.)
 - A token-driven ViewComponent system gives us the thing utility classes cannot:
   a visual change is one edit in one place, not a find-and-replace across
   hundreds of templates (see §8).
@@ -99,9 +106,9 @@ overrides in `navbar.css` fighting it.
 
 ### Why they can coexist during the migration
 
-`example.css` is **scoped** (`.ex-scope` / `.ex-body`) and defines **no global
-reset or bare-element rules**. Pico's `--pico-*` variables and the `--ex-*`
-tokens do not collide. So we can:
+The `design/*.css` files are **scoped** (`.ex-scope` / `.ex-body`) and their
+`base` layer defines **no global reset or bare-element rules**. Pico's
+`--pico-*` variables and the `--ex-*` tokens do not collide. So we can:
 
 1. Wrap a layout's `<main>` (or any subtree) in `.ex-scope` and it renders in the
    new design while the surrounding chrome stays on Pico.
@@ -113,32 +120,33 @@ tokens do not collide. So we can:
 
 ### Interim rules
 
-- **Never load Pico and `example.css` as competing full-page systems.** Scope
-  `example.css` to main content; leave Pico owning the chrome until the nav
-  components are ported (Phase 2).
+- **Never load Pico and the `design/` sheets as competing full-page systems.**
+  Scope the design language to main content (`.ex-scope` on `<main>`); leave
+  Pico owning the chrome until the nav components are ported (Phase 2).
 - The three per-area accent colours (amber / green / blue) carry over as an
   `--ex-accent` override per layout — add a `data-area` attribute or body class
   and redefine `--ex-accent*` for `[data-area="team"]` / `[data-area="admin"]`
-  in `example.css`. Default stays the terracotta.
+  in `design/tokens.css`. Default stays the terracotta.
 - Keep `data-turbo-track: "reload"` on the stylesheet tag.
 
 ### Asset-handling changes for this path (minimal)
 
-- **Remove `dartsass-rails`**, the dead `application.scss`, the empty
-  `app/assets/builds/application.css`, and the `css:` line in `Procfile.dev`.
-  Nothing replaces them — Propshaft serves `example.css` directly.
-- **Self-host Fraunces + Inter** as `woff2` in `app/assets/fonts/` with
-  `@font-face` in `example.css` (Propshaft fingerprints them) in Phase 0 to drop
-  the Google CDN dependency immediately and simplify CSP.
-- **Retire the `example.css` filename** by splitting it into
-  `app/assets/stylesheets/design/` in Phase 1 (see §4 → *CSS file organisation*)
-  — done alongside the `Yui::` rename, so "the example" name disappears in the
-  same pass.
+- ✅ **Remove `dartsass-rails`**, the dead `application.scss`, the empty
+  `app/assets/builds/application.css`, and the `css:` line in `Procfile.dev` —
+  done in Phase 0 (`fa60a8c`). Propshaft serves the `design/*.css` files
+  directly.
+- ✅ **Self-host Fraunces + Inter** as `woff2` in `app/assets/fonts/` with
+  `@font-face` in `design/tokens.css` (Propshaft fingerprints them) — done in
+  Phase 0; the Google CDN dependency is gone and CSP is simpler.
+- ✅ **Retire the `example.css` filename** by splitting it into
+  `app/assets/stylesheets/design/` (see §4 → *CSS file organisation*) — done in
+  Phase 1 alongside the `Yui::` rename.
 - **CSP**: when re-enabled (Phase 6), no external style/script host is needed if
   fonts are self-hosted. The `csp_meta_tag` is already in the layouts.
-- **CI / tests**: no runtime build artefact. `rake ci` gains one thing — the
-  Prettier + Stylelint `css` step (§4) with an `actions/setup-node` + `npm ci`
-  step in CI; still no asset compilation. (Contrast with §9.)
+- ✅ **CI / tests**: no runtime build artefact. `rake ci` gained one step — the
+  Prettier + Stylelint `css` task (§4), with `actions/setup-node` + `npm ci`
+  added to the CI tests job and `npm install` to `bin/setup`; still no asset
+  compilation. (Contrast with §9.)
 
 ---
 
@@ -149,8 +157,8 @@ concern, ordered with `@layer`**; and **add Prettier + Stylelint to `rake ci`**.
 
 ### Preprocessor: why we stay on plain CSS (no Sass/SCSS)
 
-**Decision: no Sass/SCSS. `example.css` stays plain CSS, authored with native
-CSS nesting where it aids readability.**
+**Decision: no Sass/SCSS. The `design/*.css` files stay plain CSS, authored with
+native CSS nesting and `@layer` where it aids readability.**
 
 The inert `dartsass-rails` setup (see §1) tempts a "reactivate it properly"
 move. We won't. Modern CSS has absorbed almost everything Sass existed to
@@ -163,12 +171,12 @@ provide, and adopting Sass would re-introduce exactly the build step that §2 an
 |--------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `$variables`                                           | We use CSS custom properties (`--ex-*`). Strictly **better** here: runtime, cascade-aware, devtools-inspectable — and the reason the `prefers-color-scheme` dark-mode token swap works at all. Sass variables are compile-time and cannot do that. |
 | Nesting, `&`                                           | **Native CSS nesting** ships in every browser we support (Baseline 2023). Adopt freely, zero tooling.                                                                                                                                              |
-| `darken()` / `lighten()` / `mix()`                     | **`color-mix()`** (already used in `example.css` for the callout borders), relative colour syntax `hsl(from var(--c) h s calc(l * .9))`, `light-dark()`. Native colour math is here.                                                               |
+| `darken()` / `lighten()` / `mix()`                     | **`color-mix()`** (already used in `design/callout.css` for the borders), relative colour syntax `hsl(from var(--c) h s calc(l * .9))`, `light-dark()`. Native colour math is here.                                                                |
 | Mixins for theming                                     | The `.ex-btn` private-custom-property idiom (`--_bg` / `--_fg` overridden per variant) already replaces them, and reads better than an `@include`.                                                                                                 |
 | `@media` bubbling                                      | Comes with native nesting.                                                                                                                                                                                                                         |
 | `@each` / `@for` loops                                 | **Genuinely not in CSS.** Would save ~15 lines generating the `--xs/sm/lg/xl` scale modifiers. Small — a fixed 8-value scale is written once by hand.                                                                                              |
 | Compile many partials → one file (`@use` / `@forward`) | The one real gap. See mitigations below.                                                                                                                                                                                                           |
-| Minification (`style: :compressed`)                    | Propshaft does **none**; Sass would minify. After brotli at the edge (Thruster / Kamal) the net saving on a ~1,430-line file is ~5–10%. Marginal.                                                                                                  |
+| Minification (`style: :compressed`)                    | Propshaft does **none**; Sass would minify. After brotli at the edge (Thruster / Kamal) the net saving on the ~1,650 lines of `design/*.css` is ~5–10%. Marginal.                                                                                  |
 | Build-time errors, `@debug` / `@warn`                  | Minor.                                                                                                                                                                                                                                             |
 
 ### The trade
@@ -210,20 +218,24 @@ nothing over what the browser now does natively.
 ### CSS file organisation: split by concern, ordered with `@layer`
 
 **Decision: split the single stylesheet into `app/assets/stylesheets/design/` —
-one file for tokens, one for base, one for layout, one for typography, and one
-per component / composed record — and control the cascade with native `@layer`,
-not file order.** Do it in **Phase 1**, while everything is still small and
-pre-rename.
+one file for tokens, one for base, one for layout, one for typography, one per
+component / composed record, plus `showcase.css` — and control the cascade with
+native `@layer`, not file order.**
+
+**Done in Phase 1** (`9fa4acd`): 17 `design/*.css` files +
+`spec/views/design_head_spec.rb` as the guard; the `design/README.md` map
+followed in Phase 2 (`e7acf19`).
 
 The driver is workflow, not payload: small files are faster to navigate, a
 DevTools "Workspace" edit lands as a 3-line diff in the right file, `git blame`
-is per-component, and Lookbook's read-only CSS panel (§5) can just read the
-component's own file instead of slicing a 1,400-line monolith.
+is per-component, and Lookbook's read-only CSS panel (§5) reads the component's
+own file (`Yui::ButtonComponent` → `design/button.css`) instead of slicing a
+monolith.
 
-**Layer order** — declared once, in `design/tokens.css`:
+**Layer order** — declared once, at the top of `design/tokens.css`:
 
 ```css
-@layer tokens, base, layout, typography, components, composed;
+@layer tokens, base, layout, typography, components, composed, showcase;
 ```
 
 Every file wraps its rules (`@layer components { .ex-btn { … } }`). Cascade
@@ -231,33 +243,35 @@ order is then fixed by that list and **independent of the order the files load**
 — which removes the one real hazard of splitting. (Custom properties resolve at
 use time, so `--ex-*` never cared about order; it is base resets and
 modifier-vs-base specificity ties that do, and `@layer` settles exactly those.)
+`@font-face` stays unlayered at the top of `tokens.css`.
 
-**Loading** — an ordered array in `shared_partials/_design_head`, one `<link>`
-per file, each with `data-turbo-track: "reload"`. **Not**
+**Loading** — an ordered `%w[…]` array in `shared_partials/_design_head`, one
+`<link>` per file, each with `data-turbo-track: "reload"`. **Not**
 `stylesheet_link_tag :all` (alphabetical → `tokens` loads last), **not**
-`@import` (render-blocking waterfall).
+`@import` (render-blocking waterfall — and now blocked by a Stylelint rule, §4).
 
-**`design/showcase.css`** — the showcase chrome (`.ex-section`, `.ex-swatch`,
-`.ex-specimen`, `Example::*` helpers) moves here and is loaded **only** by the
-`/example` layout and Lookbook, never app-wide. The split is what finally gets
-this CSS off every app page.
+**`design/showcase.css`** — the showcase chrome (`.ex-showcase*`, `.ex-section`,
+`.ex-swatch`, `.ex-specimen`) lives in its **own `showcase` layer, above
+everything**, and is loaded **only** by the `/example` layout and the Lookbook
+preview layout (`_design_head`'s `showcase: true`), never app-wide.
 
-**Guard** — a spec asserting every `design/*.css` is referenced by `_design_head`
-(or have the partial glob the directory in an explicit order), so a new
-`tooltip.css` cannot be silently forgotten.
+**Guard** — `spec/views/design_head_spec.rb` asserts every `design/*.css` is
+listed in `_design_head` exactly once, `tokens` first, and `showcase` not in the
+app-wide set — so a new `tooltip.css` cannot be silently forgotten.
 
-Proposed files (~10–15):
+Actual files:
 
 ```text
 design/
-  tokens.css       # fonts, colour, type scale, spacing, radii, shadows, motion (:root + dark)
-  base.css         # .ex-scope / .ex-body, box-sizing, focus-visible, selection, reduced-motion, bare elements
-  layout.css       # container, stack, cluster, grid, divider
-  typography.css   # headings, lead, text, prose, blockquote, eyebrow
-  button.css  link.css  badge.css  tag.css  card.css  field.css
-  callout.css  avatar.css  figure.css  icon.css
-  memory-card.css  chronicle-card.css
-  showcase.css     # /example + Lookbook only
+  README.md
+  tokens.css       # @layer tokens — @font-face + fonts, colour, type scale, spacing, radii, shadows, motion (:root + dark)
+  base.css         # @layer base — .ex-scope / .ex-body, box-sizing, focus-visible, selection, reduced-motion
+  layout.css       # @layer layout — container, stack, cluster, grid, divider
+  typography.css   # @layer typography — headings, lead, text, prose, blockquote, eyebrow
+  button.css  link.css  badge.css  tag.css  card.css  field.css   # @layer components
+  callout.css  avatar.css  figure.css  icon.css                   # @layer components
+  memory-card.css  chronicle-card.css                             # @layer composed
+  showcase.css     # @layer showcase — /example + Lookbook only
 ```
 
 If request count or payload is ever *measured* as a problem, that is the trigger
@@ -275,9 +289,10 @@ pattern, modern colour notation, no duplicate or descending-specificity
 selectors. That is precisely where Biome's CSS support is thin: its CSS linter
 is a small subset of `stylelint-config-recommended` (correctness only — no
 ordering, no naming patterns). Biome's real win is one fast binary replacing
-ESLint + Prettier on large **JS/TS** codebases; this is one growing CSS file
-plus ~14 tiny Stimulus controllers, so that advantage does not apply. SCSS being
-off the table removes Biome's main weakness but also its reason to exist here.
+ESLint + Prettier on large **JS/TS** codebases; this is ~17 small `design/*.css`
+files plus ~14 tiny Stimulus controllers, so that advantage does not apply. SCSS
+being off the table removes Biome's main weakness but also its reason to exist
+here.
 Prettier is additionally already running informally in the editor (it is what
 reformats these tables) and also covers Markdown / JSON / YAML.
 
@@ -295,27 +310,37 @@ importmap / Propshaft / runtime; importmap pins live in `config/importmap.rb`):
 | `stylelint-config-standard`     | baseline rules (Stylelint 16 dropped stylistic rules → no Prettier conflict; `stylelint-config-prettier` is deprecated and not needed) |
 | `stylelint-config-recess-order` | property ordering                                                                                                                      |
 
-Config: `.stylelintrc.json` extending both configs, with
-`custom-property-pattern: "^(yui|ex|_)-[a-z0-9-]+$"`,
-`at-rule-disallowed-list: ["import"]` (enforces the "no `@import`" rule from §4),
-and (to start) `no-descending-specificity: null` and
-`declaration-block-no-redundant-longhand-properties: null` — both noisy.
-`.prettierignore` excludes `app/assets/stylesheets/pico.*.css` and
-`app/assets/builds/`.
+As shipped (`.stylelintrc.json`, extends `stylelint-config-standard` +
+`stylelint-config-recess-order`):
 
-**Wiring** (mirror the `bin/mcp_*` convention):
+- `custom-property-pattern: "^(ex|yui)-…$|^_…$"` — `--ex-*` / `--yui-*` / `--_*`.
+- `at-rule-disallowed-list: ["import"]` — enforces the "no `@import`" rule (§4).
+- `selector-class-pattern` — BEM kebab-case (`block__element--modifier`), added
+  during the first pass.
+- `value-keyword-case` — lower, ignoring `font` shorthands + `optimizeLegibility`
+  and friends.
+- `no-descending-specificity` and
+  `declaration-block-no-redundant-longhand-properties` disabled — both noisy.
+- `ignoreFiles`: `node_modules/**`, `app/assets/builds/**`.
 
-- `bin/lint_css` → `stylelint "app/assets/stylesheets/**/*.css"` +
-  `prettier --check` on the same glob.
+**Scope**: only the hand-authored design system is linted/formatted —
+`bin/lint_css` / `bin/fix_css` glob `app/assets/stylesheets/design/**/*.css`, and
+`.prettierignore` excludes `app/assets/stylesheets/*.css` (the legacy Pico-era
+sheets, gone in Phase 6) plus `builds/`, `Gemfile.lock`, `package-lock.json`.
+(The plan originally said `stylesheets/**` — narrowing to `design/` is the right
+call and what shipped.)
+
+**Wiring** (mirrors the `bin/mcp_*` convention) — all done in Phase 0
+(`18dd913`, `fdcb2b8`):
+
+- `bin/lint_css` → `stylelint` + `prettier --check` on the `design/` glob.
 - `bin/fix_css` → `stylelint --fix` + `prettier --write` (the `bin/mcp_rubocop -A`
   equivalent).
-- `Rakefile`: add a `css` task and put it in the `ci` chain.
-- CI (`.github/workflows/ci_push_pull_main.yml`): add
-  `actions/setup-node@v4` (`node-version: "22"`, `cache: "npm"`) + `npm ci`
-  before `bundle exec rake ci`. Commit `package-lock.json`; use `npm ci`.
-
-Expect the first run to need one `bin/fix_css` pass plus a few rule disables —
-`stylelint-config-standard` is opinionated.
+- `Rakefile`: a `css` task in the `ci` chain (`zeitwerk:check rubocop slim_lint
+  css factory_bot:awesome_lint db:doctor rspec …`).
+- CI: `actions/setup-node@v4` (`node-version: "22"`, `cache: "npm"`) + `npm ci`
+  in the tests job; `package-lock.json` committed. `bin/setup` runs
+  `npm install`.
 
 If avoiding `node_modules` ever becomes a hard requirement, the only alternative
 is Biome as a single vendored binary (`npx --yes @biomejs/biome` in CI, or the
@@ -353,14 +378,14 @@ end
 mount Lookbook::Engine, at: "/lookbook" if Rails.env.development?
 ```
 
-- Put previews in `spec/view_components/previews/` (align with existing
-  `spec/view_components/` layout) and point
-  `config.view_component.preview_paths` / `config.lookbook.preview_paths` at it.
-- Write one `*Preview` per component, starting with the ~20 primitives that
-  already exist. Each preview method = one Specimen currently hand-written in
-  `show.html.slim`.
-- Wire Lookbook to load the `design/` stylesheets (+ fonts) in its preview
-  layout — reuse `_design_head` so it can't drift from the app.
+- Previews live in `spec/view_components/previews/yui/` — path set in
+  `config/application.rb` (`config.view_component.previews.paths <<`, **not** an
+  initializer: the VC railtie reads it too early otherwise), with
+  `config.lookbook.preview_paths = config.view_component.previews.paths`.
+- One `*Preview` per component (21 shipped). Each preview method mirrors a
+  Specimen on `/example`.
+- The preview layout is `component_preview` — it renders `_design_head` with
+  `showcase: true`, so previews can't drift from the app's `<head>`.
 
 **CSS feedback loop.** Lookbook has no in-browser CSS editor. Two ways to get a
 fast loop:
@@ -375,16 +400,25 @@ fast loop:
   a save reloads the preview with no manual refresh:
 
   ```ruby
-  config.lookbook.listen_paths << Rails.root.join("app/assets/stylesheets/design")
+  # config/application.rb
+  config.lookbook.live_updates = true   # ← required; without it the watcher
+                                        #   reloads server-side but the browser
+                                        #   never refreshes
+  config.lookbook.listen_paths << Rails.root.join("app/assets/stylesheets/design").to_s
   config.lookbook.listen_extensions << "css"
   ```
 
-  (needs the `listen` gem, already a Propshaft dev-perf recommendation.)
+  Needs the `listen` gem (now in the `:development` group) **and**
+  `config.file_watcher = ActiveSupport::EventedFileUpdateChecker` in
+  `development.rb` — also a Propshaft dev-perf win.
 
-- **read-only "CSS" inspector panel**  
-  (`config.lookbook.preview_inspector.drawer_panels`) — now trivial with split
-  files: map `button_component.rb` → `design/button.css` and show that file.
-  Low priority once the two loops above exist.
+- **Read-only "CSS" inspector panel** — shipped via `Lookbook.add_panel("css",
+  …)` in a dev-guarded initializer (`config/initializers/lookbook_panels.rb`).
+  `DesignCssPanel` maps `Yui::ButtonComponentPreview` → `design/button.css`
+  (dasherised), with a shared fallback for primitives whose rules sit in a layer
+  file (typography / layout / field). Rendered read-only + highlighted; the
+  `"*"` in `drawer_panels` slots it beside Source/Notes/Params with no extra
+  `preview_inspector` config.
 
 **`/example` stays** (see §6) — Lookbook is the daily driver, `/example` is the
 curated narrative.
@@ -517,15 +551,16 @@ spec fails otherwise). See §4 for the layer order and rationale.
       rename. Add the rule to `Yui::BaseComponent`'s doc comment. (13 → sidecar,
       4 trivial → `def call`; no inline `slim_template` left in `Yui::`.)
 - [x] **Split the stylesheet** (§4): create `app/assets/stylesheets/design/`,
-      declare `@layer tokens, base, layout, typography, components, composed;` in
-      `design/tokens.css`, move `example.css` into per-concern / per-component
-      files each wrapped in its layer, move the showcase chrome to
-      `design/showcase.css` (loaded only by `/example` + Lookbook). Update
-      `_design_head`, the `/example` layout and the Lookbook preview layout to
-      the ordered `<link>` list; add the "every `design/*.css` is referenced"
-      guard spec. Land the mechanical move as its own commit. Point Stylelint
-      (`.stylelintrc.json` glob) and `.prettierignore` at the new dir. (17 files;
-      `_design_head` takes `showcase:`; guard in `spec/views/design_head_spec.rb`.)
+      declare `@layer tokens, base, layout, typography, components, composed,
+      showcase;` in `design/tokens.css`, move `example.css` into per-concern /
+      per-component files each wrapped in its layer, move the showcase chrome to
+      `design/showcase.css` in its own `showcase` layer (loaded only by
+      `/example` + Lookbook). Update `_design_head`, the `/example` layout and
+      the Lookbook preview layout to the ordered `<link>` list; add the "every
+      `design/*.css` is referenced" guard spec. Land the mechanical move as its
+      own commit. Point Stylelint (`.stylelintrc.json` glob) and `.prettierignore`
+      at the new dir. (17 files; `_design_head` takes `showcase:`; guard in
+      `spec/views/design_head_spec.rb`.)
 
 ### Phase 2 — Shared chrome (~2–2.5 days)
 
@@ -676,11 +711,11 @@ This is the core trade-off of the chosen approach, so it is worth being precise.
 ### Cheap changes (the reason we chose this)
 
 - **Token change** (`--ex-accent`, `--ex-radius-*`, `--ex-space-*`, a font):
-  one edit in `example.css`, propagates everywhere instantly, themeable,
+  one edit in `design/tokens.css`, propagates everywhere instantly, themeable,
   verifiable on `/example` + Lookbook in seconds. **Cost: minutes.**
 - **Visual change to a primitive's CSS** (button padding, card shadow, input
-  border): one rule in `example.css`. No template touched. Every call site
-  updates. **Cost: minutes to an hour.**
+  border): one rule in that component's `design/*.css`. No template touched.
+  Every call site updates. **Cost: minutes to an hour.**
 - **New variant** (`variant: :subtle` on `Yui::Badge`): add a modifier class +
   extend the component's `VARIANTS` array + one preview. Additive, no call site
   breaks. **Cost: under an hour.**
@@ -747,8 +782,8 @@ evaluates Tailwind on its own merits, as if starting the CSS decision fresh.
 
 ### Cons
 
-- **Discards ~1,430 lines of tuned, reviewed CSS + ~20 components + the
-  showcase.** Large sunk cost for no functional gain.
+- **Discards ~1,650 lines of tuned, reviewed CSS (`design/*.css`) + ~24
+  `Yui::` components + the showcase.** Large sunk cost for no functional gain.
 - **Adds a build step**: `tailwindcss:watch` in dev, `tailwindcss:build`
   auto-attached to `assets:precompile`. Plus a **CI gotcha** — the gem attaches
   the build to `test:prepare`, but this repo runs tests via a custom `rake ci` /
