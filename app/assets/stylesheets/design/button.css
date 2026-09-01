@@ -1,0 +1,131 @@
+@layer components {
+  /* 4c. ----------------------------------------------------------- BUTTONS */
+
+  .ex-btn {
+    --_bg: var(--ex-accent);
+    --_fg: var(--ex-accent-ink);
+    --_bd: transparent;
+
+    display: inline-flex;
+    gap: 0.5em;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.25rem;
+    font-family: var(--ex-font-body);
+    font-size: var(--ex-text-sm);
+    font-weight: var(--ex-weight-semibold);
+    line-height: 1;
+    color: var(--_fg);
+    letter-spacing: var(--ex-tracking-wide);
+    white-space: nowrap;
+    text-decoration: none;
+    cursor: pointer;
+    background-color: var(--_bg);
+    border: 1.5px solid var(--_bd);
+    border-radius: var(--ex-radius-pill);
+    transition:
+      transform var(--ex-transition-fast),
+      box-shadow var(--ex-transition),
+      background-color var(--ex-transition-fast),
+      border-color var(--ex-transition-fast),
+      color var(--ex-transition-fast);
+  }
+
+  .ex-btn:hover {
+    box-shadow: var(--ex-shadow-sm);
+    transform: translateY(-1px);
+  }
+
+  .ex-btn:active {
+    box-shadow: none;
+    transform: translateY(0);
+  }
+
+  .ex-btn[disabled],
+  .ex-btn--disabled {
+    cursor: not-allowed;
+    box-shadow: none;
+    opacity: 0.5;
+    transform: none;
+  }
+
+  .ex-btn .ex-icon {
+    width: 1.15em;
+    height: 1.15em;
+    vertical-align: middle;
+  }
+
+  .ex-btn--primary {
+    --_bg: var(--ex-accent);
+    --_fg: var(--ex-accent-ink);
+  }
+
+  .ex-btn--primary:hover {
+    --_bg: var(--ex-accent-strong);
+  }
+
+  .ex-btn--secondary {
+    --_bg: transparent;
+    --_fg: var(--ex-ink);
+    --_bd: var(--ex-border-strong);
+  }
+
+  .ex-btn--secondary:hover {
+    --_bg: var(--ex-surface-sunken);
+    --_bd: var(--ex-ink-faint);
+  }
+
+  .ex-btn--warning {
+    --_bg: var(--ex-warning);
+    --_fg: #fff;
+  }
+
+  .ex-btn--warning:hover {
+    --_bg: #8f6116;
+  }
+
+  .ex-btn--danger {
+    --_bg: transparent;
+    --_fg: var(--ex-danger);
+    --_bd: currentcolor;
+  }
+
+  .ex-btn--danger:hover {
+    --_bg: var(--ex-danger);
+    --_fg: #fff;
+  }
+
+  .ex-btn--ghost {
+    --_bg: transparent;
+    --_fg: var(--ex-ink-soft);
+    --_bd: transparent;
+  }
+
+  .ex-btn--ghost:hover {
+    --_bg: var(--ex-surface-sunken);
+    --_fg: var(--ex-ink);
+
+    box-shadow: none;
+  }
+
+  .ex-btn--sm {
+    padding: 0.5rem 0.9rem;
+    font-size: var(--ex-text-xs);
+  }
+
+  .ex-btn--lg {
+    padding: 0.95rem 1.75rem;
+    font-size: var(--ex-text-base);
+  }
+
+  .ex-btn--block {
+    display: flex;
+    width: 100%;
+  }
+
+  .ex-btn-group {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: var(--ex-space-2xs);
+  }
+}

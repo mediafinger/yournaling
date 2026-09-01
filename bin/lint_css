@@ -10,7 +10,7 @@ if [ ! -x node_modules/.bin/stylelint ]; then
   exit 1
 fi
 
-CSS_GLOB="app/assets/stylesheets/**/*.css"
+CSS_GLOB="app/assets/stylesheets/design/**/*.css"
 
 echo "stylelint ${CSS_GLOB}"
 node_modules/.bin/stylelint "${CSS_GLOB}"

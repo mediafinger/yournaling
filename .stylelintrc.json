@@ -1,19 +1,6 @@
 {
   "extends": ["stylelint-config-standard", "stylelint-config-recess-order"],
-  "ignoreFiles": [
-    "node_modules/**",
-    "app/assets/builds/**",
-    "app/assets/stylesheets/admin.css",
-    "app/assets/stylesheets/application.css",
-    "app/assets/stylesheets/buttons.css",
-    "app/assets/stylesheets/card.css",
-    "app/assets/stylesheets/general.css",
-    "app/assets/stylesheets/lightbox.css",
-    "app/assets/stylesheets/navbar.css",
-    "app/assets/stylesheets/pico.*.css",
-    "app/assets/stylesheets/picocss_reset.css",
-    "app/assets/stylesheets/rails_reset.css"
-  ],
+  "ignoreFiles": ["node_modules/**", "app/assets/builds/**"],
   "rules": {
     "custom-property-pattern": "^(ex|yui)-[a-z0-9]+(-[a-z0-9]+)*$|^_[a-z0-9]+$",
     "selector-class-pattern": [

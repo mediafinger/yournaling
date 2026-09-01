@@ -10,7 +10,7 @@ Rails.application.routes.draw do
 
   get "up" => "health#show", as: :rails_health_check
 
-  # Design-language showcase (see app/view_components/example + app/assets/stylesheets/example.css)
+  # Design-language showcase (see app/view_components/yui + app/assets/stylesheets/design/)
   get "example", to: "example#show", as: :example
 
   resources :teams, except: %i[show]

@@ -1,0 +1,55 @@
+@layer components {
+  /* Links ---------------------------------------------------------------- */
+  .ex-link {
+    font-weight: var(--ex-weight-medium);
+    color: var(--ex-accent);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-decoration-color: var(--ex-border-strong);
+    text-underline-offset: 0.16em;
+    transition:
+      color var(--ex-transition-fast),
+      text-decoration-color var(--ex-transition-fast);
+  }
+
+  .ex-link:hover {
+    color: var(--ex-accent-strong);
+    text-decoration-color: var(--ex-accent);
+  }
+
+  .ex-link--muted {
+    color: var(--ex-ink-soft);
+    text-decoration-color: var(--ex-border);
+  }
+
+  .ex-link--muted:hover {
+    color: var(--ex-ink);
+  }
+
+  .ex-link--standalone {
+    display: inline-flex;
+    gap: 0.35em;
+    align-items: center;
+    font-weight: var(--ex-weight-semibold);
+    text-decoration: none;
+  }
+
+  /* Title link that sits on a card — inherits ink, underlines only on hover */
+  .ex-link--cover {
+    font-weight: inherit;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .ex-link--cover:hover {
+    color: var(--ex-accent);
+  }
+
+  .ex-link--standalone .ex-icon {
+    transition: transform var(--ex-transition);
+  }
+
+  .ex-link--standalone:hover .ex-icon {
+    transform: translateX(3px);
+  }
+}

@@ -1,0 +1,44 @@
+@layer components {
+  .ex-tag {
+    display: inline-flex;
+    gap: 0.4em;
+    align-items: center;
+    padding: 0.35rem 0.75rem;
+    font-family: var(--ex-font-body);
+    font-size: var(--ex-text-sm);
+    font-weight: var(--ex-weight-medium);
+    color: var(--ex-ink-soft);
+    text-decoration: none;
+    background-color: var(--ex-surface);
+    border: var(--ex-border-hairline);
+    border-radius: var(--ex-radius-pill);
+    transition:
+      border-color var(--ex-transition-fast),
+      color var(--ex-transition-fast),
+      background-color var(--ex-transition-fast);
+  }
+
+  a.ex-tag:hover {
+    color: var(--ex-accent);
+    background-color: var(--ex-accent-soft);
+    border-color: var(--ex-accent);
+  }
+
+  .ex-tag .ex-icon {
+    color: var(--ex-ink-faint);
+  }
+
+  .ex-tag__remove {
+    display: inline-flex;
+    padding: 0;
+    margin-inline-end: -0.2em;
+    color: var(--ex-ink-faint);
+    cursor: pointer;
+    background: none;
+    border: 0;
+  }
+
+  .ex-tag__remove:hover {
+    color: var(--ex-danger);
+  }
+}

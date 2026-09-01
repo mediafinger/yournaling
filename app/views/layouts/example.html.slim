@@ -7,6 +7,6 @@ html lang="en"
     title Yournaling — Design Language
     = csrf_meta_tags
     = csp_meta_tag
-    = render "shared_partials/design_head"
+    = render "shared_partials/design_head", showcase: true
   body.ex-body
     = yield
