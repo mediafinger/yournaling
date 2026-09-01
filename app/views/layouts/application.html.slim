@@ -12,13 +12,14 @@ html
       / - # Using a downloaded version of pico.css for development
       = stylesheet_link_tag "pico.amber.css", "data-turbo-track": "reload"
     = stylesheet_link_tag "general", "buttons", "navbar", "card", "lightbox", "data-turbo-track": "reload"
+    = render "shared_partials/design_head"
     = javascript_importmap_tags
   body
     header data-controller="navbar"
       nav
         = render ApplicationNavComponent.new
       = render partial: "shared_partials/flash_notifications"
-    main
+    main.ex-scope data-area="public"
       = yield
     button.scroll-to-top-btn data-controller="scroll-to-top" data-scroll-to-top-target="button" data-action="click->scroll-to-top#scrollToTop" aria-label="Scroll to top" title="Scroll to top"
       | ↑

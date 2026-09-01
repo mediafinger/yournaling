@@ -183,4 +183,42 @@
       --ex-shadow-lg: 0 8px 20px rgb(0 0 0 / 50%), 0 28px 60px rgb(0 0 0 / 55%);
     }
   }
+
+  /* Per-area accent — carries the old Pico amber / green / blue split onto the
+     new palette. Set on <main data-area="…"> (see the layouts); default
+     (public) stays terracotta. --ex-focus-ring / --ex-border-accent resolve at
+     use time, so they pick these up automatically. */
+  [data-area="team"] {
+    --ex-accent: #4e7a4c;
+    --ex-accent-hover: #446b42;
+    --ex-accent-strong: #375c36;
+    --ex-accent-soft: #e3ede1;
+    --ex-accent-ink: #fff;
+  }
+
+  [data-area="admin"] {
+    --ex-accent: #3f6b8c;
+    --ex-accent-hover: #365d7a;
+    --ex-accent-strong: #2c4e68;
+    --ex-accent-soft: #e0eaf1;
+    --ex-accent-ink: #fff;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    [data-area="team"] {
+      --ex-accent: #82b487;
+      --ex-accent-hover: #92c096;
+      --ex-accent-strong: #a6ceaa;
+      --ex-accent-soft: #26301f;
+      --ex-accent-ink: #12210f;
+    }
+
+    [data-area="admin"] {
+      --ex-accent: #7da7c6;
+      --ex-accent-hover: #90b6d0;
+      --ex-accent-strong: #a7c9dd;
+      --ex-accent-soft: #1c2b34;
+      --ex-accent-ink: #0f1c24;
+    }
+  }
 }
