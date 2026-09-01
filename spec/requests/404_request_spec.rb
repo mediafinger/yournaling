@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe "404 request spec", type: :system do
   describe "GET /unknown" do
     it "returns an error page with back link" do

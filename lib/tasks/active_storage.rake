@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :active_storage do
   desc "Deletes the originally uploaded pictures, keeps only the variants."
   task delete_originals: :environment do

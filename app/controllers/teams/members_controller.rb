@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Teams
   class MembersController < AppTeamsController
     def index

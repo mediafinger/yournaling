@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class DeviceComponent < ApplicationComponent
   slim_template <<~SLIM
     ul

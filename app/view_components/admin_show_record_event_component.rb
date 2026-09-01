@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AdminShowRecordEventComponent < ApplicationComponent
   slim_template <<~SLIM
     article id= dom_id(@record_event)

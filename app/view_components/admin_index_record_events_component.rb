@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AdminIndexRecordEventsComponent < ApplicationComponent
   slim_template <<-SLIM
     div id="record_events"

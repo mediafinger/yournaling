@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Recurring
   class CleanupArchivedRecordsJob < ApplicationJob
     queue_as :default

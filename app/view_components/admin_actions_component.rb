@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AdminActionsComponent < ApplicationComponent
   slim_template <<~SLIM
     - if action_name != "show"

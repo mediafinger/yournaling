@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class DeviceLocationComponent < ApplicationComponent
   slim_template <<~SLIM
     = @infos.compact.join(" ")

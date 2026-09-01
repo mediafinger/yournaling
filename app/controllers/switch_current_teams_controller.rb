@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SwitchCurrentTeamsController < ApplicationController
   def index
     authorize! current_user, to: :index?, with: CurrentTeamPolicy

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe "current_teams/members/new", type: :view do
   before do
     assign(:member, Member.new(

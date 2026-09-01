@@ -262,7 +262,8 @@ Style/FormatStringToken:
   EnforcedStyle: template
 
 Style/FrozenStringLiteralComment:
-  Enabled: false
+  Enabled: true
+  EnforcedStyle: always_true
 
 Style/HashSyntax:
   Exclude:

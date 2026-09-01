@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe "teams/edit", type: :view do
   let(:team) {
     Team.create!(

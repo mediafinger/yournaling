@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe "current_teams/pictures/show", type: :view do
   let(:picture) { FactoryBot.create(:picture) }
 

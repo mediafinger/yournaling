@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ApplicationNavLinksComponent < ApplicationComponent
   slim_template <<~SLIM
     ul

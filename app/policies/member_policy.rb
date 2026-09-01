@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class MemberPolicy < ApplicationPolicy
   def read?
     logged_in?

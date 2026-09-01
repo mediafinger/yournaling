@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SessionsController < ApplicationController
   skip_before_action :authenticate, only: %i[new create destroy] # allowing destroy means no harm
   skip_verify_authorized only: %i[new create destroy]

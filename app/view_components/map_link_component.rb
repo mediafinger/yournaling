@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class MapLinkComponent < ApplicationComponent
   slim_template <<~SLIM
     span class="map_link"

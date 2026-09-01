@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This module creates a new Login record everytime a User logs in from a new device.
 # If the device (== hashed IP address & user_agent) has been used before, the Login record will be updated.
 # Older Login records of the same user will be deleted after every new login, we keep only

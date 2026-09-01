@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # NOTE: Use the module "Requests" for all services that make requests to external API endpoints
 #   And let all services inherit from this BaseConnectionService.
 #   If they are are no fit (e.g. when they use a specific API client), then group them under another directory / module.

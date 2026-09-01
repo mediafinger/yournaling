@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ApplicationHelper
   include ActionView::Helpers::NumberHelper # for number_to_human_size
   include Authentication # makes current_user available

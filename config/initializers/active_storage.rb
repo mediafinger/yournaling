@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # See config/storage.yml for more config
 #
 # ActiveStorage is used through the model:

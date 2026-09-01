@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe "users/index", type: :view do
   let(:users) { FactoryBot.create_list(:user, 2) }
 

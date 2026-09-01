@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # type: actually neither Content nor Post, but is treated very similar
 #
 # When creating a new User, create a Team for them.
@@ -18,7 +20,7 @@ class Member < ApplicationRecordForContentAndPosts
     # "creator", # can create memories with note, photo and location, but not update or delete those or any else
     # "reader", # can read all team wide published objects, but not create or update any
   ].freeze
-  YID_CODE = "member".freeze
+  YID_CODE = "member"
 
   belongs_to :team, inverse_of: :members
   belongs_to :user, inverse_of: :memberships

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AdminShowTeamMembersComponent < ApplicationComponent
   slim_template <<~SLIM
     p

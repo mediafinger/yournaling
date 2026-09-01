@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # https://github.com/crmne/archspec
 
 architecture :rails_strict
