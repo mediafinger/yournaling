@@ -1,0 +1,98 @@
+@layer components {
+  /* Disclosure menu — Yui::Menu (<details class="ex-menu">). */
+
+  .ex-menu {
+    position: relative;
+    display: inline-flex;
+  }
+
+  .ex-menu__trigger {
+    display: inline-flex;
+    gap: 0.3em;
+    align-items: center;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .ex-menu__trigger::-webkit-details-marker {
+    display: none;
+  }
+
+  .ex-menu__trigger .ex-icon {
+    transition: transform var(--ex-transition-fast);
+  }
+
+  .ex-menu[open] > .ex-menu__trigger .ex-icon {
+    transform: rotate(180deg);
+  }
+
+  .ex-menu__panel {
+    position: absolute;
+    top: calc(100% + 0.35rem);
+    left: 0;
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    min-width: 11rem;
+    padding: 0.35rem;
+    background-color: var(--ex-surface);
+    border: var(--ex-border-hairline);
+    border-radius: var(--ex-radius-md);
+    box-shadow: var(--ex-shadow-md);
+  }
+
+  .ex-menu--end > .ex-menu__panel {
+    right: 0;
+    left: auto;
+  }
+
+  @starting-style {
+    .ex-menu[open] > .ex-menu__panel {
+      opacity: 0;
+      transform: translateY(-0.25rem);
+    }
+  }
+
+  .ex-menu[open] > .ex-menu__panel {
+    transition:
+      opacity var(--ex-transition-fast),
+      transform var(--ex-transition-fast);
+  }
+
+  .ex-menu__item {
+    display: flex;
+    gap: 0.55rem;
+    align-items: center;
+    width: 100%;
+    padding: 0.45rem 0.6rem;
+    font-family: var(--ex-font-body);
+    font-size: var(--ex-text-sm);
+    color: var(--ex-ink-soft);
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+    background: none;
+    border: 0;
+    border-radius: var(--ex-radius-sm);
+  }
+
+  .ex-menu__item:hover,
+  .ex-menu__item:focus-visible {
+    color: var(--ex-ink);
+    background-color: var(--ex-surface-sunken);
+  }
+
+  .ex-menu__item .ex-icon {
+    color: var(--ex-ink-faint);
+  }
+
+  .ex-menu__item--danger {
+    color: var(--ex-danger);
+  }
+
+  .ex-menu__sep {
+    height: 1px;
+    margin: 0.3rem;
+    background-color: var(--ex-border);
+  }
+}

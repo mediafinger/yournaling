@@ -85,20 +85,6 @@
     font-weight: var(--ex-weight-semibold);
   }
 
-  /* Not-yet-converted Pico `details.dropdown` menus sitting in a nav group. */
-  .ex-navbar__group details.dropdown {
-    display: inline-flex;
-    align-items: center;
-    margin: 0;
-  }
-
-  .ex-navbar__group details.dropdown summary {
-    padding: 0.4rem 0.7rem;
-    font-size: var(--ex-text-sm);
-    font-weight: var(--ex-weight-medium);
-    border-radius: var(--ex-radius-sm);
-  }
-
   .ex-navbar__group form {
     display: inline-flex;
     margin: 0;

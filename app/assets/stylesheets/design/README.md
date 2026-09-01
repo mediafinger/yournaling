@@ -27,7 +27,7 @@ elements Pico also styles (`a`, `button`, …). Both the `pico/` wrapper and the
 | `base`       | `base.css` — `.ex-scope` / `.ex-body`, box-sizing, `:focus-visible`, `::selection`, reduced-motion                                   |
 | `layout`     | `layout.css` — container, stack, cluster, grid, divider                                                                              |
 | `typography` | `typography.css` — headings, lead, text, prose, blockquote, eyebrow                                                                  |
-| `components` | `button.css` `link.css` `badge.css` `tag.css` `card.css` `field.css` `callout.css` `avatar.css` `figure.css` `icon.css` `navbar.css` |
+| `components` | `button.css` `link.css` `badge.css` `tag.css` `card.css` `field.css` `callout.css` `avatar.css` `figure.css` `icon.css` `navbar.css` `toast.css` `scroll-top.css` `menu.css` `modal.css` `tabs.css` `record-header.css` |
 | `composed`   | `memory-card.css` `chronicle-card.css`                                                                                               |
 | `showcase`   | `showcase.css` — its own layer, above everything; `/example` + Lookbook only, loaded via `_design_head`'s `showcase: true`           |
 

@@ -1,0 +1,12 @@
+= render(Yui::ModalComponent.new(title: "Change visibility", size: :md)) do |modal|
+  - modal.with_trigger do
+    = render Yui::ButtonComponent.new("Open modal", variant: :secondary, size: :sm)
+  p.ex-text This memory is currently visible to the team. Choose who can see it.
+  .ex-stack.ex-stack--xs
+    = render Yui::ChoiceComponent.new("Private", name: "v", type: :radio, value: "p")
+    = render Yui::ChoiceComponent.new("Team", name: "v", type: :radio, value: "t", checked: true)
+    = render Yui::ChoiceComponent.new("Public", name: "v", type: :radio, value: "pub")
+  - modal.with_footer do
+    button type="button" data-action="click->yui-modal#close"
+      | Cancel
+    = render Yui::ButtonComponent.new("Save", size: :sm)

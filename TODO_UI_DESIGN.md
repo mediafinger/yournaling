@@ -13,9 +13,11 @@ bespoke **"Warm Editorial"** design language that already lives under
 
 This section is a **frozen snapshot** of the codebase when the plan was written —
 it is not updated as work lands. Progress is tracked by the checkboxes in §7;
-as of 2026-09-01, Phases 0–1 and the CSS-feedback-loop items of Phase 2 are
-done (`example.css` is now `app/assets/stylesheets/design/*.css`, the primitives
-are `Yui::`, fonts are self-hosted, Lookbook is installed).
+as of 2026-09-01, Phases 0–2 are done (`example.css` is now
+`app/assets/stylesheets/design/*.css`, the primitives are `Yui::`, fonts are
+self-hosted, Lookbook is installed; the nav, flash and interactive chrome —
+menu / modal / tabs — run on `Yui::` components while each area's `<main>`
+still renders Pico until Phases 3–5).
 
 ### Styling stack
 
@@ -641,25 +643,44 @@ fast throughout.
       `app/assets/stylesheets/pico/<theme>.css` so the layered design system
       wins on shared elements; the unpkg CDN branch is dropped; `base.css`
       pins `:root { font-size: 100% }`. All transitional — gone in Phase 6.)
-- [ ] Chrome: `shared_partials/_flash_notifications` → `Yui::Toast` /
+- [x] Chrome: `shared_partials/_flash_notifications` → `Yui::Toast` /
       `Yui::Callout`; scroll-to-top button; `BrowseHeaderComponent` /
-      `ManageHeaderComponent` / `manage`/`browse` headers.
-- [ ] Interactive: create dedicated Stimulus controllers under a `yui`
+      `ManageHeaderComponent` / `manage`/`browse` headers. (`b81f4c6` — the
+      checkbox tick was missed there and is folded into the Interactive commit.)
+- [x] Interactive: create dedicated Stimulus controllers under a `yui`
       namespace / prefix (e.g. `yui-dropdown`, `yui-modal`, `yui-tabs`) wired to
       `.ex-dropdown` / `Yui::Modal` / `Yui::Tabs` markup. This allows old Pico
       controllers and new Yui controllers to coexist cleanly during migration.
       Retire `details.dropdown` and `dialog > article` Pico idioms on migrated
       components.
-- [ ] Once nav + flash are converted, the chrome no longer needs Pico — but
-      leave the `pico.*` links until each area's `<main>` is done.
-- [ ] As each of these components is rewritten, move its template to a sidecar
+      (**Shipped:** `Yui::Menu` + `Yui::MenuItem` + `yui-menu` (replaces Pico
+      `details.dropdown`) — the `+ New` and Insights nav menus are converted and
+      the `details.dropdown` CSS is gone. `Yui::Modal` + `yui-modal` (native
+      `<dialog>`, backdrop-dismiss) and `Yui::Tabs` + `yui-tabs` (ARIA tablist,
+      roving tabindex, arrow keys) ship as ready primitives with previews +
+      specs. The legacy `modal` controller and its `dialog > article` consumers
+      — the 7 `*/edit` views, `PictureLightboxComponent`,
+      `ContentVisibilityModalComponent`, `InsightDestroyModalComponent` — and
+      the legacy `tabs` controller (`InsightAttachmentManagerComponent`,
+      `locations/_form`) keep working and migrate to the `yui-*` primitives with
+      their features in Phases 3–4, exactly the coexistence this bullet is for.)
+- [x] Once nav + flash are converted, the chrome no longer needs Pico — but
+      leave the `pico.*` links until each area's `<main>` is done. (Nav
+      (`ce3b05b`) and flash → `Yui::Toast` (`b81f4c6`) are done. The
+      `pico/<theme>` + `legacy` `<link>`s stay in all three layouts — every
+      `<main>` still renders Pico-styled content until Phases 3–5 land.)
+- [x] As each of these components is rewritten, move its template to a sidecar
       `.slim` per the conventions above (the nav components are the heaviest
-      inline heredocs in the repo).
+      inline heredocs in the repo). (Done for every component touched in
+      Phase 2: the nav components, `NavNewButtonComponent`,
+      `InsightsDropdownComponent`, and all new `Yui::` primitives use sidecar
+      `.slim`. No inline heredocs remain in the converted chrome.)
 
-New primitives needed here (not yet in `/example`): `Navbar`, `NavItem`,
-`Modal`, `Tabs`, `Menu`/`Dropdown` (interactive), `Toast`, `Pagination`
-(pagy), `Table`, `Breadcrumb`, `EmptyState` (an app one exists —
-`EmptyStateComponent` — restyle it).
+New primitives needed here (not yet in `/example`): `Navbar` ✓, `NavItem` ✓,
+`Modal` ✓, `Tabs` ✓, `Menu`/`Dropdown` ✓ (interactive), `Toast` ✓,
+`Pagination` (pagy), `Table`, `Breadcrumb`, `EmptyState` (an app one exists —
+`EmptyStateComponent` — restyle it). Still open: `Pagination`, `Table`,
+`Breadcrumb`, `EmptyState` restyle.
 
 ### Phase 3 — Public / `application` layout (~1–2 days)
 

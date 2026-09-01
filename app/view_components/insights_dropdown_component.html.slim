@@ -1,0 +1,4 @@
+- trigger_class = active? ? "ex-nav-item ex-nav-item--strong" : "ex-nav-item"
+= render(Yui::MenuComponent.new("Insights", trigger_class: trigger_class)) do
+  - items.each do |label, path|
+    = render Yui::MenuItemComponent.new(label, href: path, active: active_path?(path))

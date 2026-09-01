@@ -1,0 +1,45 @@
+@layer components {
+  /* Tab set — Yui::Tabs. */
+
+  .ex-tabs__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.15rem;
+    border-bottom: 1px solid var(--ex-border);
+  }
+
+  .ex-tabs__tab {
+    padding: 0.5rem 0.85rem;
+    margin-bottom: -1px;
+    font-family: var(--ex-font-body);
+    font-size: var(--ex-text-sm);
+    font-weight: var(--ex-weight-medium);
+    color: var(--ex-ink-soft);
+    cursor: pointer;
+    background: none;
+    border: 0;
+    border-bottom: 2px solid transparent;
+  }
+
+  .ex-tabs__tab:hover {
+    color: var(--ex-ink);
+  }
+
+  .ex-tabs__tab--active {
+    color: var(--ex-accent-strong);
+    border-bottom-color: var(--ex-accent);
+  }
+
+  .ex-tabs__tab:focus-visible {
+    outline: 2px solid var(--ex-accent);
+    outline-offset: -2px;
+  }
+
+  .ex-tabs__panel {
+    padding-block: var(--ex-space-md);
+  }
+
+  .ex-tabs__panel:focus-visible {
+    outline: none;
+  }
+}

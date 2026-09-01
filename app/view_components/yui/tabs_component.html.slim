@@ -1,0 +1,8 @@
+.ex-tabs data-controller="yui-tabs" data-yui-tabs-active-index-value=active
+  .ex-tabs__list role="tablist" aria-label=label
+    - panels.each_with_index do |panel, i|
+      button.ex-tabs__tab type="button" role="tab" data-yui-tabs-target="tab" data-tab-index=i data-action="click->yui-tabs#select keydown->yui-tabs#onKeydown" aria-selected=(i == active ? "true" : "false") tabindex=(i == active ? "0" : "-1") id="#{uid}-tab-#{i}" aria-controls="#{uid}-panel-#{i}"
+        = panel.title
+  - panels.each_with_index do |panel, i|
+    .ex-tabs__panel role="tabpanel" tabindex="0" data-yui-tabs-target="panel" id="#{uid}-panel-#{i}" aria-labelledby="#{uid}-tab-#{i}" hidden=(i != active)
+      = panel

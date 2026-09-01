@@ -5,7 +5,7 @@
 / cascade is fixed by that list, not by which <link> loads first.
 / Pass `showcase: true` (only /example + Lookbook) to also load showcase.css.
 / The set of files here is guarded by spec/views/design_head_spec.rb.
-- app_sheets = %w[tokens base layout typography link button badge tag card field callout avatar figure icon navbar toast scroll-top record-header memory-card chronicle-card]
+- app_sheets = %w[tokens base layout typography link button badge tag card field callout avatar figure icon navbar toast scroll-top menu modal tabs record-header memory-card chronicle-card]
 - sheets = local_assigns[:showcase] ? app_sheets + %w[showcase] : app_sheets
 = preload_link_tag asset_path("Fraunces-Variable.woff2"), as: "font", type: "font/woff2", crossorigin: "anonymous"
 = preload_link_tag asset_path("Inter-Variable.woff2"), as: "font", type: "font/woff2", crossorigin: "anonymous"
