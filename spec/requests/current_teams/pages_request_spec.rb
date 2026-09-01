@@ -106,7 +106,7 @@ RSpec.describe "CurrentTeams::Pages (Manage Timeline)", type: :request do
       expect(response).to be_successful
       json = JSON.parse(response.body)
       expect(json["count"]).to eq(0)
-      expect(json["latest_updated_at"]).to be_nil
+      expect(json["latest_at"]).to be_nil
     end
 
     it "returns count and timestamp when newer updated items exist" do
@@ -118,7 +118,7 @@ RSpec.describe "CurrentTeams::Pages (Manage Timeline)", type: :request do
       expect(response).to be_successful
       json = JSON.parse(response.body)
       expect(json["count"]).to be >= 1
-      expect(json["latest_updated_at"]).to eq(new_item.updated_at.iso8601(6))
+      expect(json["latest_at"]).to eq(new_item.updated_at.iso8601(6))
     end
   end
 

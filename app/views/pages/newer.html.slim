@@ -1,4 +1,4 @@
-div data-newest-republished-at=@newest_published_at
+div data-newest-at=@newest_at
   - @publishings.each do |publishing|
     - if publishing.post_type == "Chronicle" && publishing.post.present?
       = render partial: "teams/chronicles/chronicle", locals: { team: publishing.team, chronicle: publishing.post }

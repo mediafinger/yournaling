@@ -134,7 +134,7 @@ RSpec.describe "Pages (Home Feed in Browse Mode)", type: :request do
       expect(response).to be_successful
       json = JSON.parse(response.body)
       expect(json["count"]).to eq(0)
-      expect(json["latest_republished_at"]).to be_nil
+      expect(json["latest_at"]).to be_nil
     end
 
     it "returns count and timestamp when newer publishings exist" do
@@ -146,7 +146,7 @@ RSpec.describe "Pages (Home Feed in Browse Mode)", type: :request do
       expect(response).to be_successful
       json = JSON.parse(response.body)
       expect(json["count"]).to eq(1)
-      expect(json["latest_republished_at"]).to eq(new_chronicle.publishing.republished_at.iso8601(6))
+      expect(json["latest_at"]).to eq(new_chronicle.publishing.republished_at.iso8601(6))
     end
   end
 

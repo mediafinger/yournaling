@@ -9,7 +9,10 @@ class PagesController < ApplicationController
       :offset,
       Publishing.published.reorder(republished_at: :desc).includes(:team, post: %i[team])
     )
-    @newest_published_at = @publishings.first&.republished_at&.iso8601(6) || Time.current.iso8601(6)
+    # @newest_at is the feed cursor: the timestamp the `feed-refresh` controller
+    # polls `check_newer` with. Named the same in both feed controllers (here it
+    # tracks `republished_at`, in CurrentTeams::PagesController `updated_at`).
+    @newest_at = @publishings.first&.republished_at&.iso8601(6) || Time.current.iso8601(6)
   end
 
   def check_newer
@@ -18,7 +21,7 @@ class PagesController < ApplicationController
 
     render json: {
       count: newer_scope.count,
-      latest_republished_at: newer_scope.first&.republished_at&.iso8601(6),
+      latest_at: newer_scope.first&.republished_at&.iso8601(6),
     }
   end
 
@@ -27,7 +30,7 @@ class PagesController < ApplicationController
     @publishings = Publishing.published.where("republished_at > ?", since_time).reorder(republished_at: :desc).includes(
       :team, post: %i[team]
     )
-    @newest_published_at = @publishings.first&.republished_at&.iso8601(6) || params[:since]
+    @newest_at = @publishings.first&.republished_at&.iso8601(6) || params[:since]
 
     render layout: false
   end
