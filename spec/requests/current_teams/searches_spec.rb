@@ -17,7 +17,7 @@ RSpec.describe "/current_team/search", type: :request do
     it "renders a successful response using the current_team_area layout" do
       get current_team_new_search_url
       expect(response).to be_successful
-      expect(response.body).to include("current-team-area")
+      expect(response.body).to include('data-area="team"')
     end
 
     it "renders search results when query is provided and at least 3 characters" do

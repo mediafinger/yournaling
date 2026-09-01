@@ -1,6 +1,6 @@
 {
   "extends": ["stylelint-config-standard", "stylelint-config-recess-order"],
-  "ignoreFiles": ["node_modules/**", "app/assets/builds/**"],
+  "ignoreFiles": ["node_modules/**", "app/assets/builds/**", "app/assets/stylesheets/pico/**"],
   "rules": {
     "custom-property-pattern": "^(ex|yui)-[a-z0-9]+(-[a-z0-9]+)*$|^_[a-z0-9]+$",
     "at-rule-disallowed-list": ["import"],

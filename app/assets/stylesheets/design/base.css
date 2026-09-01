@@ -1,6 +1,14 @@
 @layer base {
   /* 2. ------------------------------------------------------- SCOPE & BASE */
 
+  /* The rem scale assumes a 16px root. Pico (@layer pico) scales the root up
+     with the viewport (`:where(:root) { font-size: … }`); undo that so the
+     design system's own fluid `clamp()` steps aren't double-scaled.
+     Transitional — irrelevant once Pico is gone (Phase 6). */
+  :root {
+    font-size: 100%;
+  }
+
   .ex-body,
   .ex-scope {
     font-family: var(--ex-font-body);

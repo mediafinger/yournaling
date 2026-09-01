@@ -1,0 +1,121 @@
+@layer components {
+  /* Primary navigation — Yui::Navbar / Yui::NavItem.
+     `.ex-navbar-host` is the sticky <header> wrapper (a sticky element needs a
+     taller parent; <header>'s parent is <body>). navbar_controller.js toggles
+     the scroll-hide classes on it. */
+
+  .ex-navbar-host {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding-block: 0;
+    background-color: var(--ex-surface-raised);
+    border-bottom: var(--ex-border-hairline);
+    transition: opacity var(--ex-transition-slow);
+  }
+
+  .ex-navbar-host.navbar--transparent:not(.navbar--hover) {
+    opacity: 0;
+  }
+
+  .ex-navbar {
+    font-family: var(--ex-font-body);
+    border-top: 3px solid var(--ex-accent);
+  }
+
+  .ex-navbar__inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--ex-space-xs) var(--ex-space-md);
+    align-items: center;
+    justify-content: space-between;
+    max-width: var(--ex-container);
+    padding: var(--ex-space-2xs) clamp(1rem, 0.5rem + 2vw, 2rem);
+    margin-inline: auto;
+  }
+
+  .ex-navbar__group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.15rem;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .ex-navbar__item {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .ex-nav-item {
+    display: inline-flex;
+    gap: 0.4em;
+    align-items: center;
+    padding: 0.4rem 0.7rem;
+    font-size: var(--ex-text-sm);
+    font-weight: var(--ex-weight-medium);
+    line-height: 1.2;
+    color: var(--ex-ink-soft);
+    white-space: nowrap;
+    text-decoration: none;
+    border-radius: var(--ex-radius-sm);
+    transition:
+      color var(--ex-transition-fast),
+      background-color var(--ex-transition-fast);
+  }
+
+  .ex-nav-item:hover {
+    color: var(--ex-ink);
+    background-color: var(--ex-surface-sunken);
+  }
+
+  .ex-nav-item--strong {
+    color: var(--ex-accent-ink);
+    background-color: var(--ex-accent);
+  }
+
+  .ex-nav-item--strong:hover {
+    color: var(--ex-accent-ink);
+    background-color: var(--ex-accent-strong);
+  }
+
+  .ex-nav-item--active {
+    font-weight: var(--ex-weight-semibold);
+  }
+
+  /* Not-yet-converted Pico `details.dropdown` menus sitting in a nav group. */
+  .ex-navbar__group details.dropdown {
+    display: inline-flex;
+    align-items: center;
+    margin: 0;
+  }
+
+  .ex-navbar__group details.dropdown summary {
+    padding: 0.4rem 0.7rem;
+    font-size: var(--ex-text-sm);
+    font-weight: var(--ex-weight-medium);
+    border-radius: var(--ex-radius-sm);
+  }
+
+  .ex-navbar__group form {
+    display: inline-flex;
+    margin: 0;
+  }
+
+  /* Admin-area "Scope to Team" marker. */
+  .scope-to-team {
+    padding: 0.25rem 0.5rem;
+    font-size: var(--ex-text-xs);
+    color: var(--ex-ink-faint);
+    border: 1px dashed currentcolor;
+    border-radius: var(--ex-radius-xs);
+  }
+
+  @media (width <= 40rem) {
+    .ex-navbar__inner {
+      justify-content: flex-start;
+    }
+  }
+}

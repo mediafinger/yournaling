@@ -1,0 +1,12 @@
+- items = menu_items
+- if items.nil? && mode == :browse
+  = render Yui::NavItemComponent.new("+ New", href: plain_link_path, variant: :cta)
+- elsif items
+  li.ex-navbar__item
+    details.dropdown
+      summary.ex-nav-item.ex-nav-item--strong role="button"
+        | + New
+      ul
+        - items.each do |label, path_helper|
+          li
+            = link_to label, public_send(path_helper)

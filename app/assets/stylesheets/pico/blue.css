@@ -1,0 +1,4 @@
+/* Transitional: Pico wrapped in a low-priority cascade layer so the layered
+   design system wins on shared elements during the migration. Removed with
+   the rest of Pico in Phase 6. */
+@import url("../pico.blue.css") layer(pico);

@@ -629,13 +629,18 @@ fast throughout.
 
 **Shared chrome.**
 
-- [ ] Layouts: add `_design_head`, wrap `main` in `.ex-scope`, add
-      `data-area` for the colour override.
-- [ ] Nav: `ApplicationNavComponent`, `AdminNavComponent`,
-      `CurrentTeamNavComponent`, `ApplicationNavLinksComponent`,
-      `ApplicationNavActionsComponent`, `NavNewButtonComponent`,
-      `TeamSwitcherAndSessionsComponent` → build a `Yui::Navbar` +
-      `Yui::NavItem` and rewrite the component templates against them.
+- [x] Layouts: add `_design_head`, wrap `main` in `.ex-scope`, add
+      `data-area` for the colour override. (`[data-area="team"|"admin"]`
+      override `--ex-accent*` in tokens.css; app / team / admin.)
+- [x] Nav: … → build a `Yui::Navbar` + `Yui::NavItem` and rewrite the
+      component templates against them.
+      (`ApplicationNavLinksComponent` / `ApplicationNavActionsComponent` were
+      never wired anywhere → deleted rather than converted. The `+ New` /
+      Insights menus stay Pico `details.dropdown` until "Interactive".
+      **New:** Pico is now `@import`ed into `@layer pico` via
+      `app/assets/stylesheets/pico/<theme>.css` so the layered design system
+      wins on shared elements; the unpkg CDN branch is dropped; `base.css`
+      pins `:root { font-size: 100% }`. All transitional — gone in Phase 6.)
 - [ ] Chrome: `shared_partials/_flash_notifications` → `Yui::Toast` /
       `Yui::Callout`; scroll-to-top button; `BrowseHeaderComponent` /
       `ManageHeaderComponent` / `manage`/`browse` headers.

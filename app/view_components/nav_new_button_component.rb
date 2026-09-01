@@ -1,77 +1,56 @@
 # frozen_string_literal: true
 
+# The "+ New" nav control. Emits a bare <li> for a Yui::Navbar group.
+# The dropdown is still a Pico `details.dropdown` — it becomes a Yui::Menu when
+# the interactive primitives land (TODO_UI_DESIGN.md Phase 2, "Interactive").
 class NavNewButtonComponent < ApplicationComponent
-  slim_template <<~SLIM
-    - if @mode == :browse
-      - if !current_user&.persisted?
-        li
-          = link_to "+ New", login_path, role: "button"
-      - elsif current_team.blank?
-        li
-          = link_to "+ New", switch_current_teams_path, role: "button"
-      - else
-        li
-          details.dropdown
-            summary role="button" + New
-            ul
-              li
-                = link_to "Memory", new_current_team_memory_path
-              li
-                = link_to "Chronicle", new_current_team_chronicle_path
-
-    - elsif @mode == :manage
-      li
-        details.dropdown
-          summary role="button" + New
-          ul
-            li
-              = link_to "Memory", new_current_team_memory_path
-            li
-              = link_to "Chronicle", new_current_team_chronicle_path
-            li
-              = link_to "Picture", new_current_team_picture_path
-            li
-              = link_to "Thought", new_current_team_thought_path
-            li
-              = link_to "Location", new_current_team_location_path
-            li
-              = link_to "Weblink", new_current_team_weblink_path
-            - if can_manage_members?
-              li
-                = link_to "Member", new_current_team_member_path
-
-    - elsif @mode == :admin
-      li
-        details.dropdown
-          summary role="button" + New
-          ul
-            li
-              = link_to "Memory", new_admin_memory_path
-            li
-              = link_to "Chronicle", new_admin_chronicle_path
-            li
-              = link_to "Picture", new_admin_picture_path
-            li
-              = link_to "Location", new_admin_location_path
-            li
-              = link_to "Thought", new_admin_thought_path
-            li
-              = link_to "Weblink", new_admin_weblink_path
-            li
-              = link_to "Team", new_admin_team_path
-            li
-              = link_to "User", new_admin_user_path
-            li
-              = link_to "Member", new_admin_member_path
-  SLIM
+  MENUS = {
+    manage: [
+      ["Memory", :new_current_team_memory_path], ["Chronicle", :new_current_team_chronicle_path],
+      ["Picture", :new_current_team_picture_path], ["Thought", :new_current_team_thought_path],
+      ["Location", :new_current_team_location_path], ["Weblink", :new_current_team_weblink_path]
+    ],
+    admin: [
+      ["Memory", :new_admin_memory_path], ["Chronicle", :new_admin_chronicle_path],
+      ["Picture", :new_admin_picture_path], ["Location", :new_admin_location_path],
+      ["Thought", :new_admin_thought_path], ["Weblink", :new_admin_weblink_path],
+      ["Team", :new_admin_team_path], ["User", :new_admin_user_path], ["Member", :new_admin_member_path]
+    ],
+  }.freeze
 
   def initialize(mode: :browse)
     @mode = mode.to_sym
   end
 
+  attr_reader :mode
+
+  # [[label, path], …] for the current mode's dropdown, or nil when "+ New" is a
+  # plain link (browse mode, no team).
+  def menu_items
+    case mode
+    when :manage
+      items = MENUS[:manage].dup
+      items << ["Member", :new_current_team_member_path] if can_manage_members?
+      items
+    when :admin
+      MENUS[:admin]
+    when :browse
+      return nil unless current_user&.persisted? && current_team.present?
+
+      [["Memory", :new_current_team_memory_path], ["Chronicle", :new_current_team_chronicle_path]]
+    end
+  end
+
+  # Where "+ New" links to when it is a plain link (browse mode only).
+  def plain_link_path
+    return login_path unless current_user&.persisted?
+
+    current_team.blank? ? switch_current_teams_path : nil
+  end
+
   private
 
   def can_manage_members?
-    current_member&.roles&.include?("owner") || current_member&.roles&.include?("manager")
+    current_member&.roles.to_a.intersect?(%w[owner manager])
   end
 end

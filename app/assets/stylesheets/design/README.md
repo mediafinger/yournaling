@@ -8,22 +8,28 @@ Propshaft — no build step. See `TODO_UI_DESIGN.md` §4 for the reasoning.
 `tokens.css` declares the layer order **once**:
 
 ```css
-@layer tokens, base, layout, typography, components, composed, showcase;
+@layer pico, tokens, base, layout, typography, components, composed, showcase;
 ```
 
 Every other file wraps its rules in one of those layers, so the cascade is
 fixed by that list and **does not depend on `<link>` order**. `@font-face`
 stays unlayered at the top of `tokens.css`.
 
-| Layer        | Files                                                                                                                      |
-| ------------ | -------------------------------------------------------------------------------------------------------------------------- |
-| `tokens`     | `tokens.css` — fonts, colour, type scale, spacing, radii, shadows, motion (`:root` + dark)                                 |
-| `base`       | `base.css` — `.ex-scope` / `.ex-body`, box-sizing, `:focus-visible`, `::selection`, reduced-motion                         |
-| `layout`     | `layout.css` — container, stack, cluster, grid, divider                                                                    |
-| `typography` | `typography.css` — headings, lead, text, prose, blockquote, eyebrow                                                        |
-| `components` | `button.css` `link.css` `badge.css` `tag.css` `card.css` `field.css` `callout.css` `avatar.css` `figure.css` `icon.css`    |
-| `composed`   | `memory-card.css` `chronicle-card.css`                                                                                     |
-| `showcase`   | `showcase.css` — its own layer, above everything; `/example` + Lookbook only, loaded via `_design_head`'s `showcase: true` |
+`pico` is first (lowest priority): during the Pico → design-language migration
+the app layouts load `app/assets/stylesheets/pico/<theme>.css`, a one-line
+wrapper that `@import`s Pico into `@layer pico` so the design system wins on
+elements Pico also styles (`a`, `button`, …). Both the `pico/` wrapper and the
+`:root { font-size: 100% }` reset in `base.css` go away in Phase 6.
+
+| Layer        | Files                                                                                                                                |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `tokens`     | `tokens.css` — fonts, colour, type scale, spacing, radii, shadows, motion (`:root` + dark)                                           |
+| `base`       | `base.css` — `.ex-scope` / `.ex-body`, box-sizing, `:focus-visible`, `::selection`, reduced-motion                                   |
+| `layout`     | `layout.css` — container, stack, cluster, grid, divider                                                                              |
+| `typography` | `typography.css` — headings, lead, text, prose, blockquote, eyebrow                                                                  |
+| `components` | `button.css` `link.css` `badge.css` `tag.css` `card.css` `field.css` `callout.css` `avatar.css` `figure.css` `icon.css` `navbar.css` |
+| `composed`   | `memory-card.css` `chronicle-card.css`                                                                                               |
+| `showcase`   | `showcase.css` — its own layer, above everything; `/example` + Lookbook only, loaded via `_design_head`'s `showcase: true`           |
 
 Loading order lives in one place: `app/views/shared_partials/_design_head.html.slim`
 (one `<link>` per file, `tokens` first). `spec/views/design_head_spec.rb` fails

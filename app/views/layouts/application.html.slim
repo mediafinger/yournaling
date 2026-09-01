@@ -6,18 +6,14 @@ html
     meta[name="viewport" content="width=device-width,initial-scale=1"]
     = csrf_meta_tags
     = csp_meta_tag
-    - if AppConf.production_env
-      = stylesheet_link_tag "https://unpkg.com/@picocss/pico@latest/css/pico.amber.min.css", "data-turbo-track": "reload"
-    - else
-      / - # Using a downloaded version of pico.css for development
-      = stylesheet_link_tag "pico.amber.css", "data-turbo-track": "reload"
-    = stylesheet_link_tag "general", "buttons", "navbar", "card", "lightbox", "data-turbo-track": "reload"
+    / Pico, wrapped in a low-priority cascade layer (transitional — see design/tokens.css)
+    = stylesheet_link_tag "pico/amber", "data-turbo-track": "reload"
+    = stylesheet_link_tag "general", "buttons", "card", "lightbox", "data-turbo-track": "reload"
     = render "shared_partials/design_head"
     = javascript_importmap_tags
   body
-    header data-controller="navbar"
-      nav
-        = render ApplicationNavComponent.new
+    header.ex-navbar-host data-controller="navbar"
+      = render ApplicationNavComponent.new
       = render partial: "shared_partials/flash_notifications"
     main.ex-scope data-area="public"
       = yield

@@ -6,3 +6,4 @@ package-lock.json
 # Only the design system (app/assets/stylesheets/design/) is formatted; the
 # legacy Pico-era stylesheets are removed in the Phase 6 teardown.
 app/assets/stylesheets/*.css
+app/assets/stylesheets/pico/

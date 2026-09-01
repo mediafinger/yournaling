@@ -1,0 +1,15 @@
+= render(Yui::NavbarComponent.new(area: "public")) do |bar|
+  - bar.with_group do
+    = render Yui::NavItemComponent.new("🌐 Yournaling", href: root_path, active: active_path?(root_path))
+    - if current_team
+      = render Yui::NavItemComponent.new("⚙️ Manage #{current_team.name}", href: current_team_home_path, variant: :cta)
+    = render NavNewButtonComponent.new(mode: :browse)
+
+  - bar.with_group do
+    = render Yui::NavItemComponent.new("@Teams", href: teams_path, active: teams_active?)
+    - if members_target.present?
+      = render Yui::NavItemComponent.new("@@Members", href: team_members_path(members_target), active: active_path?(team_members_path(members_target)))
+    = render Yui::NavItemComponent.new("🔍 Search", href: new_search_path, active: active_path?(new_search_path))
+
+  - bar.with_group do
+    = render TeamSwitcherAndSessionsComponent.new(mode: :browse)
