@@ -1,0 +1,148 @@
+@layer composed {
+  /* Transitional — the legacy card.css markup (`article.yournal-card`,
+     `.card-badge`, `.timeline-grid`, chips, the chronicle timeline track),
+     de-`--pico-*`'d and moved out of `@layer legacy` so it survives the
+     `pico/*` teardown. Phase 4 bullets 2–4 replace this markup with
+     `Yui::MemoryCard` / `Yui::ChronicleCard` / `Yui::Tag` / `.ex-timeline`,
+     emptying this file; it is then deleted. */
+
+  /* --- responsive timeline grid (bullet 3 tunes the columns) --- */
+  .timeline-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--ex-space-md);
+    width: 100%;
+    margin-block: var(--ex-space-sm) var(--ex-space-lg);
+  }
+
+  @media (width >= 1050px) {
+    .timeline-grid {
+      grid-template-columns: repeat(2, minmax(500px, 1fr));
+    }
+  }
+
+  @media (width >= 1600px) {
+    .timeline-grid {
+      grid-template-columns: repeat(3, minmax(500px, 1fr));
+    }
+  }
+
+  @media (width <= 768px) {
+    .timeline-grid {
+      gap: var(--ex-space-sm);
+    }
+  }
+
+  /* --- the card shell --- */
+  article.yournal-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: min(100%, 500px);
+    padding: var(--ex-space-md);
+    color: var(--ex-ink);
+    background-color: var(--ex-surface);
+    border: var(--ex-border-hairline);
+    border-radius: var(--ex-radius-lg);
+    box-shadow: var(--ex-shadow-sm);
+    transition:
+      transform var(--ex-transition),
+      box-shadow var(--ex-transition);
+  }
+
+  article.yournal-card:hover {
+    box-shadow: var(--ex-shadow-md);
+    transform: translateY(-2px);
+  }
+
+  article.yournal-card .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: var(--ex-space-2xs);
+    margin-bottom: var(--ex-space-xs);
+    border-bottom: var(--ex-border-hairline);
+  }
+
+  article.yournal-card .card-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.2rem 0.5rem;
+    font-size: var(--ex-text-xs);
+    font-weight: var(--ex-weight-semibold);
+    color: var(--ex-ink-soft);
+    text-transform: uppercase;
+    letter-spacing: var(--ex-tracking-wide);
+    background-color: var(--ex-surface-sunken);
+    border-radius: var(--ex-radius-xs);
+  }
+
+  article.yournal-card.chronicle-card {
+    border-inline-start: 4px solid var(--ex-accent);
+  }
+
+  article.yournal-card.memory-card {
+    border-inline-start: 4px solid var(--ex-border-strong);
+  }
+
+  /* --- thought pull-quote --- */
+  blockquote.thought-quote {
+    padding: var(--ex-space-xs) var(--ex-space-sm);
+    margin: var(--ex-space-xs) 0;
+    font-family: var(--ex-font-serif);
+    font-style: italic;
+    color: var(--ex-ink-soft);
+    background-color: var(--ex-surface-sunken);
+    border-inline-start: 3px solid var(--ex-accent);
+    border-radius: 0 var(--ex-radius-xs) var(--ex-radius-xs) 0;
+  }
+
+  /* --- location / weblink chips --- */
+  .location-chip,
+  .weblink-chip {
+    display: inline-flex;
+    gap: 0.35rem;
+    align-items: center;
+    padding: 0.25rem 0.6rem;
+    margin-top: var(--ex-space-2xs);
+    margin-right: var(--ex-space-2xs);
+    font-size: var(--ex-text-sm);
+    color: var(--ex-ink-soft);
+    text-decoration: none;
+    background-color: var(--ex-surface);
+    border: var(--ex-border-hairline);
+    border-radius: var(--ex-radius-pill);
+  }
+
+  .location-chip:hover,
+  .weblink-chip:hover {
+    color: var(--ex-accent);
+    background-color: var(--ex-accent-soft);
+    border-color: var(--ex-accent);
+  }
+
+  /* --- chronicle entry timeline track --- */
+  .chronicle-timeline-track {
+    position: relative;
+    padding-left: var(--ex-space-md);
+    margin-top: var(--ex-space-sm);
+    border-left: 2px solid var(--ex-border);
+  }
+
+  .chronicle-entry-item {
+    position: relative;
+    margin-bottom: var(--ex-space-md);
+  }
+
+  .chronicle-entry-item::before {
+    position: absolute;
+    top: 0.35rem;
+    left: -1.6rem;
+    width: 0.6rem;
+    height: 0.6rem;
+    content: "";
+    background-color: var(--ex-accent);
+    border: 2px solid var(--ex-paper);
+    border-radius: 50%;
+  }
+}
