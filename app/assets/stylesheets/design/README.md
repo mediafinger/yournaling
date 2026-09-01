@@ -57,3 +57,9 @@ Lookbook watches `design/` and reloads the open preview on save, so you can edit
 in your editor with no manual refresh. Configured in `config/application.rb`
 (`config.lookbook.listen_paths`), backed by the `listen` gem in the
 `:development` group.
+
+### Reference: the "CSS" panel
+
+Every Lookbook inspect view has a read-only **CSS** tab (hotkey `c`) showing the
+`design/*.css` file for that primitive — no editing, just so the styles are one
+click away. Mapping in `config/initializers/lookbook_panels.rb`.

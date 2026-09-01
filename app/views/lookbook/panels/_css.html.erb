@@ -1,0 +1,20 @@
+<%# locals: preview (Lookbook::PreviewEntity), plus the usual inspector data %>
+<% file = DesignCssPanel.file_for(preview) %>
+<div class="h-full">
+  <% if file %>
+    <div class="px-4 py-2 text-xs font-mono opacity-60 border-b border-lookbook-divider">
+      app/assets/stylesheets/design/<%= file.basename %>
+    </div>
+    <%= lookbook_render :code, language: "css", line_numbers: true, full_height: true do %><%== file.read %><% end %>
+  <% else %>
+    <div class="p-4 text-sm leading-relaxed">
+      <p class="mb-2">This primitive has no dedicated stylesheet.</p>
+      <p class="opacity-70">
+        Its rules live in a shared layer file — usually
+        <code>typography.css</code>, <code>layout.css</code> or
+        <code>tokens.css</code>. See
+        <code>app/assets/stylesheets/design/README.md</code>.
+      </p>
+    </div>
+  <% end %>
+</div>
