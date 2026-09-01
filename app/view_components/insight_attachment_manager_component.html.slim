@@ -131,7 +131,7 @@ fieldset.ex-insight-manager data-controller="insight-manager" data-insight-manag
       .ex-field
         label.ex-label for="drawer_picture_file" Image File
         input.ex-input type="file" id="drawer_picture_file" name="picture[file]" accept=allowed_image_types_accept required=true data-picture-select-target="fileInput" data-action="change->picture-select#updateFilePreview"
-        img.ex-insight-drawer__preview data-picture-select-target="filePreview" style="display: none;" alt="Selected image preview"
+        img.ex-file-preview data-picture-select-target="filePreview" style="display: none;" alt="Selected image preview"
       .ex-field
         label.ex-label for="drawer_picture_name" Picture Name (Optional)
         input.ex-input type="text" id="drawer_picture_name" name="picture[name]" placeholder="Defaults to image file name" data-picture-select-target="pictureNameInput"

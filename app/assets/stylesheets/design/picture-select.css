@@ -1,0 +1,68 @@
+@layer components {
+  /* PictureSelectFieldComponent — pick an existing team picture from a
+     disclosure list, or expand "Or Upload New Picture" to attach a file. */
+
+  .ex-picture-select {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ex-space-sm);
+    padding: 0;
+    margin: 0;
+    border: 0;
+  }
+
+  .ex-picture-select__menu {
+    position: relative;
+  }
+
+  .ex-picture-select__menu > summary {
+    list-style: none;
+  }
+
+  .ex-picture-select__menu > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .ex-picture-select__list {
+    position: absolute;
+    z-index: 50;
+    min-width: 100%;
+    max-height: 300px;
+    padding: var(--ex-space-3xs);
+    overflow-y: auto;
+    list-style: none;
+    background-color: var(--ex-surface);
+    border: var(--ex-border-hairline);
+    border-radius: var(--ex-radius-md);
+    box-shadow: var(--ex-shadow-md);
+  }
+
+  .ex-picture-select__option {
+    display: flex;
+    gap: var(--ex-space-xs);
+    align-items: center;
+    padding: var(--ex-space-2xs);
+    font-weight: var(--ex-weight-medium);
+    text-decoration: none;
+    border-radius: var(--ex-radius-sm);
+  }
+
+  .ex-picture-select__option:hover,
+  .ex-picture-select__option:focus-visible {
+    background-color: var(--ex-surface-sunken);
+  }
+
+  .ex-picture-select__thumb {
+    flex-shrink: 0;
+    width: 60px;
+    height: 45px;
+    object-fit: cover;
+    border-radius: var(--ex-radius-xs);
+  }
+
+  .ex-picture-select__upload {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ex-space-2xs);
+  }
+}

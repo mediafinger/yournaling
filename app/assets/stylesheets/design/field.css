@@ -117,6 +117,15 @@
     color: var(--ex-ink-faint);
   }
 
+  /* Client-side preview of a chosen image file (toggled by JS). */
+  .ex-file-preview {
+    max-width: 240px;
+    max-height: 180px;
+    margin-top: var(--ex-space-2xs);
+    object-fit: cover;
+    border-radius: var(--ex-radius-xs);
+  }
+
   .ex-error {
     display: flex;
     gap: 0.35em;

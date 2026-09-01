@@ -55,20 +55,28 @@ RSpec.describe "/current_team/pictures", type: :request do
   end
 
   describe "GET /new" do
-    it "renders a successful response" do
+    it "renders the picture form with the file and name fields" do
       get new_current_team_picture_url
 
       expect(response).to be_successful
+      assert_select "form[action=?][method=?]", current_team_pictures_path, "post" do
+        assert_select "input[type=?][name=?]", "file", "picture[file]"
+        assert_select "input[name=?]", "picture[name]"
+      end
     end
   end
 
   describe "GET /edit" do
-    it "renders a successful response" do
+    it "renders the picture form with the file and name fields" do
       picture = Picture.create! valid_attributes
 
       get edit_current_team_picture_url(picture.urlsafe_id)
 
       expect(response).to be_successful
+      assert_select "form[action=?][method=?]", current_team_picture_path(picture), "post" do
+        assert_select "input[type=?][name=?]", "file", "picture[file]"
+        assert_select "input[name=?]", "picture[name]"
+      end
     end
   end
 

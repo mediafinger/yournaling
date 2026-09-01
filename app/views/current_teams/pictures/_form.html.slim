@@ -1,20 +1,13 @@
-article
-  = form_with(model: [:current_team, picture], multipart: true, data: { controller: "picture-select" }) do |form|
+= render Yui::CardComponent.new do
+  = form_with(model: [:current_team, picture], builder: YuiFormBuilder, multipart: true, html: { class: "ex-stack" }, data: { controller: "picture-select" }) do |form|
+    = render Yui::HeadlineComponent.new(form_legend, level: 3)
     = render partial: "shared_partials/form_validation_errors", locals: { record: picture }
-    fieldset
-      h3
-        legend
-          = form_legend
-      div
-        = form.label :file, "Image File"
-        = form.file_field :file, accept: Picture::ALLOWED_IMAGE_TYPES.map { |type| ".#{type}" }.join(", "), required: form.object.new_record?, data: { picture_select_target: "fileInput", action: "change->picture-select#updateFilePreview" }
-        div style="margin-top: 0.5rem;"
-          img data-picture-select-target="filePreview" style="display: none; max-width: 240px; max-height: 180px; object-fit: cover; border-radius: 4px;" alt="Selected image preview"
-      div style="margin-top: 0.5rem;"
-        = form.label :name, "Picture Name (Optional)"
-        = form.text_field :name, placeholder: "Defaults to image file name", data: { picture_select_target: "pictureNameInput" }
-      div style="margin-top: 0.5rem;"
-        = form.label :date
-        = form.date_field :date, value: form.object.date
-      div style="margin-top: 1rem;"
-        = form.submit
+
+    .ex-field
+      = form.label :file, "Image File", class: "ex-label"
+      = form.file_field :file, class: "ex-input", accept: Picture::ALLOWED_IMAGE_TYPES.map { |type| ".#{type}" }.join(", "), required: form.object.new_record?, data: { picture_select_target: "fileInput", action: "change->picture-select#updateFilePreview" }
+      img.ex-file-preview data-picture-select-target="filePreview" style="display: none;" alt="Selected image preview"
+
+    = form.text_field :name, label: "Picture Name (Optional)", placeholder: "Defaults to image file name", data: { picture_select_target: "pictureNameInput" }
+    = form.date_field :date
+    = form.submit

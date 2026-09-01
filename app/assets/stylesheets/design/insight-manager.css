@@ -128,12 +128,4 @@
   .ex-insight-drawer {
     margin-block: var(--ex-space-sm);
   }
-
-  .ex-insight-drawer__preview {
-    max-width: 240px;
-    max-height: 180px;
-    margin-top: var(--ex-space-2xs);
-    object-fit: cover;
-    border-radius: var(--ex-radius-xs);
-  }
 }
