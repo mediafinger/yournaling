@@ -130,20 +130,22 @@ tokens do not collide. So we can:
 - **Self-host Fraunces + Inter** as `woff2` in `app/assets/fonts/` with
   `@font-face` in `example.css` (Propshaft fingerprints them) in Phase 0 to drop
   the Google CDN dependency immediately and simplify CSP.
-- **Rename** `example.css` → `design.css` (or `ui.css`) when it stops being
-  "the example" and becomes the app's stylesheet. Low urgency; do it with the
-  namespace decision in Phase 1.
+- **Retire the `example.css` filename** by splitting it into
+  `app/assets/stylesheets/design/` in Phase 1 (see §4 → *CSS file organisation*)
+  — done alongside the `Yui::` rename, so "the example" name disappears in the
+  same pass.
 - **CSP**: when re-enabled (Phase 6), no external style/script host is needed if
   fonts are self-hosted. The `csp_meta_tag` is already in the layouts.
-- **CI / tests**: no change. There is no build artefact to generate, so
-  `rake ci` and the GitHub Actions job stay as they are. (Contrast with §9.)
+- **CI / tests**: no runtime build artefact. `rake ci` gains one thing — the
+  Prettier + Stylelint `css` step (§4) with an `actions/setup-node` + `npm ci`
+  step in CI; still no asset compilation. (Contrast with §9.)
 
 ---
 
 ## 4. Preprocessor, linting & formatting
 
-Two decisions: **no Sass/SCSS** (author plain CSS), and **add Prettier +
-Stylelint to `rake ci`**.
+Three decisions: **no Sass/SCSS** (author plain CSS); **split the stylesheet by
+concern, ordered with `@layer`**; and **add Prettier + Stylelint to `rake ci`**.
 
 ### Preprocessor: why we stay on plain CSS (no Sass/SCSS)
 
@@ -182,12 +184,9 @@ Not worth it.
 
 ### Drawbacks of plain CSS, and how we mitigate them
 
-- **No bundling of partials.** If `example.css` outgrows one file (say past
-  ~2,500 lines), split it along the layer comments it already has and load the
-  pieces with multiple `stylesheet_link_tag` calls (or Propshaft's
-  `stylesheet_link_tag :all`) — they download in parallel on HTTP/2. Do **not**
-  use native `@import` for this (render-blocking waterfall). One file is fine
-  until then.
+- **No bundling of partials.** Addressed head-on — see *CSS file organisation*
+  below. We split now (workflow reasons) and keep the cascade correct with
+  `@layer` rather than file order.
 - **No loops for repetitive rules.** Accept the handful of repeated lines in the
   scale modifiers; they are stable and read fine. A large *generated* utility
   layer is a Tailwind-shaped need and belongs in the §9 conversation, not a Sass
@@ -207,6 +206,62 @@ Only if we decide to generate a large utility layer programmatically (dozens of
 spacing / colour / typography utilities) — which is the utility-first direction
 §2 already rejected. Reactivating Sass for `$variables` or nesting alone buys
 nothing over what the browser now does natively.
+
+### CSS file organisation: split by concern, ordered with `@layer`
+
+**Decision: split the single stylesheet into `app/assets/stylesheets/design/` —
+one file for tokens, one for base, one for layout, one for typography, and one
+per component / composed record — and control the cascade with native `@layer`,
+not file order.** Do it in **Phase 1**, while everything is still small and
+pre-rename.
+
+The driver is workflow, not payload: small files are faster to navigate, a
+DevTools "Workspace" edit lands as a 3-line diff in the right file, `git blame`
+is per-component, and Lookbook's read-only CSS panel (§5) can just read the
+component's own file instead of slicing a 1,400-line monolith.
+
+**Layer order** — declared once, in `design/tokens.css`:
+
+```css
+@layer tokens, base, layout, typography, components, composed;
+```
+
+Every file wraps its rules (`@layer components { .ex-btn { … } }`). Cascade
+order is then fixed by that list and **independent of the order the files load**
+— which removes the one real hazard of splitting. (Custom properties resolve at
+use time, so `--ex-*` never cared about order; it is base resets and
+modifier-vs-base specificity ties that do, and `@layer` settles exactly those.)
+
+**Loading** — an ordered array in `shared_partials/_design_head`, one `<link>`
+per file, each with `data-turbo-track: "reload"`. **Not**
+`stylesheet_link_tag :all` (alphabetical → `tokens` loads last), **not**
+`@import` (render-blocking waterfall).
+
+**`design/showcase.css`** — the showcase chrome (`.ex-section`, `.ex-swatch`,
+`.ex-specimen`, `Example::*` helpers) moves here and is loaded **only** by the
+`/example` layout and Lookbook, never app-wide. The split is what finally gets
+this CSS off every app page.
+
+**Guard** — a spec asserting every `design/*.css` is referenced by `_design_head`
+(or have the partial glob the directory in an explicit order), so a new
+`tooltip.css` cannot be silently forgotten.
+
+Proposed files (~10–15):
+
+```text
+design/
+  tokens.css       # fonts, colour, type scale, spacing, radii, shadows, motion (:root + dark)
+  base.css         # .ex-scope / .ex-body, box-sizing, focus-visible, selection, reduced-motion, bare elements
+  layout.css       # container, stack, cluster, grid, divider
+  typography.css   # headings, lead, text, prose, blockquote, eyebrow
+  button.css  link.css  badge.css  tag.css  card.css  field.css
+  callout.css  avatar.css  figure.css  icon.css
+  memory-card.css  chronicle-card.css
+  showcase.css     # /example + Lookbook only
+```
+
+If request count or payload is ever *measured* as a problem, that is the trigger
+for Lightning CSS / a concat step — unchanged from the minification note above.
 
 ### CSS linting & formatting: Prettier + Stylelint (not Biome)
 
@@ -241,8 +296,9 @@ importmap / Propshaft / runtime; importmap pins live in `config/importmap.rb`):
 | `stylelint-config-recess-order` | property ordering                                                                                                                      |
 
 Config: `.stylelintrc.json` extending both configs, with
-`custom-property-pattern: "^(yui|ex|_)-[a-z0-9-]+$"`, and (to start)
-`no-descending-specificity: null` and
+`custom-property-pattern: "^(yui|ex|_)-[a-z0-9-]+$"`,
+`at-rule-disallowed-list: ["import"]` (enforces the "no `@import`" rule from §4),
+and (to start) `no-descending-specificity: null` and
 `declaration-block-no-redundant-longhand-properties: null` — both noisy.
 `.prettierignore` excludes `app/assets/stylesheets/pico.*.css` and
 `app/assets/builds/`.
@@ -303,8 +359,32 @@ mount Lookbook::Engine, at: "/lookbook" if Rails.env.development?
 - Write one `*Preview` per component, starting with the ~20 primitives that
   already exist. Each preview method = one Specimen currently hand-written in
   `show.html.slim`.
-- Wire Lookbook to load `example.css` (+ fonts) in its preview layout so
-  components render correctly in isolation.
+- Wire Lookbook to load the `design/` stylesheets (+ fonts) in its preview
+  layout — reuse `_design_head` so it can't drift from the app.
+
+**CSS feedback loop.** Lookbook has no in-browser CSS editor. Two ways to get a
+fast loop:
+
+- **DevTools Workspace** — open a preview in its own tab (preview toolbar → open
+  in new window), add `app/assets/stylesheets/design/` as a Sources → Workspace
+  folder; edits in the Styles pane then save straight into the right
+  `design/*.css` file (discard with `git checkout`). Editing `:root` tokens
+  re-renders every specimen instantly — the highest-leverage move for token
+  work.
+- **Editor + auto-reload** — add the stylesheet dir to Lookbook's watch list so
+  a save reloads the preview with no manual refresh:
+
+  ```ruby
+  config.lookbook.listen_paths << Rails.root.join("app/assets/stylesheets/design")
+  config.lookbook.listen_extensions << "css"
+  ```
+
+  (needs the `listen` gem, already a Propshaft dev-perf recommendation.)
+
+- **read-only "CSS" inspector panel**  
+  (`config.lookbook.preview_inspector.drawer_panels`) — now trivial with split
+  files: map `button_component.rb` → `design/button.css` and show that file.
+  Low priority once the two loops above exist.
 
 **`/example` stays** (see §6) — Lookbook is the daily driver, `/example` is the
 curated narrative.
@@ -364,6 +444,16 @@ Never `<<-SLIM` (does not strip indentation → fragile) or bare `<<SLIM`. Use t
 quoted terminator `<<~'SLIM'` only when the template contains `#{...}` that must
 reach the browser literally.
 
+#### CSS file placement
+
+CSS is **not** co-located with the component `.rb` (Propshaft does not serve
+ViewComponent sidecar CSS). Each component's rules live in its own file under
+`app/assets/stylesheets/design/` (`design/button.css` for `Yui::ButtonComponent`),
+wrapped in `@layer components { … }` (or `@layer composed { … }` for the record
+cards). Tokens, base and layout stay in `design/tokens.css` / `base.css` /
+`layout.css`. New file → add it to the `_design_head` ordered list (the guard
+spec fails otherwise). See §4 for the layer order and rationale.
+
 ### Phase 0 — Foundations & tooling (~1–1.5 days)
 
 - [x] Remove dead `dartsass-rails` setup (§3).
@@ -400,7 +490,7 @@ reach the browser literally.
       `strong Event:` swallows the nested `= …`, and it uses `slim/smart` `>`
       indicators — to be fixed when it is rewritten in Phase 5.)
 
-### Phase 1 — Namespace, conventions & data-access decision (~1 day)
+### Phase 1 — Namespace, conventions, CSS split & data-access decision (~1.5 days)
 
 - [ ] **Namespace**: `Example::` reads as throwaway. Rename the *primitives* to
       **`Yui::`** ("Yournaling UI" — a deliberately app-specific prefix so the
@@ -422,6 +512,15 @@ reach the browser literally.
       primitive with a sidecar `.slim` (or no template for trivial wrappers);
       move the ~20 renamed `Example::*` templates to sidecar as part of the
       rename. Add the rule to `Yui::BaseComponent`'s doc comment.
+- [ ] **Split the stylesheet** (§4): create `app/assets/stylesheets/design/`,
+      declare `@layer tokens, base, layout, typography, components, composed;` in
+      `design/tokens.css`, move `example.css` into per-concern / per-component
+      files each wrapped in its layer, move the showcase chrome to
+      `design/showcase.css` (loaded only by `/example` + Lookbook). Update
+      `_design_head`, the `/example` layout and the Lookbook preview layout to
+      the ordered `<link>` list; add the "every `design/*.css` is referenced"
+      guard spec. Land the mechanical move as its own commit. Point Stylelint
+      (`.stylelintrc.json` glob) and `.prettierignore` at the new dir.
 
 ### Phase 2 — Shared chrome (~2 days)
 
@@ -482,8 +581,9 @@ locations,pictures,members,pages}` — index / show / new / edit / `_form` /
 - [ ] Lean on the form strategy from Phase 1 — this area is form-heavy and has
       the `role="group"` / inline-`grid` partials.
 - [ ] Port `card.css` (`.timeline-grid`, `.yournal-card`, chips, timeline track)
-      into `example.css`, de-`--pico-*`'d — the `Yui::MemoryCard` /
-      `Yui::ChronicleCard` already cover most of it.
+      into `design/card.css` / `design/memory-card.css` / `design/chronicle-card.css`,
+      de-`--pico-*`'d — the `Yui::MemoryCard` / `Yui::ChronicleCard` already
+      cover most of it.
 - [ ] Restyle the lightbox (`PictureLightboxComponent` + its Stimulus).
 - [ ] Sidecar the template of every component rewritten in this area.
 - [ ] Drop `pico.green` link.
@@ -507,13 +607,14 @@ teams,users,pages,record_events}` — mostly index + edit + destroy, plus
 - [ ] Delete `pico.amber/blue/green.css` (local copies) and all CDN
       `stylesheet_link_tag "https://unpkg.com/..."` lines.
 - [ ] Delete `picocss_reset.css`, `rails_reset.css`, `admin.css`; fold anything
-      still needed into `example.css` `@layer`-style sections.
+      still needed into the relevant `design/*.css` layer.
 - [ ] Remove every remaining `var(--pico-*)` reference — enforce with a Stylelint
       rule (`declaration-property-value-disallowed-list` or a `no-restricted-syntax`
       pattern) rather than a bare grep.
 - [ ] Verify no external Google Fonts or CDN font references remain (self-hosting completed in Phase 0).
 - [ ] Re-enable and tighten CSP now that there is no external CSS/JS/font host.
-- [ ] Rename `example.css` → `design.css`; update references.
+- [ ] Confirm no `example.css` / `Example::` stylesheet references linger (the
+      `design/` split in Phase 1 already retired the filename).
 - [ ] Add a `slim_lint` / grep check that new templates don't reintroduce bare
       unstyled elements or inline `style=`.
 - [ ] Add a grep gate: no `<<-SLIM` / bare `<<SLIM` heredocs, and no inline
@@ -523,16 +624,16 @@ teams,users,pages,record_events}` — mostly index + edit + destroy, plus
 
 ### Effort summary
 
-| Phase                                      | Size                                                      |
-|--------------------------------------------|-----------------------------------------------------------|
-| 0 — foundations & tooling                  | ~1–1.5 days                                               |
-| 1 — namespace / conventions / data / forms | ~1 day                                                    |
-| 2 — shared chrome + Stimulus               | ~2 days                                                   |
-| 3 — public layout                          | ~1–2 days                                                 |
-| 4 — team workspace                         | ~2–3 days                                                 |
-| 5 — admin                                  | ~1 day                                                    |
-| 6 — teardown + CSP                         | ~0.5–1 day                                                |
-| **Total**                                  | **~9–12 focused days**, shippable at every phase boundary |
+| Phase                                                  | Size                                                       |
+|--------------------------------------------------------|------------------------------------------------------------|
+| 0 — foundations & tooling                              | ~1–1.5 days                                                |
+| 1 — namespace / conventions / CSS split / data / forms | ~1.5 days                                                  |
+| 2 — shared chrome + Stimulus                           | ~2 days                                                    |
+| 3 — public layout                                      | ~1–2 days                                                  |
+| 4 — team workspace                                     | ~2–3 days                                                  |
+| 5 — admin                                              | ~1 day                                                     |
+| 6 — teardown + CSP                                     | ~0.5–1 day                                                 |
+| **Total**                                              | **~10–13 focused days**, shippable at every phase boundary |
 
 ---
 
