@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Auto-correct the CSS design system (the bin/mcp_rubocop -A equivalent).
+set -eo pipefail
+
+cd "$(dirname "$0")/.."
+
+if [ ! -x node_modules/.bin/stylelint ]; then
+  echo "node_modules missing — run 'npm ci' (or 'npm install') first." >&2
+  exit 1
+fi
+
+CSS_GLOB="app/assets/stylesheets/design/**/*.css"
+
+echo "stylelint --fix ${CSS_GLOB}"
+node_modules/.bin/stylelint --fix "${CSS_GLOB}" || true
+
+echo "prettier --write ${CSS_GLOB}"
+node_modules/.bin/prettier --write "${CSS_GLOB}"

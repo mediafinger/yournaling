@@ -6,7 +6,7 @@ module Example
   #
   #   = render(Example::SpecimenComponent.new("variant: :primary", center: true)) do
   #     = render(Example::ButtonComponent.new("Save memory"))
-  class SpecimenComponent < BaseComponent
+  class SpecimenComponent < Yui::BaseComponent
     attr_reader :label, :center
 
     def initialize(label = nil, center: false)

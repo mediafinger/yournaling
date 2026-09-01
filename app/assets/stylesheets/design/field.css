@@ -1,0 +1,235 @@
+@layer components {
+  /* 4i. ------------------------------------------------- FORMS / INPUTS */
+
+  .ex-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .ex-label {
+    display: inline-flex;
+    gap: 0.35em;
+    align-items: center;
+    font-size: var(--ex-text-sm);
+    font-weight: var(--ex-weight-semibold);
+    color: var(--ex-ink-soft);
+  }
+
+  .ex-label__required {
+    color: var(--ex-accent);
+  }
+
+  .ex-label__optional {
+    font-size: var(--ex-text-xs);
+    font-weight: var(--ex-weight-regular);
+    color: var(--ex-ink-faint);
+  }
+
+  .ex-input,
+  .ex-textarea,
+  .ex-select {
+    width: 100%;
+    padding: 0.6rem 0.85rem;
+    font-family: var(--ex-font-body);
+    font-size: var(--ex-text-base);
+    line-height: var(--ex-leading-normal);
+    color: var(--ex-ink);
+    appearance: none;
+    background-color: var(--ex-surface);
+    border: 1.5px solid var(--ex-border-strong);
+    border-radius: var(--ex-radius-sm);
+    transition:
+      border-color var(--ex-transition-fast),
+      box-shadow var(--ex-transition-fast),
+      background-color var(--ex-transition-fast);
+  }
+
+  .ex-input::placeholder,
+  .ex-textarea::placeholder {
+    color: var(--ex-ink-faint);
+  }
+
+  .ex-input:hover,
+  .ex-textarea:hover,
+  .ex-select:hover {
+    border-color: var(--ex-ink-faint);
+  }
+
+  .ex-input:focus,
+  .ex-textarea:focus,
+  .ex-select:focus {
+    outline: none;
+    background-color: var(--ex-surface-raised);
+    border-color: var(--ex-accent);
+    box-shadow: 0 0 0 3px var(--ex-accent-soft);
+  }
+
+  .ex-textarea {
+    min-height: 6.5rem;
+    resize: vertical;
+  }
+
+  .ex-input[disabled],
+  .ex-textarea[disabled],
+  .ex-select[disabled] {
+    color: var(--ex-ink-faint);
+    cursor: not-allowed;
+    background-color: var(--ex-surface-sunken);
+  }
+
+  .ex-field--invalid .ex-input,
+  .ex-field--invalid .ex-textarea,
+  .ex-field--invalid .ex-select {
+    border-color: var(--ex-danger);
+  }
+
+  .ex-field--invalid .ex-input:focus,
+  .ex-field--invalid .ex-textarea:focus,
+  .ex-field--invalid .ex-select:focus {
+    box-shadow: 0 0 0 3px var(--ex-danger-soft);
+  }
+
+  .ex-select-wrap {
+    position: relative;
+    display: flex;
+  }
+
+  .ex-select-wrap .ex-icon {
+    position: absolute;
+    top: 50%;
+    right: 0.75rem;
+    width: 1.1em;
+    height: 1.1em;
+    color: var(--ex-ink-faint);
+    pointer-events: none;
+    transform: translateY(-50%);
+  }
+
+  .ex-select {
+    padding-right: 2.5rem;
+    cursor: pointer;
+  }
+
+  .ex-hint {
+    font-size: var(--ex-text-xs);
+    line-height: var(--ex-leading-normal);
+    color: var(--ex-ink-faint);
+  }
+
+  .ex-error {
+    display: flex;
+    gap: 0.35em;
+    align-items: center;
+    font-size: var(--ex-text-xs);
+    font-weight: var(--ex-weight-medium);
+    color: var(--ex-danger);
+  }
+
+  /* Checkbox / radio choice */
+  .ex-choice {
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+    font-size: var(--ex-text-sm);
+    color: var(--ex-ink);
+    cursor: pointer;
+  }
+
+  .ex-choice input {
+    display: grid;
+    flex: none;
+    place-content: center;
+    width: 1.2rem;
+    height: 1.2rem;
+    margin: 0;
+    appearance: none;
+    background-color: var(--ex-surface);
+    border: 1.5px solid var(--ex-border-strong);
+    transition:
+      background-color var(--ex-transition-fast),
+      border-color var(--ex-transition-fast);
+  }
+
+  .ex-choice input[type="checkbox"] {
+    border-radius: var(--ex-radius-xs);
+  }
+
+  .ex-choice input[type="radio"] {
+    border-radius: 50%;
+  }
+
+  .ex-choice input:checked {
+    background-color: var(--ex-accent);
+    border-color: var(--ex-accent);
+  }
+
+  .ex-choice input:checked::after {
+    width: 0.7rem;
+    height: 0.7rem;
+    content: "";
+  }
+
+  .ex-choice input[type="checkbox"]:checked::after {
+    background-color: var(--ex-accent-ink);
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+  }
+
+  .ex-choice input[type="radio"]:checked::after {
+    width: 0.5rem;
+    height: 0.5rem;
+    background-color: var(--ex-accent-ink);
+    border-radius: 50%;
+  }
+
+  .ex-choice input:focus-visible {
+    box-shadow: var(--ex-focus-ring);
+  }
+
+  .ex-choice__text small {
+    display: block;
+    color: var(--ex-ink-faint);
+  }
+
+  /* Dropdown menu (static presentational) */
+  .ex-dropdown {
+    min-width: 12rem;
+    padding: 0.4rem;
+    background-color: var(--ex-surface);
+    border: var(--ex-border-hairline);
+    border-radius: var(--ex-radius-md);
+    box-shadow: var(--ex-shadow-md);
+  }
+
+  .ex-dropdown__item {
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+    width: 100%;
+    padding: 0.5rem 0.65rem;
+    font: inherit;
+    font-size: var(--ex-text-sm);
+    color: var(--ex-ink-soft);
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+    background: none;
+    border: 0;
+    border-radius: var(--ex-radius-sm);
+  }
+
+  .ex-dropdown__item:hover {
+    color: var(--ex-ink);
+    background-color: var(--ex-surface-sunken);
+  }
+
+  .ex-dropdown__item .ex-icon {
+    color: var(--ex-ink-faint);
+  }
+
+  .ex-dropdown__sep {
+    height: 1px;
+    margin: 0.35rem 0.3rem;
+    background-color: var(--ex-border);
+  }
+}

@@ -1,0 +1,14 @@
+- if href.present?
+  = link_to(href, class: css_class, role: "button", aria: { disabled: disabled.presence }) do
+    - if icon
+      = render(Yui::IconComponent.new(icon, size: icon_size))
+    span = label
+    - if trailing_icon
+      = render(Yui::IconComponent.new(trailing_icon, size: icon_size))
+- else
+  button type=type class=css_class disabled=disabled
+    - if icon
+      = render(Yui::IconComponent.new(icon, size: icon_size))
+    span = label
+    - if trailing_icon
+      = render(Yui::IconComponent.new(trailing_icon, size: icon_size))

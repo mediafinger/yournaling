@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class AdminIndexRecordEventsComponent < ApplicationComponent
-  slim_template <<-SLIM
+  slim_template <<~SLIM
     div id="record_events"
-      @record_events.each do |record_event|
+      - @record_events.each do |record_event|
         = render AdminShowRecordEventComponent.new(record_event:)
   SLIM
 

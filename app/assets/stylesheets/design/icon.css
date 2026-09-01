@@ -1,0 +1,27 @@
+@layer components {
+  /* 4b. -------------------------------------------------------------- ICON */
+
+  .ex-icon {
+    display: inline-block;
+    flex: none;
+    width: 1.25em;
+    height: 1.25em;
+    vertical-align: -0.2em;
+    fill: none;
+    stroke: currentcolor;
+    stroke-width: 1.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .ex-icon--sm {
+    width: 1em;
+    height: 1em;
+  }
+
+  .ex-icon--lg {
+    width: 1.75em;
+    height: 1.75em;
+    stroke-width: 1.5;
+  }
+}

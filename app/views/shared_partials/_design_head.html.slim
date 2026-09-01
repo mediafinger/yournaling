@@ -1,0 +1,13 @@
+/ Warm Editorial design language — <head> include.
+/ Preloads the two most-used self-hosted fonts (roman faces; italic loads on
+/ demand) and links the split stylesheet in @layer order. tokens.css declares
+/ `@layer tokens, base, layout, typography, components, composed, showcase;` so the
+/ cascade is fixed by that list, not by which <link> loads first.
+/ Pass `showcase: true` (only /example + Lookbook) to also load showcase.css.
+/ The set of files here is guarded by spec/views/design_head_spec.rb.
+- app_sheets = %w[tokens base layout typography link button badge tag card field callout avatar figure icon memory-card chronicle-card]
+- sheets = local_assigns[:showcase] ? app_sheets + %w[showcase] : app_sheets
+= preload_link_tag asset_path("Fraunces-Variable.woff2"), as: "font", type: "font/woff2", crossorigin: "anonymous"
+= preload_link_tag asset_path("Inter-Variable.woff2"), as: "font", type: "font/woff2", crossorigin: "anonymous"
+- sheets.each do |sheet|
+  = stylesheet_link_tag "design/#{sheet}", "data-turbo-track": "reload"

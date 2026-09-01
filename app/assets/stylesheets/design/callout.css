@@ -1,0 +1,48 @@
+@layer components {
+  /* 4h. --------------------------------------------------------- CALLOUT */
+
+  .ex-callout {
+    --_accent: var(--ex-info);
+    --_bg: var(--ex-info-soft);
+
+    display: flex;
+    gap: var(--ex-space-xs);
+    padding: var(--ex-space-sm) var(--ex-space-md);
+    color: var(--ex-ink);
+    background-color: var(--_bg);
+    border: 1px solid color-mix(in srgb, var(--_accent) 26%, transparent);
+    border-radius: var(--ex-radius-md);
+  }
+
+  .ex-callout--success {
+    --_accent: var(--ex-success);
+    --_bg: var(--ex-success-soft);
+  }
+
+  .ex-callout--warning {
+    --_accent: var(--ex-warning);
+    --_bg: var(--ex-warning-soft);
+  }
+
+  .ex-callout--danger {
+    --_accent: var(--ex-danger);
+    --_bg: var(--ex-danger-soft);
+  }
+
+  .ex-callout__icon {
+    flex: none;
+    color: var(--_accent);
+  }
+
+  .ex-callout__title {
+    margin: 0 0 0.15rem;
+    font-weight: var(--ex-weight-semibold);
+  }
+
+  .ex-callout__body {
+    margin: 0;
+    font-size: var(--ex-text-sm);
+    line-height: var(--ex-leading-normal);
+    color: var(--ex-ink-soft);
+  }
+}

@@ -1,0 +1,52 @@
+@layer base {
+  /* 2. ------------------------------------------------------- SCOPE & BASE */
+
+  .ex-body,
+  .ex-scope {
+    font-family: var(--ex-font-body);
+    font-size: var(--ex-text-base);
+    font-weight: var(--ex-weight-regular);
+    font-feature-settings: "kern", "liga", "clig", "calt";
+    line-height: var(--ex-leading-relaxed);
+    color: var(--ex-ink);
+    background-color: var(--ex-paper);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .ex-body {
+    min-height: 100vh;
+    margin: 0;
+  }
+
+  .ex-scope *,
+  .ex-scope *::before,
+  .ex-scope *::after,
+  .ex-body *,
+  .ex-body *::before,
+  .ex-body *::after {
+    box-sizing: border-box;
+  }
+
+  .ex-scope :focus-visible,
+  .ex-body :focus-visible {
+    outline: none;
+    border-radius: var(--ex-radius-xs);
+    box-shadow: var(--ex-focus-ring);
+  }
+
+  .ex-scope ::selection,
+  .ex-body ::selection {
+    color: var(--ex-accent-strong);
+    background-color: var(--ex-accent-soft);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ex-scope *,
+    .ex-body * {
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+    }
+  }
+}

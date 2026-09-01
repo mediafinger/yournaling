@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Lint + format-check the hand-authored CSS design system.
+# Mirrors the bin/mcp_* convention; run bin/fix_css to auto-correct.
+set -eo pipefail
+
+cd "$(dirname "$0")/.."
+
+if [ ! -x node_modules/.bin/stylelint ]; then
+  echo "node_modules missing — run 'npm ci' (or 'npm install') first." >&2
+  exit 1
+fi
+
+CSS_GLOB="app/assets/stylesheets/design/**/*.css"
+
+echo "stylelint ${CSS_GLOB}"
+node_modules/.bin/stylelint "${CSS_GLOB}"
+
+echo "prettier --check ${CSS_GLOB}"
+node_modules/.bin/prettier --check "${CSS_GLOB}"

@@ -1,6 +1,6 @@
 - if local_assigns[:hide_actions]
   a.weblink-chip id= dom_id(weblink) href=weblink.url target="_blank" rel="noopener noreferrer"
-    | 🔗 
+    | 🔗
     = weblink.name.presence || weblink.url
 - else
   article id= dom_id(weblink)

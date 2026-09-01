@@ -1,0 +1,183 @@
+@layer showcase {
+  /* 6. ------------------------------------------------------ SHOWCASE CHROME */
+
+  .ex-showcase__hero {
+    padding-block: clamp(3rem, 1rem + 9vw, 7rem);
+    background:
+      radial-gradient(
+        120% 120% at 100% 0%,
+        var(--ex-accent-soft) 0%,
+        transparent 55%
+      ),
+      var(--ex-paper);
+    border-bottom: var(--ex-border-hairline);
+  }
+
+  .ex-showcase__toc {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: color-mix(in srgb, var(--ex-paper) 88%, transparent);
+    border-bottom: var(--ex-border-hairline);
+    backdrop-filter: blur(8px);
+  }
+
+  .ex-showcase__toc ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 1rem;
+    padding: 0.85rem 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .ex-showcase__toc a {
+    font-size: var(--ex-text-sm);
+    font-weight: var(--ex-weight-medium);
+    color: var(--ex-ink-faint);
+    text-decoration: none;
+  }
+
+  .ex-showcase__toc a:hover {
+    color: var(--ex-accent);
+  }
+
+  .ex-section {
+    padding-block: var(--ex-space-2xl);
+    scroll-margin-top: 4rem;
+    border-bottom: var(--ex-border-hairline);
+  }
+
+  .ex-section:last-child {
+    border-bottom: 0;
+  }
+
+  .ex-section__head {
+    max-width: var(--ex-measure);
+    margin-bottom: var(--ex-space-xl);
+  }
+
+  .ex-section__number {
+    font-family: var(--ex-font-mono);
+    font-size: var(--ex-text-xs);
+    color: var(--ex-accent);
+    letter-spacing: var(--ex-tracking-wide);
+  }
+
+  .ex-section__desc {
+    margin-top: var(--ex-space-2xs);
+    font-size: var(--ex-text-md);
+    line-height: var(--ex-leading-normal);
+    color: var(--ex-ink-faint);
+  }
+
+  /* Specimen tiles used to demonstrate a single component */
+  .ex-specimen {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ex-space-sm);
+    padding: var(--ex-space-md);
+    background-color: var(--ex-surface);
+    border: 1px solid var(--ex-border);
+    border-radius: var(--ex-radius-md);
+  }
+
+  .ex-specimen__label {
+    font-family: var(--ex-font-mono);
+    font-size: var(--ex-text-xs);
+    color: var(--ex-ink-faint);
+    letter-spacing: var(--ex-tracking-wide);
+  }
+
+  .ex-specimen__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--ex-space-sm);
+    align-items: center;
+  }
+
+  .ex-specimen--center .ex-specimen__row {
+    justify-content: center;
+  }
+
+  /* Colour swatches */
+  .ex-swatch {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background-color: var(--ex-surface);
+    border: var(--ex-border-hairline);
+    border-radius: var(--ex-radius-md);
+  }
+
+  .ex-swatch__chip {
+    height: 4.5rem;
+    border-bottom: var(--ex-border-hairline);
+  }
+
+  .ex-swatch__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: 0.65rem 0.8rem;
+  }
+
+  .ex-swatch__name {
+    font-size: var(--ex-text-sm);
+    font-weight: var(--ex-weight-semibold);
+    color: var(--ex-ink);
+  }
+
+  .ex-swatch__value {
+    font-family: var(--ex-font-mono);
+    font-size: var(--ex-text-xs);
+    color: var(--ex-ink-faint);
+  }
+
+  /* Type specimen */
+  .ex-type-row {
+    display: grid;
+    grid-template-columns: 7rem 1fr;
+    gap: var(--ex-space-md);
+    align-items: baseline;
+    padding-block: var(--ex-space-sm);
+    border-top: var(--ex-border-hairline);
+  }
+
+  .ex-type-row__key {
+    font-family: var(--ex-font-mono);
+    font-size: var(--ex-text-xs);
+    color: var(--ex-ink-faint);
+  }
+
+  @media (width <= 34rem) {
+    .ex-type-row {
+      grid-template-columns: 1fr;
+      gap: var(--ex-space-2xs);
+    }
+  }
+
+  /* Spacing / radius scale visualisation */
+  .ex-ruler {
+    display: flex;
+    gap: var(--ex-space-sm);
+    align-items: center;
+    font-family: var(--ex-font-mono);
+    font-size: var(--ex-text-xs);
+    color: var(--ex-ink-faint);
+  }
+
+  .ex-ruler__bar {
+    height: 1.25rem;
+    background-color: var(--ex-accent);
+    border-radius: var(--ex-radius-xs);
+    opacity: 0.85;
+  }
+
+  .ex-radius-demo {
+    width: 4.5rem;
+    height: 4.5rem;
+    background-color: var(--ex-accent-soft);
+    border: 1.5px solid var(--ex-accent);
+  }
+}

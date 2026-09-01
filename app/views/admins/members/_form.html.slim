@@ -19,15 +19,12 @@ article
       - else
         div
           = form.label :team_id
-          =
-          -             form.select :team_id, Team.pluck(:name, :id), selected: form.object.team_id, include_blank: true, required: true
+          = form.select :team_id, Team.pluck(:name, :id), selected: form.object.team_id, include_blank: true, required: true
         div
           = form.label :user_id
-          =
-          -             form.select :user_id, User.pluck(:email, :id), selected: form.object.user_id, include_blank: true, required: true
+          = form.select :user_id, User.pluck(:email, :id), selected: form.object.user_id, include_blank: true, required: true
       div
         = form.label :roles
-        =
-        -           form.select :roles, Member::VALID_ROLES, multiple: true, selected: form.object.roles, required: true
+        = form.select :roles, Member::VALID_ROLES, multiple: true, selected: form.object.roles, required: true
       div
         = form.submit

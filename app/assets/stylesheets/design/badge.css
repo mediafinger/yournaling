@@ -1,0 +1,59 @@
+@layer components {
+  /* 4d. ------------------------------------------------------ BADGES & TAGS */
+
+  .ex-badge {
+    --_bg: var(--ex-surface-sunken);
+    --_fg: var(--ex-ink-soft);
+
+    display: inline-flex;
+    gap: 0.4em;
+    align-items: center;
+    padding: 0.3rem 0.6rem;
+    font-family: var(--ex-font-body);
+    font-size: var(--ex-text-xs);
+    font-weight: var(--ex-weight-semibold);
+    color: var(--_fg);
+    text-transform: uppercase;
+    letter-spacing: var(--ex-tracking-wide);
+    white-space: nowrap;
+    background-color: var(--_bg);
+    border-radius: var(--ex-radius-xs);
+  }
+
+  .ex-badge--accent {
+    --_bg: var(--ex-accent-soft);
+    --_fg: var(--ex-accent-strong);
+  }
+
+  .ex-badge--success {
+    --_bg: var(--ex-success-soft);
+    --_fg: var(--ex-success);
+  }
+
+  .ex-badge--warning {
+    --_bg: var(--ex-warning-soft);
+    --_fg: var(--ex-warning);
+  }
+
+  .ex-badge--danger {
+    --_bg: var(--ex-danger-soft);
+    --_fg: var(--ex-danger);
+  }
+
+  .ex-badge--info {
+    --_bg: var(--ex-info-soft);
+    --_fg: var(--ex-info);
+  }
+
+  .ex-badge--gold {
+    --_bg: var(--ex-gold-soft);
+    --_fg: var(--ex-gold);
+  }
+
+  .ex-badge__dot {
+    width: 0.45em;
+    height: 0.45em;
+    background-color: currentcolor;
+    border-radius: 50%;
+  }
+}

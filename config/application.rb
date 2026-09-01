@@ -33,6 +33,32 @@ module Yournaling
     # defer loading of all image_tag images until they reach the viewport
     config.action_view.image_loading = "lazy"
 
+    # ViewComponent previews (the design-language workbench) live next to the
+    # component specs. Must be set here — before the view_component railtie
+    # initializers — not in config/initializers.
+    previews_path = Rails.root.join("spec/view_components/previews").to_s
+    config.view_component.previews.paths << previews_path
+    config.view_component.previews.default_layout = "component_preview"
+
+    # Let `bin/rails zeitwerk:check` verify the preview classes, and let CI
+    # (test env, eager_load = true) boot-check them — otherwise a mis-named
+    # preview only surfaces when someone opens /lookbook. Guarded because spec/
+    # is not shipped to production.
+    config.eager_load_paths << previews_path unless Rails.env.production?
+
+    # Lookbook is development-only (see the :development group in the Gemfile).
+    if defined?(Lookbook)
+      config.lookbook.project_name = "Yournaling · Warm Editorial"
+      config.lookbook.preview_paths = config.view_component.previews.paths
+
+      # Watch the split stylesheet so a save reloads the open preview — edit CSS
+      # in your editor with no manual refresh. Needs the evented file watcher
+      # (config/environments/development.rb) + the `listen` gem.
+      config.lookbook.live_updates = true
+      config.lookbook.listen_paths << Rails.root.join("app/assets/stylesheets/design").to_s
+      config.lookbook.listen_extensions << "css"
+    end
+
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.

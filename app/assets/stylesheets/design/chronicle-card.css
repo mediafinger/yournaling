@@ -1,0 +1,68 @@
+@layer composed {
+  /* 5. --------------------------------------------------- COMPOSED RECORDS */
+
+  /* Shared timeline track (used by chronicle card) */
+  .ex-timeline {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--ex-space-sm);
+    padding-inline-start: 1.35rem;
+    border-inline-start: 2px solid var(--ex-border);
+  }
+
+  .ex-timeline__item {
+    position: relative;
+  }
+
+  .ex-timeline__item::before {
+    position: absolute;
+    inset-inline-start: calc(-1.35rem - 6px);
+    top: 0.4em;
+    width: 10px;
+    height: 10px;
+    content: "";
+    background-color: var(--ex-accent);
+    border-radius: 50%;
+    box-shadow: 0 0 0 4px var(--ex-paper);
+  }
+
+  .ex-timeline__date {
+    font-size: var(--ex-text-xs);
+    font-weight: var(--ex-weight-semibold);
+    color: var(--ex-ink-faint);
+    text-transform: uppercase;
+    letter-spacing: var(--ex-tracking-wide);
+  }
+
+  .ex-timeline__title {
+    font-family: var(--ex-font-serif);
+    font-size: var(--ex-text-base);
+    color: var(--ex-ink);
+  }
+
+  /* Chronicle card */
+  .ex-chronicle-card {
+    --ex-card-accent: var(--ex-accent);
+  }
+
+  .ex-chronicle-card__cover {
+    aspect-ratio: 16 / 6;
+  }
+
+  .ex-chronicle-card__summary {
+    margin: 0;
+    font-family: var(--ex-font-serif);
+    font-size: var(--ex-text-base);
+    line-height: var(--ex-leading-relaxed);
+    color: var(--ex-ink-soft);
+  }
+
+  .ex-chronicle-card__dates {
+    display: inline-flex;
+    gap: 0.4em;
+    align-items: center;
+    font-size: var(--ex-text-sm);
+    color: var(--ex-ink-faint);
+  }
+}

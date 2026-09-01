@@ -2,6 +2,7 @@
 
 Rails.application.routes.draw do
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
+  mount Lookbook::Engine, at: "/lookbook" if Rails.env.development?
 
   root to: "pages#show"
   get "check_newer", to: "pages#check_newer", as: :check_newer_pages
@@ -9,7 +10,7 @@ Rails.application.routes.draw do
 
   get "up" => "health#show", as: :rails_health_check
 
-  # Design-language showcase (see app/view_components/example + app/assets/stylesheets/example.css)
+  # Design-language showcase (see app/view_components/yui + app/assets/stylesheets/design/)
   get "example", to: "example#show", as: :example
 
   resources :teams, except: %i[show]

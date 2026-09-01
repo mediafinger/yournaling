@@ -1,0 +1,126 @@
+@layer components {
+  /* 4e. ------------------------------------------------------------- CARD */
+
+  .ex-card {
+    --_pad: var(--ex-space-md);
+
+    display: flex;
+    flex-direction: column;
+    overflow: clip;
+    color: var(--ex-ink);
+    background-color: var(--ex-surface);
+    border: var(--ex-border-hairline);
+    border-radius: var(--ex-radius-lg);
+  }
+
+  .ex-card--elevated {
+    border-color: transparent;
+    box-shadow: var(--ex-shadow-md);
+  }
+
+  .ex-card--outline {
+    background-color: transparent;
+    border-color: var(--ex-border-strong);
+  }
+
+  .ex-card--sunken {
+    background-color: var(--ex-surface-sunken);
+    border-color: transparent;
+  }
+
+  a.ex-card {
+    color: var(--ex-ink);
+    text-decoration: none;
+  }
+
+  .ex-card--interactive {
+    cursor: pointer;
+    transition:
+      transform var(--ex-transition),
+      box-shadow var(--ex-transition),
+      border-color var(--ex-transition);
+  }
+
+  .ex-card--interactive:hover {
+    border-color: transparent;
+    box-shadow: var(--ex-shadow-lg);
+    transform: translateY(-3px);
+  }
+
+  .ex-card--accent {
+    border-inline-start: 4px solid var(--ex-card-accent, var(--ex-accent));
+  }
+
+  .ex-card__media {
+    margin: calc(-1 * var(--_pad)) calc(-1 * var(--_pad)) 0;
+    background-color: var(--ex-surface-sunken);
+  }
+
+  .ex-card__media > * {
+    display: block;
+    width: 100%;
+  }
+
+  .ex-card__media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ex-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ex-space-xs);
+    padding: var(--_pad);
+  }
+
+  .ex-card__header {
+    padding: var(--_pad) var(--_pad) 0;
+  }
+
+  .ex-card__header + .ex-card__body {
+    padding-block-start: var(--ex-space-sm);
+  }
+
+  .ex-card__footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--ex-space-xs);
+    align-items: center;
+    padding: var(--ex-space-xs) var(--_pad);
+    margin-top: auto;
+    background-color: var(--ex-surface-raised);
+    border-top: var(--ex-border-hairline);
+  }
+
+  .ex-card--pad-sm {
+    --_pad: var(--ex-space-sm);
+  }
+
+  .ex-card--pad-lg {
+    --_pad: var(--ex-space-lg);
+  }
+
+  /* Meta row (avatar + who / when) */
+  .ex-meta {
+    display: flex;
+    gap: var(--ex-space-2xs);
+    align-items: center;
+    font-size: var(--ex-text-sm);
+    color: var(--ex-ink-faint);
+  }
+
+  .ex-meta__sep {
+    width: 3px;
+    height: 3px;
+    background-color: currentcolor;
+    border-radius: 50%;
+    opacity: 0.6;
+  }
+
+  .ex-meta strong {
+    font-weight: var(--ex-weight-semibold);
+    color: var(--ex-ink-soft);
+  }
+}

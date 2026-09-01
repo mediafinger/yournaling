@@ -9,6 +9,6 @@ article id= dom_id(current_user_team)
   - if current_user_team == current_team
     = button_to "go solo", { controller: :switch_current_teams, action: :destroy, id: current_user_team.urlsafe_id }, method: :delete, class: "secondary", id: current_user_team.urlsafe_id
     i
-      (unlink currently selected team)
+      | (unlink currently selected team)
   - else
-    = button_to "Select this team", switch_current_teams_path({ current_team: { team_id: current_user_team.id} }), method: :post, class: "secondary", id: current_user_team.urlsafe_id
+    = button_to "Select this team", switch_current_teams_path({ current_team: { team_id: current_user_team.id } }), method: :post, class: "secondary", id: current_user_team.urlsafe_id

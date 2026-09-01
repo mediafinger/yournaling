@@ -1,0 +1,8 @@
+label.ex-label for=for_id
+  = label_text
+  - if required
+    span.ex-label__required aria-hidden="true"
+      | *
+  - elsif optional
+    span.ex-label__optional
+      | (optional)

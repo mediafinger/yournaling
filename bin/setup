@@ -19,6 +19,14 @@ FileUtils.chdir APP_ROOT do
   puts "== Installing dependencies =="
   system("bundle check") || system!("bundle install")
 
+  # Dev-only Node toolchain for linting/formatting the CSS design system
+  # (see TODO_UI_DESIGN.md §4). Does not touch importmap / Propshaft / runtime.
+  if system("npm --version", out: File::NULL, err: File::NULL)
+    system! "npm install"
+  else
+    puts "!! npm not found — skipping. `bin/lint_css` / `rake ci` need it; install Node ≥ 22."
+  end
+
   # puts "\n== Copying sample files =="
   # unless File.exist?("config/database.yml")
   #   FileUtils.cp "config/database.yml.sample", "config/database.yml"

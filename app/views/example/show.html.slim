@@ -5,15 +5,15 @@
 header.ex-showcase__hero
   .ex-container
     .ex-stack.ex-stack--sm style="max-width: 46rem"
-      = render(Example::EyebrowComponent.new("Yournaling · Design Language"))
+      = render(Yui::EyebrowComponent.new("Yournaling · Design Language"))
       h1.ex-display Warm, editorial, and built to last.
       p.ex-lead
         ' A self-contained system of tokens and
-        => render(Example::QuoteComponent.new("ViewComponents"))
+        => render(Yui::QuoteComponent.new("ViewComponents"))
         | — typography, colour, spacing, buttons, forms, cards — used to give every page of Yournaling one calm, considered voice.
       .ex-cluster style="margin-top: 0.5rem"
-        = render(Example::ButtonComponent.new("Start with the tokens", href: "#foundations", variant: :primary, trailing_icon: "arrow-right"))
-        = render(Example::ButtonComponent.new("Jump to the records", href: "#records", variant: :secondary))
+        = render(Yui::ButtonComponent.new("Start with the tokens", href: "#foundations", variant: :primary, trailing_icon: "arrow-right"))
+        = render(Yui::ButtonComponent.new("Jump to the records", href: "#records", variant: :secondary))
 
 / ------------------------------------------------------------------ Table of contents
 nav.ex-showcase__toc aria-label="Sections"
@@ -35,7 +35,7 @@ nav.ex-showcase__toc aria-label="Sections"
 = render(Example::SectionComponent.new(number: "01", title: "Foundations — Colour", anchor: "foundations", description: "A warm paper palette: cream grounds, cocoa ink, a terracotta accent and a muted gold. Every value is a CSS custom property, and the whole palette re-tunes itself for dark mode.")) do
   .ex-stack.ex-stack--lg
     div
-      = render(Example::HeadlineComponent.new("Surfaces & ink", level: 4))
+      = render(Yui::HeadlineComponent.new("Surfaces & ink", level: 4))
       .ex-grid style="margin-top: 1rem"
         = render(Example::SwatchComponent.new(name: "Paper", token: "--ex-paper"))
         = render(Example::SwatchComponent.new(name: "Surface", token: "--ex-surface"))
@@ -46,7 +46,7 @@ nav.ex-showcase__toc aria-label="Sections"
         = render(Example::SwatchComponent.new(name: "Border", token: "--ex-border"))
         = render(Example::SwatchComponent.new(name: "Border · strong", token: "--ex-border-strong"))
     div
-      = render(Example::HeadlineComponent.new("Accent & semantic", level: 4))
+      = render(Yui::HeadlineComponent.new("Accent & semantic", level: 4))
       .ex-grid style="margin-top: 1rem"
         = render(Example::SwatchComponent.new(name: "Accent", token: "--ex-accent", value: "terracotta"))
         = render(Example::SwatchComponent.new(name: "Accent · strong", token: "--ex-accent-strong"))
@@ -61,7 +61,7 @@ nav.ex-showcase__toc aria-label="Sections"
 = render(Example::SectionComponent.new(number: "02", title: "Typography", anchor: "typography", description: "Fraunces — an old-style display serif — carries every headline and quotation. Inter handles UI text and labels. The scale is fluid: it breathes on wide screens and tightens on phones.")) do
   .ex-stack.ex-stack--lg
     div
-      = render(Example::HeadlineComponent.new("The scale", level: 4))
+      = render(Yui::HeadlineComponent.new("The scale", level: 4))
       .ex-stack style="margin-top: 0.5rem"
         .ex-type-row
           span.ex-type-row__key Display
@@ -89,24 +89,24 @@ nav.ex-showcase__toc aria-label="Sections"
           p.ex-text.ex-text--sm.ex-text--muted Last edited 4 August 2024 · 2 min read
 
     div
-      = render(Example::HeadlineComponent.new("Headline component", level: 4))
+      = render(Yui::HeadlineComponent.new("Headline component", level: 4))
       .ex-stack style="margin-top: 1rem"
         = render(Example::SpecimenComponent.new('HeadlineComponent.new("...", level: 1, eyebrow: "Chronicle")')) do
-          = render(Example::HeadlineComponent.new("A year on the coast", level: 1, eyebrow: "Chronicle"))
+          = render(Yui::HeadlineComponent.new("A year on the coast", level: 1, eyebrow: "Chronicle"))
         = render(Example::SpecimenComponent.new('HeadlineComponent.new("...", level: 2, align: :center)')) do
-          = render(Example::HeadlineComponent.new("Everything we kept", level: 2, align: :center))
+          = render(Yui::HeadlineComponent.new("Everything we kept", level: 2, align: :center))
 
     div
-      = render(Example::HeadlineComponent.new("Inline & prose", level: 4))
+      = render(Yui::HeadlineComponent.new("Inline & prose", level: 4))
       .ex-stack.ex-stack--sm style="margin-top: 1rem"
         p.ex-text
           ' Some phrases deserve
-          => render(Example::EmphasisComponent.new("real weight"))
+          => render(Yui::EmphasisComponent.new("real weight"))
           ' and others are best said
-          => render(Example::QuoteComponent.new("a little more quietly"))
+          => render(Yui::QuoteComponent.new("a little more quietly"))
           | .
-        = render(Example::BlockquoteComponent.new("We travel to lose ourselves; we keep a journal to find ourselves again.", cite: "Field notes, vol. 3", variant: :card))
-        = render(Example::ProseComponent.new) do
+        = render(Yui::BlockquoteComponent.new("We travel to lose ourselves; we keep a journal to find ourselves again.", cite: "Field notes, vol. 3", variant: :card))
+        = render(Yui::ProseComponent.new) do
           p A <strong>Memory</strong> is the smallest unit here — a note, a photo, a place. Group them into an <em>Experience</em>, and a run of experiences becomes a <a href="#records">Chronicle</a>.
           ul
             li Write first, organise later.
@@ -142,24 +142,24 @@ nav.ex-showcase__toc aria-label="Sections"
 = render(Example::SectionComponent.new(number: "04", title: "Buttons", anchor: "buttons", description: "One ButtonComponent. Pass a variant and a size; add a leading or trailing icon; give it an href to render as a link. Pill-shaped, quietly animated on hover.")) do
   .ex-stack.ex-stack--lg
     = render(Example::SpecimenComponent.new("variant: :primary | :secondary | :warning | :danger | :ghost")) do
-      = render(Example::ButtonComponent.new("Primary", variant: :primary))
-      = render(Example::ButtonComponent.new("Secondary", variant: :secondary))
-      = render(Example::ButtonComponent.new("Warning", variant: :warning))
-      = render(Example::ButtonComponent.new("Danger", variant: :danger))
-      = render(Example::ButtonComponent.new("Ghost", variant: :ghost))
+      = render(Yui::ButtonComponent.new("Primary", variant: :primary))
+      = render(Yui::ButtonComponent.new("Secondary", variant: :secondary))
+      = render(Yui::ButtonComponent.new("Warning", variant: :warning))
+      = render(Yui::ButtonComponent.new("Danger", variant: :danger))
+      = render(Yui::ButtonComponent.new("Ghost", variant: :ghost))
     = render(Example::SpecimenComponent.new("size: :sm | :md | :lg")) do
-      = render(Example::ButtonComponent.new("Small", size: :sm))
-      = render(Example::ButtonComponent.new("Medium", size: :md))
-      = render(Example::ButtonComponent.new("Large", size: :lg))
+      = render(Yui::ButtonComponent.new("Small", size: :sm))
+      = render(Yui::ButtonComponent.new("Medium", size: :md))
+      = render(Yui::ButtonComponent.new("Large", size: :lg))
     = render(Example::SpecimenComponent.new("icon: / trailing_icon: / disabled: / href:")) do
-      = render(Example::ButtonComponent.new("New memory", icon: "plus"))
-      = render(Example::ButtonComponent.new("Continue", variant: :secondary, trailing_icon: "arrow-right"))
-      = render(Example::ButtonComponent.new("Delete", variant: :danger, icon: "trash"))
-      = render(Example::ButtonComponent.new("Disabled", disabled: true))
-      = render(Example::ButtonComponent.new("As a link", href: "#buttons", variant: :ghost, trailing_icon: "arrow-up-right"))
+      = render(Yui::ButtonComponent.new("New memory", icon: "plus"))
+      = render(Yui::ButtonComponent.new("Continue", variant: :secondary, trailing_icon: "arrow-right"))
+      = render(Yui::ButtonComponent.new("Delete", variant: :danger, icon: "trash"))
+      = render(Yui::ButtonComponent.new("Disabled", disabled: true))
+      = render(Yui::ButtonComponent.new("As a link", href: "#buttons", variant: :ghost, trailing_icon: "arrow-up-right"))
     = render(Example::SpecimenComponent.new("full_width: true")) do
       div style="flex: 1; min-width: 16rem"
-        = render(Example::ButtonComponent.new("Save this memory", full_width: true))
+        = render(Yui::ButtonComponent.new("Save this memory", full_width: true))
 
 / ------------------------------------------------------------------ Links
 = render(Example::SectionComponent.new(number: "05", title: "Links", anchor: "links", description: "Three link treatments for three jobs: inline, muted, and a standalone call-to-action with a nudging arrow.")) do
@@ -168,84 +168,91 @@ nav.ex-showcase__toc aria-label="Sections"
       p.ex-text
         | Read the
         =< " "
-        = render(Example::LinkComponent.new("full chronicle", href: "#records"))
+        = render(Yui::LinkComponent.new("full chronicle", href: "#records"))
         |  from the coast year.
     = render(Example::SpecimenComponent.new("variant: :muted")) do
-      = render(Example::LinkComponent.new("Back to all experiences", href: "#records", variant: :muted))
+      = render(Yui::LinkComponent.new("Back to all experiences", href: "#records", variant: :muted))
     = render(Example::SpecimenComponent.new("variant: :standalone")) do
-      = render(Example::LinkComponent.new("See every memory in this experience", href: "#records", variant: :standalone))
+      = render(Yui::LinkComponent.new("See every memory in this experience", href: "#records", variant: :standalone))
     = render(Example::SpecimenComponent.new("external: true")) do
-      = render(Example::LinkComponent.new("mediafinger.com", href: "https://mediafinger.com", external: true))
+      = render(Yui::LinkComponent.new("mediafinger.com", href: "https://mediafinger.com", external: true))
 
 / ------------------------------------------------------------------ Badges & tags
 = render(Example::SectionComponent.new(number: "06", title: "Badges & tags", anchor: "badges", description: "Badges state status in a word. Tags are pill-shaped chips for places, keywords and filters — link them or make them removable.")) do
   .ex-stack.ex-stack--lg
     = render(Example::SpecimenComponent.new("BadgeComponent — variants")) do
-      = render(Example::BadgeComponent.new("Neutral"))
-      = render(Example::BadgeComponent.new("Accent", variant: :accent))
-      = render(Example::BadgeComponent.new("Published", variant: :success))
-      = render(Example::BadgeComponent.new("Draft", variant: :warning, dot: true))
-      = render(Example::BadgeComponent.new("Archived", variant: :danger))
-      = render(Example::BadgeComponent.new("Team", variant: :info, icon: "user"))
-      = render(Example::BadgeComponent.new("48 memories", variant: :gold))
+      = render(Yui::BadgeComponent.new("Neutral"))
+      = render(Yui::BadgeComponent.new("Accent", variant: :accent))
+      = render(Yui::BadgeComponent.new("Published", variant: :success))
+      = render(Yui::BadgeComponent.new("Draft", variant: :warning, dot: true))
+      = render(Yui::BadgeComponent.new("Archived", variant: :danger))
+      = render(Yui::BadgeComponent.new("Team", variant: :info, icon: "user"))
+      = render(Yui::BadgeComponent.new("48 memories", variant: :gold))
     = render(Example::SpecimenComponent.new("TagComponent — plain, with icon, as link, removable")) do
-      = render(Example::TagComponent.new("beach"))
-      = render(Example::TagComponent.new("Ericeira, Portugal", icon: "map-pin"))
-      = render(Example::TagComponent.new("cabo-da-roca", href: "#badges"))
-      = render(Example::TagComponent.new("winter", removable: true))
+      = render(Yui::TagComponent.new("beach"))
+      = render(Yui::TagComponent.new("Ericeira, Portugal", icon: "map-pin"))
+      = render(Yui::TagComponent.new("cabo-da-roca", href: "#badges"))
+      = render(Yui::TagComponent.new("winter", removable: true))
 
 / ------------------------------------------------------------------ Icons
 = render(Example::SectionComponent.new(number: "07", title: "Icons", anchor: "icons", description: "A small, consistent, stroke-based set. One IconComponent, three sizes, currentColor throughout — so an icon always matches the text beside it.")) do
   .ex-grid
-    - Example::IconComponent::PATHS.keys.each do |name|
+    - Yui::IconComponent::PATHS.each_key do |name|
       .ex-specimen.ex-specimen--center
         .ex-specimen__row
-          = render(Example::IconComponent.new(name, size: :lg))
+          = render(Yui::IconComponent.new(name, size: :lg))
         span.ex-specimen__label = name
 
 / ------------------------------------------------------------------ Forms
 = render(Example::SectionComponent.new(number: "08", title: "Forms", anchor: "forms", description: "FieldComponent bundles a label, control, hint and error into one accessible unit. Inputs, textareas and selects share a border, focus ring and disabled state.")) do
   .ex-grid.ex-grid--wide
     .ex-stack
-      = render(Example::FieldComponent.new(label: "Title", name: "memory[title]", required: true, placeholder: "A short name for this memory", value: "Sand dollar, unbroken"))
-      = render(Example::FieldComponent.new(label: "Email", name: "email", type: "email", value: "andy@", error: "That address looks incomplete."))
-      = render(Example::FieldComponent.new(label: "Notes", name: "memory[notes]", as: :textarea, hint: "Markdown is supported.", value: "We found it right where the path meets the water."))
+      = render(Yui::FieldComponent.new(label: "Title", name: "memory[title]", required: true, placeholder: "A short name for this memory", value: "Sand dollar, unbroken"))
+      = render(Yui::FieldComponent.new(label: "Email", name: "email", type: "email", value: "andy@", error: "That address looks incomplete."))
+      = render(Yui::FieldComponent.new(label: "Notes", name: "memory[notes]", as: :textarea, hint: "Markdown is supported.", value: "We found it right where the path meets the water."))
     .ex-stack
-      = render(Example::FieldComponent.new(label: "Visibility", name: "memory[visibility]", as: :select, value: "team", options: [["Private — only me", "private"], ["Team — our shared journal", "team"], ["Public — anyone with the link", "public"]]))
+      = render(Yui::FieldComponent.new(label: "Visibility", name: "memory[visibility]", as: :select, value: "team", options: [["Private — only me", "private"], ["Team — our shared journal", "team"], ["Public — anyone with the link", "public"]]))
       .ex-field
-        = render(Example::LabelComponent.new("Attach to", for: "attach", optional: true))
+        = render(Yui::LabelComponent.new("Attach to", for: "attach", optional: true))
         .ex-stack.ex-stack--xs
-          = render(Example::ChoiceComponent.new("This experience", name: "attach", type: :radio, value: "exp", checked: true))
-          = render(Example::ChoiceComponent.new("A new experience", name: "attach", type: :radio, value: "new"))
-      = render(Example::ChoiceComponent.new("Let the team comment on this memory", name: "comments", type: :checkbox, hint: "You can turn this off later.", checked: true))
-      = render(Example::FieldComponent.new(label: "Location", name: "loc", disabled: true, value: "Locked while syncing…"))
+          = render(Yui::ChoiceComponent.new("This experience", name: "attach", type: :radio, value: "exp", checked: true))
+          = render(Yui::ChoiceComponent.new("A new experience", name: "attach", type: :radio, value: "new"))
+      = render(Yui::ChoiceComponent.new("Let the team comment on this memory", name: "comments", type: :checkbox, hint: "You can turn this off later.", checked: true))
+      = render(Yui::FieldComponent.new(label: "Location", name: "loc", disabled: true, value: "Locked while syncing…"))
+    .ex-specimen
+      span.ex-specimen__label
+        | YuiFormBuilder — labels, values, required &amp; errors straight from the model
+      = form_with model: Memory.new(memo: "hi").tap(&:valid?), url: "#", builder: YuiFormBuilder, class: "ex-stack ex-stack--sm" do |form|
+        = form.text_field :memo, label: "One-line memory", hint: "The model's own presence + length rules become the required marker and the error."
+        = form.select :visibility, Memory::VISIBILITY_STATES.map { |v| [v.titleize, v] }
+        = form.submit "Save memory"
     .ex-specimen
       span.ex-specimen__label dropdown menu
       .ex-dropdown
         a.ex-dropdown__item href="#forms"
-          = render(Example::IconComponent.new("pencil", size: :sm))
+          = render(Yui::IconComponent.new("pencil", size: :sm))
           | Edit memory
         a.ex-dropdown__item href="#forms"
-          = render(Example::IconComponent.new("bookmark", size: :sm))
+          = render(Yui::IconComponent.new("bookmark", size: :sm))
           | Add to a chronicle
         a.ex-dropdown__item href="#forms"
-          = render(Example::IconComponent.new("link", size: :sm))
+          = render(Yui::IconComponent.new("link", size: :sm))
           | Copy public link
         .ex-dropdown__sep
         button.ex-dropdown__item type="button" style="color: var(--ex-danger)"
-          = render(Example::IconComponent.new("trash", size: :sm))
+          = render(Yui::IconComponent.new("trash", size: :sm))
           | Delete
 
 / ------------------------------------------------------------------ Feedback
 = render(Example::SectionComponent.new(number: "09", title: "Feedback", anchor: "feedback", description: "Callouts carry inline guidance and confirmations. Four tones, each with a matching icon and tint.")) do
   .ex-stack.ex-stack--sm
-    = render(Example::CalloutComponent.new(variant: :info, title: "Drafts autosave")) do
+    = render(Yui::CalloutComponent.new(variant: :info, title: "Drafts autosave")) do
       | This memory is saved to your account every few seconds while you write.
-    = render(Example::CalloutComponent.new(variant: :success, title: "Memory saved")) do
+    = render(Yui::CalloutComponent.new(variant: :success, title: "Memory saved")) do
       | It now appears in the timeline for The Coast Year.
-    = render(Example::CalloutComponent.new(variant: :warning, title: "This experience is still private")) do
+    = render(Yui::CalloutComponent.new(variant: :warning, title: "This experience is still private")) do
       | Only you can see it. Change its visibility to share it with the team.
-    = render(Example::CalloutComponent.new(variant: :danger, title: "Deleting a chronicle is permanent")) do
+    = render(Yui::CalloutComponent.new(variant: :danger, title: "Deleting a chronicle is permanent")) do
       | Its memories stay, but the timeline and its order are lost.
 
 / ------------------------------------------------------------------ Surfaces
@@ -253,45 +260,45 @@ nav.ex-showcase__toc aria-label="Sections"
 = render(Example::SectionComponent.new(number: "10", title: "Surfaces", anchor: "surfaces", description: surfaces_desc)) do
   .ex-stack.ex-stack--lg
     .ex-grid.ex-grid--wide
-      = render(Example::CardComponent.new(variant: :default)) do |card|
+      = render(Yui::CardComponent.new(variant: :default)) do |card|
         - card.with_header do
-          = render(Example::HeadlineComponent.new("Default", level: 4))
+          = render(Yui::HeadlineComponent.new("Default", level: 4))
         p.ex-text.ex-text--sm A hairline border on a plain surface. The everyday card.
-      = render(Example::CardComponent.new(variant: :elevated)) do |card|
+      = render(Yui::CardComponent.new(variant: :elevated)) do |card|
         - card.with_header do
-          = render(Example::HeadlineComponent.new("Elevated", level: 4))
+          = render(Yui::HeadlineComponent.new("Elevated", level: 4))
         p.ex-text.ex-text--sm Borderless, lifted with a soft warm shadow. For things that float.
-      = render(Example::CardComponent.new(variant: :outline)) do |card|
+      = render(Yui::CardComponent.new(variant: :outline)) do |card|
         - card.with_header do
-          = render(Example::HeadlineComponent.new("Outline", level: 4))
+          = render(Yui::HeadlineComponent.new("Outline", level: 4))
         p.ex-text.ex-text--sm Transparent fill, firmer border. Quiet until you need it.
-      = render(Example::CardComponent.new(variant: :sunken, accent: "accent")) do |card|
+      = render(Yui::CardComponent.new(variant: :sunken, accent: "accent")) do |card|
         - card.with_header do
-          = render(Example::HeadlineComponent.new("Sunken + accent", level: 4))
+          = render(Yui::HeadlineComponent.new("Sunken + accent", level: 4))
         p.ex-text.ex-text--sm Recessed tone with a terracotta stripe to mark it out.
     .ex-grid.ex-grid--wide
-      = render(Example::FigureComponent.new(src: photo, alt: "The northern beach at dusk", caption: "Day 4 — the northern beach", ratio: "3/2"))
+      = render(Yui::FigureComponent.new(src: photo, alt: "The northern beach at dusk", caption: "Day 4 — the northern beach", ratio: "3/2"))
       .ex-specimen
         span.ex-specimen__label AvatarComponent — initials & sizes
         .ex-specimen__row
-          = render(Example::AvatarComponent.new(name: "Mira Kessler", size: :sm))
-          = render(Example::AvatarComponent.new(name: "Andreas Finger", size: :md))
-          = render(Example::AvatarComponent.new(name: "Jonas Reeve", size: :lg))
-          = render(Example::AvatarComponent.new(name: "The Coast Year", size: :xl))
+          = render(Yui::AvatarComponent.new(name: "Mira Kessler", size: :sm))
+          = render(Yui::AvatarComponent.new(name: "Andreas Finger", size: :md))
+          = render(Yui::AvatarComponent.new(name: "Jonas Reeve", size: :lg))
+          = render(Yui::AvatarComponent.new(name: "The Coast Year", size: :xl))
 
 / ------------------------------------------------------------------ Records
 - records_desc = "The primitives, assembled. A Memory card and a Chronicle card — everything on them is a component from the sections above."
 - rec = record_examples(photo:, cover:)
 = render(Example::SectionComponent.new(number: "11", title: "Records", anchor: "records", description: records_desc)) do
   .ex-grid.ex-grid--wide style="align-items: start"
-    = render(Example::MemoryCardComponent.new(**rec[:sand_dollar]))
-    = render(Example::MemoryCardComponent.new(**rec[:storm_night]))
+    = render(Yui::MemoryCardComponent.new(**rec[:sand_dollar]))
+    = render(Yui::MemoryCardComponent.new(**rec[:storm_night]))
   .ex-stack style="margin-top: 1.5rem"
-    = render(Example::ChronicleCardComponent.new(**rec[:coast_year]))
+    = render(Yui::ChronicleCardComponent.new(**rec[:coast_year]))
 
 footer.ex-section style="border-bottom: 0"
   .ex-container.ex-container--narrow.ex-align-center
-    = render(Example::EyebrowComponent.new("Yournaling"))
+    = render(Yui::EyebrowComponent.new("Yournaling"))
     p.ex-lead style="margin-inline: auto"
       | One voice, from the first headline to the last footnote.
     p.ex-text.ex-text--sm.ex-text--muted style="margin-inline: auto"

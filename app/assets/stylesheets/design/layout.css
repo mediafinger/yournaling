@@ -1,0 +1,100 @@
+@layer layout {
+  /* 3. ------------------------------------------------------ LAYOUT UTILITIES */
+
+  .ex-container {
+    width: 100%;
+    max-width: var(--ex-container);
+    padding-inline: clamp(1.25rem, 0.5rem + 3vw, 3rem);
+    margin-inline: auto;
+  }
+
+  .ex-container--narrow {
+    max-width: var(--ex-container-narrow);
+  }
+
+  /* Vertical rhythm: consistent gap between direct children */
+  .ex-stack {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ex-stack > * {
+    margin-block: 0;
+  }
+
+  .ex-stack > * + * {
+    margin-block-start: var(--ex-stack-gap, var(--ex-space-md));
+  }
+
+  .ex-stack--xs {
+    --ex-stack-gap: var(--ex-space-2xs);
+  }
+
+  .ex-stack--sm {
+    --ex-stack-gap: var(--ex-space-xs);
+  }
+
+  .ex-stack--lg {
+    --ex-stack-gap: var(--ex-space-lg);
+  }
+
+  .ex-stack--xl {
+    --ex-stack-gap: var(--ex-space-xl);
+  }
+
+  /* Horizontal wrap group */
+  .ex-cluster {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--ex-cluster-gap, var(--ex-space-xs));
+    align-items: center;
+  }
+
+  .ex-cluster--sm {
+    --ex-cluster-gap: var(--ex-space-2xs);
+  }
+
+  .ex-cluster--lg {
+    --ex-cluster-gap: var(--ex-space-sm);
+  }
+
+  .ex-cluster--between {
+    justify-content: space-between;
+  }
+
+  .ex-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
+    gap: var(--ex-space-md);
+  }
+
+  .ex-grid--wide {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 24rem), 1fr));
+  }
+
+  .ex-divider {
+    margin-block: var(--ex-space-lg);
+    border: 0;
+    border-top: var(--ex-border-hairline);
+  }
+
+  .ex-divider--labeled {
+    display: flex;
+    gap: var(--ex-space-sm);
+    align-items: center;
+    margin-block: var(--ex-space-lg);
+    font-size: var(--ex-text-xs);
+    font-weight: var(--ex-weight-semibold);
+    color: var(--ex-ink-faint);
+    text-transform: uppercase;
+    letter-spacing: var(--ex-tracking-eyebrow);
+    border: 0;
+  }
+
+  .ex-divider--labeled::before,
+  .ex-divider--labeled::after {
+    flex: 1;
+    content: "";
+    border-top: var(--ex-border-hairline);
+  }
+}

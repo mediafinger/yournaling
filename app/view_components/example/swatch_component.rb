@@ -4,7 +4,7 @@ module Example
   # A single colour swatch for the palette documentation.
   #
   #   Example::SwatchComponent.new(name: "Accent", token: "--ex-accent", value: "#b5541e")
-  class SwatchComponent < BaseComponent
+  class SwatchComponent < Yui::BaseComponent
     attr_reader :name, :token, :value
 
     def initialize(name:, token:, value: nil)

@@ -84,10 +84,19 @@ if %w[development test].include? Rails.env
     task.requires << "rubocop-rails"
   end
 
-  SlimLint::RakeTask.new
+  # Scope to app/ — the only place project templates live. Belt-and-braces with
+  # the `exclude:` in .slim-lint.yml so CI's vendor/bundle/**/*.slim is never
+  # walked (bundler-cache installs gems there; slim_lint has no vendor default).
+  SlimLint::RakeTask.new { |t| t.files = %w[app] }
+
+  desc "Lint + format-check the CSS design system (stylelint + prettier)"
+  task :css do # rubocop:disable Rails/RakeEnvironment -- pure Node toolchain, no Rails boot needed
+    sh "bin/lint_css"
+  end
 
   desc "Run test suite"
-  task ci: %w[zeitwerk:check rubocop factory_bot:awesome_lint db:doctor rspec archspec bundle:audit:update bundle:audit]
+  task ci: %w[zeitwerk:check rubocop slim_lint css factory_bot:awesome_lint db:doctor rspec archspec
+              bundle:audit:update bundle:audit]
 
   task default: :ci
 end
