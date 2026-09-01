@@ -8,6 +8,9 @@
       .ex-record-grid
         - @team_artefacts.each do |team_artefact|
           = render partial: "current_teams/pages/artefact", locals: { artefact: team_artefact }
+      / Endless scroll: emit the next lazy frame only while Pagy reports a next
+      / page. `@pagy.next` is nil on the last page (pagy 43, `pagy(:offset, …)`),
+      / which is the ONLY thing that stops the chain — guarded by a request spec.
       - if @pagy.next
         = turbo_frame_tag "team_artefacts_page_#{@pagy.next}", src: current_team_home_path(page: @pagy.next), loading: :lazy, target: "_top" do
           .ex-feed-loading

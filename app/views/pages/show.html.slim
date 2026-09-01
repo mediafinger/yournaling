@@ -11,6 +11,9 @@
             = render partial: "teams/chronicles/chronicle", locals: { team: publishing.team, chronicle: publishing.post }
           - elsif publishing.post_type == "Memory" && publishing.post.present?
             = render partial: "teams/memories/memory", locals: { team: publishing.team, memory: publishing.post }
+      / Endless scroll: emit the next lazy frame only while Pagy reports a next
+      / page. `@pagy.next` is nil on the last page (pagy 43, `pagy(:offset, …)`),
+      / which is the ONLY thing that stops the chain — guarded by a request spec.
       - if @pagy.next
         = turbo_frame_tag "publishings_page_#{@pagy.next}", src: root_path(page: @pagy.next), loading: :lazy, target: "_top" do
           .ex-feed-loading
