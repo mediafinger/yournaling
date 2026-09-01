@@ -99,6 +99,13 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y --no-install-recommends libpoppler-glib8 libvips
 
+      # actionlint is the `ci:lint` step's workflow-YAML gate. Without the
+      # binary that gate skips itself, so install it here to make it effective.
+      - name: Install actionlint
+        run: |
+          bash <(curl -sSfL https://raw.githubusercontent.com/rhysd/actionlint/v1.7.7/scripts/download-actionlint.bash) 1.7.7 "$RUNNER_TEMP"
+          echo "$RUNNER_TEMP" >> "$GITHUB_PATH"
+
       - name: Setup DB
         env:
           POSTGRES_HOST: localhost # use 'postgres' when running the app in Docker as well
