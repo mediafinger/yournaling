@@ -1,0 +1,51 @@
+@layer components {
+  /* Yui::SpinnerComponent — a CSS-only loading indicator. */
+
+  .ex-spinner {
+    display: inline-flex;
+    gap: var(--ex-space-2xs);
+    align-items: center;
+    font-size: var(--ex-text-sm);
+    color: var(--ex-ink-faint);
+  }
+
+  .ex-spinner__ring {
+    --_size: 1.15em;
+
+    display: inline-block;
+    width: var(--_size);
+    height: var(--_size);
+    border: 2px solid var(--ex-border-strong);
+    border-top-color: var(--ex-accent);
+    border-radius: var(--ex-radius-pill);
+    animation: ex-spinner-spin 0.7s linear infinite;
+  }
+
+  .ex-spinner--sm .ex-spinner__ring {
+    --_size: 0.9em;
+
+    border-width: 2px;
+  }
+
+  .ex-spinner--lg .ex-spinner__ring {
+    --_size: 1.6em;
+
+    border-width: 3px;
+  }
+
+  .ex-spinner__label {
+    font-weight: var(--ex-weight-medium);
+  }
+
+  @keyframes ex-spinner-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ex-spinner__ring {
+      animation-duration: 1.8s;
+    }
+  }
+}

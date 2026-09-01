@@ -1,0 +1,6 @@
+span class=wrapper_class role="status"
+  span.ex-spinner__ring aria-hidden="true"
+  - if label.present?
+    span.ex-spinner__label = label
+  - else
+    span.ex-visually-hidden = accessible_label
