@@ -81,7 +81,7 @@ RSpec.describe "Responsive Timeline Grid & Card Redesign", type: :system do
       visit root_url
 
       within("article.ex-memory-card") do
-        expect(page).to have_css("blockquote.thought-quote", text: "The mountains are calling and I must go right now.")
+        expect(page).to have_css(".ex-blockquote blockquote", text: "The mountains are calling and I must go right now.")
         expect(page).to have_css("a.ex-tag[href='#{weblink.url}']", text: /Swiss Alpine Club/)
         expect(page).to have_css("span.ex-tag", text: /Matterhorn Base Camp/)
       end

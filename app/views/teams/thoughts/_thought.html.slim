@@ -1,6 +1,1 @@
-blockquote.thought-quote id= dom_id(thought)
-  p = thought.text
-  - if thought.date.present?
-    small.text-muted
-      |  —
-      = thought.date
+= render Yui::BlockquoteComponent.new(thought.text, cite: thought.date&.to_s, variant: :card, id: dom_id(thought))
