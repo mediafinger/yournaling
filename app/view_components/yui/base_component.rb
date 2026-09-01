@@ -1,12 +1,30 @@
 # frozen_string_literal: true
 
 module Yui
-  # Shared superclass for every component in the "Warm Editorial" design language.
+  # Shared superclass for every primitive in the "Warm Editorial" design language.
   #
-  # It deliberately inherits straight from ViewComponent::Base (NOT
-  # ApplicationComponent) so the design-language components stay self-contained:
-  # no authentication, no policies, no app-specific helpers. They only need a
-  # renderer and the example.css stylesheet.
+  # ## These components are PURE (data-access rule — TODO_UI_DESIGN.md Phase 1)
+  #
+  # `Yui::*` primitives inherit `ViewComponent::Base` directly, **not**
+  # `ApplicationComponent`. That is deliberate and load-bearing: they have no
+  # access to `current_user`, Action Policy, `current_team`, or app helpers, and
+  # they must never gain it.
+  #
+  # - **Callers pass plain values** — `href:`, `title:`, `author_name:`,
+  #   `date: "4 Aug 2024"`, `visibility: :public`. Never a `Memory`, a `User`, or
+  #   a policy object.
+  # - **Authorization** (may this user see the edit link?) and **record → view
+  #   model mapping** (a `Chronicle` → the `title:`/`entries:`/`href:` a
+  #   `Yui::ChronicleCard` wants) happen *outside* the primitive: in an
+  #   app-level wrapper component (an `ApplicationComponent` subclass that
+  #   renders `Yui::*` internally), or in the controller/view.
+  # - **Why:** it keeps the primitives trivially testable (no fixtures, no
+  #   sign-in), reusable in Lookbook / `/example` with literal data, and immune
+  #   to a future auth or model refactor. "Wrap, don't fork" (§8).
+  #
+  # Variant/size params go through `ex_token` so bad input degrades to the
+  # default instead of raising. Treat `Yui::Field` / `Yui::Button` / `Yui::Card`
+  # as stable API — changes go through a deprecation cycle (§8).
   class BaseComponent < ViewComponent::Base
     # Join an arbitrary list of class fragments, dropping blanks/nils/false.
     #
