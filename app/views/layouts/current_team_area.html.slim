@@ -11,7 +11,7 @@ html
     = stylesheet_link_tag "legacy", "data-turbo-track": "reload"
     = render "shared_partials/design_head"
     = javascript_importmap_tags
-  body
+  body.ex-body
     header.ex-navbar-host data-controller="navbar"
       = render CurrentTeamNavComponent.new
     = render partial: "shared_partials/flash_notifications"
