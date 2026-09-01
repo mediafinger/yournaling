@@ -94,9 +94,5 @@ if %w[development test].include? Rails.env
     sh "bin/lint_css"
   end
 
-  desc "Run test suite"
-  task ci: %w[zeitwerk:check rubocop slim_lint css factory_bot:awesome_lint db:doctor rspec archspec
-              bundle:audit:update bundle:audit]
-
-  task default: :ci
+  # `rake ci` / `rake default` are defined in lib/tasks/ci.rake.
 end
