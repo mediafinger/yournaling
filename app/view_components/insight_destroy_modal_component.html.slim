@@ -1,34 +1,28 @@
-dialog data-modal-target="dialog"
-  article style="max-width: 550px;"
-    header
-      button aria-label="Close" rel="prev" data-action="click->modal#close" style="float: right;"
-      h4 style="margin-bottom: 0;" = "Destroy #{@name.capitalize}"
-    - if referenced?
-      p style="color: var(--pico-del-color, #c00); font-weight: bold; margin-bottom: 0.5rem;"
-        = "This #{@name} cannot be destroyed because it is still referenced by other content:"
+= render Yui::ModalComponent.new(title: "Destroy #{@name}", size: :sm) do |modal|
+  - modal.with_trigger do
+    = render Yui::ButtonComponent.new("Destroy this #{@name}", variant: :danger, icon: "trash", size: :sm)
+
+  - if referenced?
+    = render Yui::CalloutComponent.new(variant: :warning) do
+      p.ex-text = "This #{@name} cannot be destroyed because it is still referenced by other content:"
       - if chronicles.any?
-        p style="margin-bottom: 0.25rem; font-weight: bold;"
-          | Chronicles:
-        ul style="margin-top: 0; margin-bottom: 1rem;"
+        p.ex-text.ex-text--sm
+          strong Chronicles:
+        ul.ex-stack.ex-stack--xs
           - chronicles.each do |chronicle|
-            li
-              = link_to chronicle.name, current_team_chronicle_path(chronicle)
+            li = link_to chronicle.name, current_team_chronicle_path(chronicle), class: "ex-link"
       - if memories.any?
-        p style="margin-bottom: 0.25rem; font-weight: bold;"
-          | Memories:
-        ul style="margin-top: 0; margin-bottom: 1rem;"
+        p.ex-text.ex-text--sm
+          strong Memories:
+        ul.ex-stack.ex-stack--xs
           - memories.each do |memory|
-            li
-              = link_to memory.memo.truncate(60), current_team_memory_path(memory)
-      footer
-        div style="display: flex; gap: 0.5rem; justify-content: flex-end; align-items: center;"
-          button.secondary type="button" data-action="click->modal#close" style="margin-bottom: 0;"
-            | Close
-          button.contrast disabled="disabled" style="margin-bottom: 0; opacity: 0.5; cursor: not-allowed;" title="Cannot destroy while referenced"
-            | Destroy Insight
-    - else
-      p style="margin-bottom: 1.5rem;"
-        = "Are you sure you want to destroy this #{@name}?"
-      footer
-        div style="display: flex; gap: 0.5rem; justify-content: flex-end; align-items: center;"
-          = button_to "Destroy Insight", destroy_path, method: :delete, class: "contrast", style: "margin-bottom: 0;"
+            li = link_to memory.memo.truncate(60), current_team_memory_path(memory), class: "ex-link"
+    - modal.with_footer do
+      button.ex-btn.ex-btn--ghost type="button" data-action="click->yui-modal#close"
+        | Close
+      button.ex-btn.ex-btn--danger type="button" disabled=true title="Cannot destroy while referenced"
+        | Destroy Insight
+  - else
+    p.ex-text = "Are you sure you want to destroy this #{@name}?"
+    - modal.with_footer do
+      = button_to "Destroy Insight", destroy_path, method: :delete, class: "ex-btn ex-btn--danger"

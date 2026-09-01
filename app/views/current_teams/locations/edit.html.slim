@@ -1,11 +1,7 @@
-div data-controller="modal"
+.ex-narrow.ex-stack
   - if current_team == @location.team
     = render partial: "form", locals: { location: @location, form_legend: "Edit location" }
-  div style="display: flex; gap: 0.5rem; align-items: center; margin-top: 1rem;"
-    = link_to "Open", current_team_location_path(@location), role: "button"
+  .ex-cluster
+    = render Yui::ButtonComponent.new("Open", href: current_team_location_path(@location), variant: :secondary)
     - if current_team == @location.team
-      button type="button" class="secondary" data-action="click->modal#open" style="margin-bottom: 0;"
-        | Destroy this location
-
-  - if current_team == @location.team
-    = render InsightDestroyModalComponent.new(insight: @location, name: "location")
+      = render InsightDestroyModalComponent.new(insight: @location, name: "location")
