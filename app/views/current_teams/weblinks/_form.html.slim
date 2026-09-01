@@ -1,21 +1,9 @@
-article
-  = form_with(model: [:current_team, weblink]) do |form|
+= render Yui::CardComponent.new do
+  = form_with(model: [:current_team, weblink], builder: YuiFormBuilder, html: { class: "ex-stack" }) do |form|
+    = render Yui::HeadlineComponent.new(form_legend, level: 3)
     = render partial: "shared_partials/form_validation_errors", locals: { record: weblink }
-    fieldset
-      h3
-        legend
-          = form_legend
-      div
-        = form.label :name, "Link Name"
-        = form.text_field :name, placeholder: "e.g. Route Planning Guide", required: true
-      div style="margin-top: 0.5rem;"
-        = form.label :url, "URL"
-        = form.url_field :url, placeholder: "e.g. https://route-planner.example.com", required: true
-      div style="margin-top: 0.5rem;"
-        = form.label :date
-        = form.date_field :date, value: form.object.date
-      div style="margin-top: 0.5rem;"
-        = form.label :description, "Description (Optional)"
-        = form.text_area :description, placeholder: "Brief notes or context about this link..."
-      div style="margin-top: 1rem;"
-        = form.submit
+    = form.text_field :name, label: "Link name", required: true, placeholder: "e.g. Route Planning Guide"
+    = form.url_field :url, label: "URL", required: true, placeholder: "e.g. https://route-planner.example.com"
+    = form.date_field :date
+    = form.text_area :description, label: "Description", rows: 3, hint: "Optional — brief notes or context about this link."
+    = form.submit

@@ -1,12 +1,10 @@
-article id= dom_id(member)
-  p
-    strong User:
-    = member.user.name
-  p
-    strong Team:
-    = member.team.name
-  p
-    strong Roles:
-    = member.roles
+= render Yui::CardComponent.new(id: dom_id(member)) do
+  dl.ex-details
+    dt User
+    dd = member.user.name
+    dt Team
+    dd = member.team.name
+    dt Roles
+    dd = member.roles.to_sentence
   - if action_name != "show"
-    = link_to "Show this member", team_member_path(team_id: team.to_param, id: member.to_param), role: "button"
+    = render Yui::ButtonComponent.new("Show this member", href: team_member_path(team_id: team.to_param, id: member.to_param), variant: :secondary, size: :sm)

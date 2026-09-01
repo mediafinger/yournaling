@@ -1,6 +1,5 @@
-article id= dom_id(member)
+= render Yui::CardComponent.new(id: dom_id(member)) do
   = render ManageHeaderComponent.new(record: member, hide_actions: local_assigns[:hide_actions])
-
-  p
-    strong Roles:&nbsp;
-    = member.roles.join(", ")
+  dl.ex-details
+    dt Roles
+    dd = member.roles.to_sentence

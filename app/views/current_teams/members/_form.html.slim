@@ -1,18 +1,8 @@
-article
-  = form_with(model: [:current_team, member]) do |form|
+= render Yui::CardComponent.new do
+  = form_with(model: [:current_team, member], builder: YuiFormBuilder, html: { class: "ex-stack" }) do |form|
+    = render Yui::HeadlineComponent.new(form_legend, level: 3)
     = render partial: "shared_partials/form_validation_errors", locals: { record: member }
-    fieldset
-      h3
-        legend
-          = form_legend
-      div
-        = form.label :user_id
-        = form.text_field :user_id
-      div
-        = form.label :team_id
-        = form.text_field :team_id
-      div
-        = form.label :roles
-        = form.text_area :roles, rows: 4
-      div
-        = form.submit
+    = form.text_field :user_id
+    = form.text_field :team_id
+    = form.text_area :roles, rows: 4
+    = form.submit
