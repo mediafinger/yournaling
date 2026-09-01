@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# Lint the GitHub Actions workflow files — part of `rake ci` (ci:lint).
+#
+# actionlint is a standalone Go binary (`brew install actionlint`; CI installs
+# it in a step). When it is not on PATH the gate is skipped, not failed, so a
+# local `rake ci` still runs without it.
+
+# A personal BASH_ENV (chruby auto-switch) would otherwise be re-sourced by
+# every child shell and flood stderr under bundle exec. This script needs no
+# Ruby env.
+unset BASH_ENV
+
+set -eo pipefail
+
+cd "$(dirname "$0")/.."
+
+if ! command -v actionlint >/dev/null 2>&1; then
+  echo "actionlint not installed — skipping (brew install actionlint; CI installs it)." >&2
+  exit 0
+fi
+
+# No args: actionlint discovers .github/workflows/*.{yml,yaml} itself.
+exec actionlint
