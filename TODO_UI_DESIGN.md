@@ -488,6 +488,42 @@ cards). Tokens, base and layout stay in `design/tokens.css` / `base.css` /
 `layout.css`. New file → add it to the `_design_head` ordered list (the guard
 spec fails otherwise). See §4 for the layer order and rationale.
 
+#### Retiring the scaffold `spec/views/` layer
+
+`spec/views/` holds ~29 `type: :view` template specs (`current_teams/{locations,
+members,memories,pictures,weblinks}` CRUD, plus bits of `teams` / `users`).
+They are **Rails scaffold output, partially and unevenly upgraded** — loose
+`assert_select "article"` / `rendered.include?("Name")` assertions, a
+`Rails::VERSION` ternary, commented-out `# TODO` blocks. Almost everything they
+check is already covered *better* by the request specs (which render the same
+view through the real controller + routing + auth + layout and assert real
+data), and the template sweeps in Phases 3–5 would break every `assert_select`
+in them for near-zero return.
+
+**Decision: retire this layer.** As each area is swept:
+
+1. **Port the one thing request specs don't cover** — the form-field contract.
+   Move the `new` / `edit` specs' `assert_select "form[action=?][method=?]"` +
+   `input`/`select`/`textarea[name="…"]` assertions into that resource's
+   **request** spec (`GET /new`, `GET /edit` — they currently only assert
+   `be_successful`). Request specs can `assert_select` on `response.body`.
+2. **Delete** the resource's `spec/views/**/*_spec.rb` files.
+3. **`spec/views/design_head_spec.rb` stays** — it is an asset-config guard, not
+   a template spec (every `design/*.css` referenced in `_design_head`, `tokens`
+   first, `showcase` excluded from the app set). Nothing replaces it.
+4. **Keep the one assertion with real value** —
+   `spec/views/teams/locations/show*_spec.rb` checks `country_code` → humanised
+   name (`"es"` → `"Spain (ES)"`). That logic currently lives **inline in
+   `teams/locations/_location.html.slim`**
+   (`ISO3166::Country.find_country_by_alpha2(...).iso_short_name`). When that
+   partial is swept, extract it to a `Location#country_name` (or a
+   `LocationPresenter`) and unit-test *that*; failing an extraction, assert it in
+   the `teams/locations` request spec (`response.body` includes `"Spain"`).
+   Either way — **not** a `type: :view` spec.
+
+End state: `spec/views/` contains only `design_head_spec.rb`; one less test
+layer to maintain, no coverage lost.
+
 ### Phase 0 — Foundations & tooling (~1–1.5 days)
 
 - [x] Remove dead `dartsass-rails` setup (§3).
@@ -632,6 +668,12 @@ Templates under the default layout: `pages/*` (feed, show, error),
 - [ ] Convert `SearchFormComponent`, `SearchResultsComponent`,
       `ExternalLinkComponent`, `MapLinkComponent`, `DeviceComponent` — sidecar
       their templates while touched.
+- [ ] Retire the `spec/views/{teams,users}/**` scaffold specs (see *Retiring the
+      scaffold `spec/views/` layer* above): port any `new`/`edit` form-field
+      assertions into the `teams` / `users` request specs, then delete. Replace
+      `spec/views/teams/locations/show*_spec.rb` with a real `country_code` →
+      `"Spain (ES)"` humanisation spec (helper/decorator spec, or a
+      `teams/locations` request-spec assertion) — **not** a `type: :view` spec.
 - [ ] Drop `pico.amber` link from `layouts/application`.
 - [ ] QA against screenshots taken in Phase 0.
 
@@ -653,6 +695,11 @@ locations,pictures,members,pages}` — index / show / new / edit / `_form` /
       cover most of it.
 - [ ] Restyle the lightbox (`PictureLightboxComponent` + its Stimulus).
 - [ ] Sidecar the template of every component rewritten in this area.
+- [ ] Retire the `spec/views/current_teams/**` scaffold specs (the bulk of the
+      layer — `locations` / `members` / `memories` / `pictures` / `weblinks`
+      CRUD): port each `new`/`edit` form-field contract into the matching
+      `spec/requests/current_teams/*` spec's `GET /new` + `GET /edit`, then
+      delete. Keep `spec/views/design_head_spec.rb`.
 - [ ] Drop `pico.green` link.
 
 ### Phase 5 — Admin / `admin_area` (~1 day)
@@ -667,6 +714,10 @@ teams,users,pages,record_events}` — mostly index + edit + destroy, plus
 - [ ] Sidecar the `AdminShow*` / `AdminActions` / `AdminIndexRecordEvents`
       component templates as they are rewritten — this clears the last inline
       heredocs.
+- [ ] View specs: `admins/*` has none — nothing to retire here. Confirm
+      `spec/views/` is now just `design_head_spec.rb`; consider moving it to
+      `spec/assets/` (or adding an explicit `type:`) now that it is the lone
+      file under a `type: :view` path.
 - [ ] Drop `pico.blue` link.
 
 ### Phase 6 — Teardown & hardening (~0.5–1 day)
