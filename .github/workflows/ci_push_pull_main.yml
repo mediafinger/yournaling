@@ -104,9 +104,16 @@ jobs:
 
       # actionlint is the `ci:lint` step's workflow-YAML gate. Without the
       # binary that gate skips itself, so install it here to make it effective.
+      # Download the release asset directly (per the actionlint docs) rather
+      # than the install script — the script sniffs $OSTYPE, which this job
+      # pins to "linux" (not the "linux-gnu*" it expects) and then bails.
       - name: Install actionlint
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          bash <(curl -sSfL https://raw.githubusercontent.com/rhysd/actionlint/v1.7.7/scripts/download-actionlint.bash) 1.7.7 "$RUNNER_TEMP"
+          gh release download v1.7.11 --repo rhysd/actionlint \
+            --pattern 'actionlint_*_linux_amd64.tar.gz' --dir "$RUNNER_TEMP" --clobber
+          tar -xf "$RUNNER_TEMP"/actionlint_*_linux_amd64.tar.gz -C "$RUNNER_TEMP" actionlint
           echo "$RUNNER_TEMP" >> "$GITHUB_PATH"
 
       - name: Setup DB
