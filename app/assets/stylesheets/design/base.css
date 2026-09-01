@@ -36,6 +36,28 @@
     box-sizing: border-box;
   }
 
+  /* Safety nets for content markup that isn't wrapped in a component:
+     unclassed links, raw images. Classed elements (.ex-btn, .ex-link, …) opt
+     out via :not([class]). */
+  .ex-scope a:not([class]),
+  .ex-body a:not([class]) {
+    color: var(--ex-accent);
+    text-decoration: underline;
+    text-decoration-color: var(--ex-border-strong);
+    text-underline-offset: 0.14em;
+  }
+
+  .ex-scope a:not([class]):hover,
+  .ex-body a:not([class]):hover {
+    text-decoration-color: var(--ex-accent);
+  }
+
+  .ex-scope img,
+  .ex-body img {
+    max-width: 100%;
+    height: auto;
+  }
+
   .ex-scope :focus-visible,
   .ex-body :focus-visible {
     outline: none;

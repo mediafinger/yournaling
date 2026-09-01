@@ -37,6 +37,12 @@
     margin-block: 0;
   }
 
+  /* .ex-stack on a list drops the markers/indent. */
+  .ex-stack:is(ul, ol) {
+    padding-inline-start: 0;
+    list-style: none;
+  }
+
   .ex-stack > * + * {
     margin-block-start: var(--ex-stack-gap, var(--ex-space-md));
   }

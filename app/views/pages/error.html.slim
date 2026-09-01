@@ -1,13 +1,11 @@
-h2
-  Unfortunately you encountered an issue.
-h3
-  ' Error:
-  = "#{code} (#{status})"
-p
-  = message
-p
-  = link_to "Back to previous page", :back, role: "button", class: "contrast"
-
-- if status >= 500
-  .error_comment
-    This looks like an issue on our side. We will look into it.
+.ex-narrow.ex-stack
+  = render Yui::HeadlineComponent.new("Unfortunately you encountered an issue.", level: 2)
+  p.ex-text
+    strong Error:
+    = " #{code} (#{status})"
+  - if message.present?
+    p.ex-text = message
+  = link_to "Back to previous page", :back, class: "ex-btn ex-btn--secondary"
+  - if status >= 500
+    = render Yui::CalloutComponent.new(variant: :warning, title: "This looks like an issue on our side") do
+      | We will look into it.
