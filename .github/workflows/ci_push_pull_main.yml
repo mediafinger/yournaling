@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - name: Checkout app repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v7
 
       # - name: Install newer libxml2
       #   run: |
@@ -65,7 +65,7 @@ jobs:
 
     steps:
       - name: Checkout app repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v7
 
       - name: Copy Secrets
         run: |
@@ -83,9 +83,9 @@ jobs:
           cache-version: 1
 
       - name: Setup Node and install npm packages
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
-          node-version: "22"
+          node-version: "26"
           cache: "npm"
 
       - name: Install npm packages
