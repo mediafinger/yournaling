@@ -527,9 +527,39 @@ spec fails otherwise). See §4 for the layer order and rationale.
       (`.stylelintrc.json` glob) and `.prettierignore` at the new dir. (17 files;
       `_design_head` takes `showcase:`; guard in `spec/views/design_head_spec.rb`.)
 
-### Phase 2 — Shared chrome (~2 days)
+### Phase 2 — Shared chrome (~2–2.5 days)
 
-Convert the components every layout renders, then start pulling Pico:
+Convert the components every layout renders, then start pulling Pico.
+
+**Dev feedback loop for CSS (do first — §5).** The split files (Phase 1) make
+all three cheap; ship them before the chrome sweep so editing `design/*.css` is
+fast throughout.
+
+- [ ] **DevTools Workspace** — write up the one-time setup in
+      `app/assets/stylesheets/design/README.md` (open a preview in its own tab
+      → Sources → add `design/` as a Workspace folder → Styles-pane edits save
+      into the right file; `git checkout` to discard). Zero code; highest
+      leverage for token work.
+- [ ] **Editor + auto-reload** — add `listen` to the `:development` group, set
+      `config.file_watcher = ActiveSupport::EventedFileUpdateChecker` in
+      `development.rb` (already a Propshaft dev-perf recommendation, §1), and
+      point Lookbook at the stylesheet dir so a save reloads the preview:
+
+      ```ruby
+      config.lookbook.listen_paths      << Rails.root.join("app/assets/stylesheets/design")
+      config.lookbook.listen_extensions << "css"
+      ```
+
+- [ ] **Read-only "CSS" inspector panel** — a custom Lookbook panel that maps
+      the previewed component to its stylesheet by naming convention
+      (`Yui::ButtonComponent` → `design/button.css`) and shows that file
+      read-only with syntax highlighting; degrade gracefully when there is no
+      1:1 file (composed cards, base, layout-only primitives). Confirm the
+      Lookbook 2.3 API — it is a `config.lookbook.preview_inspector` config
+      object, not the `drawer_panels` shape quoted in §5. Low priority relative
+      to the two loops above, but the mapping is now trivial.
+
+**Shared chrome.**
 
 - [ ] Layouts: add `_design_head`, wrap `main` in `.ex-scope`, add
       `data-area` for the colour override.
