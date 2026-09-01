@@ -24,16 +24,5 @@ module Yui
     def css_class
       ex_class("ex-callout", variant != :info && "ex-callout--#{variant}")
     end
-
-    slim_template <<~SLIM
-      div class=css_class role="note"
-        .ex-callout__icon
-          = render(Yui::IconComponent.new(ICONS.fetch(variant)))
-        div
-          - if title
-            p.ex-callout__title = title
-          .ex-callout__body
-            = content
-    SLIM
   end
 end

@@ -26,13 +26,5 @@ module Yui
     def css_class
       ex_class("ex-blockquote", variant == :card && "ex-blockquote--card")
     end
-
-    slim_template <<~'SLIM'
-      figure class=css_class
-        blockquote = quote
-        - if cite
-          figcaption
-            | — #{cite}
-    SLIM
   end
 end

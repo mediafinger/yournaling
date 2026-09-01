@@ -81,15 +81,5 @@ module Yui
     def css_class
       ex_class("ex-icon", size != :md && "ex-icon--#{size}")
     end
-
-    slim_template <<~SLIM
-      - if label
-        svg class=css_class viewBox="0 0 24 24" role="img" aria-label=label
-          title = label
-          == markup
-      - else
-        svg class=css_class viewBox="0 0 24 24" aria-hidden="true" focusable="false"
-          == markup
-    SLIM
   end
 end

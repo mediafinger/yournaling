@@ -27,14 +27,5 @@ module Yui
     def css_class
       ex_class("ex-badge", variant != :neutral && "ex-badge--#{variant}")
     end
-
-    slim_template <<~SLIM
-      span class=css_class
-        - if dot
-          span.ex-badge__dot
-        - elsif icon
-          = render(Yui::IconComponent.new(icon, size: :sm))
-        = label
-    SLIM
   end
 end

@@ -19,16 +19,5 @@ module Yui
     def label_text
       @text || content
     end
-
-    slim_template <<~SLIM
-      label.ex-label for=for_id
-        = label_text
-        - if required
-          span.ex-label__required aria-hidden="true"
-            | *
-        - elsif optional
-          span.ex-label__optional
-            | (optional)
-    SLIM
   end
 end

@@ -20,21 +20,5 @@ module Yui
     def label
       @label || content
     end
-
-    slim_template <<~'SLIM'
-      - if href.present?
-        = link_to(href, class: "ex-tag") do
-          - if icon
-            = render(Yui::IconComponent.new(icon, size: :sm))
-          = label
-      - else
-        span.ex-tag
-          - if icon
-            = render(Yui::IconComponent.new(icon, size: :sm))
-          = label
-          - if removable
-            button.ex-tag__remove type="button" aria-label="Remove #{label}"
-              = render(Yui::IconComponent.new("x", size: :sm))
-    SLIM
   end
 end

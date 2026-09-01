@@ -23,13 +23,5 @@ module Yui
     def css_class
       ex_class("ex-figure", RATIOS[ratio] && "ex-figure--ratio-#{RATIOS[ratio]}")
     end
-
-    slim_template <<~SLIM
-      figure class=css_class
-        .ex-figure__frame
-          = image_tag(src, alt: alt, loading: "lazy")
-        - if caption
-          figcaption = caption
-    SLIM
   end
 end

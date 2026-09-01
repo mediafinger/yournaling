@@ -45,12 +45,5 @@ module Yui
 
       nil
     end
-
-    slim_template <<~SLIM
-      = link_to(href, link_options) do
-        = text
-        - if trailing_icon
-          = render(Yui::IconComponent.new(trailing_icon, size: :sm))
-    SLIM
   end
 end

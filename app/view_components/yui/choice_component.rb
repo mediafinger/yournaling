@@ -25,14 +25,5 @@ module Yui
     def label_text
       @label || content
     end
-
-    slim_template <<~SLIM
-      label.ex-choice class=("ex-choice--disabled" if disabled)
-        input type=type name=name value=value checked=checked disabled=disabled
-        span.ex-choice__text
-          = label_text
-          - if hint
-            small = hint
-    SLIM
   end
 end

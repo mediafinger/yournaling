@@ -12,13 +12,5 @@ module Yui
     end
 
     attr_reader :label
-
-    slim_template <<~SLIM
-      - if label
-        div.ex-divider--labeled role="separator"
-          span = label
-      - else
-        hr.ex-divider
-    SLIM
   end
 end

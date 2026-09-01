@@ -37,12 +37,5 @@ module Yui
         align == :center && "ex-align-center",
       )
     end
-
-    slim_template <<~SLIM
-      div class=("ex-align-center" if align == :center)
-        - if eyebrow
-          p.ex-eyebrow = eyebrow
-        = content_tag(tag_name, text, class: css_class)
-    SLIM
   end
 end

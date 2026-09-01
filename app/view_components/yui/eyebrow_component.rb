@@ -11,12 +11,9 @@ module Yui
       @text = text
     end
 
-    def text
-      @text || content
+    # Trivial single-element wrapper — no template (see Yui::BaseComponent).
+    def call
+      tag.p(@text || content, class: "ex-eyebrow")
     end
-
-    slim_template <<~SLIM
-      p.ex-eyebrow = text
-    SLIM
   end
 end

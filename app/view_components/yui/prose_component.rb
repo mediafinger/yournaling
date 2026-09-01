@@ -7,9 +7,9 @@ module Yui
   #   = render(Yui::ProseComponent.new) do
   #     p We kept a shell from the northern beach...
   class ProseComponent < BaseComponent
-    slim_template <<~SLIM
-      .ex-prose
-        = content
-    SLIM
+    # Trivial single-element wrapper — no template (see Yui::BaseComponent).
+    def call
+      tag.div(content, class: "ex-prose")
+    end
   end
 end

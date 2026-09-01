@@ -10,12 +10,9 @@ module Yui
       @text = text
     end
 
-    def text
-      @text || content
+    # Trivial single-element wrapper — no template (see Yui::BaseComponent).
+    def call
+      tag.em(@text || content, class: "ex-quote")
     end
-
-    slim_template <<~SLIM
-      em.ex-quote = text
-    SLIM
   end
 end

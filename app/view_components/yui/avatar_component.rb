@@ -30,13 +30,5 @@ module Yui
     def css_class
       ex_class("ex-avatar", size != :md && "ex-avatar--#{size}")
     end
-
-    slim_template <<~SLIM
-      span class=css_class title=name
-        - if src
-          = image_tag(src, alt: name, loading: "lazy")
-        - else
-          span aria-hidden="true" = initials
-    SLIM
   end
 end

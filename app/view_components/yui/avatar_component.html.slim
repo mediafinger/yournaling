@@ -1,0 +1,5 @@
+span class=css_class title=name
+  - if src
+    = image_tag(src, alt: name, loading: "lazy")
+  - else
+    span aria-hidden="true" = initials

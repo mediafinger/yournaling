@@ -22,6 +22,19 @@ module Yui
   #   sign-in), reusable in Lookbook / `/example` with literal data, and immune
   #   to a future auth or model refactor. "Wrap, don't fork" (§8).
   #
+  # ## Template placement (TODO_UI_DESIGN.md §7)
+  #
+  # - **Sidecar `.slim` is the default** — `button_component.html.slim` next to
+  #   the `.rb`, for anything with a `- if` / `- each` / slots or more than a
+  #   handful of lines. Sidecars are linted by `slim_lint`, get editor support,
+  #   and keep markup out of the `.rb`'s `git blame`.
+  # - **`def call` with `tag` / `content_tag`, no template** — for a trivial
+  #   one-element wrapper (`Yui::Emphasis`, `Yui::Eyebrow`, `Yui::Quote`,
+  #   `Yui::Prose`).
+  # - **Inline `slim_template <<~SLIM`** — avoid for new components; keep only
+  #   for a tiny, logic-free existing template. Never `<<-SLIM` / bare `<<SLIM`;
+  #   `<<~'SLIM'` only when `#{...}` must reach the browser literally.
+  #
   # Variant/size params go through `ex_token` so bad input degrades to the
   # default instead of raising. Treat `Yui::Field` / `Yui::Button` / `Yui::Card`
   # as stable API — changes go through a deprecation cycle (§8).
