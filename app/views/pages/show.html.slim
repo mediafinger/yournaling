@@ -1,6 +1,6 @@
 #publishings data-controller="feed-refresh" data-feed-refresh-since-value=@newest_at data-feed-refresh-check-url-value=check_newer_pages_path data-feed-refresh-load-url-value=newer_pages_path
   #top_sentinel data-feed-refresh-target="topSentinel"
-  #newer_posts_banner.newer-posts-banner data-feed-refresh-target="banner" hidden="" data-action="click->feed-refresh#loadNewer"
+  button#newer_posts_banner.ex-feed-banner type="button" data-feed-refresh-target="banner" hidden="" data-action="click->feed-refresh#loadNewer"
     span newer posts available, scroll up to load them
   #newer_posts_container data-feed-refresh-target="container"
   = turbo_frame_tag "publishings_page_#{@pagy.page}", target: "_top" do
@@ -12,6 +12,8 @@
           - elsif publishing.post_type == "Memory" && publishing.post.present?
             = render partial: "teams/memories/memory", locals: { team: publishing.team, memory: publishing.post }
       - if @pagy.next
-        = turbo_frame_tag "publishings_page_#{@pagy.next}", src: root_path(page: @pagy.next), loading: :lazy, target: "_top"
+        = turbo_frame_tag "publishings_page_#{@pagy.next}", src: root_path(page: @pagy.next), loading: :lazy, target: "_top" do
+          .ex-feed-loading
+            = render Yui::SpinnerComponent.new("Loading more stories…")
     - elsif @pagy.page == 1
       = render EmptyStateComponent.new(icon: "📖", title: "No published stories or memories yet", description: "Explore the public journals and travel memories shared by teams around the world.")
