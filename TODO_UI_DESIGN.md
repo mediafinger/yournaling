@@ -827,23 +827,35 @@ unaudited.
       needed (admin lists, Phase 5). The public/team feeds do not use one
       (`have_no_css("nav.pagy")` is asserted) — don't add one there.
 
-#### Forms & specs
+#### Forms & specs — done (`2e9fb51` … `ba6670f`)
 
-- [ ] Lean on `YuiFormBuilder` — this area is form-heavy and has the
-      `role="group"` / inline-`grid` `_form` partials.
-- [ ] Sidecar the template of every component rewritten in this area.
-- [ ] Retire the remaining `spec/views/**` scaffold specs
-      (`current_teams/{locations,members,memories,pictures,weblinks}` CRUD, and
-      `teams/{locations,weblinks}/show`): port each `new`/`edit` form-field
-      contract into the matching `spec/requests/*` spec, then delete. Keep
-      `spec/views/design_head_spec.rb`.
-- [ ] Replace `spec/views/teams/locations/show*_spec.rb` with a real
-      `country_code` → `"Spain (ES)"` humanisation spec. The logic is inline in
-      `teams/locations/_location.html.slim`
-      (`ISO3166::Country.find_country_by_alpha2(...).iso_short_name`) — extract
-      it to `Location#country_name` (or a presenter) and unit-test _that_;
-      failing an extraction, assert it in the `teams/locations` request spec.
-      **Not** a `type: :view` spec.
+- [x] Lean on `YuiFormBuilder` — `current_teams/{thoughts,weblinks,members,
+      memories,chronicles,locations,pictures}/_form` all render `Yui::Card` +
+      `YuiFormBuilder` now. The old `role="group"` / inline-`grid` tab pickers
+      (locations `_form`, the InsightAttachmentManager location drawer) moved
+      onto the `yui-tabs` controller with `.ex-tabs` styling.
+- [x] Sidecar the template of every component rewritten in this area:
+      `InsightAttachmentManagerComponent`, `ChronicleAttachedEntriesFormComponent`,
+      `PictureSelectFieldComponent` (each also de-pico'd into a new
+      `design/*.css`: `insight-manager`, `attached-entries`, `picture-select`).
+- [x] Modals off the legacy `modal` controller onto `Yui::ModalComponent`
+      (`yui-modal`): `ContentVisibilityModalComponent`,
+      `InsightDestroyModalComponent`, and a new shared
+      `PostDestroyModalComponent` for the memory/chronicle two-path destroy
+      dialog (replacing the bespoke `dialog` markup in both `edit` templates).
+- [x] Retire the remaining `spec/views/**` scaffold specs — all
+      `current_teams/{locations,members,memories,pictures,weblinks}` and
+      `teams/**` CRUD view specs are gone; each `new`/`edit` form-field
+      contract now lives in the matching `spec/requests/*` spec. Only
+      `spec/views/design_head_spec.rb` remains.
+- [x] `country_code` → `"Spain (ES)"` humanisation extracted to
+      `Location#country_name` / `#country_label` and unit-tested in
+      `spec/models/location_spec.rb` (not a `type: :view` spec).
+
+Deferred to Phase 6 teardown: `tabs_controller.js` / `modal_controller.js`
+are now unreferenced (superseded by `yui-tabs` / `yui-modal`) and can be
+deleted. `PictureSelectFieldComponent` is no longer rendered by any view —
+a removal candidate.
 
 #### Teardown for this area
 
