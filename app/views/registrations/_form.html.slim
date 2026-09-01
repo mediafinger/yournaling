@@ -1,20 +1,11 @@
-article
-  = form_with(model: user, url: registration_path) do |form|
-    = render partial: "shared_partials/form_validation_errors", locals: { record: user }
-    fieldset
-      h3
-        legend
-          = form_legend
-      div
-        = form.label :name
-        = form.text_field :name, required: true, autofocus: true
-      div
-        = form.label :email
-        = form.email_field :email, required: true
-      div
-        = form.label :password
-        = form.password_field :password, required: true
-      .inline
-        = form.submit form_legend
-  p
-    = link_to "Already have an account? Sign in", login_path
+.ex-narrow
+  = render Yui::CardComponent.new do
+    = render Yui::HeadlineComponent.new(form_legend, level: 3)
+    = form_with model: user, url: registration_path, builder: YuiFormBuilder, html: { class: "ex-stack" } do |form|
+      = render partial: "shared_partials/form_validation_errors", locals: { record: user }
+      = form.text_field :name, required: true, autofocus: true, autocomplete: "name"
+      = form.email_field :email, required: true, autocomplete: "email"
+      = form.password_field :password, required: true, autocomplete: "new-password"
+      = form.submit form_legend
+    .ex-stack.ex-stack--xs
+      = render Yui::LinkComponent.new("Already have an account? Sign in", href: login_path)

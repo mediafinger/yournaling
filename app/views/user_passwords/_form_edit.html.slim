@@ -1,12 +1,7 @@
-article
-  = form_with(model: user, url: edit_user_password_path(token: params[:token]), method: :patch) do |form|
-    = render partial: "shared_partials/form_validation_errors", locals: { record: user }
-    fieldset
-      h3
-        legend
-          = form_legend
-      div
-        = form.label :password, "New Password"
-        = form.password_field :password, required: true, autofocus: true
-      .inline
-        = form.submit "Update Password"
+.ex-narrow
+  = render Yui::CardComponent.new do
+    = render Yui::HeadlineComponent.new(form_legend, level: 3)
+    = form_with model: user, url: edit_user_password_path(token: params[:token]), method: :patch, builder: YuiFormBuilder, html: { class: "ex-stack" } do |form|
+      = render partial: "shared_partials/form_validation_errors", locals: { record: user }
+      = form.password_field :password, label: "New Password", required: true, autofocus: true, autocomplete: "new-password"
+      = form.submit "Update Password"

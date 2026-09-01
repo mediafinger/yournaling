@@ -1,11 +1,6 @@
-article
-  = form_with url: user_password_path do |form|
-    fieldset
-      h3
-        legend
-          = form_legend
-      div
-        = form.label :email
-        = form.email_field :email, required: true, autofocus: true
-      .inline
-        = form.submit "Send Instructions"
+.ex-narrow
+  = render Yui::CardComponent.new do
+    = render Yui::HeadlineComponent.new(form_legend, level: 3)
+    = form_with url: user_password_path, builder: YuiFormBuilder, html: { class: "ex-stack" } do |form|
+      = form.email_field :email, required: true, autofocus: true, autocomplete: "email"
+      = form.submit "Send Instructions"
