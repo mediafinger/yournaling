@@ -1,0 +1,40 @@
+@layer components {
+  /* Floating "back to top" button — toggled visible by scroll_to_top_controller. */
+
+  .ex-scroll-top {
+    position: fixed;
+    right: var(--ex-space-lg);
+    bottom: var(--ex-space-lg);
+    z-index: 90;
+    display: flex;
+    visibility: hidden;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    color: var(--ex-accent-ink);
+    background-color: var(--ex-accent);
+    border: 0;
+    border-radius: var(--ex-radius-pill);
+    box-shadow: var(--ex-shadow-md);
+    opacity: 0;
+    transform: translateY(0.5rem);
+    transition:
+      opacity var(--ex-transition),
+      visibility var(--ex-transition),
+      transform var(--ex-transition-fast),
+      background-color var(--ex-transition-fast);
+  }
+
+  .ex-scroll-top.visible {
+    visibility: visible;
+    opacity: 0.92;
+    transform: translateY(0);
+  }
+
+  .ex-scroll-top:hover {
+    background-color: var(--ex-accent-strong);
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+}

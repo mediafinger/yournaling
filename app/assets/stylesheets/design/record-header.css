@@ -1,0 +1,41 @@
+@layer components {
+  /* Header row of a record card — BrowseHeaderComponent / ManageHeaderComponent. */
+
+  .ex-record-header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--ex-space-2xs) var(--ex-space-sm);
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .ex-record-header__title {
+    margin: 0 0 0.15rem;
+    font-family: var(--ex-font-display);
+    font-size: var(--ex-text-h4);
+    font-weight: var(--ex-weight-semibold);
+    line-height: var(--ex-leading-snug);
+    color: var(--ex-ink);
+  }
+
+  .ex-record-header__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.15rem 0.5rem;
+    align-items: baseline;
+    font-size: var(--ex-text-sm);
+    color: var(--ex-ink-faint);
+  }
+
+  .ex-record-header__meta strong {
+    font-weight: var(--ex-weight-semibold);
+    color: var(--ex-ink-soft);
+  }
+
+  .ex-record-header__actions {
+    display: flex;
+    flex-shrink: 0;
+    gap: var(--ex-space-3xs);
+  }
+}

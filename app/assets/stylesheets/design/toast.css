@@ -1,0 +1,88 @@
+@layer components {
+  /* Flash notifications — Yui::Toast, stacked in a fixed region below the nav. */
+
+  .ex-toast-region {
+    position: fixed;
+    top: calc(var(--ex-navbar-height, 3.25rem) + var(--ex-space-2xs));
+    right: var(--ex-space-sm);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: var(--ex-space-2xs);
+    width: min(24rem, calc(100vw - 2 * var(--ex-space-sm)));
+    pointer-events: none;
+  }
+
+  .ex-toast {
+    --_accent: var(--ex-info);
+    --_bg: var(--ex-info-soft);
+
+    display: flex;
+    gap: var(--ex-space-2xs);
+    align-items: flex-start;
+    padding: var(--ex-space-2xs) var(--ex-space-xs);
+    font-size: var(--ex-text-sm);
+    line-height: var(--ex-leading-normal);
+    color: var(--ex-ink);
+    pointer-events: auto;
+    background-color: var(--_bg);
+    border: 1px solid color-mix(in srgb, var(--_accent) 30%, transparent);
+    border-radius: var(--ex-radius-md);
+    box-shadow: var(--ex-shadow-md);
+    transition:
+      opacity var(--ex-transition),
+      transform var(--ex-transition);
+  }
+
+  .ex-toast[data-leaving] {
+    opacity: 0;
+    transform: translateX(0.75rem);
+  }
+
+  @starting-style {
+    .ex-toast {
+      opacity: 0;
+      transform: translateX(0.75rem);
+    }
+  }
+
+  .ex-toast--success {
+    --_accent: var(--ex-success);
+    --_bg: var(--ex-success-soft);
+  }
+
+  .ex-toast--warning {
+    --_accent: var(--ex-warning);
+    --_bg: var(--ex-warning-soft);
+  }
+
+  .ex-toast--danger {
+    --_accent: var(--ex-danger);
+    --_bg: var(--ex-danger-soft);
+  }
+
+  .ex-toast__icon {
+    flex: none;
+    padding-top: 0.1rem;
+    color: var(--_accent);
+  }
+
+  .ex-toast__body {
+    flex: 1;
+    margin: 0;
+  }
+
+  .ex-toast__dismiss {
+    display: inline-flex;
+    flex: none;
+    padding: 0.1rem;
+    color: var(--ex-ink-faint);
+    cursor: pointer;
+    background: none;
+    border: 0;
+  }
+
+  .ex-toast__dismiss:hover {
+    color: var(--ex-ink);
+  }
+}

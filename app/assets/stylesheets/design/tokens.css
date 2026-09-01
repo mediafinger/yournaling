@@ -35,7 +35,7 @@
 /* `pico` is first (lowest priority) so the layered design system wins on
    elements Pico also styles during the migration. It is empty until a layout
    loads app/assets/stylesheets/pico/<theme>.css, and goes away in Phase 6. */
-@layer pico, tokens, base, layout, typography, components, composed, showcase;
+@layer pico, legacy, tokens, base, layout, typography, components, composed, showcase;
 
 @layer tokens {
   /* 1. ---------------------------------------------------------------- TOKENS */

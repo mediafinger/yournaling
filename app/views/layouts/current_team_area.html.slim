@@ -8,14 +8,14 @@ html
     = csp_meta_tag
     / Pico, wrapped in a low-priority cascade layer (transitional — see design/tokens.css)
     = stylesheet_link_tag "pico/green", "data-turbo-track": "reload"
-    = stylesheet_link_tag "general", "buttons", "card", "lightbox", "data-turbo-track": "reload"
+    = stylesheet_link_tag "legacy", "data-turbo-track": "reload"
     = render "shared_partials/design_head"
     = javascript_importmap_tags
   body
     header.ex-navbar-host data-controller="navbar"
       = render CurrentTeamNavComponent.new
-      = render partial: "shared_partials/flash_notifications"
+    = render partial: "shared_partials/flash_notifications"
     main.ex-scope data-area="team"
       = yield
-    button.scroll-to-top-btn data-controller="scroll-to-top" data-scroll-to-top-target="button" data-action="click->scroll-to-top#scrollToTop" aria-label="Scroll to top" title="Scroll to top"
-      | ↑
+    button.ex-scroll-top data-controller="scroll-to-top" data-scroll-to-top-target="button" data-action="click->scroll-to-top#scrollToTop" aria-label="Scroll to top"
+      = render Yui::IconComponent.new("arrow-up-right")
