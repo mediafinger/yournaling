@@ -1,0 +1,70 @@
+@layer components {
+  /* Yui::PaginationComponent — a numbered pager (admin lists). */
+
+  .ex-pagination {
+    display: flex;
+    justify-content: center;
+    margin-block: var(--ex-space-lg);
+  }
+
+  .ex-pagination__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--ex-space-3xs);
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .ex-pagination__link {
+    display: inline-flex;
+    gap: 0.2em;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.25rem;
+    height: 2.25rem;
+    padding: 0 var(--ex-space-2xs);
+    font-size: var(--ex-text-sm);
+    font-weight: var(--ex-weight-medium);
+    font-variant-numeric: tabular-nums;
+    color: var(--ex-ink-soft);
+    text-decoration: none;
+    border: var(--ex-border-hairline);
+    border-radius: var(--ex-radius-sm);
+    transition:
+      color var(--ex-transition-fast),
+      background-color var(--ex-transition-fast),
+      border-color var(--ex-transition-fast);
+  }
+
+  a.ex-pagination__link:hover,
+  a.ex-pagination__link:focus-visible {
+    color: var(--ex-ink);
+    background-color: var(--ex-surface-sunken);
+    border-color: var(--ex-border-strong);
+  }
+
+  .ex-pagination__link--current {
+    color: var(--ex-accent-ink);
+    background-color: var(--ex-accent);
+    border-color: var(--ex-accent);
+  }
+
+  .ex-pagination__link--nav {
+    color: var(--ex-ink-faint);
+  }
+
+  .ex-pagination__link[aria-disabled="true"] {
+    pointer-events: none;
+    opacity: 0.4;
+  }
+
+  .ex-pagination__gap {
+    display: inline-flex;
+    align-items: flex-end;
+    justify-content: center;
+    min-width: 1.5rem;
+    color: var(--ex-ink-faint);
+  }
+}

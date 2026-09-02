@@ -28,6 +28,7 @@ module Yui
       "check" => '<path d="M20 6 9 17l-5-5"/>',
       "check-circle" => '<path d="M21.5 11.1V12a9.5 9.5 0 1 1-5.6-8.7"/><path d="m9 12 2.5 2.5L22 4.5"/>',
       "chevron-down" => '<path d="m6 9 6 6 6-6"/>',
+      "chevron-left" => '<path d="m15 6-6 6 6 6"/>',
       "chevron-right" => '<path d="m9 6 6 6-6 6"/>',
       "clock" => '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/>',
       "compass" => '<circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5Z"/>',
