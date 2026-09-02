@@ -1,0 +1,5 @@
+.yui-stack
+  = render Yui::HeadlineComponent.new("Memories", level: 1)
+  #memories.yui-stack
+    = render @memories
+  = render Yui::PaginationComponent.new(pagy: @pagy)

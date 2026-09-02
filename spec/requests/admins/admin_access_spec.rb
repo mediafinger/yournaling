@@ -11,6 +11,7 @@ RSpec.describe "Admin Namespace Access Control", type: :request do
       /admin/users
       /admin/teams
       /admin/locations
+      /admin/memories
       /admin/pictures
       /admin/thoughts
       /admin/weblinks
