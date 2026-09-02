@@ -1,0 +1,3 @@
+.yui-narrow.yui-stack
+  = render partial: "form", locals: { memory: @memory, form_legend: "Edit memory" }
+  = render partial: "admins/edit_actions", locals: { name: "memory", record: @memory }

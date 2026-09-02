@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-# TODO: add views
-
 module Admins
   class MemoriesController < AdminController
     include MemoryFormHandling
 
     def index
-      @memories = Memory.includes(:team, :picture, :location, :thought, :weblink).order(created_at: :desc)
+      @pagy, @memories = pagy(
+        :offset, Memory.includes(:team, :picture, :location, :thought, :weblink).order(created_at: :desc)
+      )
     end
 
     def show
@@ -23,7 +23,7 @@ module Admins
     end
 
     def create
-      @memory = Memory.new(attrs)
+      @memory = Memory.new(memory_params)
 
       ActiveRecord::Base.transaction do
         Memory.create_with_event(

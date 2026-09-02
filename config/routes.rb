@@ -90,7 +90,7 @@ Rails.application.routes.draw do
     resources :chronicles
     resources :locations
     resources :members
-    resources :memories # TODO: add views
+    resources :memories
     resources :pictures
     resources :teams
     resources :users

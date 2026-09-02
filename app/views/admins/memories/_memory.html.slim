@@ -1,0 +1,24 @@
+= render Yui::CardComponent.new(id: dom_id(memory)) do
+  = render Yui::HeadlineComponent.new("Memory", level: 3)
+  dl.yui-details
+    dt Memo
+    dd = memory.memo
+    dt Visibility
+    dd = memory.visibility
+    - if memory.location.present?
+      dt Location
+      dd = memory.location.name
+    - if memory.thought.present?
+      dt Thought
+      dd = memory.thought.text
+    - if memory.weblink.present?
+      dt Weblink
+      dd
+        = link_to memory.weblink.name, memory.weblink.url
+    = render AdminShowTeamComponent.new(team: memory.team)
+    = render AdminShowMetaInformationComponent.new(record: memory)
+
+  - if memory.picture.present?
+    = render partial: "admins/pictures/picture", locals: { picture: memory.picture, hide_actions: true }
+
+  = render AdminActionsComponent.new(record: memory, name: "memory")

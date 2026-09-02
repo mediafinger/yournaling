@@ -1,0 +1,9 @@
+= render Yui::CardComponent.new do
+  = form_with(model: [:admin, memory], builder: YuiFormBuilder, multipart: true, html: { class: "yui-stack" }, data: { controller: "picture-select" }) do |form|
+    = render Yui::HeadlineComponent.new(form_legend, level: 3)
+    = render partial: "shared_partials/form_validation_errors", locals: { record: memory }
+    = render partial: "admins/team_field", locals: { form: form }
+    = form.text_area :memo, label: "Memo", rows: 4, required: true, placeholder: "What do you want to remember?"
+    = form.select :visibility, Memory::VISIBILITY_STATES.map { |v| [v.titleize, v] }, label: "Visibility"
+    = render InsightAttachmentManagerComponent.new(form:, scope: "admin", mode: :single)
+    = form.submit
