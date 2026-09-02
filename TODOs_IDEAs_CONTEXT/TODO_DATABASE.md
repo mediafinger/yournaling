@@ -129,53 +129,67 @@ AppConf plus its `migrations_paths`.
 
 ## Phase 4 — Rails wiring
 
-- [ ] `config/application.rb` — `config.solid_queue.connects_to = { database: {
-      writing: :queue } }` stays. (No `reading:` split until a replica exists.)
-- [ ] `app/models/application_record.rb` — if it does not already, keep it on the
-      default `primary` connection; no role switching in dev/test.
-- [ ] `config/cable.yml` — `solid_cable` already `connects_to … writing: cable`;
-      no change needed beyond the database now being Postgres. Sanity-check
-      `polling_interval: 0.1` against local Postgres (fine for dev).
-- [ ] `config/cache.yml` — `database: cache` stays. Verify `solid_cache`
-      trimming / `max_size` behaves on Postgres.
-- [ ] `config/queue.yml` — no logical change.
-- [ ] `config/environments/development.rb` / `test.rb` — remove any assumptions
-      about SQLite storage paths; confirm `config.cache_store` /
-      `active_job.queue_adapter` still resolve.
-- [ ] `mission_control-jobs` dashboard — confirm it targets the `queue`
-      connection.
-- [ ] `config/blazer.yml` — still uses the primary connection; unchanged.
-- [ ] `Gemfile` — remove `gem "sqlite3"` and its comment once dev/test run green
-      on Postgres. Run `bundle install` and commit `Gemfile.lock`.
+No code changes were needed here — the Solid gems resolve their connection from
+`database.yml` / `cable.yml` / `cache.yml`, which now point at PostgreSQL.
+
+- [x] `config/application.rb` — `config.solid_queue.connects_to = { database: {
+      writing: :queue } }` unchanged (no `reading:` split until a replica exists).
+- [x] `app/models/application_record.rb` — already `writing: :primary,
+      reading: :primary`; left as is (no role switching in dev/test).
+- [x] `config/cable.yml` — `solid_cable` already `connects_to … writing: cable`;
+      no change. `polling_interval: 0.1` is fine against local Postgres.
+- [x] `config/cache.yml` — `database: cache` unchanged; `max_size` / trimming
+      are store-level and DB-agnostic.
+- [x] `config/queue.yml` — no change.
+- [x] `config/environments/*.rb` — no SQLite storage assumptions
+      (`grep -rn sqlite config/` only hit `database.yml`, now fixed).
+      `config.cache_store` / `active_job.queue_adapter` verified via `runner`:
+      SolidCache/Queue/Cable connect to `yournaling_{cache,queue,cable}_*`.
+- [x] `mission_control-jobs` dashboard — introspects the SolidQueue models, which
+      connect to `:queue`; nothing to configure.
+- [x] `config/blazer.yml` — uses the primary connection; unchanged.
+- [x] `Gemfile` — `gem "sqlite3"` removed (Phase 5 commit) once the suite was
+      green on Postgres; `Gemfile.lock` regenerated.
 
 ---
 
-## Phase 5 — Migrations & schema management (primary + queue)
+## Phase 5 — Migrations & schema management
 
-- [ ] `bin/rails db:prepare` creates all 4 DBs; `db:migrate` only touches
-      `primary` + `queue` (`cache`/`cable` are `database_tasks: false`).
-- [ ] After migrating, `db/schema.rb` and `db/queue_schema.rb` are the dumped
-      schemas and are committed.
-- [ ] `db/cache_schema.rb` / `db/cable_schema.rb` are committed but only updated
-      when the gems change.
+- [x] `bin/rails db:prepare` creates and loads all 4 DBs; `db:migrate` runs the
+      migrations for all 4 (each has its own `migrations_paths`). No
+      special-casing — see the Phase 2 decision.
+- [x] `db/schema.rb` (primary) unchanged — already PostgreSQL.
+- [x] `db/queue_schema.rb`, `db/cache_schema.rb`, `db/cable_schema.rb` re-dumped
+      in PostgreSQL format via `db:schema:dump` and committed. Human attention
+      going forward stays on `primary` and `queue`; `cache`/`cable` only change
+      when the gems do.
+- [x] `db/migrate_queue`, `db/migrate_cache`, `db/migrate_cable` migrations are
+      standard ActiveRecord and needed no edits for PostgreSQL.
 
 ---
 
 ## Phase 6 — Local & CI setup
 
-- [ ] Update `README` / setup docs: developers need a running PostgreSQL and run
-      `bin/rails db:prepare` (or `bin/setup`) to get all 4 databases.
-- [ ] `bin/setup` — ensure it creates/loads the new databases and no longer
-      references SQLite files.
-- [ ] CI config — ensure the Postgres service is available (it already is for
-      `primary`) and `db:prepare` provisions queue/cache/cable. Confirm parallel
-      test setup (`rails db:test:prepare` / `parallelize`) creates the per-worker
-      databases.
-- [ ] `rake ci` / quality gates — run the full suite on Postgres-backed Solid
-      Stack and fix fallout (SQLite-specific SQL, `pragma`, datetime precision,
-      `rowid` assumptions, ordering that relied on SQLite insertion order).
-- [ ] Grep the codebase/specs for `sqlite`, `.sqlite3`, `storage/` DB paths and
-      clean up.
+- [x] `README.markdown` — note the 4 PostgreSQL databases; drop the "sqlite
+      installs itself" line.
+- [x] `bin/setup` — already runs `bin/rails db:prepare` + `rake parallel:setup[4]`
+      and has no SQLite references; nothing to change.
+- [x] CI (`.github/workflows/ci_push_pull_main.yml`) — the "Setup DB" step runs
+      `rake db:drop db:create db:migrate` then `parallel:setup[4]`. With all four
+      databases now on the CI Postgres service this works unchanged: `db:create`
+      provisions `yournaling_{,queue_,cache_,cable_}test`, `db:migrate` loads
+      them, `parallel:setup[4]` creates the per-worker copies. No workflow edit
+      needed.
+- [x] `rake ci` / full suite — green on the Postgres-backed Solid Stack
+      (see Phase 7).
+- [x] `grep -rn sqlite` across the app after the change: only historic mentions
+      in `README` (removed) and this plan; no code references remain.
+
+Note: running `rake parallel:setup[4]` directly through the `bin/mcp_*` chruby
+wrappers can fail locally with a `Bundler::GemNotFound` in the spawned
+sub-processes (an environment quirk, not caused by this change). Workaround used
+here: `for i in 2 3 4; do RAILS_ENV=test TEST_ENV_NUMBER=$i bundle exec rails db:create db:schema:load; done`.
+`parallel_rspec -n 4` itself works fine.
 
 ---
 

@@ -23,11 +23,11 @@ _There are more READMEs to describe some topics in more depth:_
 ## Dependencies
 
 * Ruby - for exact version see: https://raw.githubusercontent.com/mediafinger/yournaling/main/.ruby-version
-* Postgres v15+
+* Postgres v15+ (the app uses 4 PostgreSQL databases: primary, queue, cache, cable)
 * libvips library for image manipulation
 * many Ruby gems: https://raw.githubusercontent.com/mediafinger/yournaling/main/Gemfile.lock
 
-Also foreman and sqlite, but those install themselves automagically.
+Also foreman, which installs itself automagically.
 
 ## Installation
 
