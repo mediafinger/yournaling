@@ -50,6 +50,11 @@
 /config/deploy*.yml
 /.kamal
 
+# Ignore local compose files.
+/compose*.yaml
+/compose*.yml
+/docker-compose*.yml
+
 # Ignore test files.
 /spec/
 /coverage/

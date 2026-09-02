@@ -108,28 +108,31 @@ bin/kamal build push -d staging
 bin/kamal config -d staging
 ```
 
-### Local image build (no server needed)
+### Local run — test the image in a browser
 
 ```bash
-# native arch, quick smoke test
-docker build -t yournaling:local .
+docker compose up --build -d
+docker compose logs -f app          # wait ~1-2 min (db:prepare + eager load)
+```
 
-# production-parity linux/amd64 (what Kamal/CI produce)
-docker buildx build --platform linux/amd64 -t yournaling:amd64 --load .
+Open **`https://yournaling.orb.local`** (OrbStack routes the `yournaling`
+container, gives it a trusted cert, and sets `X-Forwarded-Proto: https` — so
+`force_ssl` and secure session cookies are satisfied and **login works**).
 
-# run it against a local Postgres
-docker run --rm -p 8080:80 \
-  -e RAILS_ENV=staging -e RAILS_SERVE_STATIC_FILES=true -e YOURNALING_PORT=3000 \
-  -e RAILS_SECRET_KEY_BASE=dev-dummy -e YOURNALING_HOST=localhost \
-  -e YOURNALING_DB_HOST=host.docker.internal -e YOURNALING_DB_NAME=yournaling \
-  -e YOURNALING_DB_USERNAME=postgres -e YOURNALING_DB_PASSWORD=postgres \
-  -e YOURNALING_DB_TIMEOUT_SECONDS=5 \
-  -e AMAZON_S3_ACCESS_KEY_ID=x -e AMAZON_S3_SECRET_ACCESS_KEY=x \
-  -e AMAZON_S3_BUCKET_NAME=x -e GEOAPIFY_API_KEY=x \
-  yournaling:local
-# -> http://localhost:8080/alive  (200)
-# -> http://localhost:8080/       (200)
-# -> http://localhost:8080/up     (503 until the DB has a User — this is by design)
+- First hit on each page is slow (cold Slim template compile); `compose.yaml`
+  raises `RACK_TIMEOUT` to 60s so it doesn't 500 — just reload once.
+- `/alive` → 200 · `/` `/login` `/example` → 200 · `/up` → 503 until a `User`
+  exists (by design — see `HealthController`).
+- No OrbStack? Browse `http://localhost:8088` instead, set
+  `YOURNALING_HOST=localhost` in `compose.yaml`; login won't work over plain HTTP.
+
+Teardown: `docker compose down -v` (also drops the databases).
+
+### Local image build only
+
+```bash
+docker build -t yournaling:local .                                    # native arch
+docker buildx build --platform linux/amd64 -t yournaling:amd64 --load .   # deploy parity
 ```
 
 ### Via GitHub Actions

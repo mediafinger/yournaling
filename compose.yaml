@@ -1,0 +1,62 @@
+# Local test of the *production image* (staging config) — NOT for development.
+#
+#   docker compose up --build -d
+#   docker compose logs -f app          # wait ~1-2 min: db:prepare + eager load
+#
+# Then open  https://yournaling.orb.local  in a browser — OrbStack gives it a
+# trusted cert and sets X-Forwarded-Proto, so force_ssl + secure cookies work
+# and you can log in. The first hit on each page is slow (cold template
+# compile); RACK_TIMEOUT is raised to 60s below so it doesn't 500. Reload once.
+#
+# Without OrbStack: publish a port (already done: 8088) and browse
+# http://localhost:8088 — but set YOURNALING_HOST=localhost and note login
+# won't work over plain HTTP (secure cookies).
+#
+# Teardown (also drops the databases):  docker compose down -v
+
+name: yournaling-local
+
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: yournaling
+      POSTGRES_DB: yournaling
+      POSTGRES_PASSWORD: localdev
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "yournaling"]
+      interval: 3s
+      timeout: 3s
+      retries: 10
+
+  app:
+    build: .
+    container_name: yournaling          # -> https://yournaling.orb.local on OrbStack
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8088:80"
+    environment:
+      RAILS_ENV: staging
+      RAILS_SERVE_STATIC_FILES: "true"
+      YOURNALING_PORT: "3000"
+      SOLID_QUEUE_IN_PUMA: "true"
+      YOURNALING_HOST: yournaling.orb.local
+      YOURNALING_DB_HOST: db
+      YOURNALING_DB_NAME: yournaling
+      YOURNALING_DB_USERNAME: yournaling
+      YOURNALING_DB_PASSWORD: localdev
+      YOURNALING_DB_TIMEOUT_SECONDS: "5"
+      RAILS_SECRET_KEY_BASE: local-dev-not-secret-0000000000000000000000000000000000000000000000000000000000000000
+      RACK_TIMEOUT: "60"                # local VM is slow on the first hit per page
+      GEOAPIFY_API_URL: https://api.geoapify.com
+      GEOAPIFY_API_KEY: x
+      AMAZON_S3_ACCESS_KEY_ID: x
+      AMAZON_S3_SECRET_ACCESS_KEY: x
+      AMAZON_S3_BUCKET_NAME: x
+
+volumes:
+  db-data:
