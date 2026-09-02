@@ -100,6 +100,24 @@ class AppConf
     default: "postgres://#{yournaling_db_username}:#{yournaling_db_password}@" \
              "#{yournaling_db_host}:#{yournaling_db_port}/#{yournaling_db_name}"
 
+  # The Solid Stack (SolidQueue / SolidCache / SolidCable) runs on PostgreSQL too.
+  # Each component gets its own database on the same server as the primary DB;
+  # only the database name differs. The database.yml appends the environment
+  # suffix (_development, _test<N>, ...) to these URLs.
+  register :yournaling_queue_db_name, default: "#{yournaling_db_name}_queue"
+  register :yournaling_cache_db_name, default: "#{yournaling_db_name}_cache"
+  register :yournaling_cable_db_name, default: "#{yournaling_db_name}_cable"
+
+  register :yournaling_queue_db_url,
+    default: "postgres://#{yournaling_db_username}:#{yournaling_db_password}@" \
+             "#{yournaling_db_host}:#{yournaling_db_port}/#{yournaling_queue_db_name}"
+  register :yournaling_cache_db_url,
+    default: "postgres://#{yournaling_db_username}:#{yournaling_db_password}@" \
+             "#{yournaling_db_host}:#{yournaling_db_port}/#{yournaling_cache_db_name}"
+  register :yournaling_cable_db_url,
+    default: "postgres://#{yournaling_db_username}:#{yournaling_db_password}@" \
+             "#{yournaling_db_host}:#{yournaling_db_port}/#{yournaling_cable_db_name}"
+
   # determines the size of the DB connection pool and the puma threads
   register :rails_max_threads, default: 6
   register :rails_min_threads, default: 2

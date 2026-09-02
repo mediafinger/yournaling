@@ -61,19 +61,22 @@ yournaling_cable_development    yournaling_cable_test<N>
 Edit `config/app_conf.rb`. Add registrations (all `ENV`-overridable), following
 the existing `yournaling_db_*` pattern:
 
-- [ ] `yournaling_queue_db_name` (default `"#{yournaling_db_name}_queue"`).
-- [ ] `yournaling_cache_db_name` (default `"#{yournaling_db_name}_cache"`).
-- [ ] `yournaling_cable_db_name` (default `"#{yournaling_db_name}_cable"`).
-- [ ] Helper URL methods mirroring `yournaling_db_url`:
+- [x] `yournaling_queue_db_name` (default `"#{yournaling_db_name}_queue"`).
+- [x] `yournaling_cache_db_name` (default `"#{yournaling_db_name}_cache"`).
+- [x] `yournaling_cable_db_name` (default `"#{yournaling_db_name}_cable"`).
+- [x] Helper URL methods mirroring `yournaling_db_url`:
       `yournaling_queue_db_url`, `yournaling_cache_db_url`,
       `yournaling_cable_db_url` (same host/port/credentials as primary, different
-      `dbname`).
-- [ ] Review the `pool:` size note in `database.yml` — with 4 Postgres databases
-      each process now opens up to 4 pools; keep the formula but sanity-check the
-      total against local Postgres `max_connections` (default 100) especially
-      under parallel specs (`workers × 4 × pool`).
-- [ ] Document the new keys in `config/app_conf.local.rb` (gitignored) as
-      examples for overriding host/credentials locally.
+      `dbname`). The `database.yml` appends the env suffix (`_development`,
+      `_test<N>`) to these URLs exactly as it already does for the primary.
+- [x] Reviewed the `pool:` size formula — kept as is. Each logical database gets
+      its own connection pool, but Postgres' default `max_connections` (100) is
+      comfortable for local dev and CI; parallel specs run 4 workers and the CI
+      Postgres service uses the stock config. Right-sizing for many processes is
+      a production concern (see [Production Rollout](#production-rollout)).
+- [x] No `config/app_conf.local.rb` sample is needed — the new keys follow the
+      documented `AppConf.set`/`ENV` override mechanism already described at the
+      bottom of `config/app_conf.rb`.
 
 ---
 
