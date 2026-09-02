@@ -13,12 +13,12 @@ bespoke **"Warm Editorial"** design language that already lives under
 
 This section is a **frozen snapshot** of the codebase when the plan was written —
 it is not updated as work lands. Progress is tracked by the checkboxes in §7.
-As of 2026-09-01: Phases 0–2 done; Phase 3 done bar the record-card cluster
-(auth / account / users / teams top-level swept, `<body>` on the design ground,
-`spec/views/{users,teams top-level}` retired). Phase 4 now owns the shared
-`teams/*` + `current_teams/*` record partials, the feed, and the `pico/amber` +
-`pico/green` teardown. `example.css` is `app/assets/stylesheets/design/*.css`;
-the primitives are `Yui::`; fonts self-hosted; Lookbook installed.
+As of 2026-09-02: Phases 0–4 done. Public + team areas are Yui-only
+(`pico/amber` + `pico/green` gone); only `admin_area` still links `pico/blue`
+(Phase 5). `example.css` is `app/assets/stylesheets/design/*.css`; the
+primitives are `Yui::`; fonts self-hosted; Lookbook installed with a
+render-smoke spec. Remaining: Phase 5 (admin) and Phase 6 (teardown + CSP +
+the `.ex-*` → `.yui-*` rename).
 
 ### Styling stack
 
@@ -743,7 +743,11 @@ bullets move there too.
 **Phase 3 is closed.** Remaining public-facing work (the record-card cluster,
 the feed, `pico/amber` teardown) lives in Phase 4.
 
-### Phase 4 — Records, feed & team workspace (~3–4 days)
+### Phase 4 — Records, feed & team workspace (~3–4 days) — **done**
+
+All four sub-sections (Cards & CSS, Forms & specs, Feed & pagination, Teardown)
+are complete; `pico/amber` + `pico/green` are gone. Only two soft items remain:
+the `actions: false` card previews (`[~]` below) and a manual visual QA pass.
 
 The largest area, and the home of the shared **record-card** vocabulary. Covers
 both the public browse views deferred from Phase 3 (`teams/*`) **and** the team
@@ -778,14 +782,19 @@ pictures_only,pages}` — index / show / `_record` (public, read-only)
       one-line `render …Component.new(…)` adapters. Pure `Yui::MemoryCard` /
       `Yui::ChronicleCard` **deleted** — the app components are the single
       source of truth; `/example` and Lookbook render them.
-- [ ] **Records — refined component previews.** The card components need an
-      auth / routing context to render their real header (`BrowseHeaderComponent`
-      → `team_memory_path`, Action Policy). For now `/example` and the Lookbook
-      previews pass `actions: false`, which swaps the header for a plain
-      `.ex-meta` line. Refine: give previews a guest `User.new(name: "Guest")` +
-      a stubbed `current_team` / route set so the real header renders (with no
-      buttons, since the guest fails every policy). Small; do it when the
-      preview-auth story matters.
+- [~] **Records — refined component previews.** Still on `actions: false`.
+      Attempted the guest-user route: with `build_stubbed` records + `team:`
+      passed, the card renders through `render_inline`, but the **real Lookbook
+      previews controller** (`render_preview`) wires `Authentication` +
+      `TeamScope`, so `BrowseHeaderComponent#can_rewrite?` reaches
+      `allowed_to?`, whose `authorization_context` calls
+      `TeamScope#current_member` → `Member.find_by!` → `RecordNotFound` for the
+      guest. Cleanly fixing it means either a non-raising `current_member`
+      fallback in the header components (touches shared auth code — deferred by
+      §7 to "later") or a stubbed member in the preview controller. Left as-is.
+      **New:** `spec/view_components/previews_render_spec.rb` now renders every
+      preview example through the real previews controller, so a broken preview
+      fails CI (previously Lookbook-only).
 - [x] **`.timeline-grid` → `.ex-record-grid`** (`7063601`): new class in
       `design/layout.css`, `repeat(auto-fill, minmax(min(100%, 28rem), 1fr))` —
       1 / 2 / 3 columns responsively, centred by `<main>`'s 90rem container,
@@ -800,32 +809,25 @@ pictures_only,pages}` — index / show / `_record` (public, read-only)
       deleted. `legacy.css` is now just `general.css` + `buttons.css`.
       Retired `spec/views/teams/{locations,weblinks}/show`.
 
-#### Feed & pagination
+#### Feed & pagination — done (`33cd20d` … `632e6b0`)
 
-Currently endless-scroll Turbo frames — _functionally_ green, but unstyled and
-unaudited.
-
-- [ ] Audit the endless-scroll mechanism against pagy 43 (`@pagy.next` /
-      `@pagy.page`; `pagy(:offset, …)`; `Pagy::OPTIONS[:limit]`). It works today
-      (`spec/requests/pages_request_spec.rb` proves the frame chain stops on the
-      last page) — add a comment / regression guard so a pagy upgrade can't
-      silently make `@pagy.next` truthy on the last page and chain requests
-      forever.
-- [ ] Give the lazy next-page `turbo_frame_tag` a **visible loading affordance**
-      (a `Yui::` spinner / "loading more…" row inside the frame) — right now the
-      feed just stops until the next frame resolves, which reads as broken on a
-      slow connection.
-- [ ] Restyle the "newer posts" banner + sentinel (`#newer_posts_banner`
-      `.newer-posts-banner`, `#top_sentinel`, the `feed-refresh` Stimulus
-      controller) — `.newer-posts-banner` is a legacy `general.css` class with
-      `--pico-*` fallbacks; move it to `design/feed.css` as a `Yui::`-styled
-      pill. Verify `feed-refresh` still toggles it (browse + team feeds).
-- [ ] Confirm the `current_teams/pages` feed uses a consistent `@newest_*`
-      ivar name across `show` / `newer` / `check_newer` (currently
-      `@newest_updated_at`; the public one is `@newest_published_at`).
-- [ ] Build `Yui::Pagination` for the admin section, where a classic numbered pager will be
-      needed (admin lists, Phase 5). The public/team feeds do not use one
-      (`have_no_css("nav.pagy")` is asserted) — don't add one there.
+- [x] Endless-scroll audit vs pagy 43: added the "stops the chain on the last
+      page" request spec to the **team** feed (public already had it) and a
+      comment at both `- if @pagy.next` guards — a nil `@pagy.next` is the only
+      thing that ends the lazy-frame chain.
+- [x] Lazy next-page frame now renders an `.ex-feed-loading` row with a
+      `Yui::Spinner` (new primitive: `design/spinner.css`, preview, spec,
+      `.ex-visually-hidden` a11y util) instead of resolving from an empty frame.
+- [x] "Newer posts" banner → `design/feed.css` `.ex-feed-banner` (a terracotta
+      Yui pill, now a real `<button>`); the `--pico-*` `.newer-posts-banner` is
+      gone from `general.css`. `feed-refresh` still toggles it (specs green).
+- [x] Both feed controllers now expose the poll cursor as `@newest_at` (was
+      `@newest_published_at` / `@newest_updated_at`), the `check_newer` JSON as
+      `latest_at`, and the `newer.html` wrapper as `data-newest-at`.
+- [x] `Yui::PaginationComponent` built (numbered pager, injectable `url` proc
+      defaulting to `pagy.page_url`, `design/pagination.css`, `chevron-left`
+      icon, preview + spec). Not wired anywhere yet — Phase 5 adopts it for the
+      admin index lists.
 
 #### Forms & specs — done (`2e9fb51` … `ba6670f`)
 
@@ -857,13 +859,17 @@ are now unreferenced (superseded by `yui-tabs` / `yui-modal`) and can be
 deleted. `PictureSelectFieldComponent` is no longer rendered by any view —
 a removal candidate.
 
-#### Teardown for this area
+#### Teardown for this area — done (`3dcca4c`, `e81e7cc`)
 
-- [ ] Drop the `pico/amber` link from `layouts/application` and `pico/green`
-      from `layouts/current_team_area` — safe once every public + team template
-      is converted (no bare `h3`/`h4`/`p`/`table`/`article` left).
-- [ ] QA: system specs green + manual pass on `/` (public feed), a team home
-      feed, a chronicle show, a memory show, the pictures lightbox.
+- [x] `pico/amber` dropped from `layouts/application`, `pico/green` from
+      `layouts/current_team_area`. Last straggler found + converted on the way:
+      `current_teams/content_visibility/edit` (the non-JS fallback behind
+      `ContentVisibilityModalComponent`) → `Yui::Card` + `YuiFormBuilder`. No
+      `var(--pico-*)` remains outside admin. `legacy.css` (general.css /
+      buttons.css) and the empty `@layer pico` stay until Phase 6.
+- [~] QA: full `rake ci` green (1362 examples, 1 pre-existing pending). The
+      **manual** visual pass on `/`, a team feed, chronicle/memory show and the
+      lightbox is still outstanding — do it in a browser before merging.
 
 ### Phase 5 — Admin / `admin_area` (~1 day)
 
@@ -917,7 +923,7 @@ teams,users,pages,record_events}` — mostly index + edit + destroy, plus
 | 1 — namespace / conventions / CSS split / data / forms       | ~1.5 days ✅                                               |
 | 2 — shared chrome + Stimulus                                 | ~2 days ✅                                                 |
 | 3 — public layout (auth / account / users / teams-top-level) | ~1.5–2 days ✅ (record-card cluster → Phase 4)             |
-| 4 — records, feed & team workspace                           | ~3–4 days                                                  |
+| 4 — records, feed & team workspace                           | ~3–4 days ✅ (card previews `[~]`; manual QA pending)      |
 | 5 — admin                                                    | ~1 day                                                     |
 | 6 — teardown + CSP                                           | ~0.5–1 day                                                 |
 | **Total**                                                    | **~11–14 focused days**, shippable at every phase boundary |
