@@ -1,9 +1,12 @@
 {
   "extends": ["stylelint-config-standard", "stylelint-config-recess-order"],
-  "ignoreFiles": ["node_modules/**", "app/assets/builds/**", "app/assets/stylesheets/pico/**"],
+  "ignoreFiles": ["node_modules/**", "app/assets/builds/**"],
   "rules": {
     "custom-property-pattern": "^(ex|yui)-[a-z0-9]+(-[a-z0-9]+)*$|^_[a-z0-9]+$",
     "at-rule-disallowed-list": ["import"],
+    "declaration-property-value-disallowed-list": {
+      "/^/": ["/var\\(\\s*--pico-/"]
+    },
     "selector-class-pattern": [
       "^[a-z][a-z0-9]*(-[a-z0-9]+)*(__[a-z0-9]+(-[a-z0-9]+)*)?(--[a-z0-9]+(-[a-z0-9]+)*)?$",
       {
