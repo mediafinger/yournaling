@@ -58,12 +58,14 @@ group :development, :test do
   gem "active_record_doctor", "~> 2.0", require: false
   gem "amazing_print", "~> 2.0"
   gem "archspec"
+  gem "brakeman", require: false
   gem "bundler-audit", "~> 0.9"
-  gem "capybara", "~> 3.19" # for headless browser tests
+  gem "capybara", "~> 3.19"
   gem "factory_bot-awesome_linter", "~> 1.0"
   gem "factory_bot_rails", "~> 6.2"
   gem "faker", "~> 3.2"
   gem "kamal"
+  gem "parallel"
   gem "rspec-rails", "~> 8.0"
   gem "rubocop-capybara", "~> 3.0"
   gem "rubocop-factory_bot", "~> 2.26"
@@ -81,6 +83,6 @@ end
 
 group :test do
   gem "parallel_tests"
-  gem "selenium-webdriver", "~> 4.14" # for headless browser tests
+  gem "selenium-webdriver", "~> 4.14"
   gem "webmock", "~> 3.14"
 end

@@ -108,6 +108,8 @@ GEM
       safely_block (>= 1)
     bootsnap (1.25.0)
       msgpack (~> 1.5)
+    brakeman (8.0.6)
+      racc
     builder (3.3.0)
     bundler-audit (0.9.3)
       bundler (>= 1.2.0)
@@ -595,6 +597,7 @@ DEPENDENCIES
   bcrypt (~> 3.1)
   blazer (~> 3.1)
   bootsnap
+  brakeman
   bundler-audit (~> 0.9)
   capybara (~> 3.19)
   chimera_http_client (~> 1.6)
@@ -615,6 +618,7 @@ DEPENDENCIES
   lookbook (~> 2.3)
   mission_control-jobs (~> 1.0)
   pagy (~> 43.0)
+  parallel
   parallel_tests
   pg (~> 1.1)
   pg_search (~> 2.3)

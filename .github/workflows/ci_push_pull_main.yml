@@ -91,14 +91,32 @@ jobs:
       - name: Install npm packages
         run: npm ci
 
-      # TODO: install optional JPG, EXIF ... dependencies first?
-      # https://github.com/libvips/libvips#optional-dependencies
-      #
+      # libvips covers every format the app touches — Picture::ALLOWED_IMAGE_TYPES
+      # is gif/jpeg/png/tiff/webp, all converted to webp for ActiveStorage
+      # variants. The JPEG, PNG, TIFF, WebP and libexif codecs are hard
+      # `Depends:` of the apt libvips package, so no separate "optional
+      # dependencies" install is needed (that list only matters when building
+      # libvips from source). libpoppler-glib8 is for PDF thumbnailing.
       - name: Install libvips
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y --no-install-recommends libpoppler-glib8 libvips
 
+      # actionlint is the `ci:lint` step's workflow-YAML gate. Without the
+      # binary that gate skips itself, so install it here to make it effective.
+      # Download the release asset directly (per the actionlint docs) rather
+      # than the install script — the script sniffs $OSTYPE, which this job
+      # pins to "linux" (not the "linux-gnu*" it expects) and then bails.
+      - name: Install actionlint
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download v1.7.11 --repo rhysd/actionlint \
+            --pattern 'actionlint_*_linux_amd64.tar.gz' --dir "$RUNNER_TEMP" --clobber
+          tar -xf "$RUNNER_TEMP"/actionlint_*_linux_amd64.tar.gz -C "$RUNNER_TEMP" actionlint
+          echo "$RUNNER_TEMP" >> "$GITHUB_PATH"
+
+      # psql -U postgres-ci -c "CREATE ROLE root WITH LOGIN CREATEDB;" || true
       - name: Setup DB
         env:
           POSTGRES_HOST: localhost # use 'postgres' when running the app in Docker as well
@@ -107,10 +125,7 @@ jobs:
           bundle exec rake db:drop db:create db:migrate
           bundle exec rake "parallel:setup[4]"
 
-        # psql -U postgres-ci -c "CREATE ROLE root WITH LOGIN CREATEDB;" || true
-        # bundle exec rake db:drop db:create db:migrate
-
-      # this could be parallelized by running the individual jobs in different workflows
+      # the jobs are internally parallelized, running on 4 threads
       - name: Run rake:ci
         run: |
-          bundle exec rake ci
+          CI_VERBOSE=1 bundle exec rake ci

@@ -13,7 +13,9 @@ Rails.application.load_tasks
 if %w[development test].include? Rails.env
   require "active_record_doctor"
   require "active_record_doctor/rake/task"
-  ENV["PARALLEL_TEST_RAKE_EXECUTABLE"] ||= File.exist?("bin/mcp_rake") ? "bin/mcp_rake" : "bundle exec rake"
+  # Portable: `rake ci` runs on CI and on machines without chruby, so never
+  # route parallel_tests' internal rake calls through a `bin/mcp_*` wrapper.
+  ENV["PARALLEL_TEST_RAKE_EXECUTABLE"] ||= "bundle exec rake"
   require "bundler/audit/task"
   require "parallel_tests/tasks"
   require "rspec/core/rake_task"
@@ -91,12 +93,10 @@ if %w[development test].include? Rails.env
 
   desc "Lint + format-check the CSS design system (stylelint + prettier)"
   task :css do # rubocop:disable Rails/RakeEnvironment -- pure Node toolchain, no Rails boot needed
-    sh "bin/lint_css"
+    # BASH_ENV unset: see bin/css_lint — a personal chruby-in-BASH_ENV setup
+    # otherwise floods every child bash with Bundler warnings under bundle exec.
+    sh({ "BASH_ENV" => nil }, "bin/css_lint")
   end
 
-  desc "Run test suite"
-  task ci: %w[zeitwerk:check rubocop slim_lint css factory_bot:awesome_lint db:doctor rspec archspec
-              bundle:audit:update bundle:audit]
-
-  task default: :ci
+  # `rake ci` / `rake default` are defined in lib/tasks/ci.rake.
 end

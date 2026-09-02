@@ -1,14 +1,17 @@
 # frozen_string_literal: true
 
-# Run using bin/ci
+# Run using `bin/ci`. This mirrors `rake ci` (see README_RAKE_CI.markdown) —
+# same four steps, same order, same fail-fast — with the Rails 8 CI runner's
+# step framing and the optional GitHub sign-off hook below. GitHub Actions
+# runs `bundle exec rake ci` directly; `bin/ci` is the local alternative.
 
 CI.run do
   step "Setup", "bin/setup --skip-server"
 
-  step "Style: Ruby", "bin/rubocop"
-
-  step "Security: Gem audit", "bin/bundler-audit"
-  step "Security: Importmap vulnerability audit", "bin/importmap audit"
+  step "Lint", "bin/rake ci:lint"
+  step "Security", "bin/rake ci:security"
+  step "Checks", "bin/rake ci:checks"
+  step "Tests", "bin/rake ci:rspec"
 
   # Optional: set a green GitHub commit status to unblock PR merge.
   # Requires the `gh` CLI and `gh extension install basecamp/gh-signoff`.

@@ -24,7 +24,7 @@ FileUtils.chdir APP_ROOT do
   if system("npm --version", out: File::NULL, err: File::NULL)
     system! "npm install"
   else
-    puts "!! npm not found — skipping. `bin/lint_css` / `rake ci` need it; install Node ≥ 22."
+    puts "!! npm not found — skipping. `bin/css_lint` / `rake ci` need it; install Node ≥ 22."
   end
 
   # puts "\n== Copying sample files =="
