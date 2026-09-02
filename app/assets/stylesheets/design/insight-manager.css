@@ -64,7 +64,6 @@
 
   /* "+ Add Insight" disclosure menu */
   .yui-insight-menu {
-    position: relative;
     align-self: flex-start;
   }
 
@@ -76,10 +75,14 @@
     display: none;
   }
 
+  /* Rendered in-flow (not absolutely positioned): the manager sits inside a
+     `.yui-card`, which clips overflow, so an absolute panel had its lower
+     entries cut off and unclickable. Opening the <details> now pushes the
+     siblings below it down instead. */
   .yui-insight-menu ul {
-    position: absolute;
-    z-index: 200;
+    width: fit-content;
     min-width: 16rem;
+    max-width: 100%;
     padding: var(--yui-space-3xs);
     margin-top: var(--yui-space-3xs);
     list-style: none;
