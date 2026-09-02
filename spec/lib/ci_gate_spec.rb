@@ -36,9 +36,11 @@ RSpec.describe CIGate do
     end
 
     it "hides a passing gate's output by default" do
-      expect do
-        described_class.run_group("demo", { "quiet" => %w[echo hidden-marker] })
-      end.not_to output(/hidden-marker/).to_stdout
+      with_env("CI_VERBOSE" => nil) do
+        expect do
+          described_class.run_group("demo", { "quiet" => %w[echo hidden-marker] })
+        end.not_to output(/hidden-marker/).to_stdout
+      end
     end
 
     it "shows passing output when CI_VERBOSE is set" do
