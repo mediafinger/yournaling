@@ -20,5 +20,5 @@ Rails.application.configure do
   # Staging is reached through a throwaway hostname; allow it explicitly and
   # keep the health check reachable without host authorization.
   config.hosts << AppConf.yournaling_host if AppConf.yournaling_host.present?
-  config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+  config.host_authorization = { exclude: ->(request) { request.path.in?(["/up", "/alive"]) } }
 end

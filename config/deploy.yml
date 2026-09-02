@@ -31,11 +31,13 @@ builder:
 
 # Kamal proxy: terminates TLS (Let's Encrypt) and forwards to Thruster on
 # port 80 inside the container. `host` is set per destination.
+# /alive is a liveness check (see config/routes.rb) — /up is a readiness check
+# that 503s until the DB has data, so it can't gate a first deploy.
 proxy:
   ssl: true
   app_port: 80
   healthcheck:
-    path: /up
+    path: /alive
     interval: 3
     timeout: 3
 
