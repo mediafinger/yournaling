@@ -1,0 +1,38 @@
+# Kamal 2 — staging destination (bin/kamal deploy -d staging).
+# Single server: Puma + SolidQueue-in-Puma + a PostgreSQL accessory, all on one host.
+#
+# TODO: no server exists yet — set the real IP/hostname before deploying.
+<% STAGING_HOST = ENV.fetch("STAGING_HOST", "REPLACE_WITH_STAGING_IP") %>
+
+servers:
+  web:
+    - <%= STAGING_HOST %>
+
+proxy:
+  host: staging.yournaling.com
+
+env:
+  clear:
+    RAILS_ENV: staging
+    SOLID_QUEUE_IN_PUMA: "true"          # no separate job container on staging
+    YOURNALING_HOST: staging.yournaling.com
+    YOURNALING_DB_HOST: yournaling-db     # the accessory container on the Kamal network
+    YOURNALING_DB_NAME: yournaling
+    YOURNALING_DB_USERNAME: yournaling
+    AMAZON_S3_BUCKET_NAME: yournaling-staging
+
+# PostgreSQL 17. Holds all four logical databases (primary, cache, cable,
+# queue); bin/rails db:prepare in the entrypoint creates the three secondaries.
+accessories:
+  db:
+    image: postgres:17
+    host: <%= STAGING_HOST %>
+    port: "127.0.0.1:5432:5432"           # bound to localhost only
+    env:
+      clear:
+        POSTGRES_USER: yournaling
+        POSTGRES_DB: yournaling
+      secret:
+        - POSTGRES_PASSWORD
+    directories:
+      - data:/var/lib/postgresql/data

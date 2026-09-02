@@ -1,0 +1,79 @@
+# Kamal 2 — shared configuration.
+# Deploy a specific environment with a destination file, e.g.
+#   bin/kamal deploy -d staging      (uses this file + config/deploy.staging.yml)
+# There is no server yet; see README_BUILD_AND_DEPLOY.markdown.
+
+service: yournaling
+
+# Image repository on the container registry (GHCR). The registry server below
+# turns this into ghcr.io/mediafinger/yournaling.
+image: mediafinger/yournaling
+
+# Container registry (GitHub Container Registry).
+# Locally: KAMAL_REGISTRY_USERNAME=<github-user>, KAMAL_REGISTRY_PASSWORD=<PAT with write:packages>.
+# In CI: the GitHub actor + GITHUB_TOKEN (see .github/workflows/deploy_staging.yml).
+registry:
+  server: ghcr.io
+  username:
+    - KAMAL_REGISTRY_USERNAME
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+# Build the linux/amd64 image (Hetzner / most cloud hosts are x86-64).
+builder:
+  arch: amd64
+  args:
+    RUBY_VERSION: 4.0.6
+  cache:
+    type: registry
+    options: mode=max
+    image: ghcr.io/mediafinger/yournaling-build-cache
+
+# Kamal proxy: terminates TLS (Let's Encrypt) and forwards to Thruster on
+# port 80 inside the container. `host` is set per destination.
+proxy:
+  ssl: true
+  app_port: 80
+  healthcheck:
+    path: /up
+    interval: 3
+    timeout: 3
+
+# Non-secret environment. Destination files add RAILS_ENV and host/DB specifics.
+env:
+  clear:
+    RAILS_LOG_TO_STDOUT: "1"
+    RAILS_SERVE_STATIC_FILES: "true"
+    YOURNALING_PORT: "3000"        # Puma listens here; Thruster's default target
+    WEB_CONCURRENCY: "1"
+    JOB_CONCURRENCY: "1"
+    YOURNALING_DB_PORT: "5432"
+    YOURNALING_DB_TIMEOUT_SECONDS: "5"
+    GEOAPIFY_API_URL: https://api.geoapify.com
+  secret:
+    - RAILS_SECRET_KEY_BASE
+    - YOURNALING_DB_PASSWORD
+    - AMAZON_S3_ACCESS_KEY_ID
+    - AMAZON_S3_SECRET_ACCESS_KEY
+    - GEOAPIFY_API_KEY
+
+# Run bin/rails / bin/rake / console against a running container:
+#   bin/kamal console -d staging   ·   bin/kamal shell -d staging
+#   bin/kamal logs -d staging      ·   bin/kamal dbc -d staging
+aliases:
+  console: app exec --interactive --reuse "bin/rails console"
+  shell: app exec --interactive --reuse "bash"
+  logs: app logs --follow
+  dbc: app exec --interactive --reuse "bin/rails dbconsole"
+
+# Use the built-in SSH user (root) unless overridden per destination.
+ssh:
+  user: root
+
+# Asset bridging so old asset URLs keep working across a rolling deploy.
+asset_path: /rails/public/assets
+
+# One container at a time (single host).
+boot:
+  limit: 1
+  wait: 2
