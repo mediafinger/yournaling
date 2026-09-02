@@ -1,170 +1,385 @@
-# TODO — Kamal 2 Deployment
+# TODO — Kamal 2 Deployment (staging first)
 
-Status: **planning** · Branch: `kamal2` (worktree, off `main`) · Date: 2026-09-01
+Status: **planning** · Branch: `kamal2` (worktree, rebased on `main`) · Updated: 2026-09-02
 
 References:
 - Website: https://kamal-deploy.org/
 - Docs (v2.x): https://kamal-deploy.org/docs/installation/
+- Destinations: https://kamal-deploy.org/docs/configuration/environments/
 - Source: https://github.com/basecamp/kamal
 - GHA pattern the old branch pointed at: https://jetthoughts.com/blog/automate-your-deployments-with-kamal-2-github-actions-devops-development/
+
+---
+
+## 0. What changed since the first draft (2026-09-01)
+
+Two things on `main` reshape this plan:
+
+1. **The Solid Stack is 100% PostgreSQL now** (`#83 Migrate Solid Stack from SQLite to PostgreSQL`).
+   SolidQueue / SolidCache / SolidCable no longer use SQLite files under `storage/`. The app
+   runs **four PostgreSQL databases** — `primary`, `queue`, `cache`, `cable` — each with its
+   own schema file and migration path (`db/migrate{,_queue,_cache,_cable}`). See
+   [config/database.yml](../config/database.yml). Consequences:
+   - No `/data/storage` volume is needed for the Solid* databases any more.
+   - The old "web and job containers must share the same host + volume" constraint is **gone**.
+     Web and jobs only need to reach the same Postgres.
+   - `bin/rails db:prepare` now creates/migrates all four databases in one call.
+   - `AppConf` gained `yournaling_cable_db_url`, `yournaling_cache_db_url`,
+     `yournaling_queue_db_url` (all `required: production_env`).
+
+2. **A `staging` environment exists** (`#88 Add staging environment configuration`).
+   - `config/environments/staging.rb` loads `production.rb` and only widens host auth.
+   - `AppConf.production_env` returns **true for `staging` as well as `production`**, so every
+     production-grade setting (required ENV, S3 storage, STDOUT logging, `force_ssl`, no pidfile)
+     already applies to staging.
+   - `config/database.yml` has a `staging:` block that reuses the `production:` block via a YAML
+     anchor — same shape, the URLs just point at one server.
+   - `config/{cable,cache,queue}.yml` have `staging:` sections.
+   - CI (`.github/workflows/ci_push_pull_main.yml`) already sets
+     `BUNDLE_WITHOUT: development:staging:production` — it expects deploy gems to live in a
+     `:staging` / `:production` (or shared `:deploy`) group, not in `:development, :test`.
+
+**This plan now targets a staging deployment.** Everything that only matters for production
+(horizontal scaling, multiple app servers, dedicated/managed database servers, read replicas,
+Postgres tuning, at-scale backups) is collected in **§5 Production rollout** and deferred.
 
 ---
 
 ## 1. What exists today
 
 ### On `main`
-- `gem "kamal"` is already in the `Gemfile` (inside `group :development, :test` — see [Gemfile](../Gemfile) line ~66). Nothing else Kamal-related is committed.
-- No `Dockerfile`, no `config/deploy.yml`, no `.kamal/`, no `.dockerignore`, no deploy workflow.
-- Stack: Ruby **4.0.6** (`.ruby-version`), Rails `~> 8.1.3`, Puma `~> 8.0`, Propshaft + dartsass + importmap, Slim, ViewComponent.
-- DB: primary **PostgreSQL** (`pg ~> 1.1`); SolidCache / SolidQueue / SolidCable on **SQLite files under `storage/`** (see [config/database.yml](../config/database.yml)).
-- Jobs: `bin/jobs` runs the SolidQueue supervisor.
-- Image processing: `image_processing ~> 2.0` + `ruby-vips` → needs system **libvips** (CI also installs `libpoppler-glib8`).
-- ActiveStorage → **Amazon S3** (`amazon_s3` service, region `eu-central-1`), config via `AppConf.amazon_s3_*`.
+- `gem "kamal"` is in the `Gemfile`, still inside `group :development, :test` (line ~66). Nothing
+  else Kamal-related is committed: no `Dockerfile`, no `config/deploy.yml`, no `.kamal/`, no
+  `.dockerignore`, no deploy workflow.
+- `bin/thrust` and `bin/jobs` binstubs exist. **`bin/thrust` is dead** — the `thruster` gem is
+  not in the `Gemfile`/`Gemfile.lock` yet. `bin/jobs` runs the SolidQueue supervisor.
+- Stack: Ruby **4.0.6** (`.ruby-version`), Rails `~> 8.1.3`, Puma `~> 8.0`, Propshaft with
+  dartsass and importmap, Slim, ViewComponent.
+- DB: **PostgreSQL only** (`pg ~> 1.1`), four databases (see §0). `pg_search` + `scenic` in use.
+- Image processing: `image_processing ~> 2.0` + `ruby-vips` → needs system **libvips** (CI also
+  installs `libpoppler-glib8` for PDF thumbnailing).
+- ActiveStorage → **Amazon S3** (`amazon_s3` service, region `eu-central-1`), keyed on
+  `AppConf.amazon_s3_*`. **`aws-sdk-s3` is not in the `Gemfile`** — the `S3` service will not
+  resolve until it is added.
 - Geocoding → Geoapify (`AppConf.geoapify_api_*`).
-- Health check route exists: `GET /up` → `health#show` (Kamal's default readiness probe).
-- `config/environments/production.rb` already sets `config.assume_ssl = true` and `config.force_ssl = true`; the `/up` exclusion lines for `ssl_options` and `host_authorization` are **commented out** and should be enabled.
-- Config is centralised in `config/app_conf.rb` (`AppConf`), reading ENV. Relevant keys:
-  `yournaling_db_url` / `yournaling_db_{host,name,password,port,username,timeout_seconds}`,
-  `rails_secret_key_base`, `amazon_s3_access_key_id` / `amazon_s3_secret_access_key` / `amazon_s3_bucket_name`,
-  `geoapify_api_key` / `geoapify_api_url`. All `required: production_env`.
-- CI: `.github/workflows/ci_push_pull_main.yml` (tests/lint only, runs on PR + push to main).
+- Mail: `config/environments/production.rb` sets `delivery_method = :smtp` with **no
+  `smtp_settings`** — sending mail will raise until SMTP ENV/config is added (staging inherits
+  this from `production.rb`).
+- Health check route: `GET /up` → `health#show` (Kamal's default readiness probe).
+- `production.rb` sets `config.assume_ssl = true` and `config.force_ssl = true`. The `/up`
+  exclusion lines for `ssl_options` and `host_authorization` are **commented out**.
+  `staging.rb` already adds `host_authorization = { exclude: /up }` and appends
+  `AppConf.yournaling_host` to `config.hosts`.
+- Config is centralised in `config/app_conf.rb` (`AppConf`), reading ENV. Keys relevant to a
+  deploy, **all `required: production_env`** (i.e. mandatory for `staging`):
+  `yournaling_host`, `yournaling_db_name`, `yournaling_db_timeout_seconds`,
+  `yournaling_db_url`, `yournaling_cable_db_url`, `yournaling_cache_db_url`,
+  `yournaling_queue_db_url`, `rails_secret_key_base`,
+  `amazon_s3_access_key_id` / `amazon_s3_secret_access_key` / `amazon_s3_bucket_name`,
+  `geoapify_api_key` / `geoapify_api_url`.
+  Non-secret tunables with defaults: `web_concurrency` (1), `job_concurrency` (1),
+  `solid_queue_in_puma` (false), `rails_max_threads` (6), `yournaling_port` (3008).
+- CI: `.github/workflows/ci_push_pull_main.yml` (tests + lint, runs on PR + push to `main`).
 
-### On the old `origin/kamal` branch (stale — forked 54 commits back at `0c96704`, last commit `8765106`)
-Adds a full but **unfinished and partly AI-generated** Kamal 2 setup:
+> ⚠️ **`required: production_env` means `ENV.fetch` with no fallback.** For a staging deploy the
+> four `YOURNALING_*_DB_URL` values must each be provided explicitly as ENV — the composed-from-
+> parts defaults are *not* used when `required: true`. Either supply all four URLs in
+> `deploy.yml`/secrets, or (small app change, see §4) relax those four to
+> `required: false` so they compose from `YOURNALING_DB_{HOST,PORT,NAME,USERNAME,PASSWORD}`.
 
-| File | Notes |
-|---|---|
-| `Dockerfile` | Multi-stage, `ruby:3.3.6-slim`, installs `libvips postgresql-client libjemalloc2`, non-root `rails` uid 1000, `assets:precompile` with `SECRET_KEY_BASE_DUMMY=1`, `ENTRYPOINT bin/docker-entrypoint`, `CMD ["./bin/thrust", "./bin/rails", "server"]`, `EXPOSE 80`. Has a half-baked `YOURNALING_DB_URL` build-ARG block that references an unset `YOURNALING_DB_PASSWORD` — **drop that**, the URL belongs in runtime ENV not the image. |
-| `.dockerignore` | Standard Rails 8 generated ignore list — reusable as-is. |
-| `bin/docker-entrypoint` | jemalloc preload + `./bin/rails db:prepare` when starting the server. Reusable. |
-| `bin/kamal` | Bundler binstub. Reusable (regenerate with `bundle binstubs kamal`). |
-| `bin/provision` | Ruby script (from mhenrixon's article) to provision an Ubuntu 22+ host: essentials, `/data/storage` + `/data/postgres` (chown 1000), 2 GB swap, fail2ban. Firewall handled by Hetzner Cloud Firewall. Useful starting point. |
-| `config/deploy.yml` | **Contains duplicate keys** (`aliases`, `asset_path` defined twice) and hardcoded values. Roles `web` + `job` both on `188.245.99.209`; proxy `ssl: true`, `host: yournaling.com`, `app_port: 3000`; registry `ghcr.io` with `KAMAL_REGISTRY_USERNAME/PASSWORD`; builder `arch: amd64`, `RUBY_VERSION: 3.3.6`, registry build cache at `ghcr.io/mediafinger/yournaling/build-cache`; `postgres:17` accessory with `/data/postgres` volume; app volume `/data/storage:/app/storage`; rolling `boot: {limit: 10, wait: 2}`. Needs a rewrite, not a cherry-pick. |
-| `.kamal/secrets` | 1Password adapter: `kamal secrets fetch --adapter 1password --account … --from yournaling.com/Production …`. **Has YAML-vs-shell syntax bug** — lines use `POSTGRES_DB: $(…)` (colon) instead of `POSTGRES_DB=$(…)`. Fix on rewrite. |
-| `.kamal/hooks/*.sample` | Default Kamal sample hooks (pre-build clean-checkout check, pre-deploy GitHub build-status gate, etc.). Keep as `.sample` for now. |
-| `.github/workflows/deploy.yml` | **Stub only** — a `name:` and two TODO comments. Nothing implemented. |
-| `config/postgres_production.conf` | 844-line generated postgres tuning file, referenced only in a commented-out `files:` block. Skip for now. |
-| `Gemfile` / `Gemfile.lock` | Adds `kamal` + `thruster` (both `require: false`). Lock is for the old Ruby 3.3 / gem set — regenerate. |
-| `db/seeds.rb` | Adds a `production` seed block (creates admin user + demo team/location/weblink). Out of scope for this task — revisit separately. |
-| `config/app_conf.rb`, `config/environments/production.rb`, `bin/dev` | Minor tweaks (enable `/up` SSL/host-auth exclusions, shebang fix). `main` already has most of these. |
-
-There is also an older `origin/dockerize` branch: a plain Rails-8-generated `Dockerfile` (Ruby 3.3.1, `WORKDIR /rails`, `EXPOSE 3000`, no Thruster) + `.dockerignore` + `bin/docker-entrypoint`. Superseded by the `kamal` branch's version.
-
-### The `Kamal_Deployment.markdown` file (untracked, in working dir on `yui-design`)
-An AI-written status/checklist doc. Records infra work claimed done:
-- Hetzner server obtained, IP **188.245.99.209**; firewall = SSH 22 / HTTP 80 / HTTPS 443 only.
-- Domain **yournaling.com** DNS → that IP; nameservers configured.
-- SSH configured locally + on server.
-- `.kamal/secrets` wired to 1Password: GHCR token, `RAILS_MASTER_KEY`, DB creds stored under `yournaling.com/Production`.
-- Docker installed locally (not on CI).
-
-Still open per that doc: Docker on CI, finalised Dockerfile & `deploy.yml` (SSL / storage / DB verified), persistent + backed-up storage and DB (S3 backups), first `kamal setup`.
-
-> ⚠️ Treat the "done" claims as **unverified**. The server may or may not still exist (Q1 answer was "decide later"). Re-check before the first real deploy.
-
----
-
-## 2. Decisions (from Andy, 2026-09-01)
-
-1. **DB topology:** decide later. Plan documents **both**: default = Postgres 17 as a Kamal **accessory** on the same host with a bind-mounted, off-server-backed volume; alternative = external/managed Postgres (just point `YOURNALING_DB_*` / `DATABASE_URL` at it and drop the accessory).
-2. **GitHub Actions workflow:** build **+ push + deploy**, **manually triggered** (`workflow_dispatch`). Since there is no server yet, the **deploy job/step is written but commented out** with an explanatory comment.
-3. **Thruster:** **yes** — add the `thruster` gem, container `CMD ["./bin/thrust", "./bin/rails", "server"]`, Kamal proxy → Thruster.
-4. **Secrets:** **1Password CLI adapter** for local `kamal` runs; GitHub Actions uses its own Actions secrets/OIDC.
-5. Must be possible to **build the image locally** for testing (and optionally dev).
-6. No code changes in this task — this file only. Commit it first, then push `kamal2`.
+### Stale prior art (do not cherry-pick — rewrite)
+- **`origin/kamal` branch** (forked ~54 commits back): a full but unfinished, partly AI-generated
+  Kamal 2 setup — `Dockerfile` (Ruby 3.3.6, broken `YOURNALING_DB_URL` build-ARG block),
+  `.dockerignore` (standard, reusable), `bin/docker-entrypoint` (jemalloc + `db:prepare`,
+  reusable idea), `bin/kamal`, `bin/provision` (Ubuntu host bootstrap, useful reference),
+  `config/deploy.yml` (**duplicate keys**, hardcoded to one Hetzner IP, `postgres:17` accessory
+  with a single DB, SQLite-era `/data/storage` volume), `.kamal/secrets` (1Password adapter,
+  **`NAME:` vs `NAME=` shell-syntax bug**, `POSTGRES_*` / `RAILS_MASTER_KEY` naming that does
+  **not** match `AppConf`), `.github/workflows/deploy.yml` (name + two TODO comments only),
+  `config/postgres_production.conf` (844-line tuning dump). Treat every "done" claim as
+  unverified.
+- **`origin/dockerize` branch**: a plain Rails-8-generated `Dockerfile` (Ruby 3.3.1, no
+  Thruster). Superseded.
+- The old **`Kamal_Deployment.markdown`** status doc (was untracked on `yui-design`, now gone)
+  claimed: Hetzner server IP **188.245.99.209**, firewall 22/80/443, DNS **yournaling.com** →
+  that IP, SSH configured, `.kamal/secrets` wired to 1Password under `yournaling.com/Production`,
+  Docker installed locally. **All unverified — re-check before any real deploy.** For staging we
+  most likely want a *separate, small* box and a `staging.yournaling.com` (or similar) hostname.
 
 ---
 
-## 3. Target design
+## 2. Scope & decisions
 
-### Container / image
-- Registry: **GHCR** — `ghcr.io/mediafinger/yournaling` (+ build cache `…/yournaling/build-cache`).
+**In scope now — a staging deployment:**
+1. **DB topology (staging):** Postgres 17 as a **Kamal accessory on the same single host**,
+   bind-mounted volume, off-server backup. All four logical databases live in that one Postgres
+   instance. (Managed/external Postgres is a valid drop-in — point the four `YOURNALING_*_DB_URL`
+   at it and remove the accessory — but not the default for staging.)
+2. **One box for everything.** Web + jobs + Postgres on a single server. Run the SolidQueue
+   supervisor **inside Puma** (`SOLID_QUEUE_IN_PUMA=true`) → a single app container, no separate
+   `job` role. (`bin/jobs` as a second role stays documented as the production shape.)
+3. **GitHub Actions workflow:** build **+ push + deploy to staging**, **manually triggered**
+   (`workflow_dispatch`). The deploy job is **active** (manual trigger = intentional), but the
+   whole thing is a no-op until the staging server + secrets exist.
+   *Near-term evolution (documented, not enabled yet):* add `push: branches: [main]` so a merge
+   to `main` auto-deploys staging.
+4. **Thruster:** yes — add the `thruster` gem, container `CMD ["./bin/thrust", "./bin/rails",
+   "server"]`, Kamal proxy → Thruster on port 80 in-container.
+5. **Secrets:** 1Password CLI adapter for local `kamal` runs (vault item `yournaling.com/Staging`);
+   GitHub Actions uses its own Actions secrets (+ optional 1Password service-account token).
+6. **Local image build** must work for smoke testing (native arch) and parity testing
+   (`linux/amd64`).
+7. **ENV naming:** standardise on the **`AppConf` names** (`YOURNALING_DB_*`,
+   `RAILS_SECRET_KEY_BASE`, `AMAZON_S3_*`, `GEOAPIFY_API_*`) everywhere — deploy.yml, secrets,
+   1Password item — so no app code changes are needed for naming.
+
+**Deferred to §5 Production rollout:** horizontal scaling, multiple app servers, dedicated
+database server(s) / managed Postgres, read replicas, separate `job` role/containers,
+`WEB_CONCURRENCY > 1`, `config/deploy.production.yml` destination, Postgres tuning conf,
+at-scale / PITR backups, blue-green specifics, `db/seeds.rb` production seeding.
+
+---
+
+## 3. Target design — staging
+
+### Container / image (`Dockerfile`)
+- Registry: **GHCR** — `ghcr.io/mediafinger/yournaling` (+ build cache
+  `ghcr.io/mediafinger/yournaling/build-cache`). Confirm `mediafinger` is the right owner/namespace.
 - Base: `ruby:4.0.6-slim` (keep `ARG RUBY_VERSION` in sync with `.ruby-version`).
-- Build platform: **linux/amd64** (Hetzner is x86-64). Local dev on Apple Silicon → cross-build via `docker buildx --platform linux/amd64` (Kamal's `builder.arch: amd64` handles this automatically; first local build is slow under emulation, hence the registry build cache).
-- Runtime packages: `curl libjemalloc2 libvips postgresql-client` (+ `libpoppler-glib8` to match CI's PDF/image support — verify it's needed in prod).
+- Build platform: **linux/amd64** (Hetzner is x86-64). On Apple Silicon, Kamal's
+  `builder.arch: amd64` cross-builds via buildx; first local build under emulation is slow →
+  rely on the registry build cache and/or build in GHA.
+- Runtime packages: `curl libjemalloc2 libvips postgresql-client` (+ `libpoppler-glib8` to match
+  CI's PDF thumbnailing — confirm it's actually exercised in the deployed app).
 - Build packages (throwaway stage): `build-essential git libpq-dev pkg-config`.
 - Non-root `rails` user (uid/gid 1000); `chown` `db log storage tmp`.
-- `assets:precompile` at build with `SECRET_KEY_BASE_DUMMY=1` (Propshaft; ensure the dartsass build runs — check `bin/rails assets:precompile` triggers `dartsass:build`).
-- `ENTRYPOINT bin/docker-entrypoint` (jemalloc + `db:prepare` on server start), `CMD ["./bin/thrust","./bin/rails","server"]`, `EXPOSE 80`.
-- **Do not** bake DB URL / secrets into the image. `RAILS_MASTER_KEY` only needed at runtime (or as a buildx secret if precompile ever needs real creds — it shouldn't).
+- `bin/rails assets:precompile` at build with `SECRET_KEY_BASE_DUMMY=1`. **Verify precompile
+  also runs the dartsass build** (`app/assets/builds/*.css`) and writes the Propshaft
+  `.manifest.json`.
+- `ENTRYPOINT ["/rails/bin/docker-entrypoint"]` — jemalloc preload; run `./bin/rails db:prepare`
+  only when the command is the server (creates + migrates all four PG databases; the accessory's
+  superuser has `CREATEDB`).
+- `CMD ["./bin/thrust", "./bin/rails", "server"]`, `EXPOSE 80`.
+- **Do not** bake DB URLs / secrets into the image. No `RAILS_MASTER_KEY` needed at build
+  (dummy secret key base covers precompile).
+- `.dockerignore`: start from the Rails 8 generated list (the `origin/kamal` one is fine).
 
-### `config/deploy.yml` (clean rewrite — not a cherry-pick)
-- `service: yournaling`, `image: mediafinger/yournaling`.
-- `servers.web.hosts: [<HOST>]`; `servers.job` with `cmd: bin/jobs` (same host for now; note the option to move jobs into Puma via `SOLID_QUEUE_IN_PUMA=true` on a single small box).
-- `proxy: { ssl: true, host: yournaling.com, app_port: 80, healthcheck: { path: /up } }` (Thruster listens on 80 in-container).
-- `registry: { server: ghcr.io, username: [KAMAL_REGISTRY_USERNAME], password: [KAMAL_REGISTRY_PASSWORD] }`.
-- `builder: { arch: amd64, args: { RUBY_VERSION: 4.0.6 }, cache: { type: registry, image: ghcr.io/mediafinger/yournaling/build-cache, options: mode=max } }`.
-- `env.clear`: `RAILS_LOG_TO_STDOUT`, `RAILS_SERVE_STATIC_FILES=true`, `WEB_CONCURRENCY`, `JOB_CONCURRENCY`, `SOLID_QUEUE_IN_PUMA=false`, `YOURNALING_DB_HOST` (= `yournaling-db` when using the accessory on the kamal docker network), `YOURNALING_DB_PORT`, `YOURNALING_DB_NAME`, `GEOAPIFY_API_URL`, `AMAZON_S3_BUCKET_NAME`, region.
-- `env.secret`: `RAILS_SECRET_KEY_BASE` (or `RAILS_MASTER_KEY` if switching to credentials), `YOURNALING_DB_PASSWORD`, `YOURNALING_DB_USERNAME`, `GEOAPIFY_API_KEY`, `AMAZON_S3_ACCESS_KEY_ID`, `AMAZON_S3_SECRET_ACCESS_KEY`.
-  - ⚠️ Reconcile naming: `AppConf` expects `YOURNALING_DB_*` / `AMAZON_S3_*` / `GEOAPIFY_API_*` / `RAILS_SECRET_KEY_BASE`. The old `deploy.yml` used `POSTGRES_*` and `RAILS_MASTER_KEY` — pick one convention and keep app + deploy + 1Password item in sync.
-- `volumes: ["/data/storage:/app/storage"]` — persists SolidQueue/Cache/Cable SQLite files **and** any Disk-service ActiveStorage. (AS primary is S3, so this is mainly the Solid* DBs.)
-- `accessories.postgres` (default topology): `image: postgres:17`, `host: <HOST>`, `directories: ["/data/postgres:/var/lib/postgresql/data"]`, `env.clear POSTGRES_DB/POSTGRES_USER`, `env.secret POSTGRES_PASSWORD`.
-- `aliases`: `console`, `shell`, `logs`, `dbc` (define **once**).
-- `asset_path: /app/public/assets`; `boot: { limit: 10, wait: 2 }`; `allow_empty_roles: false`.
-- Parameterise the host/domain via a top-of-file anchor or `destination` files if staging is added later.
+### Gemfile
+- Move `gem "kamal"` out of `:development, :test`. Add a group CI already expects:
+  ```ruby
+  group :deploy do              # or:  group :staging, :production do
+    gem "kamal",    require: false
+    gem "thruster", require: false
+  end
+  ```
+  CI's `BUNDLE_WITHOUT: development:staging:production` — extend to also skip `deploy` if that
+  name is used. `bundle install`, commit `Gemfile.lock` (Ruby 4.0.6 gem set).
+- Add `gem "aws-sdk-s3", require: false` (top-level or `:deploy`) so the `S3` ActiveStorage
+  service resolves in staging/production. **This is a hard blocker for a working deploy.**
+- `bundle binstubs kamal thruster` → refresh `bin/kamal`, `bin/thrust`.
+
+### `config/deploy.yml` + destinations (clean write — not a cherry-pick)
+Use Kamal **destinations** from day one so production slots in later without a rewrite:
+- **`config/deploy.yml`** — shared base:
+  - `service: yournaling`, `image: mediafinger/yournaling`.
+  - `registry: { server: ghcr.io, username: [KAMAL_REGISTRY_USERNAME], password: [KAMAL_REGISTRY_PASSWORD] }`.
+  - `builder: { arch: amd64, args: { RUBY_VERSION: 4.0.6 }, cache: { type: registry, image: ghcr.io/mediafinger/yournaling/build-cache, options: mode=max } }`.
+  - `proxy: { ssl: true, app_port: 80, healthcheck: { path: /up } }` (host set per-destination).
+  - `aliases: { console: "app exec -i -- bin/rails console", shell: "app exec -i -- bash", logs: "app logs -f", dbc: "app exec -i -- bin/rails dbconsole" }` (define **once**).
+  - `asset_path: /app/public/assets`, `boot: { limit: 1, wait: 2 }`, `allow_empty_roles: false`.
+  - `env.clear` shared: `RAILS_LOG_TO_STDOUT=1`, `RAILS_SERVE_STATIC_FILES=true`,
+    `GEOAPIFY_API_URL`, `AMAZON_S3_BUCKET_NAME`.
+  - `env.secret` shared: `RAILS_SECRET_KEY_BASE`, `YOURNALING_DB_USERNAME`,
+    `YOURNALING_DB_PASSWORD`, `GEOAPIFY_API_KEY`, `AMAZON_S3_ACCESS_KEY_ID`,
+    `AMAZON_S3_SECRET_ACCESS_KEY`.
+- **`config/deploy.staging.yml`** — the only destination for now:
+  - `servers.web.hosts: [<STAGING_HOST>]` — single host, **no `job` role**.
+  - `proxy.host: staging.yournaling.com` (decide the real hostname).
+  - `env.clear`: `RAILS_ENV=staging`, `SOLID_QUEUE_IN_PUMA=true`, `WEB_CONCURRENCY=1`,
+    `JOB_CONCURRENCY=1`, `YOURNALING_HOST=staging.yournaling.com`,
+    plus the four DB URLs pointing at the accessory on the Kamal docker network:
+    `YOURNALING_DB_URL=postgres://yournaling@yournaling-db:5432/yournaling`,
+    `YOURNALING_CABLE_DB_URL=…/yournaling_cable`, `…CACHE…=…/yournaling_cache`,
+    `…QUEUE…=…/yournaling_queue`.
+    *(Password comes from `env.secret`; if URLs must embed it, build them in `.kamal/secrets`
+    instead and list them under `env.secret`.)*
+  - `accessories.db`:
+    ```yaml
+    accessories:
+      db:
+        image: postgres:17
+        host: <STAGING_HOST>
+        port: "127.0.0.1:5432:5432"          # localhost-only
+        env:
+          clear: { POSTGRES_USER: yournaling, POSTGRES_DB: yournaling }
+          secret: [ POSTGRES_PASSWORD ]
+        directories: [ "/data/postgres:/var/lib/postgresql/data" ]
+        files:
+          - config/postgres/init-solid-dbs.sql:/docker-entrypoint-initdb.d/10-solid-dbs.sql
+    ```
+    `init-solid-dbs.sql` = `CREATE DATABASE yournaling_cable OWNER yournaling;` (+ `_cache`,
+    `_queue`). Only runs on first init of an empty data dir. (Alternatively let
+    `bin/rails db:prepare` create them — the Postgres superuser can — and skip the init file.)
+  - `volumes`: only needed if any ActiveStorage falls back to Disk. AS primary is S3, so
+    likely omit. If kept: `[ "/data/storage:/app/storage" ]`.
 
 ### `.kamal/secrets`
-1Password adapter, one `kamal secrets fetch` call, then `kamal secrets extract` per var. Fix the `NAME=value` (not `NAME:`) shell syntax. Vault item: `yournaling.com/Production`. Vars: `KAMAL_REGISTRY_USERNAME`, `KAMAL_REGISTRY_PASSWORD`, `RAILS_SECRET_KEY_BASE` (or `RAILS_MASTER_KEY`), `YOURNALING_DB_USERNAME`, `YOURNALING_DB_PASSWORD`, `GEOAPIFY_API_KEY`, `AMAZON_S3_ACCESS_KEY_ID`, `AMAZON_S3_SECRET_ACCESS_KEY`. Keep `.kamal/secrets*` out of git except this template (already git-safe — no raw creds).
+1Password adapter, one `kamal secrets fetch`, then `kamal secrets extract` per var. Use
+`NAME=$(...)` (shell), not `NAME: $(...)` (YAML). Vault item: **`yournaling.com/Staging`**.
+Vars: `KAMAL_REGISTRY_USERNAME`, `KAMAL_REGISTRY_PASSWORD`, `RAILS_SECRET_KEY_BASE`
+(`SecureRandom.hex(64)`), `YOURNALING_DB_USERNAME`, `YOURNALING_DB_PASSWORD`,
+`POSTGRES_PASSWORD` (= the DB password), `GEOAPIFY_API_KEY`, `AMAZON_S3_ACCESS_KEY_ID`,
+`AMAZON_S3_SECRET_ACCESS_KEY`. Keep only this template in git (no raw creds); `.gitignore` any
+resolved `.kamal/secrets.*`.
 
-### GitHub Actions — `.github/workflows/deploy.yml`
-- Trigger: `workflow_dispatch` only (inputs: optional `ref`/tag; later: environment).
-- Permissions: `contents: read`, `packages: write` (GHCR push via `GITHUB_TOKEN`), `id-token: write` (future OIDC).
-- Job `build-and-push`:
-  - checkout, `docker/setup-buildx-action`, `docker/login-action` → `ghcr.io` with `${{ github.actor }}` / `${{ secrets.GITHUB_TOKEN }}`.
-  - Set up Ruby (`ruby/setup-ruby`, bundler cache) so `bin/kamal` is available.
-  - `bin/kamal build push` (Kamal drives buildx, tags with git SHA, uses the registry cache) — **or** a direct `docker/build-push-action` with `platforms: linux/amd64`, `cache-from/to: type=registry,ref=…/build-cache`. Prefer `kamal build push` to keep one source of truth.
-  - Needs `RAILS_MASTER_KEY` / registry creds only if the build requires them (it shouldn't — dummy secret key base).
-- Job `deploy` (**commented out** — "no server yet"):
-  - `needs: build-and-push`, adds SSH key from `secrets.SSH_PRIVATE_KEY`, `KAMAL_REGISTRY_PASSWORD`, `RAILS_MASTER_KEY`, 1Password service-account token (or plain Actions secrets instead of 1Password in CI), then `bin/kamal deploy --skip-push` (image already pushed).
-  - Left in the file as a fully-written but block-commented job with a `# TODO: enable once the production server exists and secrets are configured` note.
+### GitHub Actions — `.github/workflows/deploy_staging.yml`
+- Trigger: `workflow_dispatch` (optional `ref` input). **Later:** add
+  `push: { branches: [main] }` for auto-deploy on merge — leave a commented block + TODO.
+- Permissions: `contents: read`, `packages: write` (GHCR via `GITHUB_TOKEN`),
+  `id-token: write` (future OIDC).
+- Steps (single job, or `build` + `deploy` with `needs:`):
+  1. `actions/checkout@v7`.
+  2. `ruby/setup-ruby@v1` with `bundler-cache: true`, `BUNDLE_WITH: deploy` so `bin/kamal` is
+     available.
+  3. `docker/setup-buildx-action`; `docker/login-action` → `ghcr.io` with `${{ github.actor }}` /
+     `${{ secrets.GITHUB_TOKEN }}`.
+  4. Add SSH key from `secrets.SSH_PRIVATE_KEY` (`webfactory/ssh-agent` or manual).
+  5. Export deploy env from **GitHub Actions secrets** (not 1Password in CI, unless a
+     service-account token is added): `KAMAL_REGISTRY_PASSWORD`, `RAILS_SECRET_KEY_BASE`,
+     `YOURNALING_DB_*`, `POSTGRES_PASSWORD`, `AMAZON_S3_*`, `GEOAPIFY_API_KEY`.
+  6. `bin/kamal deploy -d staging` (Kamal builds, pushes with the git SHA, uses the registry
+     cache, then deploys). For a build-only run on non-main refs: `bin/kamal build push -d staging`.
+- Set a GitHub **Environment** `staging` (URL, optional protection rules) and scope the secrets to it.
 
-### Local build (testing / optional dev)
-Document in the deploy doc / README:
-```
-# plain docker build (native arch, quick smoke test)
+### Local build / test (document in README + here)
+```bash
+# native-arch smoke test
 docker build -t yournaling:local .
 docker run --rm -p 3000:80 \
-  -e RAILS_SECRET_KEY_BASE=dev-dummy -e RAILS_SERVE_STATIC_FILES=true \
-  -e YOURNALING_DB_URL=postgres://user:pass@host.docker.internal:5432/yournaling \
+  -e RAILS_ENV=staging -e RAILS_SERVE_STATIC_FILES=true \
+  -e RAILS_SECRET_KEY_BASE=dev-dummy \
+  -e YOURNALING_HOST=localhost \
+  -e YOURNALING_DB_URL=postgres://postgres@host.docker.internal:5432/yournaling \
+  -e YOURNALING_CABLE_DB_URL=postgres://postgres@host.docker.internal:5432/yournaling_cable \
+  -e YOURNALING_CACHE_DB_URL=postgres://postgres@host.docker.internal:5432/yournaling_cache \
+  -e YOURNALING_QUEUE_DB_URL=postgres://postgres@host.docker.internal:5432/yournaling_queue \
+  -e AMAZON_S3_ACCESS_KEY_ID=x -e AMAZON_S3_SECRET_ACCESS_KEY=x -e AMAZON_S3_BUCKET_NAME=x \
+  -e GEOAPIFY_API_KEY=x -e GEOAPIFY_API_URL=https://api.geoapify.com \
   yournaling:local
 
-# production-parity amd64 build (what Kamal/GHA produce)
+# production-parity amd64 build
 docker buildx build --platform linux/amd64 -t yournaling:amd64 --load .
 
-# via Kamal (uses deploy.yml builder config, no push)
-bin/kamal build dev        # builds + runs locally
-bin/kamal build push       # build + push to GHCR only
+# via Kamal (uses deploy.yml builder config)
+bin/kamal build push -d staging     # build + push to GHCR
 ```
-Optionally add a `docker-compose.yml` (app + `postgres:17`) purely for local integration testing — not required for deploy.
+Optional `docker-compose.yml` (app + `postgres:17` with the four DBs) for local integration
+testing — not required for deploy.
 
 ---
 
-## 4. Implementation checklist (next branch / PR — NOT this task)
+## 4. Implementation checklist — staging (next PR)
 
-- [ ] Move `gem "kamal"` out of `:development, :test` into a dedicated `:deploy`/top-level line; add `gem "thruster", require: false`. `bundle install`, commit `Gemfile.lock` (Ruby 4.0.6 gem set).
-- [ ] `bundle binstubs kamal` → `bin/kamal`; add `bin/docker-entrypoint` (from old branch, unchanged).
-- [ ] Add `Dockerfile` (Ruby 4.0.6, Thruster CMD, libvips/pdf deps, drop the broken DB-URL ARG block) + `.dockerignore` (from old branch).
-- [ ] `kamal init`, then write `config/deploy.yml` from the target design above (single `aliases`, no dup keys, ENV names matching `AppConf`).
-- [ ] Add `.kamal/secrets` (1Password adapter, fixed `NAME=value` syntax); create/verify the `yournaling.com/Production` 1Password item; `.gitignore` any resolved secret files.
-- [ ] Enable the two `/up` exclusion lines in `config/environments/production.rb` (`ssl_options`, `host_authorization`); double-check `config.hosts` / host authorization allows `yournaling.com`.
-- [ ] Confirm `assets:precompile` in the image also compiles dartsass (`app/assets/builds`), and the Propshaft manifest is present.
-- [ ] Add `.github/workflows/deploy.yml` — `workflow_dispatch`, build+push job active, deploy job written but commented out.
-- [ ] Local verification: `docker buildx build --platform linux/amd64 … --load` succeeds; container boots against a local Postgres; `/up` returns 200; assets served; a SolidQueue job runs.
-- [ ] Decide DB topology (accessory vs managed) — update `deploy.yml` accordingly.
-- [ ] Provision server (adapt `bin/provision`): `/data/storage` + `/data/postgres` (chown 1000:1000), 2 GB swap, fail2ban, Docker; Hetzner Cloud Firewall = 22/80/443; DNS `yournaling.com` → host.
-- [ ] Set GH Actions secrets: `SSH_PRIVATE_KEY`, registry creds (or rely on `GITHUB_TOKEN`), `RAILS_MASTER_KEY`/`RAILS_SECRET_KEY_BASE`, 1Password service-account token (if used in CI).
-- [ ] First deploy: `op signin` → `kamal config` (dry run) → `kamal setup` → `kamal app exec -i "bin/rails db:prepare"` → `kamal details` / `kamal app logs` → verify `https://yournaling.com` + valid Let's Encrypt cert.
-- [ ] Uncomment the GHA deploy job.
-- [ ] Persistence & backups: confirm `/data/postgres` + `/data/storage` survive `kamal remove`/redeploy; add Postgres→S3 backup (e.g. `postgres-backup-s3` accessory or a host cron); document restore.
-- [ ] Optionally add `config/postgres_production.conf` tuning + `files:` mount once the baseline works.
-- [ ] Revisit `db/seeds.rb` production seeding separately (out of scope here).
-- [ ] Update `Kamal_Deployment.markdown` / README with the local-build + deploy runbook; delete stale claims.
+- [ ] **Gemfile:** move `kamal` into `group :deploy` (`require: false`); add `thruster`
+      (`require: false`) and `aws-sdk-s3` (`require: false`). `bundle install`; commit
+      `Gemfile.lock`. Update CI `BUNDLE_WITHOUT` if the group name is new.
+- [ ] `bundle binstubs kamal thruster`; add `bin/docker-entrypoint` (jemalloc + guarded
+      `db:prepare`).
+- [ ] Add `Dockerfile` (Ruby 4.0.6, Thruster `CMD`, libvips/poppler + libpq build deps, no DB
+      URL build-ARG) + `.dockerignore`.
+- [ ] Decide the four `YOURNALING_*_DB_URL` handling: **(a)** provide all four explicitly in
+      deploy env/secrets (no code change), or **(b)** relax `required:` on the four URL keys in
+      `config/app_conf.rb` to `false` so they compose from
+      `YOURNALING_DB_{HOST,PORT,NAME,USERNAME,PASSWORD}`. Recommend **(b)** — one host + creds,
+      four URLs derived — and keep only `YOURNALING_DB_HOST`/`_NAME`/`_USERNAME` + secret
+      `_PASSWORD` in deploy config.
+- [ ] `kamal init`; write `config/deploy.yml` (shared) + `config/deploy.staging.yml`
+      (destination) per §3 — single `aliases`, no duplicate keys, ENV names matching `AppConf`,
+      `SOLID_QUEUE_IN_PUMA=true`, no `job` role.
+- [ ] Add `config/postgres/init-solid-dbs.sql` (create `_cable` / `_cache` / `_queue`
+      databases) **or** confirm `db:prepare` creates them and drop the file.
+- [ ] Add `.kamal/secrets` (1Password adapter, `NAME=value` syntax); create the
+      `yournaling.com/Staging` 1Password item.
+- [ ] Enable the `/up` exclusion in `config/environments/production.rb`
+      (`config.ssl_options = { redirect: { exclude: -> { _1.path == "/up" } } }`) so the
+      health check isn't 301'd before TLS is on. (`host_authorization` exclusion already in
+      `staging.rb`.)
+- [ ] SMTP for staging: add `config.action_mailer.smtp_settings` from ENV in `production.rb`
+      (or `staging.rb`), or set `raise_delivery_errors = false` + `delivery_method = :test` for
+      staging until a provider is chosen. Register the SMTP keys in `AppConf`.
+- [ ] Confirm `assets:precompile` in the image compiles dartsass and writes
+      `public/assets/.manifest.json`.
+- [ ] Add `.github/workflows/deploy_staging.yml` — `workflow_dispatch`, build+push+deploy
+      active; commented `push: [main]` block with a TODO for auto-deploy.
+- [ ] Set GitHub Actions secrets (Environment `staging`): `SSH_PRIVATE_KEY`,
+      `KAMAL_REGISTRY_PASSWORD` (or rely on `GITHUB_TOKEN`), `RAILS_SECRET_KEY_BASE`,
+      `YOURNALING_DB_USERNAME` / `YOURNALING_DB_PASSWORD`, `POSTGRES_PASSWORD`, `AMAZON_S3_*`,
+      `GEOAPIFY_API_KEY`.
+- [ ] **Local verification:** `docker buildx build --platform linux/amd64 … --load` succeeds;
+      container boots against a local Postgres with the four DBs; `/up` → 200; assets served;
+      a SolidQueue job runs (in-Puma supervisor).
+- [ ] Provision the staging server (adapt `bin/provision` from `origin/kamal`): Ubuntu 22+,
+      Docker, `/data/postgres` (chown 1000:1000), swap, fail2ban; firewall 22/80/443; DNS
+      `staging.yournaling.com` → host. **Verify whether the old Hetzner box / SSH still exist
+      or provision fresh.**
+- [ ] First deploy: `op signin` → `bin/kamal config -d staging` (dry run) →
+      `bin/kamal setup -d staging` → `bin/kamal app logs -d staging` → verify
+      `https://staging.yournaling.com` + valid Let's Encrypt cert + `/up` green.
+- [ ] Backups: `pg_dump` of all four DBs → S3 (host cron or a `postgres-backup-s3`-style
+      accessory); document restore. Confirm `/data/postgres` survives `kamal app remove` /
+      redeploy.
+- [ ] Update `README.markdown` with the staging build + deploy runbook.
+- [ ] **Follow-up:** enable `push: [main]` in the workflow for auto-deploy once staging is proven.
 
-## 5. Open questions / risks
+---
 
-- Does the Hetzner server (188.245.99.209) still exist and is SSH still valid? (Q1 deferred — verify before provisioning.)
-- ENV-name convention: standardise on `YOURNALING_DB_*` + `RAILS_SECRET_KEY_BASE` (matches `AppConf`) vs `POSTGRES_*` + `RAILS_MASTER_KEY` (old branch / Rails default). Recommend the `AppConf` names to avoid touching app code.
-- `image: mediafinger/yournaling` — confirm the GHCR namespace/owner (`mediafinger` user vs an org).
-- SolidQueue/Cache/Cable on SQLite in `/app/storage` means the **job and web containers must share the same host + volume** (or move Solid* to Postgres). Keep single-host until that's reworked.
-- Thruster + Kamal proxy: both handle HTTP — ensure `app_port: 80`, Thruster TLS disabled (Kamal proxy terminates TLS), and no double gzip.
-- First amd64 build under QEMU on the Mac is slow (~10-20 min) — rely on the registry build cache and/or run the build in GHA.
+## 5. Production rollout (deferred)
+
+Do **not** build these now — capture them so staging choices don't paint us into a corner.
+
+- **`config/deploy.production.yml`** destination: multiple `servers.web.hosts`, a dedicated
+  `servers.job` role (`cmd: bin/jobs`, `SOLID_QUEUE_IN_PUMA=false`), `WEB_CONCURRENCY > 1`,
+  `JOB_CONCURRENCY` tuned, `boot.limit` for rolling deploys.
+- **Database:** dedicated Postgres server(s) or a managed service (Hetzner/RDS/Crunchy). Point
+  the four `YOURNALING_*_DB_URL` at it; **remove the `db` accessory**. Consider separate
+  hosts/instances for `primary` vs the Solid* databases, and a read replica for `primary` if
+  reporting/Blazer load warrants it.
+- **Postgres tuning:** revive `config/postgres_production.conf` (from `origin/kamal`) via a
+  `files:` mount, sized to the real instance.
+- **Backups at scale:** WAL archiving / PITR (e.g. pgBackRest or the managed provider's
+  snapshots), not just nightly `pg_dump`. Documented restore drill.
+- **Secrets:** 1Password vault item `yournaling.com/Production`; OIDC from GitHub Actions
+  instead of long-lived SSH keys where possible.
+- **Workflow:** promote staging → production (manual `workflow_dispatch` with an environment
+  input, or a tag-triggered job), protection rules / required reviewers on the `production`
+  Environment.
+- **Domain:** `yournaling.com` (apex + `www`) → production; keep `staging.yournaling.com`
+  pointed at staging.
+- **`db/seeds.rb`:** the production seed block (admin user + demo data) from `origin/kamal` —
+  review separately, likely a one-shot `kamal app exec`, not part of `db:prepare`.
+- **Zero-downtime:** verify Kamal proxy rolling deploy with `>1` web host; check migration
+  safety (strong_migrations is not in the Gemfile — `fix-db-schema-conflicts` only sorts the
+  schema).
+
+---
+
+## 6. Open questions / risks
+
+- **Staging server:** does the old Hetzner box (188.245.99.209) / SSH still exist? Reuse it for
+  staging, or provision a fresh small instance? What hostname — `staging.yournaling.com`?
+- **`aws-sdk-s3` + `thruster` are missing from the Gemfile** — both are hard blockers; add them
+  in the first implementation PR.
+- **Four `YOURNALING_*_DB_URL` are `required: production_env`** — pick approach (a) or (b) from
+  §4 before writing `deploy.yml`.
+- **SMTP is unconfigured** — staging will raise on any mail send until a provider + settings are
+  added. Decide: real provider, or disable delivery on staging.
+- **GHCR namespace:** `ghcr.io/mediafinger/yournaling` — user vs org, and is the package
+  visibility/permission set for GHA `packages: write`?
+- **First amd64 build under QEMU on the Mac is slow (~10–20 min)** — lean on the registry build
+  cache and/or always build in GHA.
+- **dartsass in the image:** confirm `assets:precompile` triggers `dartsass:build`; if not, add
+  an explicit build step in the Dockerfile.
+- **Thruster + Kamal proxy:** both speak HTTP — ensure `proxy.app_port: 80`, Thruster TLS off
+  (Kamal proxy terminates TLS), no double gzip.
+- **`bin/docker-entrypoint` running `db:prepare` every boot** on a single container is fine;
+  revisit when there is more than one web container (only one should migrate).
