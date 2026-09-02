@@ -1,0 +1,16 @@
+#!/bin/bash -e
+
+# Enable jemalloc for reduced memory usage and fragmentation.
+if [ -z "${LD_PRELOAD+x}" ]; then
+  LD_PRELOAD=$(find /usr/lib -name libjemalloc.so.2 -print -quit)
+  export LD_PRELOAD
+fi
+
+# If running the Rails server then prepare all four PostgreSQL databases
+# (primary, cache, cable, queue). db:prepare is idempotent: it creates any
+# missing database and loads/migrates its schema.
+if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
+  ./bin/rails db:prepare
+fi
+
+exec "${@}"
