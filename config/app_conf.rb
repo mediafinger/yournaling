@@ -91,14 +91,10 @@ class AppConf
   register :yournaling_db_port, default: 5432
   register :yournaling_db_timeout_seconds, default: 5, required: production_env
   register :yournaling_db_username, default: "postgres"
-  register :yournaling_db_url,
-    default: "postgres://#{yournaling_db_username}:#{yournaling_db_password}@" \
-             "#{yournaling_db_host}:#{yournaling_db_port}/#{yournaling_db_name}",
-    required: production_env
-
-  register :yournaling_db_url,
-    default: "postgres://#{yournaling_db_username}:#{yournaling_db_password}@" \
-             "#{yournaling_db_host}:#{yournaling_db_port}/#{yournaling_db_name}"
+  register :yournaling_db_url, default: "postgres://#{yournaling_db_username}:#{yournaling_db_password}@#{yournaling_db_host}:#{yournaling_db_port}/#{yournaling_db_name}", required: production_env
+  register :yournaling_cable_db_url, default: "postgres://#{yournaling_db_username}:#{yournaling_db_password}@#{yournaling_db_host}:#{yournaling_db_port}/#{yournaling_db_name}_cable", required: production_env
+  register :yournaling_cache_db_url, default: "postgres://#{yournaling_db_username}:#{yournaling_db_password}@#{yournaling_db_host}:#{yournaling_db_port}/#{yournaling_db_name}_cache", required: production_env
+  register :yournaling_queue_db_url, default: "postgres://#{yournaling_db_username}:#{yournaling_db_password}@#{yournaling_db_host}:#{yournaling_db_port}/#{yournaling_db_name}_queue", required: production_env
 
   # determines the size of the DB connection pool and the puma threads
   register :rails_max_threads, default: 6

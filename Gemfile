@@ -40,7 +40,6 @@ gem "slim-rails", "~> 4.0", require: ["slim", "slim/smart"] # Use slim 5.2 for H
 gem "solid_cable", "~> 4.0"
 gem "solid_cache", "~> 1.0"
 gem "solid_queue", "~> 1.0"
-gem "sqlite3" # Use sqlite3 as the database for solid_cache, solid_cable, solid_queue
 gem "stimulus-rails" # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
 gem "turbo-rails" # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
 gem "view_component" # Use view_component for reusable view components [https://viewcomponent.org]
