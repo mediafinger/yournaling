@@ -35,9 +35,14 @@ Rails.application.configure do
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   config.force_ssl = true
 
-  # Skip http-to-https redirect for the default health check endpoint (the
-  # Kamal proxy / load balancer probes it over plain HTTP).
-  config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/up" } } }
+  # The app carries its secret in RAILS_SECRET_KEY_BASE (via AppConf), not the
+  # Rails-native SECRET_KEY_BASE / credentials. Wire it through here. During
+  # `assets:precompile` (SECRET_KEY_BASE_DUMMY set) leave it to Rails' own dummy.
+  config.secret_key_base = AppConf.rails_secret_key_base unless ENV["SECRET_KEY_BASE_DUMMY"]
+
+  # Skip http-to-https redirect for the health check endpoints (the Kamal proxy
+  # / load balancer probes them over plain HTTP).
+  config.ssl_options = { redirect: { exclude: ->(request) { request.path.in?(["/up", "/alive"]) } } }
 
   # Log to STDOUT by default
   config.logger   = ActiveSupport::TaggedLogging.logger($stdout)
