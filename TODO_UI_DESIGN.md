@@ -13,12 +13,12 @@ bespoke **"Warm Editorial"** design language that already lives under
 
 This section is a **frozen snapshot** of the codebase when the plan was written —
 it is not updated as work lands. Progress is tracked by the checkboxes in §7.
-As of 2026-09-02: Phases 0–4 done. Public + team areas are Yui-only
-(`pico/amber` + `pico/green` gone); only `admin_area` still links `pico/blue`
-(Phase 5). `example.css` is `app/assets/stylesheets/design/*.css`; the
-primitives are `Yui::`; fonts self-hosted; Lookbook installed with a
-render-smoke spec. Remaining: Phase 5 (admin) and Phase 6 (teardown + CSP +
-the `.ex-*` → `.yui-*` rename).
+As of 2026-09-02: Phases 0–5 done. All three layouts are Yui-only — no
+`pico/*` link anywhere. `example.css` is `app/assets/stylesheets/design/*.css`;
+the primitives are `Yui::` with sidecar templates (no inline `slim_template`
+heredocs left); fonts self-hosted; Lookbook installed with a render-smoke
+spec. Remaining: Phase 6 (delete the dead Pico files, Stylelint `--pico-*`
+ban, re-enable CSP, the `.ex-*` → `.yui-*` rename, grep gates).
 
 ### Styling stack
 
@@ -871,23 +871,28 @@ a removal candidate.
       **manual** visual pass on `/`, a team feed, chronicle/memory show and the
       lightbox is still outstanding — do it in a browser before merging.
 
-### Phase 5 — Admin / `admin_area` (~1 day)
+### Phase 5 — Admin / `admin_area` (~1 day) — **done** (`84aeea9` … `e941161`)
 
-`admins/{chronicles,memories,thoughts,weblinks,locations,pictures,members,
-teams,users,pages,record_events}` — mostly index + edit + destroy, plus
-`AdminNavComponent`, `AdminActionsComponent`, `AdminShow*Component`,
-`AdminIndexRecordEventsComponent`.
-
-- [ ] These are utilitarian — `Yui::Table`, `Yui::Button`, `Yui::Field`, `Yui::Badge`
-      cover ~all of it.
-- [ ] Sidecar the `AdminShow*` / `AdminActions` / `AdminIndexRecordEvents`
-      component templates as they are rewritten — this clears the last inline
-      heredocs.
-- [ ] View specs: `admins/*` has none — nothing to retire here. Confirm
-      `spec/views/` is now just `design_head_spec.rb`; consider moving it to
-      `spec/assets/` (or adding an explicit `type:`) now that it is the lone
-      file under a `type: :view` path.
-- [ ] Drop `pico.blue` link.
+- [x] Every `admins/*/{_record,_form,index,new,edit,show}` view → `Yui::Card`
+      + `dl.ex-details` + `YuiFormBuilder`, with two shared partials
+      (`admins/_team_field`, `admins/_edit_actions`). `Yui::Table` turned out
+      **not** to be needed — the admin views are card-per-record, not tabular;
+      build it if a real table appears. `YuiFormBuilder` gained `include_blank:`
+      / `multiple:` on `select` for the admin `team_id` / `roles` pickers.
+- [x] `AdminActionsComponent`, the six `AdminShow*` components and
+      `AdminIndexRecordEventsComponent` → sidecar `.slim` (the **last inline
+      `slim_template` heredocs in the repo are now gone**). Fixed the
+      `strong Event:` text-swallow bug flagged in Phase 0.
+- [x] Admin index actions gained `pagy(:offset, …)` + `Yui::PaginationComponent`
+      (its first call sites).
+- [x] `spec/views/` retired entirely — the `_design_head` guard moved to
+      `spec/lib/design_head_spec.rb`.
+- [x] `pico/blue` + `legacy/admin` links dropped from `layouts/admin_area`.
+- [ ] **Not touched — `admins/memories`** has a controller but **no views**
+      (`# TODO: add views`); `/admin/memories` 500s today, pre-existing. The
+      admin nav links to it. And `app/views/admins/record_history/index.html.slim`
+      renders a `AdminIndexRecordHistoryComponent` that does not exist and has
+      no route — dead scaffolding, left in place.
 
 ### Phase 6 — Teardown & hardening (~0.5–1 day)
 
@@ -924,7 +929,7 @@ teams,users,pages,record_events}` — mostly index + edit + destroy, plus
 | 2 — shared chrome + Stimulus                                 | ~2 days ✅                                                 |
 | 3 — public layout (auth / account / users / teams-top-level) | ~1.5–2 days ✅ (record-card cluster → Phase 4)             |
 | 4 — records, feed & team workspace                           | ~3–4 days ✅ (card previews `[~]`; manual QA pending)      |
-| 5 — admin                                                    | ~1 day                                                     |
+| 5 — admin                                                    | ~1 day ✅ (admins/memories still view-less, pre-existing)  |
 | 6 — teardown + CSP                                           | ~0.5–1 day                                                 |
 | **Total**                                                    | **~11–14 focused days**, shippable at every phase boundary |
 
