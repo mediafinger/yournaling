@@ -84,6 +84,11 @@ RSpec.describe "Browse Mode Central Home Feed", type: :system do
     expect(page).to have_css("#top_sentinel")
     expect(page).to have_css("#newer_posts_banner", text: "newer posts available, scroll up to load them", visible: :all)
     expect(page).to have_css("#newer_posts_container")
+
+    # In the DOM but `hidden` — the feed-refresh controller unhides it only when
+    # polling finds newer posts. Regression: `.yui-feed-banner { display: block }`
+    # used to override the UA `[hidden]` rule and show it on load.
+    expect(page).to have_no_css("#newer_posts_banner", text: "newer posts available")
   end
 
   it "allows navigating back to browse mode home feed from the team area" do
