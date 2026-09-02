@@ -58,8 +58,11 @@ class AppConf
       public_send(var_name.to_sym).to_s == other_value.to_s
     end
 
+    # Staging is a production-like environment: same required ENV vars, same
+    # S3 storage, same STDOUT logging, same SSL enforcement. It only differs in
+    # topology (single server vs. horizontal scaling), which is set via ENV.
     def production_env
-      is?(:environment, :production)
+      is?(:environment, :production) || is?(:environment, :staging)
     end
 
     # rubocop:disable Style/RescueStandardError
