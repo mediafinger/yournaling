@@ -1,6 +1,7 @@
 # TODO — Kamal 2 Deployment (staging first)
 
-Status: **planning** · Branch: `kamal2` (worktree, rebased on `main`) · Updated: 2026-09-02
+Status: **§1–4 implemented** (not yet deployed — no server/secrets) · Branch: `kamal2` · Updated: 2026-09-03
+Runbook: [`README_BUILD_AND_DEPLOY.markdown`](../README_BUILD_AND_DEPLOY.markdown)
 
 References:
 - Website: https://kamal-deploy.org/
@@ -278,57 +279,56 @@ testing — not required for deploy.
 
 ---
 
-## 4. Implementation checklist — staging (next PR)
+## 4. Implementation checklist — staging
 
-- [ ] **Gemfile:** move `kamal` into `group :deploy` (`require: false`); add `thruster`
-      (`require: false`) and `aws-sdk-s3` (`require: false`). `bundle install`; commit
-      `Gemfile.lock`. Update CI `BUNDLE_WITHOUT` if the group name is new.
-- [ ] `bundle binstubs kamal thruster`; add `bin/docker-entrypoint` (jemalloc + guarded
-      `db:prepare`).
-- [ ] Add `Dockerfile` (Ruby 4.0.6, Thruster `CMD`, libvips/poppler + libpq build deps, no DB
-      URL build-ARG) + `.dockerignore`.
-- [ ] Decide the four `YOURNALING_*_DB_URL` handling: **(a)** provide all four explicitly in
-      deploy env/secrets (no code change), or **(b)** relax `required:` on the four URL keys in
-      `config/app_conf.rb` to `false` so they compose from
-      `YOURNALING_DB_{HOST,PORT,NAME,USERNAME,PASSWORD}`. Recommend **(b)** — one host + creds,
-      four URLs derived — and keep only `YOURNALING_DB_HOST`/`_NAME`/`_USERNAME` + secret
-      `_PASSWORD` in deploy config.
-- [ ] `kamal init`; write `config/deploy.yml` (shared) + `config/deploy.staging.yml`
-      (destination) per §3 — single `aliases`, no duplicate keys, ENV names matching `AppConf`,
-      `SOLID_QUEUE_IN_PUMA=true`, no `job` role.
-- [ ] Add `config/postgres/init-solid-dbs.sql` (create `_cable` / `_cache` / `_queue`
-      databases) **or** confirm `db:prepare` creates them and drop the file.
-- [ ] Add `.kamal/secrets` (1Password adapter, `NAME=value` syntax); create the
-      `yournaling.com/Staging` 1Password item.
-- [ ] Enable the `/up` exclusion in `config/environments/production.rb`
-      (`config.ssl_options = { redirect: { exclude: -> { _1.path == "/up" } } }`) so the
-      health check isn't 301'd before TLS is on. (`host_authorization` exclusion already in
-      `staging.rb`.)
-- [ ] SMTP for staging: add `config.action_mailer.smtp_settings` from ENV in `production.rb`
-      (or `staging.rb`), or set `raise_delivery_errors = false` + `delivery_method = :test` for
-      staging until a provider is chosen. Register the SMTP keys in `AppConf`.
-- [ ] Confirm `assets:precompile` in the image compiles dartsass and writes
+**Done (this PR — `README_BUILD_AND_DEPLOY.markdown` is the runbook):**
+
+- [x] **Gemfile:** `kamal` moved to `group :deploy` (`require: false`); `thruster` +
+      `aws-sdk-s3` added in `group :staging, :production` (`require: false`); `Gemfile.lock`
+      updated; CI `BUNDLE_WITHOUT` extended with `deploy`. Binstubs regenerated.
+- [x] `bin/docker-entrypoint` — jemalloc preload + `db:prepare` (all four DBs) on server boot.
+- [x] `Dockerfile` (ruby:4.0.6-slim, Thruster `CMD`, libvips + libpoppler-glib8 +
+      postgresql-client runtime, build-essential/libpq-dev/git/pkg-config build stage,
+      non-root, no DB-URL ARG) + `.dockerignore`. No Node — assets are plain Propshaft.
+- [x] **DB URL handling = approach (b):** the four `YOURNALING_*_DB_URL` are no longer
+      `required:`; they compose from `YOURNALING_DB_{HOST,PORT,NAME,USERNAME,PASSWORD}`.
+- [x] `config/deploy.yml` (shared) + `config/deploy.staging.yml` (destination) — single
+      `aliases`, ENV names match `AppConf`, `SOLID_QUEUE_IN_PUMA=true`, no `job` role,
+      `postgres:17` accessory. Validated with `bin/kamal config -d staging`.
+- [x] Solid DB creation: `bin/rails db:prepare` in the entrypoint creates `_cable` / `_cache`
+      / `_queue` — no init SQL file needed.
+- [x] `.kamal/secrets` — committed template (1Password block + plain-ENV fallthrough); no
+      real values. (Creating the actual 1Password item is still open.)
+- [x] `/up` SSL-redirect exclusion enabled in `production.rb` (host-auth exclusion was
+      already in `staging.rb`).
+- [x] SMTP wired in `production.rb` from `AppConf` (`SMTP_*` / `MAILER_FROM` registered);
+      delivery stays off until `SMTP_ADDRESS` is set.
+- [x] `assets:precompile` verified in the `production` env with `SECRET_KEY_BASE_DUMMY=1`
+      (`register` now falls back to defaults under that flag) — writes
       `public/assets/.manifest.json`.
-- [ ] Add `.github/workflows/deploy_staging.yml` — `workflow_dispatch`, build+push+deploy
-      active; commented `push: [main]` block with a TODO for auto-deploy.
-- [ ] Set GitHub Actions secrets (Environment `staging`): `SSH_PRIVATE_KEY`,
-      `KAMAL_REGISTRY_PASSWORD` (or rely on `GITHUB_TOKEN`), `RAILS_SECRET_KEY_BASE`,
-      `YOURNALING_DB_USERNAME` / `YOURNALING_DB_PASSWORD`, `POSTGRES_PASSWORD`, `AMAZON_S3_*`,
-      `GEOAPIFY_API_KEY`.
-- [ ] **Local verification:** `docker buildx build --platform linux/amd64 … --load` succeeds;
-      container boots against a local Postgres with the four DBs; `/up` → 200; assets served;
-      a SolidQueue job runs (in-Puma supervisor).
+- [x] `.github/workflows/deploy_staging.yml` — `workflow_dispatch`; commented `push: [main]`.
+- [x] Full `rake ci` green (lint / security / checks / 1372 specs).
+
+**Still open before a first deploy (needs infra / secrets — see also §6):**
+
+- [ ] Set GitHub Actions secrets + `staging` Environment: `SSH_PRIVATE_KEY`,
+      `RAILS_SECRET_KEY_BASE`, `YOURNALING_DB_PASSWORD`, `AMAZON_S3_ACCESS_KEY_ID`,
+      `AMAZON_S3_SECRET_ACCESS_KEY`, `GEOAPIFY_API_KEY`; variable `STAGING_HOST`.
+      (`GITHUB_TOKEN` covers GHCR.)
+- [ ] Create the 1Password item for local `kamal` runs (or just export the vars).
+- [ ] **Local verification on a real Docker host:** `docker buildx build --platform
+      linux/amd64 … --load` succeeds; container boots against a local Postgres with the four
+      DBs; `/up` → 200; assets served; a SolidQueue job runs (in-Puma supervisor).
 - [ ] Provision the staging server (adapt `bin/provision` from `origin/kamal`): Ubuntu 22+,
-      Docker, `/data/postgres` (chown 1000:1000), swap, fail2ban; firewall 22/80/443; DNS
-      `staging.yournaling.com` → host. **Verify whether the old Hetzner box / SSH still exist
-      or provision fresh.**
-- [ ] First deploy: `op signin` → `bin/kamal config -d staging` (dry run) →
+      Docker, a Postgres data dir, swap, fail2ban; firewall 22/80/443; DNS
+      `staging.yournaling.com` → host. **The old Hetzner box / IPs are no longer ours —
+      provision fresh.**
+- [ ] First deploy: set `STAGING_HOST` + secrets → `bin/kamal config -d staging` →
       `bin/kamal setup -d staging` → `bin/kamal app logs -d staging` → verify
-      `https://staging.yournaling.com` + valid Let's Encrypt cert + `/up` green.
+      `https://staging.yournaling.com` + Let's Encrypt cert + `/up` green.
 - [ ] Backups: `pg_dump` of all four DBs → S3 (host cron or a `postgres-backup-s3`-style
-      accessory); document restore. Confirm `/data/postgres` survives `kamal app remove` /
-      redeploy.
-- [ ] Update `README.markdown` with the staging build + deploy runbook.
+      accessory); document restore; confirm the Postgres volume survives redeploy.
+- [ ] Pick an SMTP provider for staging (or leave mail disabled).
 - [ ] **Follow-up:** enable `push: [main]` in the workflow for auto-deploy once staging is proven.
 
 ---
