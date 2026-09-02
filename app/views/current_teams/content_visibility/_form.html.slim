@@ -1,12 +1,6 @@
-article
-  = form_with(url: current_team_content_visibility_path(content), method: :patch) do |form|
+= render Yui::CardComponent.new do
+  = form_with(model: content, url: current_team_content_visibility_path(content), method: :patch, builder: YuiFormBuilder, html: { class: "ex-stack" }) do |form|
+    = render Yui::HeadlineComponent.new(form_legend, level: 3)
     = render partial: "shared_partials/form_validation_errors", locals: { record: content }
-    fieldset
-      h3
-        legend
-          = form_legend
-      div
-        = form.label :visibility
-        = form.select :visibility, @visibility_states, selected: content.visibility
-      div
-        = form.submit
+    = form.select :visibility, @visibility_states.map { |state| [state.titleize, state] }, label: "Visibility"
+    = form.submit "Update visibility"
