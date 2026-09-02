@@ -24,7 +24,7 @@ RSpec.describe ChronicleEntry, type: :model do
     end
 
     it "defines VALID_ENTRY_TYPES" do
-      expect(described_class::VALID_ENTRY_TYPES).to eq(%w[Memory Picture Location Thought Weblink])
+      expect(described_class::VALID_ENTRY_TYPES).to eq(%w[Memory Picture Location Story Thought Weblink])
     end
   end
 

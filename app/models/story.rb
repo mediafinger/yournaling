@@ -30,7 +30,8 @@ class Story < ApplicationRecordForContentAndPosts
   attr_readonly :team_id
 
   normalizes :name, with: ->(name) { name.strip }
-  normalizes :content, with: ->(content) { content.strip }
+  # Store clean, LF-only Markdown regardless of the browser's line endings.
+  normalizes :content, with: ->(content) { content.to_s.gsub("\r\n", "\n").strip }
 
   validates :name, presence: true, length: { maximum: 255 }
   validates :content, presence: true, length: { in: MIN_CONTENT_LENGTH..MAX_CONTENT_LENGTH }
