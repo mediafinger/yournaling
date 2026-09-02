@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
@@ -33,8 +35,9 @@ Rails.application.configure do
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   config.force_ssl = true
 
-  # Skip http-to-https redirect for the default health check endpoint.
-  # config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/up" } } }
+  # Skip http-to-https redirect for the default health check endpoint (the
+  # Kamal proxy / load balancer probes it over plain HTTP).
+  config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/up" } } }
 
   # Log to STDOUT by default
   config.logger   = ActiveSupport::TaggedLogging.logger($stdout)
@@ -61,12 +64,31 @@ Rails.application.configure do
 
   # config.active_job.queue_name_prefix = "yournaling_production"
 
-  # ActionMailer configuration for production
-  config.action_mailer.raise_delivery_errors = true
+  # ActionMailer configuration for production and staging.
+  # Delivery is only wired up when SMTP_ADDRESS is set; otherwise mails are
+  # rendered but not delivered (and no error is raised), so the app boots and
+  # runs fine on an environment without a mail provider.
   config.action_mailer.perform_caching = false
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.perform_deliveries = true
   config.action_mailer.default_url_options = { host: AppConf.yournaling_host }
+  config.action_mailer.default_options = { from: AppConf.mailer_from }
+
+  if AppConf.smtp_address.present?
+    config.action_mailer.delivery_method = :smtp
+    config.action_mailer.perform_deliveries = true
+    config.action_mailer.raise_delivery_errors = true
+    config.action_mailer.smtp_settings = {
+      address: AppConf.smtp_address,
+      port: AppConf.smtp_port.to_i,
+      user_name: AppConf.smtp_user_name,
+      password: AppConf.smtp_password,
+      domain: AppConf.smtp_domain,
+      authentication: :plain,
+      enable_starttls_auto: true,
+    }.compact
+  else
+    config.action_mailer.perform_deliveries = false
+    config.action_mailer.raise_delivery_errors = false
+  end
 
   # Don't log any deprecations.
   config.active_support.report_deprecations = false
