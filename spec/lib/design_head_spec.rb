@@ -4,7 +4,8 @@ require "rails_helper"
 
 # Guard: every stylesheet in app/assets/stylesheets/design/ must be listed in
 # shared_partials/_design_head, so a new `tooltip.css` cannot be silently
-# forgotten (TODO_UI_DESIGN.md §4).
+# forgotten (TODO_UI_DESIGN.md §4). An asset-config guard, not a view spec —
+# lives under spec/lib/ so spec/views/ can be retired entirely.
 RSpec.describe "shared_partials/_design_head" do # rubocop:disable RSpec/DescribeClass
   let(:partial) { Rails.root.join("app/views/shared_partials/_design_head.html.slim").read }
   let(:listed) { partial.scan(/%w\[([^\]]+)\]/).flatten.join(" ").split }
