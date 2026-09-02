@@ -6,8 +6,6 @@ html
     meta[name="viewport" content="width=device-width,initial-scale=1"]
     = csrf_meta_tags
     = csp_meta_tag
-    / Transitional legacy sheet (general.css / buttons.css) — removed in Phase 6.
-    = stylesheet_link_tag "legacy", "data-turbo-track": "reload"
     = render "shared_partials/design_head"
     = javascript_importmap_tags
   body.ex-body

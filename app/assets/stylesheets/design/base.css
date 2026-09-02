@@ -1,10 +1,8 @@
 @layer base {
   /* 2. ------------------------------------------------------- SCOPE & BASE */
 
-  /* The rem scale assumes a 16px root. Pico (@layer pico) scales the root up
-     with the viewport (`:where(:root) { font-size: … }`); undo that so the
-     design system's own fluid `clamp()` steps aren't double-scaled.
-     Transitional — irrelevant once Pico is gone (Phase 6). */
+  /* The rem scale assumes a 16px root; the design system's own fluid `clamp()`
+     steps do the responsive scaling, so keep the root at the browser default. */
   :root {
     font-size: 100%;
   }
@@ -56,6 +54,10 @@
   .ex-body img {
     max-width: 100%;
     height: auto;
+
+    /* Content images get soft corners by default; components that need square
+       edges opt out. Folded in from the retired legacy general.css. */
+    border-radius: var(--ex-radius-sm);
   }
 
   .ex-scope :focus-visible,

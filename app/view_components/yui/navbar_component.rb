@@ -11,8 +11,8 @@ module Yui
   #       = render(Yui::NavItemComponent.new("Search", href: search_path, active: on_search?))
   #
   # `area:` ("public" / "team" / "admin") sets `data-area` so the nav picks up
-  # the per-area accent. A slotted group may render raw `<li>`s (e.g. a Pico
-  # `details.dropdown` that has not been converted yet) alongside NavItems.
+  # the per-area accent. A slotted group may render raw `<li>`s (e.g. a
+  # Yui::Menu wrapper) alongside NavItems.
   class NavbarComponent < BaseComponent
     renders_many :groups
 

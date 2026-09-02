@@ -90,12 +90,12 @@ export default class extends Controller {
     if (!this.hasDrawerErrorTarget) return
     const errorList = Array.isArray(errors) ? errors : [errors]
     this.drawerErrorTarget.innerHTML = `
-      <section style="background-color: var(--pico-form-element-invalid-border-color); color: white; padding: 0.75rem 1rem; border-radius: 4px; margin-bottom: 1rem;">
+      <div class="ex-insight-drawer__error" role="alert">
         <strong>Please fix the following:</strong>
-        <ul style="margin-bottom: 0; margin-top: 0.25rem;">
+        <ul class="ex-stack ex-stack--xs">
           ${errorList.map(err => `<li>${err}</li>`).join("")}
         </ul>
-      </section>
+      </div>
     `
     this.drawerErrorTarget.style.display = "block"
   }
@@ -247,21 +247,21 @@ export default class extends Controller {
     const icon = icons[type] || "📌"
     let mediaSnippet = ""
     if (type === "picture" && thumb_url) {
-      mediaSnippet = `<img src="${thumb_url}" style="width: 40px; height: 30px; object-fit: cover; border-radius: 3px; margin-right: 0.5rem;" alt="" />`
+      mediaSnippet = `<img class="ex-insight-chip__thumb" src="${thumb_url}" alt="" />`
     }
 
     const chip = document.createElement("div")
+    chip.className = "ex-insight-chip"
     chip.dataset.insightChip = "true"
     chip.dataset.type = type
     chip.dataset.id = id
-    chip.style.cssText = "display: inline-flex; align-items: center; justify-content: space-between; background: var(--pico-card-background-color); border: 1px solid var(--pico-muted-border-color); border-radius: 6px; padding: 0.5rem 0.75rem; margin: 0.25rem 0.5rem 0.25rem 0; font-size: 0.9rem;"
 
     chip.innerHTML = `
-      <span style="display: flex; align-items: center; margin-right: 0.75rem;">
+      <span class="ex-insight-chip__label">
         ${mediaSnippet}
-        <span><strong>${icon} ${this.capitalize(type)}:</strong> ${this.escapeHtml(label)}</span>
+        <span><strong>${icon} ${this.capitalize(type)}:&nbsp;</strong>${this.escapeHtml(label)}</span>
       </span>
-      <button type="button" class="outline secondary" data-action="click->insight-manager#removeInsight" data-type="${type}" style="padding: 0.2rem 0.5rem; margin-bottom: 0; font-size: 0.8rem; line-height: 1;" title="Remove">✕</button>
+      <button type="button" class="ex-btn ex-btn--ghost ex-btn--sm ex-insight-chip__remove" data-action="click->insight-manager#removeInsight" data-type="${type}" title="Remove">✕</button>
     `
 
     this.attachedContainerTarget.appendChild(chip)

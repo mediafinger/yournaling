@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-# The "+ New" nav control. Emits a bare <li> for a Yui::Navbar group.
-# The dropdown is still a Pico `details.dropdown` — it becomes a Yui::Menu when
-# the interactive primitives land (TODO_UI_DESIGN.md Phase 2, "Interactive").
+# The "+ New" nav control. Emits a bare <li> for a Yui::Navbar group, wrapping
+# a Yui::Menu (or a plain CTA nav item when there is only one target).
 class NavNewButtonComponent < ApplicationComponent
   MENUS = {
     manage: [

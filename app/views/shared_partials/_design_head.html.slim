@@ -1,7 +1,7 @@
 / Warm Editorial design language — <head> include.
 / Preloads the two most-used self-hosted fonts (roman faces; italic loads on
 / demand) and links the split stylesheet in @layer order. tokens.css declares
-/ `@layer pico, tokens, base, layout, typography, components, composed, showcase;` so the
+/ `@layer tokens, base, layout, typography, components, composed, showcase;` so the
 / cascade is fixed by that list, not by which <link> loads first.
 / Pass `showcase: true` (only /example + Lookbook) to also load showcase.css.
 / The set of files here is guarded by spec/views/design_head_spec.rb.

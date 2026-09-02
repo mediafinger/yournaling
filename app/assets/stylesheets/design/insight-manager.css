@@ -128,4 +128,14 @@
   .ex-insight-drawer {
     margin-block: var(--ex-space-sm);
   }
+
+  /* Error box injected by insight_manager_controller.js on a failed create. */
+  .ex-insight-drawer__error {
+    padding: var(--ex-space-xs) var(--ex-space-sm);
+    margin-bottom: var(--ex-space-sm);
+    font-size: var(--ex-text-sm);
+    color: var(--ex-danger);
+    background-color: var(--ex-danger-soft);
+    border-radius: var(--ex-radius-sm);
+  }
 }
