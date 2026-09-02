@@ -1,11 +1,7 @@
-div data-controller="modal"
+.yui-narrow.yui-stack
   - if current_team == @weblink.team
     = render partial: "form", locals: { weblink: @weblink, form_legend: "Edit weblink" }
-  div style="display: flex; gap: 0.5rem; align-items: center; margin-top: 1rem;"
-    = link_to "Open", current_team_weblink_path(@weblink), role: "button"
+  .yui-cluster
+    = render Yui::ButtonComponent.new("Open", href: current_team_weblink_path(@weblink), variant: :secondary)
     - if current_team == @weblink.team
-      button type="button" class="secondary" data-action="click->modal#open" style="margin-bottom: 0;"
-        | Destroy this weblink
-
-  - if current_team == @weblink.team
-    = render InsightDestroyModalComponent.new(insight: @weblink, name: "weblink")
+      = render InsightDestroyModalComponent.new(insight: @weblink, name: "weblink")

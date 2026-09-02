@@ -1,32 +1,27 @@
-article id= dom_id(chronicle)
-  header
-    h3 = chronicle.name
-    p
-      small
-        strong Dates:
-        = chronicle.start_date
-        - if chronicle.end_date.present?
-          |  –
-          = chronicle.end_date
-        |  |
-        strong Visibility:
-        = chronicle.visibility
+- full = local_assigns[:full] || action_name == "show"
+= render Yui::CardComponent.new(id: dom_id(chronicle)) do
+  = render Yui::HeadlineComponent.new(chronicle.name, level: 3)
+  dl.yui-details
+    dt Dates
+    dd
+      = chronicle.start_date
+      - if chronicle.end_date.present?
+        = " – #{chronicle.end_date}"
+    dt Visibility
+    dd = chronicle.visibility
+    dt Notice
+    dd = chronicle.notice
+    = render AdminShowTeamComponent.new(team: chronicle.team)
+    = render AdminShowMetaInformationComponent.new(record: chronicle)
 
-  p
-    strong Notice:
-    = chronicle.notice
-
-  - if local_assigns[:full] || action_name == "show"
-    - if chronicle.entries.any?
-      section
-        h4 Entries
+  - if full && chronicle.entries.any?
+    section.yui-stack.yui-stack--sm
+      = render Yui::HeadlineComponent.new("Entries", level: 4)
+      .yui-timeline
         - chronicle.entries.each do |chronicle_entry|
-          = render ChronicleEntryComponent.new(chronicle_entry: chronicle_entry, scope: "admin")
+          .yui-timeline__item
+            = render ChronicleEntryComponent.new(chronicle_entry: chronicle_entry, scope: "admin")
   - elsif chronicle.first_picture.present?
-    p
-      = render partial: "admins/pictures/picture", locals: { picture: chronicle.first_picture }
+    = render partial: "admins/pictures/picture", locals: { picture: chronicle.first_picture, hide_actions: true }
 
-  hr
-  = render AdminShowTeamComponent.new(team: chronicle.team)
-  = render AdminShowMetaInformationComponent.new(record: chronicle)
   = render AdminActionsComponent.new(record: chronicle, name: "chronicle")

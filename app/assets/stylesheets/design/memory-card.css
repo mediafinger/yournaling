@@ -1,23 +1,23 @@
 @layer composed {
   /* Memory card */
-  .ex-memory-card .ex-card__body {
-    gap: var(--ex-space-sm);
+  .yui-memory-card .yui-card__body {
+    gap: var(--yui-space-sm);
   }
 
-  .ex-memory-card__memo {
+  .yui-memory-card__memo {
     margin: 0;
-    font-family: var(--ex-font-serif);
-    font-size: var(--ex-text-md);
-    line-height: var(--ex-leading-relaxed);
-    color: var(--ex-ink);
+    font-family: var(--yui-font-serif);
+    font-size: var(--yui-text-md);
+    line-height: var(--yui-leading-relaxed);
+    color: var(--yui-ink);
   }
 
-  .ex-memory-card__quote {
-    padding-inline-start: var(--ex-space-sm);
+  .yui-memory-card__quote {
+    padding-inline-start: var(--yui-space-sm);
     margin: 0;
-    font-family: var(--ex-font-serif);
+    font-family: var(--yui-font-serif);
     font-style: italic;
-    color: var(--ex-ink-soft);
-    border-inline-start: 3px solid var(--ex-gold);
+    color: var(--yui-ink-soft);
+    border-inline-start: 3px solid var(--yui-gold);
   }
 }

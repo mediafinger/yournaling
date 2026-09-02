@@ -19,7 +19,7 @@ module Yui
       @text = text
       @level = LEVELS.include?(level.to_i) ? level.to_i : 2
       @eyebrow = eyebrow.presence
-      @align = ex_token(align, allowed: ALIGNMENTS, default: :left)
+      @align = yui_token(align, allowed: ALIGNMENTS, default: :left)
       @display = display
     end
 
@@ -32,9 +32,9 @@ module Yui
     end
 
     def css_class
-      ex_class(
-        display ? "ex-display" : "ex-h#{level}",
-        align == :center && "ex-align-center",
+      yui_class(
+        display ? "yui-display" : "yui-h#{level}",
+        align == :center && "yui-align-center",
       )
     end
   end

@@ -1,30 +1,11 @@
-article
-  = form_with(model: [:admin, picture]) do |form|
+= render Yui::CardComponent.new do
+  = form_with(model: [:admin, picture], builder: YuiFormBuilder, multipart: true, html: { class: "yui-stack" }) do |form|
+    = render Yui::HeadlineComponent.new(form_legend, level: 3)
     = render partial: "shared_partials/form_validation_errors", locals: { record: picture }
-    fieldset
-      h3
-        legend
-          = form_legend
-      - if picture.persisted?
-        label
-          strong Team
-          = picture.team.name
-          i
-            = picture.team.id
-      - else
-        div
-          = form.label :team_id
-          = form.select :team_id, Team.pluck(:name, :id), selected: form.object.team_id, include_blank: true, required: true
-      div
-        = form.file_field :file, accept: Picture::ALLOWED_IMAGE_TYPES.map { |type| ".#{type}" }.join(", ")
-      div
-        = form.label :name
-        = form.text_field :name
-        / - # TODO: fill in name from file_field if one selected
-      div
-        = form.label :date
-        = form.date_field :date, value: Date.current
-        / - # TODO: fill in date from file_field if one selected
-      div
-        = form.submit
-        / - # TODO: deactivate button until file_field has been used successfully
+    = render partial: "admins/team_field", locals: { form: form }
+    .yui-field
+      = form.label :file, "Image File", class: "yui-label"
+      = form.file_field :file, class: "yui-input", accept: Picture::ALLOWED_IMAGE_TYPES.map { |type| ".#{type}" }.join(", ")
+    = form.text_field :name
+    = form.date_field :date
+    = form.submit

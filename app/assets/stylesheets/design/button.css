@@ -1,9 +1,9 @@
 @layer components {
   /* 4c. ----------------------------------------------------------- BUTTONS */
 
-  .ex-btn {
-    --_bg: var(--ex-accent);
-    --_fg: var(--ex-accent-ink);
+  .yui-btn {
+    --_bg: var(--yui-accent);
+    --_fg: var(--yui-accent-ink);
     --_bd: transparent;
 
     display: inline-flex;
@@ -11,121 +11,129 @@
     align-items: center;
     justify-content: center;
     padding: 0.75rem 1.25rem;
-    font-family: var(--ex-font-body);
-    font-size: var(--ex-text-sm);
-    font-weight: var(--ex-weight-semibold);
+    font-family: var(--yui-font-body);
+    font-size: var(--yui-text-sm);
+    font-weight: var(--yui-weight-semibold);
     line-height: 1;
     color: var(--_fg);
-    letter-spacing: var(--ex-tracking-wide);
+    letter-spacing: var(--yui-tracking-wide);
     white-space: nowrap;
     text-decoration: none;
     cursor: pointer;
     background-color: var(--_bg);
     border: 1.5px solid var(--_bd);
-    border-radius: var(--ex-radius-pill);
+    border-radius: var(--yui-radius-pill);
     transition:
-      transform var(--ex-transition-fast),
-      box-shadow var(--ex-transition),
-      background-color var(--ex-transition-fast),
-      border-color var(--ex-transition-fast),
-      color var(--ex-transition-fast);
+      transform var(--yui-transition-fast),
+      box-shadow var(--yui-transition),
+      background-color var(--yui-transition-fast),
+      border-color var(--yui-transition-fast),
+      color var(--yui-transition-fast);
   }
 
-  .ex-btn:hover {
-    box-shadow: var(--ex-shadow-sm);
+  .yui-btn:hover {
+    box-shadow: var(--yui-shadow-sm);
     transform: translateY(-1px);
   }
 
-  .ex-btn:active {
+  .yui-btn:active {
     box-shadow: none;
     transform: translateY(0);
   }
 
-  .ex-btn[disabled],
-  .ex-btn--disabled {
+  .yui-btn[disabled],
+  .yui-btn--disabled {
     cursor: not-allowed;
     box-shadow: none;
     opacity: 0.5;
     transform: none;
   }
 
-  .ex-btn .ex-icon {
+  .yui-btn .yui-icon {
     width: 1.15em;
     height: 1.15em;
     vertical-align: middle;
   }
 
-  .ex-btn--primary {
-    --_bg: var(--ex-accent);
-    --_fg: var(--ex-accent-ink);
+  .yui-btn--primary {
+    --_bg: var(--yui-accent);
+    --_fg: var(--yui-accent-ink);
   }
 
-  .ex-btn--primary:hover {
-    --_bg: var(--ex-accent-strong);
+  .yui-btn--primary:hover {
+    --_bg: var(--yui-accent-strong);
   }
 
-  .ex-btn--secondary {
+  .yui-btn--secondary {
     --_bg: transparent;
-    --_fg: var(--ex-ink);
-    --_bd: var(--ex-border-strong);
+    --_fg: var(--yui-ink);
+    --_bd: var(--yui-border-strong);
   }
 
-  .ex-btn--secondary:hover {
-    --_bg: var(--ex-surface-sunken);
-    --_bd: var(--ex-ink-faint);
+  .yui-btn--secondary:hover {
+    --_bg: var(--yui-surface-sunken);
+    --_bd: var(--yui-ink-faint);
   }
 
-  .ex-btn--warning {
-    --_bg: var(--ex-warning);
+  .yui-btn--warning {
+    --_bg: var(--yui-warning);
     --_fg: #fff;
   }
 
-  .ex-btn--warning:hover {
+  .yui-btn--warning:hover {
     --_bg: #8f6116;
   }
 
-  .ex-btn--danger {
+  .yui-btn--danger {
     --_bg: transparent;
-    --_fg: var(--ex-danger);
+    --_fg: var(--yui-danger);
     --_bd: currentcolor;
   }
 
-  .ex-btn--danger:hover {
-    --_bg: var(--ex-danger);
+  .yui-btn--danger:hover {
+    --_bg: var(--yui-danger);
     --_fg: #fff;
   }
 
-  .ex-btn--ghost {
+  .yui-btn--ghost {
     --_bg: transparent;
-    --_fg: var(--ex-ink-soft);
+    --_fg: var(--yui-ink-soft);
     --_bd: transparent;
   }
 
-  .ex-btn--ghost:hover {
-    --_bg: var(--ex-surface-sunken);
-    --_fg: var(--ex-ink);
+  .yui-btn--ghost:hover {
+    --_bg: var(--yui-surface-sunken);
+    --_fg: var(--yui-ink);
 
     box-shadow: none;
   }
 
-  .ex-btn--sm {
+  .yui-btn--sm {
     padding: 0.5rem 0.9rem;
-    font-size: var(--ex-text-xs);
+    font-size: var(--yui-text-xs);
   }
 
-  .ex-btn--lg {
+  .yui-btn--lg {
     padding: 0.95rem 1.75rem;
-    font-size: var(--ex-text-base);
+    font-size: var(--yui-text-base);
   }
 
-  .ex-btn--block {
+  .yui-btn--block {
     display: flex;
     width: 100%;
   }
 
-  .ex-btn-group {
+  .yui-btn-group {
     display: inline-flex;
     flex-wrap: wrap;
-    gap: var(--ex-space-2xs);
+    gap: var(--yui-space-2xs);
+  }
+
+  /* Rails `button_to` wraps its <button class="yui-btn …"> in a <form> — keep it
+     inline so it sits in a cluster like an <a> button. (`.button_to` is a
+     Rails-generated class name, hence the lint exemption.) */
+  /* stylelint-disable-next-line selector-class-pattern */
+  form.button_to {
+    display: inline-block;
   }
 }

@@ -52,7 +52,7 @@ RSpec.describe "Insight Destruction with Reference Checking", type: :system do
     expect(page).to have_text("This picture cannot be destroyed because it is still referenced by other content:")
     expect(page).to have_text("Chronicles:")
     expect(page).to have_link("Coastal Exploration", href: current_team_chronicle_path(chronicle))
-    expect(page).to have_css("button.contrast[disabled]")
+    expect(page).to have_css("button.yui-btn--danger[disabled]")
 
     # Clicking the link navigates to the chronicle show page
     click_link "Coastal Exploration"
@@ -67,7 +67,7 @@ RSpec.describe "Insight Destruction with Reference Checking", type: :system do
     expect(page).to have_text("This thought cannot be destroyed because it is still referenced by other content:")
     expect(page).to have_text("Memories:")
     expect(page).to have_link("A calm evening reflection", href: current_team_memory_path(memory))
-    expect(page).to have_css("button.contrast[disabled]")
+    expect(page).to have_css("button.yui-btn--danger[disabled]")
 
     click_link "A calm evening reflection"
     expect(page).to have_current_path(current_team_memory_path(memory))

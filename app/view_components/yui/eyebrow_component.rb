@@ -13,7 +13,7 @@ module Yui
 
     # Trivial single-element wrapper — no template (see Yui::BaseComponent).
     def call
-      tag.p(@text || content, class: "ex-eyebrow")
+      tag.p(@text || content, class: "yui-eyebrow")
     end
   end
 end

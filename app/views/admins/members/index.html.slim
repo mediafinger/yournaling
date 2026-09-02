@@ -1,2 +1,5 @@
-#members
-  = render @members
+.yui-stack
+  = render Yui::HeadlineComponent.new("Members", level: 1)
+  #members.yui-stack
+    = render @members
+  = render Yui::PaginationComponent.new(pagy: @pagy)

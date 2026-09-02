@@ -1,6 +1,6 @@
-.ex-cluster.ex-cluster--lg
+.yui-cluster.yui-cluster--lg
   - Yui::IconComponent::PATHS.each_key do |name|
-    .ex-stack.ex-stack--xs style="align-items: center; width: 5rem"
+    .yui-stack.yui-stack--xs style="align-items: center; width: 5rem"
       = render(Yui::IconComponent.new(name, size: :lg))
-      span.ex-text--sm.ex-text--muted style="font-family: var(--ex-font-mono); font-size: var(--ex-text-xs)"
+      span.yui-text--sm.yui-text--muted style="font-family: var(--yui-font-mono); font-size: var(--yui-text-xs)"
         = name

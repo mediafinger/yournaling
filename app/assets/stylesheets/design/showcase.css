@@ -1,28 +1,28 @@
 @layer showcase {
   /* 6. ------------------------------------------------------ SHOWCASE CHROME */
 
-  .ex-showcase__hero {
+  .yui-showcase__hero {
     padding-block: clamp(3rem, 1rem + 9vw, 7rem);
     background:
       radial-gradient(
         120% 120% at 100% 0%,
-        var(--ex-accent-soft) 0%,
+        var(--yui-accent-soft) 0%,
         transparent 55%
       ),
-      var(--ex-paper);
-    border-bottom: var(--ex-border-hairline);
+      var(--yui-paper);
+    border-bottom: var(--yui-border-hairline);
   }
 
-  .ex-showcase__toc {
+  .yui-showcase__toc {
     position: sticky;
     top: 0;
     z-index: 10;
-    background-color: color-mix(in srgb, var(--ex-paper) 88%, transparent);
-    border-bottom: var(--ex-border-hairline);
+    background-color: color-mix(in srgb, var(--yui-paper) 88%, transparent);
+    border-bottom: var(--yui-border-hairline);
     backdrop-filter: blur(8px);
   }
 
-  .ex-showcase__toc ul {
+  .yui-showcase__toc ul {
     display: flex;
     flex-wrap: wrap;
     gap: 0.35rem 1rem;
@@ -31,153 +31,153 @@
     list-style: none;
   }
 
-  .ex-showcase__toc a {
-    font-size: var(--ex-text-sm);
-    font-weight: var(--ex-weight-medium);
-    color: var(--ex-ink-faint);
+  .yui-showcase__toc a {
+    font-size: var(--yui-text-sm);
+    font-weight: var(--yui-weight-medium);
+    color: var(--yui-ink-faint);
     text-decoration: none;
   }
 
-  .ex-showcase__toc a:hover {
-    color: var(--ex-accent);
+  .yui-showcase__toc a:hover {
+    color: var(--yui-accent);
   }
 
-  .ex-section {
-    padding-block: var(--ex-space-2xl);
+  .yui-section {
+    padding-block: var(--yui-space-2xl);
     scroll-margin-top: 4rem;
-    border-bottom: var(--ex-border-hairline);
+    border-bottom: var(--yui-border-hairline);
   }
 
-  .ex-section:last-child {
+  .yui-section:last-child {
     border-bottom: 0;
   }
 
-  .ex-section__head {
-    max-width: var(--ex-measure);
-    margin-bottom: var(--ex-space-xl);
+  .yui-section__head {
+    max-width: var(--yui-measure);
+    margin-bottom: var(--yui-space-xl);
   }
 
-  .ex-section__number {
-    font-family: var(--ex-font-mono);
-    font-size: var(--ex-text-xs);
-    color: var(--ex-accent);
-    letter-spacing: var(--ex-tracking-wide);
+  .yui-section__number {
+    font-family: var(--yui-font-mono);
+    font-size: var(--yui-text-xs);
+    color: var(--yui-accent);
+    letter-spacing: var(--yui-tracking-wide);
   }
 
-  .ex-section__desc {
-    margin-top: var(--ex-space-2xs);
-    font-size: var(--ex-text-md);
-    line-height: var(--ex-leading-normal);
-    color: var(--ex-ink-faint);
+  .yui-section__desc {
+    margin-top: var(--yui-space-2xs);
+    font-size: var(--yui-text-md);
+    line-height: var(--yui-leading-normal);
+    color: var(--yui-ink-faint);
   }
 
   /* Specimen tiles used to demonstrate a single component */
-  .ex-specimen {
+  .yui-specimen {
     display: flex;
     flex-direction: column;
-    gap: var(--ex-space-sm);
-    padding: var(--ex-space-md);
-    background-color: var(--ex-surface);
-    border: 1px solid var(--ex-border);
-    border-radius: var(--ex-radius-md);
+    gap: var(--yui-space-sm);
+    padding: var(--yui-space-md);
+    background-color: var(--yui-surface);
+    border: 1px solid var(--yui-border);
+    border-radius: var(--yui-radius-md);
   }
 
-  .ex-specimen__label {
-    font-family: var(--ex-font-mono);
-    font-size: var(--ex-text-xs);
-    color: var(--ex-ink-faint);
-    letter-spacing: var(--ex-tracking-wide);
+  .yui-specimen__label {
+    font-family: var(--yui-font-mono);
+    font-size: var(--yui-text-xs);
+    color: var(--yui-ink-faint);
+    letter-spacing: var(--yui-tracking-wide);
   }
 
-  .ex-specimen__row {
+  .yui-specimen__row {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--ex-space-sm);
+    gap: var(--yui-space-sm);
     align-items: center;
   }
 
-  .ex-specimen--center .ex-specimen__row {
+  .yui-specimen--center .yui-specimen__row {
     justify-content: center;
   }
 
   /* Colour swatches */
-  .ex-swatch {
+  .yui-swatch {
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    background-color: var(--ex-surface);
-    border: var(--ex-border-hairline);
-    border-radius: var(--ex-radius-md);
+    background-color: var(--yui-surface);
+    border: var(--yui-border-hairline);
+    border-radius: var(--yui-radius-md);
   }
 
-  .ex-swatch__chip {
+  .yui-swatch__chip {
     height: 4.5rem;
-    border-bottom: var(--ex-border-hairline);
+    border-bottom: var(--yui-border-hairline);
   }
 
-  .ex-swatch__meta {
+  .yui-swatch__meta {
     display: flex;
     flex-direction: column;
     gap: 0.15rem;
     padding: 0.65rem 0.8rem;
   }
 
-  .ex-swatch__name {
-    font-size: var(--ex-text-sm);
-    font-weight: var(--ex-weight-semibold);
-    color: var(--ex-ink);
+  .yui-swatch__name {
+    font-size: var(--yui-text-sm);
+    font-weight: var(--yui-weight-semibold);
+    color: var(--yui-ink);
   }
 
-  .ex-swatch__value {
-    font-family: var(--ex-font-mono);
-    font-size: var(--ex-text-xs);
-    color: var(--ex-ink-faint);
+  .yui-swatch__value {
+    font-family: var(--yui-font-mono);
+    font-size: var(--yui-text-xs);
+    color: var(--yui-ink-faint);
   }
 
   /* Type specimen */
-  .ex-type-row {
+  .yui-type-row {
     display: grid;
     grid-template-columns: 7rem 1fr;
-    gap: var(--ex-space-md);
+    gap: var(--yui-space-md);
     align-items: baseline;
-    padding-block: var(--ex-space-sm);
-    border-top: var(--ex-border-hairline);
+    padding-block: var(--yui-space-sm);
+    border-top: var(--yui-border-hairline);
   }
 
-  .ex-type-row__key {
-    font-family: var(--ex-font-mono);
-    font-size: var(--ex-text-xs);
-    color: var(--ex-ink-faint);
+  .yui-type-row__key {
+    font-family: var(--yui-font-mono);
+    font-size: var(--yui-text-xs);
+    color: var(--yui-ink-faint);
   }
 
   @media (width <= 34rem) {
-    .ex-type-row {
+    .yui-type-row {
       grid-template-columns: 1fr;
-      gap: var(--ex-space-2xs);
+      gap: var(--yui-space-2xs);
     }
   }
 
   /* Spacing / radius scale visualisation */
-  .ex-ruler {
+  .yui-ruler {
     display: flex;
-    gap: var(--ex-space-sm);
+    gap: var(--yui-space-sm);
     align-items: center;
-    font-family: var(--ex-font-mono);
-    font-size: var(--ex-text-xs);
-    color: var(--ex-ink-faint);
+    font-family: var(--yui-font-mono);
+    font-size: var(--yui-text-xs);
+    color: var(--yui-ink-faint);
   }
 
-  .ex-ruler__bar {
+  .yui-ruler__bar {
     height: 1.25rem;
-    background-color: var(--ex-accent);
-    border-radius: var(--ex-radius-xs);
+    background-color: var(--yui-accent);
+    border-radius: var(--yui-radius-xs);
     opacity: 0.85;
   }
 
-  .ex-radius-demo {
+  .yui-radius-demo {
     width: 4.5rem;
     height: 4.5rem;
-    background-color: var(--ex-accent-soft);
-    border: 1.5px solid var(--ex-accent);
+    background-color: var(--yui-accent-soft);
+    border: 1.5px solid var(--yui-accent);
   }
 }

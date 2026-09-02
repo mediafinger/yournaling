@@ -1,2 +1,5 @@
-#locations
-  = render @locations
+.yui-stack
+  = render Yui::HeadlineComponent.new("Locations", level: 1)
+  #locations.yui-stack
+    = render @locations
+  = render Yui::PaginationComponent.new(pagy: @pagy)

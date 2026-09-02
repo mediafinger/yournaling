@@ -1,0 +1,40 @@
+@layer components {
+  /* Floating "back to top" button — toggled visible by scroll_to_top_controller. */
+
+  .yui-scroll-top {
+    position: fixed;
+    right: var(--yui-space-lg);
+    bottom: var(--yui-space-lg);
+    z-index: 90;
+    display: flex;
+    visibility: hidden;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    color: var(--yui-accent-ink);
+    background-color: var(--yui-accent);
+    border: 0;
+    border-radius: var(--yui-radius-pill);
+    box-shadow: var(--yui-shadow-md);
+    opacity: 0;
+    transform: translateY(0.5rem);
+    transition:
+      opacity var(--yui-transition),
+      visibility var(--yui-transition),
+      transform var(--yui-transition-fast),
+      background-color var(--yui-transition-fast);
+  }
+
+  .yui-scroll-top.visible {
+    visibility: visible;
+    opacity: 0.92;
+    transform: translateY(0);
+  }
+
+  .yui-scroll-top:hover {
+    background-color: var(--yui-accent-strong);
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+}

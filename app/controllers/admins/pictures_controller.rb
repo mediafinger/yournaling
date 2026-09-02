@@ -3,7 +3,7 @@
 module Admins
   class PicturesController < AdminController
     def index
-      @pictures = Picture.all
+      @pagy, @pictures = pagy(:offset, Picture.includes(:team).with_attached_file.order(created_at: :desc))
     end
 
     def show

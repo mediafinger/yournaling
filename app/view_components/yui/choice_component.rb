@@ -15,7 +15,7 @@ module Yui
       super()
       @label = label
       @name = name
-      @type = ex_token(type, allowed: TYPES, default: :checkbox)
+      @type = yui_token(type, allowed: TYPES, default: :checkbox)
       @value = value
       @hint = hint.presence
       @checked = checked

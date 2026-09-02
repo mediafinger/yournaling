@@ -1,47 +1,58 @@
 @layer components {
   /* 4g. ---------------------------------------------------------- FIGURE */
 
-  .ex-figure {
+  /* A link whose content is media (a map thumbnail, a photo) — no underline. */
+  .yui-media-link {
+    display: inline-block;
+    overflow: clip;
+    border-radius: var(--yui-radius-md);
+  }
+
+  .yui-media-link img {
+    display: block;
+  }
+
+  .yui-figure {
     display: flex;
     flex-direction: column;
-    gap: var(--ex-space-2xs);
+    gap: var(--yui-space-2xs);
     margin: 0;
   }
 
-  .ex-figure__frame {
+  .yui-figure__frame {
     overflow: hidden;
-    background-color: var(--ex-surface-sunken);
-    border: var(--ex-border-hairline);
-    border-radius: var(--ex-radius-md);
+    background-color: var(--yui-surface-sunken);
+    border: var(--yui-border-hairline);
+    border-radius: var(--yui-radius-md);
   }
 
-  .ex-figure__frame img {
+  .yui-figure__frame img {
     display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
 
-  .ex-figure--ratio-16-9 .ex-figure__frame {
+  .yui-figure--ratio-16-9 .yui-figure__frame {
     aspect-ratio: 16 / 9;
   }
 
-  .ex-figure--ratio-4-3 .ex-figure__frame {
+  .yui-figure--ratio-4-3 .yui-figure__frame {
     aspect-ratio: 4 / 3;
   }
 
-  .ex-figure--ratio-1-1 .ex-figure__frame {
+  .yui-figure--ratio-1-1 .yui-figure__frame {
     aspect-ratio: 1 / 1;
   }
 
-  .ex-figure--ratio-3-2 .ex-figure__frame {
+  .yui-figure--ratio-3-2 .yui-figure__frame {
     aspect-ratio: 3 / 2;
   }
 
-  .ex-figure figcaption {
-    font-family: var(--ex-font-serif);
-    font-size: var(--ex-text-sm);
+  .yui-figure figcaption {
+    font-family: var(--yui-font-serif);
+    font-size: var(--yui-text-sm);
     font-style: italic;
-    color: var(--ex-ink-faint);
+    color: var(--yui-ink-faint);
   }
 }

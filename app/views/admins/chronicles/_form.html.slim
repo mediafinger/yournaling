@@ -1,38 +1,13 @@
-article
-  = form_with(model: [:admin, chronicle], multipart: true, data: { controller: "picture-select" }) do |form|
+= render Yui::CardComponent.new do
+  = form_with(model: [:admin, chronicle], builder: YuiFormBuilder, multipart: true, html: { class: "yui-stack" }, data: { controller: "picture-select" }) do |form|
+    = render Yui::HeadlineComponent.new(form_legend, level: 3)
     = render partial: "shared_partials/form_validation_errors", locals: { record: chronicle }
-    fieldset
-      h3
-        legend
-          = form_legend
-      - if chronicle.persisted?
-        label
-          strong Team
-          = chronicle.team.name
-          i
-            = chronicle.team.id
-      - else
-        div
-          = form.label :team_id
-          = form.select :team_id, Team.pluck(:name, :id), selected: form.object.team_id, include_blank: true, required: true
-      div
-        = form.label :name
-        = form.text_field :name, required: true
-      div
-        = form.label :notice
-        = form.text_area :notice, rows: 6, required: true
-      div
-        = form.label :start_date
-        = form.date_field :start_date, required: true
-      div
-        = form.label :end_date
-        = form.date_field :end_date
-      div
-        = form.label :visibility
-        = form.select :visibility, Chronicle::VISIBILITY_STATES.map { |v| [v.titleize, v] }, selected: form.object.visibility
-
+    = render partial: "admins/team_field", locals: { form: form }
+    = form.text_field :name, required: true
+    = form.text_area :notice, rows: 6, required: true
+    = form.date_field :start_date, required: true
+    = form.date_field :end_date
+    = form.select :visibility, Chronicle::VISIBILITY_STATES.map { |v| [v.titleize, v] }, label: "Visibility"
     = render ChronicleAttachedEntriesFormComponent.new(form:, scope: "admin")
     = render InsightAttachmentManagerComponent.new(form:, scope: "admin", mode: :multiple)
-
-    div
-      = form.submit
+    = form.submit

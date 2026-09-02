@@ -6,7 +6,7 @@ RSpec.describe Yui::HeadlineComponent, type: :component do
   it "renders the semantic heading tag for the given level" do
     (1..4).each do |level|
       rendered = render_inline(described_class.new("Title", level:))
-      expect(rendered).to have_css("h#{level}.ex-h#{level}", text: "Title")
+      expect(rendered).to have_css("h#{level}.yui-h#{level}", text: "Title")
     end
   end
 
@@ -19,14 +19,14 @@ RSpec.describe Yui::HeadlineComponent, type: :component do
   it "renders an eyebrow above the heading when given" do
     rendered = render_inline(described_class.new("A year on the coast", level: 1, eyebrow: "Chronicle"))
 
-    expect(rendered).to have_css("p.ex-eyebrow", text: "Chronicle")
+    expect(rendered).to have_css("p.yui-eyebrow", text: "Chronicle")
     expect(rendered).to have_css("h1", text: "A year on the coast")
   end
 
   it "uses the oversized display treatment when display: true" do
     rendered = render_inline(described_class.new("Kept for good", level: 1, display: true))
 
-    expect(rendered).to have_css("h1.ex-display")
+    expect(rendered).to have_css("h1.yui-display")
   end
 
   it "accepts block content" do

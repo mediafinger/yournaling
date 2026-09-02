@@ -12,7 +12,8 @@ module DesignCssPanel
     "headline" => "typography", "eyebrow" => "typography", "emphasis" => "typography",
     "quote" => "typography", "prose" => "typography", "blockquote" => "typography",
     "divider" => "layout",
-    "choice" => "field", "label" => "field"
+    "choice" => "field", "label" => "field",
+    "nav_item" => "navbar"
   }.freeze
 
   # @param preview [#preview_class] a Lookbook::PreviewEntity

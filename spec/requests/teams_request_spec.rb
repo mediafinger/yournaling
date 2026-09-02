@@ -82,6 +82,12 @@ RSpec.describe "/teams", type: :system do
 
         expect(page.status_code).to eq(200) # not supported by selenium driver
       end
+
+      it "renders the team form with the name field" do
+        visit new_team_url
+
+        expect(page).to have_css("form[action='#{teams_path}'] input[name='team[name]']")
+      end
     end
 
     context "when guest user" do
@@ -107,6 +113,12 @@ RSpec.describe "/teams", type: :system do
         visit edit_team_url(team.urlsafe_id)
 
         expect(page.status_code).to eq(200) # not supported by selenium driver
+      end
+
+      it "renders the team form with the name field" do
+        visit edit_team_url(team.urlsafe_id)
+
+        expect(page).to have_css("form[action='#{team_path(team)}'] input[name='team[name]']")
       end
     end
 

@@ -6,7 +6,7 @@ RSpec.describe Yui::IconComponent, type: :component do
   it "renders an inline svg for a known name" do
     rendered = render_inline(described_class.new("calendar"))
 
-    svg = rendered.css("svg.ex-icon").first
+    svg = rendered.css("svg.yui-icon").first
     expect(svg).to be_present
     expect(svg["viewBox"] || svg["viewbox"]).to eq("0 0 24 24")
     expect(svg.inner_html).to include("<path")
@@ -21,7 +21,7 @@ RSpec.describe Yui::IconComponent, type: :component do
   it "maps size to a modifier class" do
     rendered = render_inline(described_class.new("book", size: :lg))
 
-    expect(rendered).to have_css("svg.ex-icon.ex-icon--lg")
+    expect(rendered).to have_css("svg.yui-icon.yui-icon--lg")
   end
 
   describe "accessibility" do

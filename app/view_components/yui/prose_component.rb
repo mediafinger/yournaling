@@ -9,7 +9,7 @@ module Yui
   class ProseComponent < BaseComponent
     # Trivial single-element wrapper — no template (see Yui::BaseComponent).
     def call
-      tag.div(content, class: "ex-prose")
+      tag.div(content, class: "yui-prose")
     end
   end
 end

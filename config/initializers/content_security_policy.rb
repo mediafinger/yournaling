@@ -1,31 +1,34 @@
 # frozen_string_literal: true
 
 # Be sure to restart your server when you modify this file.
-
-# Define an application-wide content security policy.
-# See the Securing Rails Applications Guide for more information:
-# https://guides.rubyonrails.org/security.html#content-security-policy-header
-
-# Rails.application.configure do
-#   config.content_security_policy do |policy|
-#     policy.default_src :self, :https
-#     policy.font_src    :self, :https, :data
-#     policy.img_src     :self, :https, :data
-#     policy.object_src  :none
-#     policy.script_src  :self, :https
-#     policy.style_src   :self, :https
-#     # Specify URI for violation reports
-#     # policy.report_uri "/csp-violation-report-endpoint"
-#   end
 #
-#   # Generate session nonces for permitted importmap, inline scripts, and inline styles.
-#   config.content_security_policy_nonce_generator = ->(request) { request.session.id.to_s }
-#   config.content_security_policy_nonce_directives = %w(script-src style-src)
+# Application-wide Content Security Policy. Enabled in Phase 6 of the UI design
+# migration: with Pico and the Google Fonts CDN gone, the app loads no external
+# CSS / JS / fonts, so every source can be locked to `:self`.
 #
-#   # Automatically add `nonce` to `javascript_tag`, `javascript_include_tag`, and `stylesheet_link_tag`
-#   # if the corresponding directives are specified in `content_security_policy_nonce_directives`.
-#   # config.content_security_policy_nonce_auto = true
+# `'unsafe-inline'` is still allowed for scripts and styles because:
+#   * Turbo injects an inline <style> for its progress bar, and
+#   * the mounted admin engines (Blazer, Mission Control) render inline
+#     <script> / <style> with no nonce.
+# Dropping it (and switching to a nonce) needs those engines exempted via
+# `content_security_policy(false)` in their base controllers plus a manual
+# browser QA pass — tracked in TODO_UI_DESIGN.md Phase 6.
 #
-#   # Report violations without enforcing the policy.
-#   # config.content_security_policy_report_only = true
-# end
+# Not enforced in development, where Lookbook / letter_opener / web-console
+# pull in their own inline assets and a live-reload WebSocket.
+unless Rails.env.development?
+  Rails.application.configure do
+    config.content_security_policy do |policy|
+      policy.default_src :self
+      policy.font_src    :self
+      policy.img_src     :self, :data, :blob
+      policy.object_src  :none
+      policy.script_src  :self, :unsafe_inline
+      policy.style_src   :self, :unsafe_inline
+      policy.connect_src :self
+      policy.base_uri    :self
+      policy.frame_ancestors :self
+      policy.form_action :self
+    end
+  end
+end

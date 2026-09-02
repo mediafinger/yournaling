@@ -1,3 +1,5 @@
-= render partial: "form", locals: { team: @team, form_legend: "Edit team" }
-= link_to "Show this team", @team, role: "button"
-= button_to "Destroy this team", team_path(@team), method: :delete, class: "secondary"
+.yui-narrow.yui-stack
+  = render partial: "form", locals: { team: @team, form_legend: "Edit team" }
+  .yui-cluster
+    = render Yui::ButtonComponent.new("Show this team", href: team_path(@team), variant: :secondary)
+    = button_to "Destroy this team", team_path(@team), method: :delete, class: "yui-btn yui-btn--danger"

@@ -1,0 +1,15 @@
+- if results.present?
+  ul.yui-stack.yui-stack--sm
+    - results.each do |result|
+      - next if (link = record_link(result)).blank?
+      li
+        = render Yui::CardComponent.new(padding: :sm) do
+          = link
+          p.yui-text.yui-text--sm.yui-text--muted
+            = result.content.truncate(120)
+          p.yui-text.yui-text--sm.yui-text--muted
+            | Updated
+            = " #{result.searchable.updated_at.to_fs(:db)}"
+- elsif query.present?
+  = render Yui::CalloutComponent.new(variant: :info) do
+    | No results found.

@@ -1,0 +1,17 @@
+= render Yui::ModalComponent.new(title: title, size: :sm) do |modal|
+  - modal.with_trigger do
+    = render Yui::ButtonComponent.new("Destroy this #{name}", variant: :danger, icon: "trash", size: :sm)
+
+  p.yui-text
+    | Are you sure you want to destroy
+    '
+    strong = label
+    | ?
+  p.yui-text.yui-text--sm.yui-text--muted
+    | Insights that are not part of any other memory or chronicle will be permanently deleted.
+
+  - modal.with_footer do
+    button.yui-btn.yui-btn--ghost type="button" data-action="click->yui-modal#close"
+      | Close
+    = button_to "Destroy #{name.capitalize} Only", destroy_path, method: :delete, params: { destroy_orphaned_insights: false }, class: "yui-btn yui-btn--secondary"
+    = button_to "Destroy & Delete Orphaned Insights", destroy_path, method: :delete, params: { destroy_orphaned_insights: true }, class: "yui-btn yui-btn--danger"

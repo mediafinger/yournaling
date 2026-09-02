@@ -1,2 +1,5 @@
-#teams
-  = render @teams
+.yui-stack
+  = render Yui::HeadlineComponent.new("Teams", level: 1)
+  #teams.yui-stack
+    = render @teams
+  = render Yui::PaginationComponent.new(pagy: @pagy)

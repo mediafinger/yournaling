@@ -9,7 +9,10 @@ module CurrentTeams
         :offset,
         authorized_scope(TeamArtefact.chronological, type: :relation).includes(:team, artefact: %i[team])
       )
-      @newest_updated_at = @team_artefacts.first&.updated_at&.iso8601(6) || Time.current.iso8601(6)
+      # @newest_at is the feed cursor: the timestamp the `feed-refresh` controller
+      # polls `check_newer` with. Named the same in both feed controllers (here it
+      # tracks `updated_at`, in PagesController `republished_at`).
+      @newest_at = @team_artefacts.first&.updated_at&.iso8601(6) || Time.current.iso8601(6)
     end
 
     def check_newer
@@ -19,7 +22,7 @@ module CurrentTeams
 
       render json: {
         count: newer_scope.count,
-        latest_updated_at: newer_scope.first&.updated_at&.iso8601(6),
+        latest_at: newer_scope.first&.updated_at&.iso8601(6),
       }
     end
 
@@ -28,7 +31,7 @@ module CurrentTeams
       since_time = parse_since_param
       newer_scope = TeamArtefact.where("updated_at > ?", since_time).chronological
       @team_artefacts = authorized_scope(newer_scope, type: :relation).includes(:team, artefact: %i[team])
-      @newest_updated_at = @team_artefacts.first&.updated_at&.iso8601(6) || params[:since]
+      @newest_at = @team_artefacts.first&.updated_at&.iso8601(6) || params[:since]
 
       render layout: false
     end

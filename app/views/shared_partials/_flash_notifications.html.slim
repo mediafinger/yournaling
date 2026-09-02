@@ -1,5 +1,6 @@
-- types = { "notice" => "success", "alert" => "error" }
-- flash.each do |key, message|
-  section(id="notice", class="flash #{types[key]}")
-    p
-      = message
+- if flash.any?
+  .yui-toast-region
+    - flash.each do |key, message|
+      - variant = Yui::ToastComponent::FLASH_VARIANTS.fetch(key.to_s, :info)
+      - Array(message).each do |line|
+        = render Yui::ToastComponent.new(line, variant: variant)

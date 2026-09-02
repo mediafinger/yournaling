@@ -10,8 +10,8 @@ RSpec.describe DesignCssPanel do
     end
 
     it "dasherises multi-word component names" do
-      expect(described_class.name_for("Yui::MemoryCardComponentPreview").basename.to_s).to eq("memory-card.css")
-      expect(described_class.name_for("Yui::ChronicleCardComponentPreview").basename.to_s).to eq("chronicle-card.css")
+      expect(described_class.name_for("MemoryCardComponentPreview").basename.to_s).to eq("memory-card.css")
+      expect(described_class.name_for("ChronicleCardComponentPreview").basename.to_s).to eq("chronicle-card.css")
     end
 
     it "falls back to the shared layer file for primitives with no dedicated sheet" do

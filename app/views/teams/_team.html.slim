@@ -1,5 +1,5 @@
-article id= dom_id(team)
-  p
-    strong Name:
-    = team.name
-  = link_to "Go to team", team_home_path(team_id: team.to_param), role: "button"
+= render Yui::CardComponent.new(id: dom_id(team)) do
+  dl.yui-details
+    dt Name
+    dd = team.name
+  = render Yui::ButtonComponent.new("Go to team", href: team_home_path(team_id: team.to_param), variant: :secondary, size: :sm)

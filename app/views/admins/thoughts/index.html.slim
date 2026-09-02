@@ -1,2 +1,5 @@
-#thoughts
-  = render @thoughts
+.yui-stack
+  = render Yui::HeadlineComponent.new("Thoughts", level: 1)
+  #thoughts.yui-stack
+    = render @thoughts
+  = render Yui::PaginationComponent.new(pagy: @pagy)

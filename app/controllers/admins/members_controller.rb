@@ -3,7 +3,7 @@
 module Admins
   class MembersController < AdminController
     def index
-      @members = Member.includes(:user, :team).all
+      @pagy, @members = pagy(:offset, Member.includes(:user, :team).order(created_at: :desc))
     end
 
     def show

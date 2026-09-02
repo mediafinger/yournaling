@@ -15,14 +15,14 @@ RSpec.describe "/example", type: :request do
 
       expect(response.body).to include("example")
       expect(response.body).to include("Fraunces")
-      expect(response.body).to include('class="ex-body"')
+      expect(response.body).to include('class="yui-body"')
     end
 
     it "shows the composed Memory and Chronicle record cards" do
       get "/example"
 
-      expect(response.body).to include("ex-memory-card")
-      expect(response.body).to include("ex-chronicle-card")
+      expect(response.body).to include("yui-memory-card")
+      expect(response.body).to include("yui-chronicle-card")
       expect(response.body).to include("A year on the coast")
     end
 
@@ -30,10 +30,10 @@ RSpec.describe "/example", type: :request do
       get "/example"
 
       aggregate_failures do
-        expect(response.body).to include("ex-btn ex-btn--primary")
-        expect(response.body).to include("ex-badge ex-badge--success")
-        expect(response.body).to include("ex-field")
-        expect(response.body).to include("ex-icon")
+        expect(response.body).to include("yui-btn yui-btn--primary")
+        expect(response.body).to include("yui-badge yui-badge--success")
+        expect(response.body).to include("yui-field")
+        expect(response.body).to include("yui-icon")
       end
     end
   end

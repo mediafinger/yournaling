@@ -1,0 +1,88 @@
+@layer components {
+  /* Flash notifications — Yui::Toast, stacked in a fixed region below the nav. */
+
+  .yui-toast-region {
+    position: fixed;
+    top: calc(var(--yui-navbar-height, 3.25rem) + var(--yui-space-2xs));
+    right: var(--yui-space-sm);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: var(--yui-space-2xs);
+    width: min(24rem, calc(100vw - 2 * var(--yui-space-sm)));
+    pointer-events: none;
+  }
+
+  .yui-toast {
+    --_accent: var(--yui-info);
+    --_bg: var(--yui-info-soft);
+
+    display: flex;
+    gap: var(--yui-space-2xs);
+    align-items: flex-start;
+    padding: var(--yui-space-2xs) var(--yui-space-xs);
+    font-size: var(--yui-text-sm);
+    line-height: var(--yui-leading-normal);
+    color: var(--yui-ink);
+    pointer-events: auto;
+    background-color: var(--_bg);
+    border: 1px solid color-mix(in srgb, var(--_accent) 30%, transparent);
+    border-radius: var(--yui-radius-md);
+    box-shadow: var(--yui-shadow-md);
+    transition:
+      opacity var(--yui-transition),
+      transform var(--yui-transition);
+  }
+
+  .yui-toast[data-leaving] {
+    opacity: 0;
+    transform: translateX(0.75rem);
+  }
+
+  @starting-style {
+    .yui-toast {
+      opacity: 0;
+      transform: translateX(0.75rem);
+    }
+  }
+
+  .yui-toast--success {
+    --_accent: var(--yui-success);
+    --_bg: var(--yui-success-soft);
+  }
+
+  .yui-toast--warning {
+    --_accent: var(--yui-warning);
+    --_bg: var(--yui-warning-soft);
+  }
+
+  .yui-toast--danger {
+    --_accent: var(--yui-danger);
+    --_bg: var(--yui-danger-soft);
+  }
+
+  .yui-toast__icon {
+    flex: none;
+    padding-top: 0.1rem;
+    color: var(--_accent);
+  }
+
+  .yui-toast__body {
+    flex: 1;
+    margin: 0;
+  }
+
+  .yui-toast__dismiss {
+    display: inline-flex;
+    flex: none;
+    padding: 0.1rem;
+    color: var(--yui-ink-faint);
+    cursor: pointer;
+    background: none;
+    border: 0;
+  }
+
+  .yui-toast__dismiss:hover {
+    color: var(--yui-ink);
+  }
+}

@@ -1,52 +1,97 @@
 @layer base {
   /* 2. ------------------------------------------------------- SCOPE & BASE */
 
-  .ex-body,
-  .ex-scope {
-    font-family: var(--ex-font-body);
-    font-size: var(--ex-text-base);
-    font-weight: var(--ex-weight-regular);
+  /* The rem scale assumes a 16px root; the design system's own fluid `clamp()`
+     steps do the responsive scaling, so keep the root at the browser default. */
+  :root {
+    font-size: 100%;
+  }
+
+  .yui-body,
+  .yui-scope {
+    font-family: var(--yui-font-body);
+    font-size: var(--yui-text-base);
+    font-weight: var(--yui-weight-regular);
     font-feature-settings: "kern", "liga", "clig", "calt";
-    line-height: var(--ex-leading-relaxed);
-    color: var(--ex-ink);
-    background-color: var(--ex-paper);
+    line-height: var(--yui-leading-relaxed);
+    color: var(--yui-ink);
+    background-color: var(--yui-paper);
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
   }
 
-  .ex-body {
+  .yui-body {
     min-height: 100vh;
     margin: 0;
   }
 
-  .ex-scope *,
-  .ex-scope *::before,
-  .ex-scope *::after,
-  .ex-body *,
-  .ex-body *::before,
-  .ex-body *::after {
+  .yui-scope *,
+  .yui-scope *::before,
+  .yui-scope *::after,
+  .yui-body *,
+  .yui-body *::before,
+  .yui-body *::after {
     box-sizing: border-box;
   }
 
-  .ex-scope :focus-visible,
-  .ex-body :focus-visible {
-    outline: none;
-    border-radius: var(--ex-radius-xs);
-    box-shadow: var(--ex-focus-ring);
+  /* Safety nets for content markup that isn't wrapped in a component:
+     unclassed links, raw images. Classed elements (.yui-btn, .yui-link, …) opt
+     out via :not([class]). */
+  .yui-scope a:not([class]),
+  .yui-body a:not([class]) {
+    color: var(--yui-accent);
+    text-decoration: underline;
+    text-decoration-color: var(--yui-border-strong);
+    text-underline-offset: 0.14em;
   }
 
-  .ex-scope ::selection,
-  .ex-body ::selection {
-    color: var(--ex-accent-strong);
-    background-color: var(--ex-accent-soft);
+  .yui-scope a:not([class]):hover,
+  .yui-body a:not([class]):hover {
+    text-decoration-color: var(--yui-accent);
+  }
+
+  .yui-scope img,
+  .yui-body img {
+    max-width: 100%;
+    height: auto;
+
+    /* Content images get soft corners by default; components that need square
+       edges opt out. Folded in from the retired legacy general.css. */
+    border-radius: var(--yui-radius-sm);
+  }
+
+  .yui-scope :focus-visible,
+  .yui-body :focus-visible {
+    outline: none;
+    border-radius: var(--yui-radius-xs);
+    box-shadow: var(--yui-focus-ring);
+  }
+
+  .yui-scope ::selection,
+  .yui-body ::selection {
+    color: var(--yui-accent-strong);
+    background-color: var(--yui-accent-soft);
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .ex-scope *,
-    .ex-body * {
+    .yui-scope *,
+    .yui-body * {
       transition-duration: 0.01ms !important;
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
     }
+  }
+
+  /* Visually hidden but available to assistive tech. */
+  .yui-visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    white-space: nowrap;
+    border: 0;
+    clip-path: inset(50%);
   }
 }

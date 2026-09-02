@@ -1,0 +1,24 @@
+= render Yui::CardComponent.new(id: helpers.dom_id(chronicle), variant: :elevated, accent: "accent", class: "yui-chronicle-card") do |card|
+  - card.with_header do
+    .yui-stack.yui-stack--sm
+      .yui-cluster.yui-cluster--between
+        = render Yui::EyebrowComponent.new("Chronicle")
+        - if actions?
+          = render header_component
+        - elsif static_meta.present?
+          span.yui-meta = static_meta
+      - if render_own_title?
+        = render Yui::HeadlineComponent.new(chronicle.name, level: 3)
+
+  - if chronicle.notice.present?
+    p.yui-chronicle-card__summary = chronicle.notice
+
+  - if expanded? && chronicle.entries.any?
+    section.yui-stack.yui-stack--sm
+      = render Yui::HeadlineComponent.new("Entries", level: 4)
+      .yui-timeline
+        - chronicle.entries.each do |chronicle_entry|
+          .yui-timeline__item
+            = render ChronicleEntryComponent.new(chronicle_entry: chronicle_entry, scope: entry_scope, team: team)
+  - elsif chronicle.first_picture.present?
+    = render partial: insight_partial_path(chronicle.first_picture), locals: insight_partial_locals(chronicle.first_picture)

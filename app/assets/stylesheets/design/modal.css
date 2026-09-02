@@ -1,0 +1,97 @@
+@layer components {
+  /* Modal dialog — Yui::Modal (native <dialog>). */
+
+  .yui-modal-wrap {
+    display: contents;
+  }
+
+  .yui-modal__trigger {
+    display: contents;
+  }
+
+  .yui-modal {
+    width: min(32rem, calc(100vw - 2rem));
+    max-height: calc(100dvh - 4rem);
+    padding: 0;
+    color: var(--yui-ink);
+    background-color: var(--yui-surface);
+    border: var(--yui-border-hairline);
+    border-radius: var(--yui-radius-lg);
+    box-shadow: var(--yui-shadow-lg);
+  }
+
+  .yui-modal--sm {
+    width: min(24rem, calc(100vw - 2rem));
+  }
+
+  .yui-modal--lg {
+    width: min(48rem, calc(100vw - 2rem));
+  }
+
+  .yui-modal::backdrop {
+    background-color: var(--yui-overlay);
+  }
+
+  @starting-style {
+    .yui-modal[open] {
+      opacity: 0;
+      transform: translateY(0.5rem);
+    }
+  }
+
+  .yui-modal[open] {
+    transition:
+      opacity var(--yui-transition),
+      transform var(--yui-transition);
+  }
+
+  .yui-modal__panel {
+    display: flex;
+    flex-direction: column;
+    max-height: inherit;
+  }
+
+  .yui-modal__header {
+    display: flex;
+    gap: var(--yui-space-sm);
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: var(--yui-space-md) var(--yui-space-md) 0;
+  }
+
+  .yui-modal__title {
+    margin: 0;
+    font-family: var(--yui-font-display);
+    font-size: var(--yui-text-h4);
+    font-weight: var(--yui-weight-semibold);
+  }
+
+  .yui-modal__close {
+    display: inline-flex;
+    flex: none;
+    padding: 0.2rem;
+    color: var(--yui-ink-faint);
+    cursor: pointer;
+    background: none;
+    border: 0;
+    border-radius: var(--yui-radius-xs);
+  }
+
+  .yui-modal__close:hover {
+    color: var(--yui-ink);
+    background-color: var(--yui-surface-sunken);
+  }
+
+  .yui-modal__body {
+    padding: var(--yui-space-md);
+    overflow-y: auto;
+  }
+
+  .yui-modal__footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--yui-space-2xs);
+    justify-content: flex-end;
+    padding: 0 var(--yui-space-md) var(--yui-space-md);
+  }
+}

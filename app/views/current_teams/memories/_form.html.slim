@@ -1,15 +1,7 @@
-article
-  = form_with(model: [:current_team, memory], multipart: true) do |form|
+= render Yui::CardComponent.new do
+  = form_with(model: [:current_team, memory], builder: YuiFormBuilder, multipart: true, html: { class: "yui-stack" }) do |form|
+    = render Yui::HeadlineComponent.new(form_legend, level: 3)
     = render partial: "shared_partials/form_validation_errors", locals: { record: memory }
-    fieldset
-      h3
-        legend
-          = form_legend
-      div
-        = form.label :memo
-        = form.text_area :memo, rows: 4, required: true, placeholder: "What do you want to remember?"
-
+    = form.text_area :memo, label: "Memo", rows: 4, required: true, placeholder: "What do you want to remember?"
     = render InsightAttachmentManagerComponent.new(form: form, scope: "current_team", mode: :single)
-
-    div style="margin-top: 1.5rem;"
-      = form.submit
+    = form.submit

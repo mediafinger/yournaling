@@ -1,0 +1,68 @@
+@layer components {
+  /* PictureSelectFieldComponent — pick an existing team picture from a
+     disclosure list, or expand "Or Upload New Picture" to attach a file. */
+
+  .yui-picture-select {
+    display: flex;
+    flex-direction: column;
+    gap: var(--yui-space-sm);
+    padding: 0;
+    margin: 0;
+    border: 0;
+  }
+
+  .yui-picture-select__menu {
+    position: relative;
+  }
+
+  .yui-picture-select__menu > summary {
+    list-style: none;
+  }
+
+  .yui-picture-select__menu > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .yui-picture-select__list {
+    position: absolute;
+    z-index: 50;
+    min-width: 100%;
+    max-height: 300px;
+    padding: var(--yui-space-3xs);
+    overflow-y: auto;
+    list-style: none;
+    background-color: var(--yui-surface);
+    border: var(--yui-border-hairline);
+    border-radius: var(--yui-radius-md);
+    box-shadow: var(--yui-shadow-md);
+  }
+
+  .yui-picture-select__option {
+    display: flex;
+    gap: var(--yui-space-xs);
+    align-items: center;
+    padding: var(--yui-space-2xs);
+    font-weight: var(--yui-weight-medium);
+    text-decoration: none;
+    border-radius: var(--yui-radius-sm);
+  }
+
+  .yui-picture-select__option:hover,
+  .yui-picture-select__option:focus-visible {
+    background-color: var(--yui-surface-sunken);
+  }
+
+  .yui-picture-select__thumb {
+    flex-shrink: 0;
+    width: 60px;
+    height: 45px;
+    object-fit: cover;
+    border-radius: var(--yui-radius-xs);
+  }
+
+  .yui-picture-select__upload {
+    display: flex;
+    flex-direction: column;
+    gap: var(--yui-space-2xs);
+  }
+}

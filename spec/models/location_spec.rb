@@ -95,6 +95,23 @@ RSpec.describe Location, type: :model do
     end
   end
 
+  describe "country helpers" do
+    it "#country_name humanises the ISO alpha-2 code" do
+      expect(described_class.new(country_code: "es").country_name).to eq("Spain")
+    end
+
+    it "#country_label is name + code + flag" do
+      expect(described_class.new(country_code: "es").country_label).to eq("Spain (ES) 🇪🇸")
+    end
+
+    it "returns nil when there is no country_code" do
+      loc = described_class.new(country_code: nil)
+      expect(loc.country).to be_nil
+      expect(loc.country_name).to be_nil
+      expect(loc.country_label).to be_nil
+    end
+  end
+
   describe "attribute normalization" do
     it "normalizes country_code to stripped lowercase" do
       loc = described_class.create!(valid_attributes.merge(country_code: "  ES  "))

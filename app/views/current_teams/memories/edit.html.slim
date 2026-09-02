@@ -1,23 +1,5 @@
-div data-controller="modal"
+.yui-narrow.yui-stack
   = render partial: "form", locals: { memory: @memory, form_legend: "Edit memory" }
-  div style="display: flex; gap: 0.5rem; align-items: center; margin-top: 1rem;"
-    = link_to "Open", current_team_memory_path(@memory), role: "button"
-    button type="button" class="secondary" data-action="click->modal#open" style="margin-bottom: 0;"
-      | Destroy this memory
-
-  dialog data-modal-target="dialog"
-    article style="max-width: 650px;"
-      header
-        button aria-label="Close" rel="prev" data-action="click->modal#close" style="float: right;"
-        h4 style="margin-bottom: 0;" Destroy Memory
-      p style="margin-bottom: 1.5rem;"
-        | Are you sure you want to destroy this memory?
-      footer
-        div style="display: flex; gap: 0.5rem; justify-content: flex-end; align-items: center; flex-wrap: nowrap;"
-          button.secondary type="button" data-action="click->modal#close" style="margin-bottom: 0; white-space: nowrap;"
-            | Cancel
-          = button_to "Destroy Memory Only", current_team_memory_path(@memory), method: :delete, params: { destroy_orphaned_insights: false }, class: "outline secondary", style: "margin-bottom: 0; white-space: nowrap;"
-          = button_to "Destroy & Delete Orphaned Insights", current_team_memory_path(@memory), method: :delete, params: { destroy_orphaned_insights: true }, class: "contrast", style: "margin-bottom: 0; white-space: nowrap;"
-        p style="text-align: right; margin-top: 0.5rem; margin-bottom: 0;"
-          small style="color: var(--pico-muted-color);"
-            | Insights that are not part of any other memory or chronicle will be permanently deleted.
+  .yui-cluster
+    = render Yui::ButtonComponent.new("Open", href: current_team_memory_path(@memory), variant: :secondary)
+    = render PostDestroyModalComponent.new(post: @memory, name: "memory")

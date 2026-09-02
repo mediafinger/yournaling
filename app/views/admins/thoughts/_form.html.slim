@@ -1,25 +1,8 @@
-article
-  = form_with(model: [:admin, thought]) do |form|
+= render Yui::CardComponent.new do
+  = form_with(model: [:admin, thought], builder: YuiFormBuilder, html: { class: "yui-stack" }) do |form|
+    = render Yui::HeadlineComponent.new(form_legend, level: 3)
     = render partial: "shared_partials/form_validation_errors", locals: { record: thought }
-    fieldset
-      h3
-        legend
-          = form_legend
-      - if thought.persisted?
-        label
-          strong Team
-          = thought.team.name
-          i
-            = thought.team.id
-      - else
-        div
-          = form.label :team_id
-          = form.select :team_id, Team.pluck(:name, :id), selected: form.object.team_id, include_blank: true, required: true
-      div
-        = form.label :text
-        = form.text_area :text
-      div
-        = form.label :date
-        = form.date_field :date, value: Date.current
-      div
-        = form.submit
+    = render partial: "admins/team_field", locals: { form: form }
+    = form.text_area :text, label: "Text", required: true
+    = form.date_field :date
+    = form.submit

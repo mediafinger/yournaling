@@ -1,18 +1,1 @@
-article.yournal-card.memory-card id= dom_id(memory)
-  header.card-header
-    span.card-badge 💡 Memory
-    = render BrowseHeaderComponent.new(record: memory, team: team)
-
-  p
-    strong Memo:
-    br
-    = memory.memo
-
-  - if memory.picture
-    = render partial: "teams/pictures/picture", locals: { team:, picture: memory.picture }
-  - if memory.thought
-    = render partial: "teams/thoughts/thought", locals: { team:, thought: memory.thought }
-  - if memory.location
-    = render partial: "teams/locations/location", locals: { team:, location: memory.location }
-  - if memory.weblink
-    = render partial: "teams/weblinks/weblink", locals: { team:, weblink: memory.weblink }
+= render MemoryCardComponent.new(memory: memory, scope: :browse, team: team, hide_actions: local_assigns[:hide_actions] || false)

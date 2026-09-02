@@ -1,0 +1,98 @@
+@layer components {
+  /* Disclosure menu — Yui::Menu (<details class="yui-menu">). */
+
+  .yui-menu {
+    position: relative;
+    display: inline-flex;
+  }
+
+  .yui-menu__trigger {
+    display: inline-flex;
+    gap: 0.3em;
+    align-items: center;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .yui-menu__trigger::-webkit-details-marker {
+    display: none;
+  }
+
+  .yui-menu__trigger .yui-icon {
+    transition: transform var(--yui-transition-fast);
+  }
+
+  .yui-menu[open] > .yui-menu__trigger .yui-icon {
+    transform: rotate(180deg);
+  }
+
+  .yui-menu__panel {
+    position: absolute;
+    top: calc(100% + 0.35rem);
+    left: 0;
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    min-width: 11rem;
+    padding: 0.35rem;
+    background-color: var(--yui-surface);
+    border: var(--yui-border-hairline);
+    border-radius: var(--yui-radius-md);
+    box-shadow: var(--yui-shadow-md);
+  }
+
+  .yui-menu--end > .yui-menu__panel {
+    right: 0;
+    left: auto;
+  }
+
+  @starting-style {
+    .yui-menu[open] > .yui-menu__panel {
+      opacity: 0;
+      transform: translateY(-0.25rem);
+    }
+  }
+
+  .yui-menu[open] > .yui-menu__panel {
+    transition:
+      opacity var(--yui-transition-fast),
+      transform var(--yui-transition-fast);
+  }
+
+  .yui-menu__item {
+    display: flex;
+    gap: 0.55rem;
+    align-items: center;
+    width: 100%;
+    padding: 0.45rem 0.6rem;
+    font-family: var(--yui-font-body);
+    font-size: var(--yui-text-sm);
+    color: var(--yui-ink-soft);
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+    background: none;
+    border: 0;
+    border-radius: var(--yui-radius-sm);
+  }
+
+  .yui-menu__item:hover,
+  .yui-menu__item:focus-visible {
+    color: var(--yui-ink);
+    background-color: var(--yui-surface-sunken);
+  }
+
+  .yui-menu__item .yui-icon {
+    color: var(--yui-ink-faint);
+  }
+
+  .yui-menu__item--danger {
+    color: var(--yui-danger);
+  }
+
+  .yui-menu__sep {
+    height: 1px;
+    margin: 0.3rem;
+    background-color: var(--yui-border);
+  }
+}

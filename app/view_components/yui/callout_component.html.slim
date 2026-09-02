@@ -1,8 +1,8 @@
 div class=css_class role="note"
-  .ex-callout__icon
+  .yui-callout__icon
     = render(Yui::IconComponent.new(ICONS.fetch(variant)))
   div
     - if title
-      p.ex-callout__title = title
-    .ex-callout__body
+      p.yui-callout__title = title
+    .yui-callout__body
       = content

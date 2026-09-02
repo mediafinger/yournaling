@@ -1,25 +1,30 @@
 # frozen_string_literal: true
 
 class AdminActionsComponent < ApplicationComponent
-  slim_template <<~SLIM
-    - if action_name != "show"
-      = @show_link
-    = @edit_link
-    = @events_link
-  SLIM
-
   def initialize(record:, name:)
     @record = record
     @name = name
   end
 
-  def before_render
-    show_path = send(:"admin_#{@name}_path", @record)
-    edit_path = send(:"edit_admin_#{@name}_path", @record)
+  attr_reader :name
 
-    @show_link = link_to "Show this #{@name}", show_path, role: "button"
-    @edit_link = link_to "Edit this #{@name}", edit_path, role: "button", class: "secondary"
-    @events_link =
-      link_to "Events", admin_record_events_path(record_id: @record.to_param), role: "button", class: "secondary"
+  def action_name
+    helpers.controller.action_name
+  end
+
+  def show?
+    action_name != "show"
+  end
+
+  def show_path
+    send(:"admin_#{name}_path", @record)
+  end
+
+  def edit_path
+    send(:"edit_admin_#{name}_path", @record)
+  end
+
+  def events_path
+    admin_record_events_path(record_id: @record.to_param)
   end
 end

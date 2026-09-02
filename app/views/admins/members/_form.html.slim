@@ -1,30 +1,22 @@
-article
-  = form_with(model: [:admin, member]) do |form|
+= render Yui::CardComponent.new do
+  = form_with(model: [:admin, member], builder: YuiFormBuilder, html: { class: "yui-stack" }) do |form|
+    = render Yui::HeadlineComponent.new(form_legend, level: 3)
     = render partial: "shared_partials/form_validation_errors", locals: { record: member }
-    fieldset
-      h3
-        legend
-          = form_legend
-      - if member.persisted?
-        label
-          strong Team
+    - if member.persisted?
+      .yui-field
+        span.yui-label Team
+        p.yui-text
           = member.team.name
-          i
-            = member.team.id
-        label
-          strong User
+          = " "
+          code.yui-code = member.team.id
+      .yui-field
+        span.yui-label User
+        p.yui-text
           = member.user.name
-          i
-            = member.user.id
-      - else
-        div
-          = form.label :team_id
-          = form.select :team_id, Team.pluck(:name, :id), selected: form.object.team_id, include_blank: true, required: true
-        div
-          = form.label :user_id
-          = form.select :user_id, User.pluck(:email, :id), selected: form.object.user_id, include_blank: true, required: true
-      div
-        = form.label :roles
-        = form.select :roles, Member::VALID_ROLES, multiple: true, selected: form.object.roles, required: true
-      div
-        = form.submit
+          = " "
+          code.yui-code = member.user.id
+    - else
+      = form.select :team_id, Team.order(:name).pluck(:name, :id), label: "Team", include_blank: true, required: true
+      = form.select :user_id, User.order(:email).pluck(:email, :id), label: "User", include_blank: true, required: true
+    = form.select :roles, Member::VALID_ROLES, label: "Roles", multiple: true, required: true
+    = form.submit

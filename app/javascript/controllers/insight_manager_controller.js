@@ -62,7 +62,7 @@ export default class extends Controller {
   closeDrawer(event) {
     if (event) event.preventDefault()
     if (this.hasDrawerTarget) {
-      this.drawerTarget.style.display = "none"
+      this.drawerTarget.hidden = true
       this.drawerFormContainerTarget.innerHTML = ""
       this.hideDrawerError()
     }
@@ -82,7 +82,7 @@ export default class extends Controller {
     this.drawerTitleTarget.textContent = titles[type] || "Add Insight"
     this.drawerFormContainerTarget.innerHTML = this[templateName].innerHTML
     this.hideDrawerError()
-    this.drawerTarget.style.display = "block"
+    this.drawerTarget.hidden = false
     this.drawerTarget.scrollIntoView({ behavior: "smooth", block: "nearest" })
   }
 
@@ -90,20 +90,20 @@ export default class extends Controller {
     if (!this.hasDrawerErrorTarget) return
     const errorList = Array.isArray(errors) ? errors : [errors]
     this.drawerErrorTarget.innerHTML = `
-      <section style="background-color: var(--pico-form-element-invalid-border-color); color: white; padding: 0.75rem 1rem; border-radius: 4px; margin-bottom: 1rem;">
+      <div class="yui-insight-drawer__error" role="alert">
         <strong>Please fix the following:</strong>
-        <ul style="margin-bottom: 0; margin-top: 0.25rem;">
+        <ul class="yui-stack yui-stack--xs">
           ${errorList.map(err => `<li>${err}</li>`).join("")}
         </ul>
-      </section>
+      </div>
     `
-    this.drawerErrorTarget.style.display = "block"
+    this.drawerErrorTarget.hidden = false
   }
 
   hideDrawerError() {
     if (this.hasDrawerErrorTarget) {
       this.drawerErrorTarget.innerHTML = ""
-      this.drawerErrorTarget.style.display = "none"
+      this.drawerErrorTarget.hidden = true
     }
   }
 
@@ -247,21 +247,21 @@ export default class extends Controller {
     const icon = icons[type] || "📌"
     let mediaSnippet = ""
     if (type === "picture" && thumb_url) {
-      mediaSnippet = `<img src="${thumb_url}" style="width: 40px; height: 30px; object-fit: cover; border-radius: 3px; margin-right: 0.5rem;" alt="" />`
+      mediaSnippet = `<img class="yui-insight-chip__thumb" src="${thumb_url}" alt="" />`
     }
 
     const chip = document.createElement("div")
+    chip.className = "yui-insight-chip"
     chip.dataset.insightChip = "true"
     chip.dataset.type = type
     chip.dataset.id = id
-    chip.style.cssText = "display: inline-flex; align-items: center; justify-content: space-between; background: var(--pico-card-background-color); border: 1px solid var(--pico-muted-border-color); border-radius: 6px; padding: 0.5rem 0.75rem; margin: 0.25rem 0.5rem 0.25rem 0; font-size: 0.9rem;"
 
     chip.innerHTML = `
-      <span style="display: flex; align-items: center; margin-right: 0.75rem;">
+      <span class="yui-insight-chip__label">
         ${mediaSnippet}
-        <span><strong>${icon} ${this.capitalize(type)}:</strong> ${this.escapeHtml(label)}</span>
+        <span><strong>${icon} ${this.capitalize(type)}:&nbsp;</strong>${this.escapeHtml(label)}</span>
       </span>
-      <button type="button" class="outline secondary" data-action="click->insight-manager#removeInsight" data-type="${type}" style="padding: 0.2rem 0.5rem; margin-bottom: 0; font-size: 0.8rem; line-height: 1;" title="Remove">✕</button>
+      <button type="button" class="yui-btn yui-btn--ghost yui-btn--sm yui-insight-chip__remove" data-action="click->insight-manager#removeInsight" data-type="${type}" title="Remove">✕</button>
     `
 
     this.attachedContainerTarget.appendChild(chip)
@@ -277,11 +277,7 @@ export default class extends Controller {
       const isAttached = this[inputTarget] && Boolean(this[inputTarget].value)
 
       if (this[menuItemTarget]) {
-        if (isAttached) {
-          this[menuItemTarget].style.display = "none"
-        } else {
-          this[menuItemTarget].style.display = "block"
-        }
+        this[menuItemTarget].hidden = isAttached
       }
     })
   }

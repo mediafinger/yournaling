@@ -1,0 +1,11 @@
+/ locals: name (singular resource name), record
+.yui-cluster
+  = render Yui::ButtonComponent.new("Open", href: send(:"admin_#{name}_path", record), variant: :secondary)
+  = render Yui::ModalComponent.new(title: "Destroy #{name}", size: :sm) do |modal|
+    - modal.with_trigger do
+      = render Yui::ButtonComponent.new("Destroy this #{name}", variant: :danger, icon: "trash", size: :sm)
+    p.yui-text = "Are you sure you want to destroy this #{name}?"
+    - modal.with_footer do
+      button.yui-btn.yui-btn--ghost type="button" data-action="click->yui-modal#close"
+        | Close
+      = button_to "Destroy #{name.capitalize}", send(:"admin_#{name}_path", record), method: :delete, class: "yui-btn yui-btn--danger"

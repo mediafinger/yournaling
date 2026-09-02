@@ -10,13 +10,14 @@ module Yui
   class BlockquoteComponent < BaseComponent
     VARIANTS = %i[plain card].freeze
 
-    attr_reader :cite, :variant
+    attr_reader :cite, :variant, :dom_id
 
-    def initialize(quote = nil, cite: nil, variant: :plain)
+    def initialize(quote = nil, cite: nil, variant: :plain, id: nil)
       super()
       @quote = quote
       @cite = cite.presence
-      @variant = ex_token(variant, allowed: VARIANTS, default: :plain)
+      @variant = yui_token(variant, allowed: VARIANTS, default: :plain)
+      @dom_id = id.presence
     end
 
     def quote
@@ -24,7 +25,7 @@ module Yui
     end
 
     def css_class
-      ex_class("ex-blockquote", variant == :card && "ex-blockquote--card")
+      yui_class("yui-blockquote", variant == :card && "yui-blockquote--card")
     end
   end
 end

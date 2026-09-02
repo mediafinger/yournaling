@@ -1,0 +1,11 @@
+= render(Yui::NavbarComponent.new(area: area)) do |bar|
+  - bar.with_group do
+    = render Yui::NavItemComponent.new("🌐 Yournaling", href: "#", variant: :cta)
+    = render Yui::NavItemComponent.new("+ New", href: "#", variant: :cta)
+  - bar.with_group do
+    = render Yui::NavItemComponent.new("Chronicles", href: "#", active: true)
+    = render Yui::NavItemComponent.new("Memories", href: "#")
+    = render Yui::NavItemComponent.new("Search", href: "#")
+  - bar.with_group do
+    = render Yui::NavItemComponent.new("👤 Mira Kessler", href: "#")
+    = render Yui::NavItemComponent.new("Logout", href: "#")

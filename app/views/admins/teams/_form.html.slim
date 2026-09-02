@@ -1,12 +1,6 @@
-article
-  = form_with(model: [:admin, team]) do |form|
+= render Yui::CardComponent.new do
+  = form_with(model: [:admin, team], builder: YuiFormBuilder, html: { class: "yui-stack" }) do |form|
+    = render Yui::HeadlineComponent.new(form_legend, level: 3)
     = render partial: "shared_partials/form_validation_errors", locals: { record: team }
-    fieldset
-      h3
-        legend
-          = form_legend
-      div
-        = form.label :name
-        = form.text_field :name
-      div
-        = form.submit
+    = form.text_field :name
+    = form.submit

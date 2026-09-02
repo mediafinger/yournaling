@@ -1,0 +1,105 @@
+@layer components {
+  /* ChronicleAttachedEntriesFormComponent — the drag-sortable list of entries
+     already attached to a chronicle, each with reorder nudges and a Remove
+     checkbox. Drag state (opacity) is set inline by the `sortable` controller. */
+
+  .yui-attached-entries {
+    display: flex;
+    flex-direction: column;
+    gap: var(--yui-space-2xs);
+    padding: 0;
+    margin: 0;
+    border: 0;
+  }
+
+  .yui-attached-entries__legend {
+    display: block;
+    padding: 0;
+  }
+
+  .yui-attached-entries__legend .yui-h4 {
+    margin-bottom: var(--yui-space-3xs);
+  }
+
+  .yui-attached-entries__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--yui-space-xs);
+  }
+
+  .yui-attached-entry {
+    display: flex;
+    gap: var(--yui-space-sm);
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--yui-space-xs);
+    background-color: var(--yui-surface);
+    border: var(--yui-border-hairline);
+    border-radius: var(--yui-radius-sm);
+  }
+
+  .yui-attached-entry__main {
+    display: flex;
+    gap: var(--yui-space-2xs);
+    align-items: center;
+    min-width: 0;
+  }
+
+  .yui-attached-entry__handle {
+    padding-right: var(--yui-space-3xs);
+    font-size: 1.25rem;
+    line-height: 1;
+    color: var(--yui-ink-faint);
+    cursor: grab;
+    user-select: none;
+  }
+
+  .yui-attached-entry__nudge {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-right: var(--yui-space-3xs);
+  }
+
+  .yui-attached-entry__thumb {
+    flex-shrink: 0;
+    width: 60px;
+    height: 45px;
+    object-fit: cover;
+    border-radius: var(--yui-radius-xs);
+  }
+
+  .yui-attached-entry__body {
+    min-width: 0;
+    font-size: var(--yui-text-sm);
+  }
+
+  .yui-attached-entry__title {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .yui-attached-entry__note {
+    display: block;
+    color: var(--yui-ink-faint);
+  }
+
+  .yui-attached-entry__actions {
+    display: flex;
+    flex-shrink: 0;
+    gap: var(--yui-space-sm);
+    align-items: center;
+  }
+
+  .yui-attached-entry__remove {
+    display: flex;
+    gap: var(--yui-space-3xs);
+    align-items: center;
+    margin-bottom: 0;
+    font-size: var(--yui-text-sm);
+    color: var(--yui-danger);
+    cursor: pointer;
+  }
+}

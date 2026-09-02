@@ -1,0 +1,35 @@
+@layer components {
+  /* The publish/artefact feed chrome: the "newer posts" pill the `feed-refresh`
+     controller toggles, and the loading row shown while a lazy next-page Turbo
+     frame resolves. */
+
+  .yui-feed-banner {
+    display: block;
+    width: fit-content;
+    padding: var(--yui-space-2xs) var(--yui-space-md);
+    margin: var(--yui-space-xs) auto var(--yui-space-md);
+    font-size: var(--yui-text-sm);
+    font-weight: var(--yui-weight-semibold);
+    color: var(--yui-accent-ink);
+    text-align: center;
+    cursor: pointer;
+    background-color: var(--yui-accent);
+    border: 0;
+    border-radius: var(--yui-radius-pill);
+    box-shadow: var(--yui-shadow-sm);
+    transition:
+      transform var(--yui-transition-fast),
+      opacity var(--yui-transition-fast);
+  }
+
+  .yui-feed-banner:hover {
+    opacity: 0.95;
+    transform: translateY(-1px);
+  }
+
+  .yui-feed-loading {
+    display: flex;
+    justify-content: center;
+    padding: var(--yui-space-lg) 0;
+  }
+}

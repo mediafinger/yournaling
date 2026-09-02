@@ -71,9 +71,14 @@ RSpec.describe "/current_team/members", type: :request do
       switch_current_team(team)
     end
 
-    it "renders a successful response" do
+    it "renders the form with the member fields" do
       get new_current_team_member_url
       expect(response).to be_successful
+      assert_select "form[action=?][method=?]", current_team_members_path, "post" do
+        assert_select "input[name=?]", "member[user_id]"
+        assert_select "input[name=?]", "member[team_id]"
+        assert_select "textarea[name=?]", "member[roles]"
+      end
     end
   end
 
@@ -85,9 +90,14 @@ RSpec.describe "/current_team/members", type: :request do
       switch_current_team(team)
     end
 
-    it "renders a successful response" do
+    it "renders the form with the member fields" do
       get edit_current_team_member_url(member.urlsafe_id)
       expect(response).to be_successful
+      assert_select "form[action=?][method=?]", current_team_member_path(member), "post" do
+        assert_select "input[name=?]", "member[user_id]"
+        assert_select "input[name=?]", "member[team_id]"
+        assert_select "textarea[name=?]", "member[roles]"
+      end
     end
   end
 

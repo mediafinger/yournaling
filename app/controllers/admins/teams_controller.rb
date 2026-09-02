@@ -3,7 +3,7 @@
 module Admins
   class TeamsController < AdminController
     def index
-      @teams = Team.all
+      @pagy, @teams = pagy(:offset, Team.order(created_at: :desc))
     end
 
     def show

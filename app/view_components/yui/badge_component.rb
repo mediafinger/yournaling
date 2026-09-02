@@ -15,7 +15,7 @@ module Yui
     def initialize(label = nil, variant: :neutral, dot: false, icon: nil)
       super()
       @label = label
-      @variant = ex_token(variant, allowed: VARIANTS, default: :neutral)
+      @variant = yui_token(variant, allowed: VARIANTS, default: :neutral)
       @dot = dot
       @icon = icon.presence
     end
@@ -25,7 +25,7 @@ module Yui
     end
 
     def css_class
-      ex_class("ex-badge", variant != :neutral && "ex-badge--#{variant}")
+      yui_class("yui-badge", variant != :neutral && "yui-badge--#{variant}")
     end
   end
 end

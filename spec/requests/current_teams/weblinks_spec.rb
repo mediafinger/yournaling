@@ -48,20 +48,30 @@ RSpec.describe "/current_team/weblinks", type: :request do
   end
 
   describe "GET /new" do
-    it "renders a successful response" do
+    it "renders the form with the weblink fields" do
       get new_current_team_weblink_url
 
       expect(response).to be_successful
+      assert_select "form[action=?][method=?]", current_team_weblinks_path, "post" do
+        assert_select "input[name=?]", "weblink[name]"
+        assert_select "input[name=?]", "weblink[url]"
+        assert_select "textarea[name=?]", "weblink[description]"
+      end
     end
   end
 
   describe "GET /edit" do
-    it "renders a successful response" do
+    it "renders the form with the weblink fields" do
       weblink = Weblink.create! valid_attributes
 
       get edit_current_team_weblink_url(weblink)
 
       expect(response).to be_successful
+      assert_select "form[action=?][method=?]", current_team_weblink_path(weblink), "post" do
+        assert_select "input[name=?]", "weblink[name]"
+        assert_select "input[name=?]", "weblink[url]"
+        assert_select "textarea[name=?]", "weblink[description]"
+      end
     end
   end
 

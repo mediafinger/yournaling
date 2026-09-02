@@ -24,9 +24,9 @@ RSpec.describe "Content Visibility Modal Dialog", type: :system do
 
     expect(page).to have_text("Visibility: draft")
     expect(page).to have_button("Change visibility")
-    expect(page).to have_css("dialog[data-modal-target='dialog']", visible: :all)
+    expect(page).to have_css("dialog[data-yui-modal-target='dialog']", visible: :all)
 
-    dialog = find("dialog[data-modal-target='dialog']", visible: :all)
+    dialog = find("dialog[data-yui-modal-target='dialog']", visible: :all)
     expect(dialog).to have_button("Draft ✓", disabled: true)
     expect(dialog).to have_button("Internal")
     expect(dialog).to have_button("Published")
@@ -44,12 +44,12 @@ RSpec.describe "Content Visibility Modal Dialog", type: :system do
 
     expect(page).to have_text("Visibility: internal")
     expect(page).to have_button("Change visibility")
-    expect(page).to have_css("div[data-controller='modal']")
-    expect(page).to have_css("button[data-action='click->modal#open'][aria-label='Change visibility']")
-    expect(page).to have_css("dialog[data-modal-target='dialog']", visible: :all)
+    expect(page).to have_css("div[data-controller='yui-modal']")
+    expect(page).to have_css("[data-action='click->yui-modal#open']")
+    expect(page).to have_css("dialog[data-yui-modal-target='dialog']", visible: :all)
 
-    dialog = find("dialog[data-modal-target='dialog']", visible: :all)
-    expect(dialog).to have_text("Change Visibility")
+    dialog = find("dialog[data-yui-modal-target='dialog']", visible: :all)
+    expect(dialog).to have_text("Change visibility")
     expect(dialog).to have_button("Draft")
     expect(dialog).to have_button("Internal ✓", disabled: true)
     expect(dialog).to have_button("Published")
@@ -68,8 +68,8 @@ RSpec.describe "Content Visibility Modal Dialog", type: :system do
 
     expect(page).to have_text("Visibility: internal")
     expect(page).to have_button("Change visibility")
-    expect(page).to have_css("button[data-action='click->modal#open'][aria-label='Change visibility']")
-    expect(page).to have_css("dialog[data-modal-target='dialog']", visible: :all)
+    expect(page).to have_css("[data-action='click->yui-modal#open']")
+    expect(page).to have_css("dialog[data-yui-modal-target='dialog']", visible: :all)
 
     find_button("Published", visible: :all).click
 
@@ -83,8 +83,8 @@ RSpec.describe "Content Visibility Modal Dialog", type: :system do
 
     expect(page).to have_text("Visibility: published")
     expect(page).to have_button("Change visibility")
-    expect(page).to have_css("button[data-action='click->modal#open'][aria-label='Change visibility']")
-    expect(page).to have_css("dialog[data-modal-target='dialog']", visible: :all)
+    expect(page).to have_css("[data-action='click->yui-modal#open']")
+    expect(page).to have_css("dialog[data-yui-modal-target='dialog']", visible: :all)
 
     find_button("Internal", visible: :all).click
 

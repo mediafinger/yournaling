@@ -1,19 +1,15 @@
-div data-controller="modal"
+.yui-narrow.yui-stack
   = render partial: "form", locals: { member: @member, form_legend: "Edit member" }
-  div style="display: flex; gap: 0.5rem; align-items: center; margin-top: 1rem;"
-    = link_to "Open", current_team_member_path(@member), role: "button"
-    button type="button" class="secondary" data-action="click->modal#open" style="margin-bottom: 0;"
-      | Destroy this member
-
-  dialog data-modal-target="dialog"
-    article style="max-width: 500px;"
-      header
-        button aria-label="Close" rel="prev" data-action="click->modal#close" style="float: right;"
-        h4 style="margin-bottom: 0;" Destroy Member
-      p style="margin-bottom: 1.5rem;"
+  .yui-cluster
+    = render Yui::ButtonComponent.new("Open", href: current_team_member_path(@member), variant: :secondary)
+    = render Yui::ModalComponent.new(title: "Destroy member", size: :sm) do |modal|
+      - modal.with_trigger do
+        = render Yui::ButtonComponent.new("Destroy this member", variant: :danger, icon: "trash", size: :sm)
+      p.yui-text
         | Are you sure you want to remove
-        strong = @member.user.name
-        |  from the team?
-      footer
-        div style="display: flex; gap: 0.5rem; justify-content: flex-end; align-items: center;"
-          = button_to "Destroy Member", current_team_member_path(@member), method: :delete, class: "contrast", style: "margin-bottom: 0;"
+        strong = " #{@member.user.name} "
+        | from the team?
+      - modal.with_footer do
+        button.yui-btn.yui-btn--ghost type="button" data-action="click->yui-modal#close"
+          | Close
+        = button_to "Destroy Member", current_team_member_path(@member), method: :delete, class: "yui-btn yui-btn--danger"

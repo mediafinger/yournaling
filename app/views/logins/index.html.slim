@@ -1,2 +1,4 @@
-#logins
-  = render @logins
+.yui-stack
+  = render Yui::HeadlineComponent.new("Login sessions", level: 1)
+  #logins.yui-stack
+    = render @logins

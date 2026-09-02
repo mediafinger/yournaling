@@ -1,0 +1,11 @@
+/ dt/dd fragment — the caller wraps a dl.yui-details.
+dt Members
+dd
+  ul.yui-stack.yui-stack--xs
+    - members.each do |member|
+      li
+        = link_to member.user.name, admin_user_path(member.user), class: "yui-link"
+        = " "
+        code.yui-code = member.id
+        = " · "
+        = link_to member.roles.join(", "), admin_member_path(member), class: "yui-link"

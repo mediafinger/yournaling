@@ -1,0 +1,6 @@
+span class=wrapper_class role="status"
+  span.yui-spinner__ring aria-hidden="true"
+  - if label.present?
+    span.yui-spinner__label = label
+  - else
+    span.yui-visually-hidden = accessible_label

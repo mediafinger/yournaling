@@ -1,0 +1,20 @@
+= render(Yui::NavbarComponent.new(area: "admin")) do |bar|
+  - bar.with_group do
+    = render Yui::NavItemComponent.new("🛡️ Admin Area", href: "/admin", active: active_path?("/admin"))
+    = render Yui::NavItemComponent.new("⬅ Exit Admin", href: root_path)
+    = render NavNewButtonComponent.new(mode: :admin)
+
+  - bar.with_group do
+    = render Yui::NavItemComponent.new("Users", href: admin_users_path, active: active_path?(admin_users_path))
+    = render Yui::NavItemComponent.new("Teams", href: admin_teams_path, active: teams_active?)
+    = render Yui::NavItemComponent.new("Members", href: admin_members_path, active: active_path?(admin_members_path))
+    = render Yui::NavItemComponent.new("Chronicles", href: admin_chronicles_path, active: active_path?(admin_chronicles_path))
+    = render Yui::NavItemComponent.new("Memories", href: admin_memories_path, active: active_path?(admin_memories_path))
+    li.yui-navbar__item
+      = render InsightsDropdownComponent.new(scope: :admin)
+    = render Yui::NavItemComponent.new("Record Events", href: admin_record_events_path, active: active_path?(admin_record_events_path))
+    = render Yui::NavItemComponent.new("Analytics", href: "/admin/blazer")
+    = render Yui::NavItemComponent.new("Jobs", href: "/admin/jobs")
+
+  - bar.with_group do
+    = render TeamSwitcherAndSessionsComponent.new(mode: :admin)

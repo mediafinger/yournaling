@@ -9,10 +9,10 @@ RSpec.describe PictureLightboxComponent, type: :component do
   it "renders clickable thumbnail trigger and modal dialog" do
     rendered = render_inline(described_class.new(picture: picture, team: team))
 
-    expect(rendered.to_html).to have_css("div[data-controller='modal']")
-    expect(rendered.to_html).to have_css("[data-action='click->modal#open']")
-    expect(rendered.to_html).to have_css("dialog[data-modal-target='dialog']")
-    expect(rendered.to_html).to have_css("button[data-action='click->modal#close']")
+    expect(rendered.to_html).to have_css("div[data-controller='yui-modal']")
+    expect(rendered.to_html).to have_css("[data-action='click->yui-modal#open']")
+    expect(rendered.to_html).to have_css("dialog[data-yui-modal-target='dialog']")
+    expect(rendered.to_html).to have_css("button[data-action='click->yui-modal#close']")
   end
 
   it "renders picture details, enlarged image link, and open original button in new tab" do

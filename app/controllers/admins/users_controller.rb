@@ -3,7 +3,7 @@
 module Admins
   class UsersController < AdminController
     def index
-      @users = User.all
+      @pagy, @users = pagy(:offset, User.order(created_at: :desc))
     end
 
     def show

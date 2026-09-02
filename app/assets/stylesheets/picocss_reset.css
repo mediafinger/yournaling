@@ -1,9 +1,0 @@
-html[aria-busy="true"]::before {
-  all: unset;
-}
-
-body>header, body>main, div>article {
-  margin-top: -1rem;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-}

@@ -68,6 +68,22 @@ RSpec.describe "CurrentTeams::Pages (Manage Timeline)", type: :request do
         expect(response.body)
           .to match(/<turbo-frame\b(?=[^>]*\bid="team_artefacts_page_2")(?=[^>]*\btarget="_top")[^>]*>/)
       end
+
+      # The endless scroll terminates only because Pagy reports no next page: were `@pagy.next`
+      # ever truthy on the last page (e.g. a Pagy upgrade regression), the view would emit another
+      # lazy turbo frame and the feed would chain requests forever. See the matching test in
+      # spec/requests/pages_request_spec.rb.
+      it "stops the endless scroll chain on the last page" do
+        # 3 base artefacts + 4 extra = 7, so page 2 (at 5/page) is the last.
+        4.times { |i| FactoryBot.create(:memory, team: team, memo: "Extra Memory #{i}") }
+
+        get current_team_home_url(page: 2)
+
+        expect(response).to be_successful
+        expect(response.body).to include("id=\"team_artefacts_page_2\"")
+        expect(response.body).not_to include("id=\"team_artefacts_page_3\"")
+        expect(response.body).not_to include("loading=\"lazy\"")
+      end
     end
 
     context "when logged in as an editor" do
@@ -106,7 +122,7 @@ RSpec.describe "CurrentTeams::Pages (Manage Timeline)", type: :request do
       expect(response).to be_successful
       json = JSON.parse(response.body)
       expect(json["count"]).to eq(0)
-      expect(json["latest_updated_at"]).to be_nil
+      expect(json["latest_at"]).to be_nil
     end
 
     it "returns count and timestamp when newer updated items exist" do
@@ -118,7 +134,7 @@ RSpec.describe "CurrentTeams::Pages (Manage Timeline)", type: :request do
       expect(response).to be_successful
       json = JSON.parse(response.body)
       expect(json["count"]).to be >= 1
-      expect(json["latest_updated_at"]).to eq(new_item.updated_at.iso8601(6))
+      expect(json["latest_at"]).to eq(new_item.updated_at.iso8601(6))
     end
   end
 

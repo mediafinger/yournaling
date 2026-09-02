@@ -1,20 +1,20 @@
-header style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 1rem;"
+.yui-record-header
   div
-    = content_tag(heading_tag, title, style: "margin-bottom: 0.25rem;")
-    div style="margin-bottom: 0;"
-      small
-        - if date.present?
+    = content_tag(heading_tag, title, class: "yui-record-header__title")
+    .yui-record-header__meta
+      - if date.present?
+        span
           strong = "#{date_label}: "
           = date
-          | &nbsp;|&nbsp;
+      span
         strong Visibility:&nbsp;
         = @record.visibility
         - unless @hide_actions
           = render ContentVisibilityModalComponent.new(record: @record, user: current_user, team: current_team, member: current_member)
 
   - unless @hide_actions
-    div style="display: flex; gap: 0.5rem; flex-shrink: 0;"
+    .yui-record-header__actions
       - if show_open_button?
-        = link_to "Open", show_path, role: "button", class: "outline", style: "padding: 0.25rem 0.6rem; font-size: 0.8rem; margin-bottom: 0;"
+        = render Yui::ButtonComponent.new("Open", href: show_path, variant: :secondary, size: :sm)
       - if can_rewrite?
-        = link_to "Rewrite", edit_path, role: "button", class: "outline secondary", style: "padding: 0.25rem 0.6rem; font-size: 0.8rem; margin-bottom: 0;"
+        = render Yui::ButtonComponent.new("Rewrite", href: edit_path, variant: :ghost, size: :sm)

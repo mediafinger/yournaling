@@ -91,7 +91,7 @@ RSpec.describe "/current_team/chronicles", type: :request do
       get current_team_chronicle_url(chronicle.urlsafe_id)
       expect(response).to be_successful
       expect(response.body).to include("Beach View")
-      expect(response.body).to include("data-controller=\"modal\"")
+      expect(response.body).to include("data-controller=\"yui-modal\"")
       expect(response.body).not_to include(team_picture_only_path(team, picture))
 
       get current_team_picture_path(picture)
@@ -103,7 +103,7 @@ RSpec.describe "/current_team/chronicles", type: :request do
       get current_team_chronicle_url(chronicle.urlsafe_id)
       expect(response).to be_successful
       expect(response.body).to include("Change visibility")
-      expect(response.body).to include("data-controller=\"modal\"")
+      expect(response.body).to include("data-controller=\"yui-modal\"")
       expect(response.body).to include("Published")
 
       patch current_team_content_visibility_url(chronicle), params: { visibility: "published" },
@@ -130,9 +130,14 @@ RSpec.describe "/current_team/chronicles", type: :request do
   end
 
   describe "GET /new" do
-    it "renders a successful response" do
+    it "renders the chronicle form with its fields" do
       get new_current_team_chronicle_url
       expect(response).to be_successful
+      assert_select "form[action=?][method=?]", current_team_chronicles_path, "post" do
+        assert_select "input[name=?]", "chronicle[name]"
+        assert_select "textarea[name=?]", "chronicle[notice]"
+        assert_select "select[name=?]", "chronicle[visibility]"
+      end
     end
 
     it "renders picture options with valid representation preview URLs and thumbnail images (regression test)" do
@@ -147,9 +152,14 @@ RSpec.describe "/current_team/chronicles", type: :request do
   describe "GET /edit" do
     let!(:chronicle) { Chronicle.create!(valid_attributes) }
 
-    it "renders a successful response" do
+    it "renders the chronicle form with its fields" do
       get edit_current_team_chronicle_url(chronicle.urlsafe_id)
       expect(response).to be_successful
+      assert_select "form[action=?][method=?]", current_team_chronicle_path(chronicle), "post" do
+        assert_select "input[name=?]", "chronicle[name]"
+        assert_select "textarea[name=?]", "chronicle[notice]"
+        assert_select "select[name=?]", "chronicle[visibility]"
+      end
     end
 
     it "renders picture options with valid representation preview URLs and thumbnail images (regression test)" do

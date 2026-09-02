@@ -1,0 +1,45 @@
+@layer components {
+  /* Tab set — Yui::Tabs. */
+
+  .yui-tabs__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.15rem;
+    border-bottom: 1px solid var(--yui-border);
+  }
+
+  .yui-tabs__tab {
+    padding: 0.5rem 0.85rem;
+    margin-bottom: -1px;
+    font-family: var(--yui-font-body);
+    font-size: var(--yui-text-sm);
+    font-weight: var(--yui-weight-medium);
+    color: var(--yui-ink-soft);
+    cursor: pointer;
+    background: none;
+    border: 0;
+    border-bottom: 2px solid transparent;
+  }
+
+  .yui-tabs__tab:hover {
+    color: var(--yui-ink);
+  }
+
+  .yui-tabs__tab--active {
+    color: var(--yui-accent-strong);
+    border-bottom-color: var(--yui-accent);
+  }
+
+  .yui-tabs__tab:focus-visible {
+    outline: 2px solid var(--yui-accent);
+    outline-offset: -2px;
+  }
+
+  .yui-tabs__panel {
+    padding-block: var(--yui-space-md);
+  }
+
+  .yui-tabs__panel:focus-visible {
+    outline: none;
+  }
+}

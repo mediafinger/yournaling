@@ -1,34 +1,34 @@
 # frozen_string_literal: true
 
-# View helpers for the /example design-language showcase only.
+# View helpers for the /example design-language showcase only. The records are
+# built in memory (no DB, no FactoryBot — /example is reachable in production)
+# and rendered with `actions: false` so no auth/policy context is needed.
 module ExampleHelper
-  # Sample data for the composed Memory / Chronicle record cards.
-  def record_examples(photo:, cover:)
-    {
-      sand_dollar: {
-        memo: "We found a whole sand dollar, unbroken, right where the path meets the water. Mira spotted it first.",
-        on: "4 Aug 2024", author: "Mira Kessler", team: "The Coast Year",
-        location: "Ericeira, Portugal", thought: "Some days keep themselves.",
-        tags: %w[beach walk], image: photo, visibility: :public, href: "#records"
-      },
-      storm_night: {
-        memo: "Storm all night. The path to the beach is gone — the sea took the last three metres of it.",
-        on: "18 Nov 2024", author: "Andreas Finger", team: "The Coast Year",
-        location: "Cabo da Roca", tags: %w[storm winter], visibility: :team
-      },
-      coast_year: {
-        title: "A year on the coast", start_date: "Jan 2024", end_date: "Dec 2024",
-        author: "Andreas Finger", team: "The Coast Year", memory_count: 48,
-        visibility: :team, cover: cover, href: "#records",
-        summary: "Twelve months of small tides on the Portuguese shore, collected walk by walk. " \
-                 "What started as a photo dump became the most complete record we have of a year.",
-        entries: [
-          { title: "First swim of the year — 8°C, brief", date: "12 Jan" },
-          { title: "The lighthouse at Cabo da Roca", date: "3 Mar" },
-          { title: "Sand dollar, unbroken", date: "4 Aug" },
-          { title: "Storm week — the path washes out", date: "18 Nov" },
-        ]
-      },
-    }
+  def example_memory
+    Memory.new(
+      memo: "We found a whole sand dollar, unbroken, right where the path meets the water. Mira spotted it first.",
+      visibility: "published",
+      team: Team.new(name: "The Coast Year"),
+      thought: Thought.new(text: "Some days keep themselves.", date: Date.new(2024, 8, 4)),
+      weblink: Weblink.new(name: "Tide tables — Ericeira", url: "https://example.com/tides/ericeira"),
+    )
+  end
+
+  def example_chronicle
+    Chronicle.new(
+      name: "A year on the coast",
+      notice: "Twelve months of small tides on the Portuguese shore, collected walk by walk. " \
+              "What started as a photo dump became the most complete record we have of a year.",
+      start_date: Date.new(2024, 1, 1),
+      end_date: Date.new(2024, 12, 31),
+      visibility: "published",
+      team: Team.new(name: "The Coast Year"),
+      entries: [
+        ChronicleEntry.new(entry: Thought.new(text: "First swim of the year — 8°C, brief.", date: Date.new(2024, 1, 12))),
+        ChronicleEntry.new(entry: Weblink.new(name: "The lighthouse at Cabo da Roca", url: "https://example.com/cabo-da-roca")),
+        ChronicleEntry.new(entry: Thought.new(text: "Storm week — the path to the beach washes out.",
+          date: Date.new(2024, 11, 18))),
+      ],
+    )
   end
 end

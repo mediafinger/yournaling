@@ -1,3 +1,3 @@
-div data-newest-republished-at=@newest_updated_at
+div data-newest-at=@newest_at
   - @team_artefacts.each do |team_artefact|
     = render partial: "current_teams/pages/artefact", locals: { artefact: team_artefact }

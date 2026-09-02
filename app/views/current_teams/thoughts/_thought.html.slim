@@ -1,4 +1,6 @@
-blockquote.thought-quote id= dom_id(thought)
-  - unless local_assigns[:hide_actions]
-    = render ManageHeaderComponent.new(record: thought, hide_actions: local_assigns[:hide_actions])
-  p = thought.text
+- if local_assigns[:hide_actions]
+  = render Yui::BlockquoteComponent.new(thought.text, variant: :card, id: dom_id(thought))
+- else
+  = render Yui::CardComponent.new(id: dom_id(thought)) do
+    = render ManageHeaderComponent.new(record: thought, hide_actions: false)
+    = render Yui::BlockquoteComponent.new(thought.text, variant: :card)

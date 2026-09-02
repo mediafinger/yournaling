@@ -1,142 +1,162 @@
 @layer components {
   /* 4i. ------------------------------------------------- FORMS / INPUTS */
 
-  .ex-field {
+  .yui-field {
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
   }
 
-  .ex-label {
+  .yui-label {
     display: inline-flex;
     gap: 0.35em;
     align-items: center;
-    font-size: var(--ex-text-sm);
-    font-weight: var(--ex-weight-semibold);
-    color: var(--ex-ink-soft);
+    font-size: var(--yui-text-sm);
+    font-weight: var(--yui-weight-semibold);
+    color: var(--yui-ink-soft);
   }
 
-  .ex-label__required {
-    color: var(--ex-accent);
+  .yui-label__required {
+    color: var(--yui-accent);
   }
 
-  .ex-label__optional {
-    font-size: var(--ex-text-xs);
-    font-weight: var(--ex-weight-regular);
-    color: var(--ex-ink-faint);
+  .yui-label__optional {
+    font-size: var(--yui-text-xs);
+    font-weight: var(--yui-weight-regular);
+    color: var(--yui-ink-faint);
   }
 
-  .ex-input,
-  .ex-textarea,
-  .ex-select {
+  .yui-input,
+  .yui-textarea,
+  .yui-select {
     width: 100%;
     padding: 0.6rem 0.85rem;
-    font-family: var(--ex-font-body);
-    font-size: var(--ex-text-base);
-    line-height: var(--ex-leading-normal);
-    color: var(--ex-ink);
+    font-family: var(--yui-font-body);
+    font-size: var(--yui-text-base);
+    line-height: var(--yui-leading-normal);
+    color: var(--yui-ink);
     appearance: none;
-    background-color: var(--ex-surface);
-    border: 1.5px solid var(--ex-border-strong);
-    border-radius: var(--ex-radius-sm);
+    background-color: var(--yui-surface);
+    border: 1.5px solid var(--yui-border-strong);
+    border-radius: var(--yui-radius-sm);
     transition:
-      border-color var(--ex-transition-fast),
-      box-shadow var(--ex-transition-fast),
-      background-color var(--ex-transition-fast);
+      border-color var(--yui-transition-fast),
+      box-shadow var(--yui-transition-fast),
+      background-color var(--yui-transition-fast);
   }
 
-  .ex-input::placeholder,
-  .ex-textarea::placeholder {
-    color: var(--ex-ink-faint);
+  .yui-input::placeholder,
+  .yui-textarea::placeholder {
+    color: var(--yui-ink-faint);
   }
 
-  .ex-input:hover,
-  .ex-textarea:hover,
-  .ex-select:hover {
-    border-color: var(--ex-ink-faint);
+  .yui-input:hover,
+  .yui-textarea:hover,
+  .yui-select:hover {
+    border-color: var(--yui-ink-faint);
   }
 
-  .ex-input:focus,
-  .ex-textarea:focus,
-  .ex-select:focus {
+  .yui-input:focus,
+  .yui-textarea:focus,
+  .yui-select:focus {
     outline: none;
-    background-color: var(--ex-surface-raised);
-    border-color: var(--ex-accent);
-    box-shadow: 0 0 0 3px var(--ex-accent-soft);
+    background-color: var(--yui-surface-raised);
+    border-color: var(--yui-accent);
+    box-shadow: 0 0 0 3px var(--yui-accent-soft);
   }
 
-  .ex-textarea {
+  .yui-textarea {
     min-height: 6.5rem;
     resize: vertical;
   }
 
-  .ex-input[disabled],
-  .ex-textarea[disabled],
-  .ex-select[disabled] {
-    color: var(--ex-ink-faint);
+  .yui-input[disabled],
+  .yui-textarea[disabled],
+  .yui-select[disabled] {
+    color: var(--yui-ink-faint);
     cursor: not-allowed;
-    background-color: var(--ex-surface-sunken);
+    background-color: var(--yui-surface-sunken);
   }
 
-  .ex-field--invalid .ex-input,
-  .ex-field--invalid .ex-textarea,
-  .ex-field--invalid .ex-select {
-    border-color: var(--ex-danger);
+  .yui-field--invalid .yui-input,
+  .yui-field--invalid .yui-textarea,
+  .yui-field--invalid .yui-select {
+    border-color: var(--yui-danger);
   }
 
-  .ex-field--invalid .ex-input:focus,
-  .ex-field--invalid .ex-textarea:focus,
-  .ex-field--invalid .ex-select:focus {
-    box-shadow: 0 0 0 3px var(--ex-danger-soft);
+  .yui-field--invalid .yui-input:focus,
+  .yui-field--invalid .yui-textarea:focus,
+  .yui-field--invalid .yui-select:focus {
+    box-shadow: 0 0 0 3px var(--yui-danger-soft);
   }
 
-  .ex-select-wrap {
+  .yui-select-wrap {
     position: relative;
     display: flex;
   }
 
-  .ex-select-wrap .ex-icon {
+  .yui-select-wrap .yui-icon {
     position: absolute;
     top: 50%;
     right: 0.75rem;
     width: 1.1em;
     height: 1.1em;
-    color: var(--ex-ink-faint);
+    color: var(--yui-ink-faint);
     pointer-events: none;
     transform: translateY(-50%);
   }
 
-  .ex-select {
+  .yui-select {
     padding-right: 2.5rem;
     cursor: pointer;
   }
 
-  .ex-hint {
-    font-size: var(--ex-text-xs);
-    line-height: var(--ex-leading-normal);
-    color: var(--ex-ink-faint);
+  /* Multi-select: no chevron affordance, size to a few rows. */
+  .yui-select-wrap--multiple .yui-select {
+    height: auto;
+    min-height: 6rem;
+    padding-right: var(--yui-space-xs);
   }
 
-  .ex-error {
+  .yui-select[multiple] option {
+    padding: 0.15rem 0.25rem;
+  }
+
+  .yui-hint {
+    font-size: var(--yui-text-xs);
+    line-height: var(--yui-leading-normal);
+    color: var(--yui-ink-faint);
+  }
+
+  /* Client-side preview of a chosen image file (toggled by JS). */
+  .yui-file-preview {
+    max-width: 240px;
+    max-height: 180px;
+    margin-top: var(--yui-space-2xs);
+    object-fit: cover;
+    border-radius: var(--yui-radius-xs);
+  }
+
+  .yui-error {
     display: flex;
     gap: 0.35em;
     align-items: center;
-    font-size: var(--ex-text-xs);
-    font-weight: var(--ex-weight-medium);
-    color: var(--ex-danger);
+    font-size: var(--yui-text-xs);
+    font-weight: var(--yui-weight-medium);
+    color: var(--yui-danger);
   }
 
   /* Checkbox / radio choice */
-  .ex-choice {
+  .yui-choice {
     display: flex;
     gap: 0.6rem;
     align-items: flex-start;
-    font-size: var(--ex-text-sm);
-    color: var(--ex-ink);
+    font-size: var(--yui-text-sm);
+    color: var(--yui-ink);
     cursor: pointer;
   }
 
-  .ex-choice input {
+  .yui-choice input {
     display: grid;
     flex: none;
     place-content: center;
@@ -144,92 +164,92 @@
     height: 1.2rem;
     margin: 0;
     appearance: none;
-    background-color: var(--ex-surface);
-    border: 1.5px solid var(--ex-border-strong);
+    background-color: var(--yui-surface);
+    border: 1.5px solid var(--yui-border-strong);
     transition:
-      background-color var(--ex-transition-fast),
-      border-color var(--ex-transition-fast);
+      background-color var(--yui-transition-fast),
+      border-color var(--yui-transition-fast);
   }
 
-  .ex-choice input[type="checkbox"] {
-    border-radius: var(--ex-radius-xs);
+  .yui-choice input[type="checkbox"] {
+    border-radius: var(--yui-radius-xs);
   }
 
-  .ex-choice input[type="radio"] {
+  .yui-choice input[type="radio"] {
     border-radius: 50%;
   }
 
-  .ex-choice input:checked {
-    background-color: var(--ex-accent);
-    border-color: var(--ex-accent);
+  .yui-choice input:checked {
+    background-color: var(--yui-accent);
+    border-color: var(--yui-accent);
   }
 
-  .ex-choice input:checked::after {
+  .yui-choice input:checked::after {
     width: 0.7rem;
     height: 0.7rem;
     content: "";
   }
 
-  .ex-choice input[type="checkbox"]:checked::after {
-    background-color: var(--ex-accent-ink);
+  .yui-choice input[type="checkbox"]:checked::after {
+    background-color: var(--yui-accent-ink);
     clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
   }
 
-  .ex-choice input[type="radio"]:checked::after {
+  .yui-choice input[type="radio"]:checked::after {
     width: 0.5rem;
     height: 0.5rem;
-    background-color: var(--ex-accent-ink);
+    background-color: var(--yui-accent-ink);
     border-radius: 50%;
   }
 
-  .ex-choice input:focus-visible {
-    box-shadow: var(--ex-focus-ring);
+  .yui-choice input:focus-visible {
+    box-shadow: var(--yui-focus-ring);
   }
 
-  .ex-choice__text small {
+  .yui-choice__text small {
     display: block;
-    color: var(--ex-ink-faint);
+    color: var(--yui-ink-faint);
   }
 
   /* Dropdown menu (static presentational) */
-  .ex-dropdown {
+  .yui-dropdown {
     min-width: 12rem;
     padding: 0.4rem;
-    background-color: var(--ex-surface);
-    border: var(--ex-border-hairline);
-    border-radius: var(--ex-radius-md);
-    box-shadow: var(--ex-shadow-md);
+    background-color: var(--yui-surface);
+    border: var(--yui-border-hairline);
+    border-radius: var(--yui-radius-md);
+    box-shadow: var(--yui-shadow-md);
   }
 
-  .ex-dropdown__item {
+  .yui-dropdown__item {
     display: flex;
     gap: 0.6rem;
     align-items: center;
     width: 100%;
     padding: 0.5rem 0.65rem;
     font: inherit;
-    font-size: var(--ex-text-sm);
-    color: var(--ex-ink-soft);
+    font-size: var(--yui-text-sm);
+    color: var(--yui-ink-soft);
     text-align: left;
     text-decoration: none;
     cursor: pointer;
     background: none;
     border: 0;
-    border-radius: var(--ex-radius-sm);
+    border-radius: var(--yui-radius-sm);
   }
 
-  .ex-dropdown__item:hover {
-    color: var(--ex-ink);
-    background-color: var(--ex-surface-sunken);
+  .yui-dropdown__item:hover {
+    color: var(--yui-ink);
+    background-color: var(--yui-surface-sunken);
   }
 
-  .ex-dropdown__item .ex-icon {
-    color: var(--ex-ink-faint);
+  .yui-dropdown__item .yui-icon {
+    color: var(--yui-ink-faint);
   }
 
-  .ex-dropdown__sep {
+  .yui-dropdown__sep {
     height: 1px;
     margin: 0.35rem 0.3rem;
-    background-color: var(--ex-border);
+    background-color: var(--yui-border);
   }
 }

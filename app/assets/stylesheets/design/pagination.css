@@ -1,0 +1,70 @@
+@layer components {
+  /* Yui::PaginationComponent — a numbered pager (admin lists). */
+
+  .yui-pagination {
+    display: flex;
+    justify-content: center;
+    margin-block: var(--yui-space-lg);
+  }
+
+  .yui-pagination__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--yui-space-3xs);
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .yui-pagination__link {
+    display: inline-flex;
+    gap: 0.2em;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.25rem;
+    height: 2.25rem;
+    padding: 0 var(--yui-space-2xs);
+    font-size: var(--yui-text-sm);
+    font-weight: var(--yui-weight-medium);
+    font-variant-numeric: tabular-nums;
+    color: var(--yui-ink-soft);
+    text-decoration: none;
+    border: var(--yui-border-hairline);
+    border-radius: var(--yui-radius-sm);
+    transition:
+      color var(--yui-transition-fast),
+      background-color var(--yui-transition-fast),
+      border-color var(--yui-transition-fast);
+  }
+
+  a.yui-pagination__link:hover,
+  a.yui-pagination__link:focus-visible {
+    color: var(--yui-ink);
+    background-color: var(--yui-surface-sunken);
+    border-color: var(--yui-border-strong);
+  }
+
+  .yui-pagination__link--current {
+    color: var(--yui-accent-ink);
+    background-color: var(--yui-accent);
+    border-color: var(--yui-accent);
+  }
+
+  .yui-pagination__link--nav {
+    color: var(--yui-ink-faint);
+  }
+
+  .yui-pagination__link[aria-disabled="true"] {
+    pointer-events: none;
+    opacity: 0.4;
+  }
+
+  .yui-pagination__gap {
+    display: inline-flex;
+    align-items: flex-end;
+    justify-content: center;
+    min-width: 1.5rem;
+    color: var(--yui-ink-faint);
+  }
+}

@@ -1,0 +1,141 @@
+@layer components {
+  /* InsightAttachmentManagerComponent — attach Locations / Pictures / Thoughts
+     / Weblinks to a Memory or Chronicle. The "+ Add Insight" disclosure, the
+     attached-item chips and the in-flow creation drawer. */
+
+  .yui-insight-manager {
+    display: flex;
+    flex-direction: column;
+    gap: var(--yui-space-sm);
+    padding: 0;
+    margin: 0;
+    border: 0;
+  }
+
+  .yui-insight-manager__legend {
+    display: block;
+    padding: 0;
+  }
+
+  .yui-insight-manager__legend .yui-h4 {
+    margin-bottom: var(--yui-space-3xs);
+  }
+
+  /* Attached-item chips */
+  .yui-insight-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--yui-space-2xs);
+  }
+
+  .yui-insight-chips:empty {
+    display: none;
+  }
+
+  .yui-insight-chip {
+    display: inline-flex;
+    gap: var(--yui-space-xs);
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--yui-space-2xs) var(--yui-space-xs);
+    font-size: var(--yui-text-sm);
+    background-color: var(--yui-surface-sunken);
+    border: var(--yui-border-hairline);
+    border-radius: var(--yui-radius-sm);
+  }
+
+  .yui-insight-chip__label {
+    display: inline-flex;
+    gap: var(--yui-space-3xs);
+    align-items: center;
+  }
+
+  .yui-insight-chip__thumb {
+    width: 40px;
+    height: 30px;
+    margin-right: var(--yui-space-3xs);
+    object-fit: cover;
+    border-radius: var(--yui-radius-xs);
+  }
+
+  .yui-insight-chip__remove {
+    flex-shrink: 0;
+  }
+
+  /* "+ Add Insight" disclosure menu */
+  .yui-insight-menu {
+    position: relative;
+    align-self: flex-start;
+  }
+
+  .yui-insight-menu > summary {
+    list-style: none;
+  }
+
+  .yui-insight-menu > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .yui-insight-menu ul {
+    position: absolute;
+    z-index: 200;
+    min-width: 16rem;
+    padding: var(--yui-space-3xs);
+    margin-top: var(--yui-space-3xs);
+    list-style: none;
+    background-color: var(--yui-surface);
+    border: var(--yui-border-hairline);
+    border-radius: var(--yui-radius-md);
+    box-shadow: var(--yui-shadow-md);
+  }
+
+  .yui-insight-menu__group {
+    display: block;
+    padding: var(--yui-space-3xs) var(--yui-space-2xs) 0;
+    font-size: var(--yui-text-sm);
+    font-weight: var(--yui-weight-semibold);
+    color: var(--yui-ink-faint);
+  }
+
+  .yui-insight-menu li > div {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .yui-insight-menu li a {
+    display: block;
+    padding: var(--yui-space-3xs) var(--yui-space-2xs);
+    font-size: var(--yui-text-sm);
+    color: var(--yui-ink-soft);
+    text-decoration: none;
+    border-radius: var(--yui-radius-sm);
+  }
+
+  .yui-insight-menu li a:hover,
+  .yui-insight-menu li a:focus-visible {
+    color: var(--yui-ink);
+    background-color: var(--yui-surface-sunken);
+  }
+
+  .yui-insight-menu hr {
+    height: 1px;
+    margin: var(--yui-space-3xs) 0;
+    background-color: var(--yui-border);
+    border: 0;
+  }
+
+  /* In-flow creation / selection drawer */
+  .yui-insight-drawer {
+    margin-block: var(--yui-space-sm);
+  }
+
+  /* Error box injected by insight_manager_controller.js on a failed create. */
+  .yui-insight-drawer__error {
+    padding: var(--yui-space-xs) var(--yui-space-sm);
+    margin-bottom: var(--yui-space-sm);
+    font-size: var(--yui-text-sm);
+    color: var(--yui-danger);
+    background-color: var(--yui-danger-soft);
+    border-radius: var(--yui-radius-sm);
+  }
+}

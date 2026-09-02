@@ -1,0 +1,17 @@
+= render(Yui::NavbarComponent.new(area: "team")) do |bar|
+  - bar.with_group do
+    = render Yui::NavItemComponent.new("🌐 Yournaling", href: root_path, active: active_path?(root_path))
+    - if current_team
+      = render Yui::NavItemComponent.new("Manage #{current_team.name}", href: current_team_home_path, variant: :cta)
+    = render NavNewButtonComponent.new(mode: :manage)
+
+  - bar.with_group do
+    = render Yui::NavItemComponent.new("Chronicles", href: current_team_chronicles_path, active: active_path?(current_team_chronicles_path))
+    = render Yui::NavItemComponent.new("Memories", href: current_team_memories_path, active: active_path?(current_team_memories_path))
+    li.yui-navbar__item
+      = render InsightsDropdownComponent.new(scope: :current_team)
+    = render Yui::NavItemComponent.new("Members", href: current_team_members_path, active: active_path?(current_team_members_path))
+    = render Yui::NavItemComponent.new("🔍 Search", href: current_team_new_search_path, active: active_path?(current_team_new_search_path))
+
+  - bar.with_group do
+    = render TeamSwitcherAndSessionsComponent.new(mode: :manage)

@@ -1,47 +1,9 @@
 # frozen_string_literal: true
 
 class PictureSelectFieldComponent < ApplicationComponent
-  slim_template <<~SLIM
-    fieldset
-      legend Attach Picture (Optional)
-      div
-        = label_tag "\#{@form.object_name}_picture_id", "Select Existing Picture"
-        = hidden_field_tag "\#{@form.object_name}[picture_id]", picture_id_value, id: "\#{@form.object_name}_picture_id", data: { picture_select_target: "hiddenInput" }
-        details.dropdown data-picture-select-target="dropdown" style="margin-bottom: 1rem;"
-          summary data-picture-select-target="summary"
-            - if selected_picture&.persisted? && selected_picture.file.attached?
-              span style="display: flex; align-items: center; gap: 0.75rem;"
-                - if (thumb = selected_picture.thumbnail)
-                  img src=rails_representation_path(thumb) style="width: 80px; height: 60px; object-fit: cover; border-radius: 3px;" alt=""
-                span = picture_label(selected_picture)
-            - else
-              | Choose an existing picture...
-          ul style="max-height: 300px; overflow-y: auto; z-index: 50;"
-            li
-              a href="#" data-action="click->picture-select#selectOption" data-picture-id="" data-picture-name="Choose an existing picture..." data-preview-url=""
-                | None (no picture)
-            - pictures.each do |pic|
-              - thumb_url = rails_representation_path(pic.thumbnail)
-              - label = picture_label(pic)
-              li
-                a href="#" data-action="click->picture-select#selectOption" data-picture-id=pic.id data-picture-name=label data-preview-url=thumb_url style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem;"
-                  img src=thumb_url style="width: 60px; height: 45px; object-fit: cover; border-radius: 4px; flex-shrink: 0;" alt=pic.name
-                  span style="font-weight: 500;"
-                    = label
-
-      details data-picture-select-target="uploadDetails" open=(upload_details_open ? "open" : nil) style="margin-top: 1rem;"
-        summary Or Upload New Picture
-        div style="margin-top: 0.75rem;"
-          = label_tag "\#{@form.object_name}_picture_file", "Picture File"
-          = file_field_tag "\#{@form.object_name}[picture_file]", accept: "image/*", id: "\#{@form.object_name}_picture_file", data: { picture_select_target: "fileInput", action: "change->picture-select#updateFilePreview" }
-          div style="margin-top: 0.5rem;"
-            img data-picture-select-target="filePreview" style="display: none; max-width: 200px; max-height: 150px; object-fit: cover; border-radius: 4px;" alt="Uploaded picture preview"
-
-        div style="margin-top: 0.5rem;"
-          = label_tag "\#{@form.object_name}_picture_name", "Picture Name (Optional)"
-          = text_field_tag "\#{@form.object_name}[picture_name]", picture_name_value, id: "\#{@form.object_name}_picture_name", placeholder: "Defaults to image file name", data: { picture_select_target: "pictureNameInput" }
-  SLIM
-
+  # NOTE: as of the Warm Editorial migration this component is not rendered by
+  # any view — InsightAttachmentManagerComponent covers picture attachment.
+  # Kept (and sidecar-templated) per TODO_UI_DESIGN.md; a candidate for removal.
   def initialize(form:, team: nil, selected_picture: nil, scope: "current_team")
     @form = form
     @team = team

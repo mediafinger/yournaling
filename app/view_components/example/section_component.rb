@@ -16,17 +16,5 @@ module Example
       @number = number
       @description = description.presence
     end
-
-    slim_template <<~'SLIM'
-      section.ex-section id=anchor
-        .ex-container
-          header.ex-section__head
-            - if number
-              span.ex-section__number = "#{number} —"
-            = render(Yui::HeadlineComponent.new(title, level: 2))
-            - if description
-              p.ex-section__desc = description
-          = content
-    SLIM
   end
 end

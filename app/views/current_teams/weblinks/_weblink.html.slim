@@ -1,18 +1,11 @@
 - if local_assigns[:hide_actions]
-  a.weblink-chip id= dom_id(weblink) href=weblink.url target="_blank" rel="noopener noreferrer"
-    | 🔗
-    = weblink.name.presence || weblink.url
+  = render Yui::TagComponent.new(weblink.name.presence || weblink.url, href: weblink.url, external: true, icon: "link", id: dom_id(weblink))
 - else
-  article id= dom_id(weblink)
-    = render ManageHeaderComponent.new(record: weblink, hide_actions: local_assigns[:hide_actions])
-
-    p
-      strong Url:
-      br
-      = render ExternalLinkComponent.new(url: weblink.url, text: weblink.url)
-
-    - if weblink.description.present?
-      p
-        strong Description:
-        br
-        = weblink.description
+  = render Yui::CardComponent.new(id: dom_id(weblink)) do
+    = render ManageHeaderComponent.new(record: weblink, hide_actions: false)
+    dl.yui-details
+      dt URL
+      dd = render ExternalLinkComponent.new(url: weblink.url, text: weblink.url)
+      - if weblink.description.present?
+        dt Description
+        dd = weblink.description

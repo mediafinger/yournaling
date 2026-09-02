@@ -12,7 +12,7 @@ RSpec.describe InsightDestroyModalComponent, type: :component do
 
     expect(page).to have_text("Are you sure you want to destroy this picture?")
     expect(page).to have_button("Destroy Insight")
-    expect(page).to have_no_css("button.contrast[disabled]")
+    expect(page).to have_no_css("button.yui-btn--danger[disabled]")
   end
 
   it "renders disabled destroy button and lists referencing chronicles" do
@@ -24,7 +24,7 @@ RSpec.describe InsightDestroyModalComponent, type: :component do
     expect(page).to have_text("This picture cannot be destroyed because it is still referenced by other content:")
     expect(page).to have_text("Chronicles:")
     expect(page).to have_link("Summer Holidays")
-    expect(page).to have_css("button.contrast[disabled]")
+    expect(page).to have_css("button.yui-btn--danger[disabled]")
     expect(page).to have_button("Close")
   end
 
@@ -36,7 +36,7 @@ RSpec.describe InsightDestroyModalComponent, type: :component do
     expect(page).to have_text("This picture cannot be destroyed because it is still referenced by other content:")
     expect(page).to have_text("Memories:")
     expect(page).to have_link("Golden hour memories")
-    expect(page).to have_css("button.contrast[disabled]")
+    expect(page).to have_css("button.yui-btn--danger[disabled]")
     expect(page).to have_button("Close")
   end
 end

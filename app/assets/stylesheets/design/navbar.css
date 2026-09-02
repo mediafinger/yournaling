@@ -1,0 +1,107 @@
+@layer components {
+  /* Primary navigation — Yui::Navbar / Yui::NavItem.
+     `.yui-navbar-host` is the sticky <header> wrapper (a sticky element needs a
+     taller parent; <header>'s parent is <body>). navbar_controller.js toggles
+     the scroll-hide classes on it. */
+
+  .yui-navbar-host {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding-block: 0;
+    background-color: var(--yui-surface-raised);
+    border-bottom: var(--yui-border-hairline);
+    transition: opacity var(--yui-transition-slow);
+  }
+
+  .yui-navbar-host.navbar--transparent:not(.navbar--hover) {
+    opacity: 0;
+  }
+
+  .yui-navbar {
+    font-family: var(--yui-font-body);
+    border-top: 3px solid var(--yui-accent);
+  }
+
+  .yui-navbar__inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--yui-space-xs) var(--yui-space-md);
+    align-items: center;
+    justify-content: space-between;
+    max-width: var(--yui-container);
+    padding: var(--yui-space-2xs) clamp(1rem, 0.5rem + 2vw, 2rem);
+    margin-inline: auto;
+  }
+
+  .yui-navbar__group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.15rem;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .yui-navbar__item {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .yui-nav-item {
+    display: inline-flex;
+    gap: 0.4em;
+    align-items: center;
+    padding: 0.4rem 0.7rem;
+    font-size: var(--yui-text-sm);
+    font-weight: var(--yui-weight-medium);
+    line-height: 1.2;
+    color: var(--yui-ink-soft);
+    white-space: nowrap;
+    text-decoration: none;
+    border-radius: var(--yui-radius-sm);
+    transition:
+      color var(--yui-transition-fast),
+      background-color var(--yui-transition-fast);
+  }
+
+  .yui-nav-item:hover {
+    color: var(--yui-ink);
+    background-color: var(--yui-surface-sunken);
+  }
+
+  .yui-nav-item--strong {
+    color: var(--yui-accent-ink);
+    background-color: var(--yui-accent);
+  }
+
+  .yui-nav-item--strong:hover {
+    color: var(--yui-accent-ink);
+    background-color: var(--yui-accent-strong);
+  }
+
+  .yui-nav-item--active {
+    font-weight: var(--yui-weight-semibold);
+  }
+
+  .yui-navbar__group form {
+    display: inline-flex;
+    margin: 0;
+  }
+
+  /* Admin-area "Scope to Team" marker. */
+  .scope-to-team {
+    padding: 0.25rem 0.5rem;
+    font-size: var(--yui-text-xs);
+    color: var(--yui-ink-faint);
+    border: 1px dashed currentcolor;
+    border-radius: var(--yui-radius-xs);
+  }
+
+  @media (width <= 40rem) {
+    .yui-navbar__inner {
+      justify-content: flex-start;
+    }
+  }
+}

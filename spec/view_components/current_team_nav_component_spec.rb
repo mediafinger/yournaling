@@ -18,7 +18,7 @@ RSpec.describe CurrentTeamNavComponent, type: :component do
 
     expect(rendered.to_html).to have_link("🌐 Yournaling", href: "/")
     expect(rendered.to_html).to have_link("Manage Alpha Squad", href: "/current_team")
-    expect(rendered.to_html).to have_css("details.dropdown summary", text: "+ New")
+    expect(rendered.to_html).to have_css("details.yui-menu summary", text: "+ New")
   end
 
   it "renders center zone post and insight links with dropdown" do
@@ -26,7 +26,7 @@ RSpec.describe CurrentTeamNavComponent, type: :component do
 
     expect(rendered.to_html).to have_link("Chronicles", href: "/current_team/chronicles")
     expect(rendered.to_html).to have_link("Memories", href: "/current_team/memories")
-    expect(rendered.to_html).to have_css("details.dropdown summary", text: "Insights")
+    expect(rendered.to_html).to have_css("details.yui-menu summary", text: "Insights")
     expect(rendered.to_html).to have_link("Pictures", href: "/current_team/pictures", visible: :all)
     expect(rendered.to_html).to have_link("Thoughts", href: "/current_team/thoughts", visible: :all)
     expect(rendered.to_html).to have_link("Locations", href: "/current_team/locations", visible: :all)

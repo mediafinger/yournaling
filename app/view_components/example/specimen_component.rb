@@ -5,7 +5,7 @@ module Example
   # small monospace caption and the live component(s) inside.
   #
   #   = render(Example::SpecimenComponent.new("variant: :primary", center: true)) do
-  #     = render(Example::ButtonComponent.new("Save memory"))
+  #     = render(Yui::ButtonComponent.new("Save memory"))
   class SpecimenComponent < Yui::BaseComponent
     attr_reader :label, :center
 
@@ -16,15 +16,7 @@ module Example
     end
 
     def css_class
-      ex_class("ex-specimen", center && "ex-specimen--center")
+      yui_class("yui-specimen", center && "yui-specimen--center")
     end
-
-    slim_template <<~SLIM
-      .ex-specimen class=("ex-specimen--center" if center)
-        - if label
-          span.ex-specimen__label = label
-        .ex-specimen__row
-          = content
-    SLIM
   end
 end

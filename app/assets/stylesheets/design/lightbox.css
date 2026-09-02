@@ -1,0 +1,40 @@
+@layer components {
+  /* Picture lightbox — thumbnail trigger + enlarged image inside a Yui::Modal. */
+
+  .yui-lightbox-trigger {
+    display: inline-block;
+    padding: 0;
+    cursor: zoom-in;
+    background: none;
+    border: 0;
+  }
+
+  .yui-lightbox-thumb {
+    display: block;
+    width: 100%;
+    max-width: 25rem;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    border-radius: var(--yui-radius-md);
+    box-shadow: var(--yui-shadow-sm);
+    transition:
+      transform var(--yui-transition),
+      opacity var(--yui-transition);
+  }
+
+  .yui-lightbox-trigger:hover .yui-lightbox-thumb {
+    opacity: 0.95;
+    transform: scale(1.01);
+  }
+
+  .yui-lightbox-body {
+    text-align: center;
+  }
+
+  .yui-lightbox-full {
+    max-width: 100%;
+    max-height: 75vh;
+    object-fit: contain;
+    border-radius: var(--yui-radius-md);
+  }
+}

@@ -11,17 +11,18 @@ RSpec.describe ContentVisibilityModalComponent, type: :component do
   it "renders icon-button with action to open modal dialog" do
     rendered = render_inline(described_class.new(record: chronicle, user: user, team: team, member: member))
 
-    expect(rendered.to_html).to have_css("div[data-controller='modal']")
-    expect(rendered.to_html).to have_css("button[data-action='click->modal#open'][aria-label='Change visibility']")
-    expect(rendered.to_html).to have_css("dialog[data-modal-target='dialog']")
-    expect(rendered.to_html).to have_css("button[data-action='click->modal#close'][aria-label='Close']")
+    expect(rendered.to_html).to have_css("div[data-controller='yui-modal']")
+    expect(rendered.to_html).to have_css("[data-action='click->yui-modal#open']")
+    expect(rendered.to_html).to have_css("button[aria-label='Change visibility']")
+    expect(rendered.to_html).to have_css("dialog[data-yui-modal-target='dialog']")
+    expect(rendered.to_html).to have_css("button[data-action='click->yui-modal#close'][aria-label='Close']")
   end
 
   it "renders modal dialog with available visibility options and highlighted active status" do
     rendered = render_inline(described_class.new(record: chronicle, user: user, team: team, member: member))
 
     expect(rendered.to_html).to include("dialog")
-    expect(rendered.to_html).to include("Change Visibility")
+    expect(rendered.to_html).to include("Change visibility")
     expect(rendered.to_html).to include("Draft")
     expect(rendered.to_html).to include("Internal ✓")
     expect(rendered.to_html).to include("Published")
@@ -34,7 +35,7 @@ RSpec.describe ContentVisibilityModalComponent, type: :component do
     draft_chronicle = FactoryBot.create(:chronicle, team: team, visibility: "draft")
     rendered = render_inline(described_class.new(record: draft_chronicle, user: user, team: team, member: member))
 
-    expect(rendered.to_html).to have_css("button[data-action='click->modal#open'][aria-label='Change visibility']")
+    expect(rendered.to_html).to have_css("button[aria-label='Change visibility']")
     expect(rendered.to_html).to include("Draft ✓")
     expect(rendered.to_html).to include("Internal")
     expect(rendered.to_html).to include("Published")

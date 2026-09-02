@@ -1,11 +1,7 @@
-div data-controller="modal"
+.yui-narrow.yui-stack
   - if current_team == @thought.team
     = render partial: "form", locals: { thought: @thought, form_legend: "Edit thought" }
-  div style="display: flex; gap: 0.5rem; align-items: center; margin-top: 1rem;"
-    = link_to "Open", current_team_thought_path(@thought), role: "button"
+  .yui-cluster
+    = render Yui::ButtonComponent.new("Open", href: current_team_thought_path(@thought), variant: :secondary)
     - if current_team == @thought.team
-      button type="button" class="secondary" data-action="click->modal#open" style="margin-bottom: 0;"
-        | Destroy this thought
-
-  - if current_team == @thought.team
-    = render InsightDestroyModalComponent.new(insight: @thought, name: "thought")
+      = render InsightDestroyModalComponent.new(insight: @thought, name: "thought")

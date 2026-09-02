@@ -83,9 +83,9 @@ export default class extends Controller {
       const temp = document.createElement("div")
       temp.innerHTML = html
 
-      const wrapper = temp.querySelector("[data-newest-republished-at]")
+      const wrapper = temp.querySelector("[data-newest-at]")
       if (wrapper) {
-        const nextSince = wrapper.getAttribute("data-newest-republished-at")
+        const nextSince = wrapper.getAttribute("data-newest-at")
         if (nextSince) {
           this.sinceValue = nextSince
         }

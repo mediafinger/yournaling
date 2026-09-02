@@ -3,7 +3,7 @@
 module Admins
   class LocationsController < AdminController
     def index
-      @locations = Location.all
+      @pagy, @locations = pagy(:offset, Location.includes(:team).order(created_at: :desc))
     end
 
     def show

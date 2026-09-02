@@ -1,6 +1,6 @@
 #chronicles
   - if @chronicles.any?
-    .timeline-grid
+    .yui-record-grid
       - @chronicles.each do |chronicle|
         = render partial: "teams/chronicles/chronicle", locals: { team:, chronicle: }
   - else

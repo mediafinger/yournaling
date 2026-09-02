@@ -1,18 +1,8 @@
-article
-  = form_with(model: user) do |form|
+= render Yui::CardComponent.new do
+  = render Yui::HeadlineComponent.new(form_legend, level: 3)
+  = form_with model: user, builder: YuiFormBuilder, html: { class: "yui-stack" } do |form|
     = render partial: "shared_partials/form_validation_errors", locals: { record: user }
-    fieldset
-      h3
-        legend
-          = form_legend
-      div
-        = form.label :name
-        = form.text_field :name
-      div
-        = form.label :email
-        = form.text_field :email
-      div
-        = form.label :password
-        = form.password_field :password
-      .inline
-        = form.submit
+    = form.text_field :name, autocomplete: "name"
+    = form.email_field :email, autocomplete: "email"
+    = form.password_field :password, autocomplete: "new-password"
+    = form.submit

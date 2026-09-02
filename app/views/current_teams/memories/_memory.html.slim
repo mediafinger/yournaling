@@ -1,18 +1,1 @@
-article.yournal-card.memory-card id= dom_id(memory)
-  header.card-header
-    span.card-badge 💡 Memory
-    = render ManageHeaderComponent.new(record: memory, hide_actions: local_assigns[:hide_actions])
-
-  p
-    strong Memo:
-    br
-    = memory.memo
-
-  - if memory.picture
-    = render partial: "current_teams/pictures/picture", locals: { picture: memory.picture, hide_actions: true }
-  - if memory.thought
-    = render partial: "current_teams/thoughts/thought", locals: { thought: memory.thought, hide_actions: true }
-  - if memory.location
-    = render partial: "current_teams/locations/location", locals: { location: memory.location, hide_actions: true }
-  - if memory.weblink
-    = render partial: "current_teams/weblinks/weblink", locals: { weblink: memory.weblink, hide_actions: true }
+= render MemoryCardComponent.new(memory: memory, scope: :manage, hide_actions: local_assigns[:hide_actions] || false)

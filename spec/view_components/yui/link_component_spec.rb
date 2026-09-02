@@ -6,19 +6,19 @@ RSpec.describe Yui::LinkComponent, type: :component do
   it "renders an anchor with the base class" do
     rendered = render_inline(described_class.new("Read on", href: "/x"))
 
-    expect(rendered).to have_link("Read on", href: "/x", class: "ex-link")
+    expect(rendered).to have_link("Read on", href: "/x", class: "yui-link")
   end
 
   it "adds a modifier class for non-default variants" do
     rendered = render_inline(described_class.new("Back", href: "#", variant: :muted))
 
-    expect(rendered).to have_css("a.ex-link.ex-link--muted")
+    expect(rendered).to have_css("a.yui-link.yui-link--muted")
   end
 
   it "appends a nudging arrow for the standalone variant" do
     rendered = render_inline(described_class.new("More", href: "#", variant: :standalone))
 
-    expect(rendered).to have_css("a.ex-link--standalone svg.ex-icon[aria-hidden='true']")
+    expect(rendered).to have_css("a.yui-link--standalone svg.yui-icon[aria-hidden='true']")
   end
 
   describe "external links" do
@@ -31,7 +31,7 @@ RSpec.describe Yui::LinkComponent, type: :component do
     end
 
     it "shows an outward arrow that is hidden from assistive tech" do
-      expect(rendered).to have_css("svg.ex-icon[aria-hidden='true']")
+      expect(rendered).to have_css("svg.yui-icon[aria-hidden='true']")
     end
   end
 end

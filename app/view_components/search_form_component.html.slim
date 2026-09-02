@@ -1,0 +1,12 @@
+= render Yui::CardComponent.new do
+  = form_with(url: url, method: :post, data: { controller: "search" }, html: { class: "yui-stack" }) do |form|
+    = render Yui::HeadlineComponent.new(form_legend, level: 3)
+    .yui-field
+      = form.label :query, class: "yui-label"
+      = form.text_field :query, value: query, class: "yui-input", minlength: 3, required: true, data: { search_target: "input", action: "input->search#validate" }
+    .yui-field
+      = form.label :klass_name, "Type", class: "yui-label"
+      .yui-select-wrap
+        = form.select :klass_name, klass_options, { selected: selected_klass }, { class: "yui-select" }
+        = render Yui::IconComponent.new("chevron-down")
+    = form.submit "Search", class: "yui-btn yui-btn--primary", data: { search_target: "submit" }, disabled: submit_disabled?
