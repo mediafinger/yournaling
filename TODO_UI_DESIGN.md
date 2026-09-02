@@ -13,12 +13,14 @@ bespoke **"Warm Editorial"** design language that already lives under
 
 This section is a **frozen snapshot** of the codebase when the plan was written —
 it is not updated as work lands. Progress is tracked by the checkboxes in §7.
-As of 2026-09-02: Phases 0–5 done. All three layouts are Yui-only — no
-`pico/*` link anywhere. `example.css` is `app/assets/stylesheets/design/*.css`;
-the primitives are `Yui::` with sidecar templates (no inline `slim_template`
-heredocs left); fonts self-hosted; Lookbook installed with a render-smoke
-spec. Remaining: Phase 6 (delete the dead Pico files, Stylelint `--pico-*`
-ban, re-enable CSP, the `.ex-*` → `.yui-*` rename, grep gates).
+As of 2026-09-02: **Phases 0–6 done.** Pico and every legacy stylesheet are
+deleted; `app/assets/stylesheets/` is just `design/`. The CSS vocabulary is
+`.yui-*` / `--yui-*`. A CSP is enforced outside development. Primitives are
+`Yui::` with sidecar templates (grep-gated — no inline `slim_template` or
+`style=` in app templates); fonts self-hosted; Lookbook has a render-smoke
+spec. Outstanding: a manual browser QA pass, and optionally tightening the
+CSP off `'unsafe-inline'` (needs the Blazer / Mission Control engines
+exempted).
 
 ### Styling stack
 
@@ -894,31 +896,54 @@ a removal candidate.
       renders a `AdminIndexRecordHistoryComponent` that does not exist and has
       no route — dead scaffolding, left in place.
 
-### Phase 6 — Teardown & hardening (~0.5–1 day)
+### Phase 6 — Teardown & hardening (~0.5–1 day) — **done** (`04e6a93` … `1ebf178`)
 
-- [ ] Delete `pico.amber/blue/green.css` (local copies) and all CDN
-      `stylesheet_link_tag "https://unpkg.com/..."` lines.
-- [ ] Delete `picocss_reset.css`, `rails_reset.css`, `admin.css`; fold anything
-      still needed into the relevant `design/*.css` layer.
-- [ ] Remove every remaining `var(--pico-*)` reference — enforce with a Stylelint
-      rule (`declaration-property-value-disallowed-list` or a `no-restricted-syntax`
-      pattern) rather than a bare grep.
-- [ ] Verify no external Google Fonts or CDN font references remain (self-hosting completed in Phase 0).
-- [ ] Re-enable and tighten CSP now that there is no external CSS/JS/font host.
-- [ ] Confirm no `example.css` / `Example::` stylesheet references linger (the
-      `design/` split in Phase 1 already retired the filename).
-- [ ] The Ruby primitives are `Yui::`, but the CSS
-      classes and tokens are still `.ex-*` / `--ex-*` (originally "example");
-      `.stylelintrc`'s `custom-property-pattern` already accepts both). Now one atomic
-      `ex` → `yui` rename (`.ex-` → `.yui-`, `--ex-` → `--yui-`, `.ex-scope` /
-      `.ex-body` too) across `design/**`, the `.slim` templates, and the
-      component `ex_class` / `ex_token` helpers — a mechanical `git grep -l`
-      sweep + one commit.
-- [ ] Add a `slim_lint` / grep check that new templates don't reintroduce bare
-      unstyled elements or inline `style=`.
-- [ ] Add a grep gate: no `<<-SLIM` / bare `<<SLIM` heredocs, and no inline
-      `slim_template` over ~5 lines — enforces the Component & template
-      conventions for future components.
+- [x] Deleted `pico.amber/blue/green.css` + the `pico/` wrappers (no CDN
+      `stylesheet_link_tag` ever existed), plus `picocss_reset.css`,
+      `rails_reset.css`, `admin.css` + `legacy/admin.css`, `legacy.css` +
+      `general.css` + `buttons.css`, the dead top-level `navbar.css`, and the
+      stale Sprockets `application.css` manifest. `app/assets/stylesheets/`
+      is now just `design/`. `general.css`'s `img { border-radius }` folded
+      into `base.css` (scoped); the `@layer` list drops the empty `pico` /
+      `legacy` layers.
+- [x] `var(--pico-*)` gone everywhere (incl. the two inline styles
+      `insight_manager_controller.js` used to emit). Stylelint
+      `declaration-property-value-disallowed-list` rejects any `var(--pico-…)`,
+      and `custom-property-pattern` is tightened to `yui-` only.
+- [x] Verified: no external Google Fonts / CDN / font references anywhere.
+- [x] CSP enabled (enforced outside development): `default-src 'self'`, no
+      external script/style/font/connect host, `object-src 'none'`,
+      `frame-ancestors 'self'`, `form-action 'self'`. `'unsafe-inline'` kept
+      on script/style for Turbo's progress bar and the Blazer / Mission
+      Control admin engines — **dropping it (and moving to a nonce) needs
+      those engines exempted via `content_security_policy(false)` + a manual
+      browser QA pass.** Guarded by `spec/requests/content_security_policy_spec.rb`.
+- [x] No `example.css` / `Example::` stylesheet references. The `Example::`
+      showcase chrome (Section / Swatch / Specimen) stays by design — now
+      sidecar-templated.
+- [x] **`.ex-*` / `--ex-*` → `.yui-*` / `--yui-*`** — one `\bex-` word-boundary
+      sweep across 285 files (`design/**`, every `.slim`, the component `.rb`
+      string literals + `ex_class`/`ex_token` → `yui_class`/`yui_token`, the
+      Stimulus controllers, the specs). `flex-` / `text-` untouched.
+- [x] `spec/lib/design_conventions_spec.rb` grep-gates: no `<<-SLIM` / bare
+      `<<SLIM`, no inline `slim_template` (the last 3 — the `Example::`
+      showcase components — moved to sidecar), no inline `style=` in app
+      templates (`/example` exempt), `--yui-*`-only in `design/*.css`.
+      `style="display:none"` on JS-toggled elements became the `hidden`
+      attribute.
+
+Deferred / follow-ups (not blockers):
+
+- The `js: true` `card_open_and_rewrite_links_spec.rb` is still `pending`
+  (pre-existing `let!`-scope bug, unrelated).
+- `admins/memories` still has no views; `admins/record_history` is dead
+  scaffolding — both pre-existing.
+- The card-component Lookbook previews stay on `actions: false` (`[~]` in
+  Phase 4).
+- Manual browser QA pass on all three areas (still outstanding — the spec
+  suite is the behavioural net; there are no screenshots).
+- Tightening the CSP to drop `'unsafe-inline'` (needs the admin engines
+  exempted first).
 
 ### Effort summary
 
@@ -930,8 +955,13 @@ a removal candidate.
 | 3 — public layout (auth / account / users / teams-top-level) | ~1.5–2 days ✅ (record-card cluster → Phase 4)             |
 | 4 — records, feed & team workspace                           | ~3–4 days ✅ (card previews `[~]`; manual QA pending)      |
 | 5 — admin                                                    | ~1 day ✅ (admins/memories still view-less, pre-existing)  |
-| 6 — teardown + CSP                                           | ~0.5–1 day                                                 |
+| 6 — teardown + CSP                                           | ~0.5–1 day ✅ (CSP keeps `'unsafe-inline'`; manual QA due) |
 | **Total**                                                    | **~11–14 focused days**, shippable at every phase boundary |
+
+**All six phases are complete.** Pico is gone; the CSS vocabulary is
+`.yui-*` / `--yui-*`; a CSP is enforced. Outstanding before merge: a manual
+visual QA pass in a browser (the automated suite — 1372 examples — is green),
+and optionally tightening the CSP off `'unsafe-inline'`.
 
 ---
 
