@@ -303,6 +303,12 @@ testing — not required for deploy.
       real values. (Creating the actual 1Password item is still open.)
 - [x] `config.secret_key_base` wired from `AppConf.rails_secret_key_base` in `production.rb`
       (Rails only reads `SECRET_KEY_BASE`/credentials otherwise — staging wouldn't boot).
+- [x] `Rack::Timeout` `service_timeout` coerced with `.to_i` in `application.rb` (an ENV
+      `RACK_TIMEOUT` arrives as a String and Rack::Timeout rejected it → boot crash).
+- [x] `compose.yaml` — `docker compose up --build` runs the image + a throwaway Postgres for
+      local browser testing; on OrbStack the app is at `https://yournaling.orb.local` with a
+      trusted cert (so `force_ssl` + secure cookies work and login is testable). Verified:
+      `/` `/login` `/register` `/example` → 200.
 - [x] `/alive` liveness route added for the Kamal proxy healthcheck (`/up` queries the DB and
       503s until a `User` exists, so it can't gate a first deploy). `/up` + `/alive` excluded
       from `force_ssl` redirect and host authorization.
