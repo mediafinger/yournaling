@@ -68,7 +68,7 @@ RSpec.describe "/admin/chronicles", type: :request do
         expect(response).to be_successful
         expect(response.body).to include("Admin Audit Picture 1")
         expect(response.body).to include("Admin Audit Picture 2")
-        expect(response.body.scan('article id="picture_').count).to eq(2)
+        expect(response.body.scan(/<article[^>]+id="picture_/).count).to eq(2)
       end
     end
 

@@ -1,2 +1,5 @@
-#chronicles
-  = render @chronicles
+.ex-stack
+  = render Yui::HeadlineComponent.new("Chronicles", level: 1)
+  #chronicles.ex-stack
+    = render @chronicles
+  = render Yui::PaginationComponent.new(pagy: @pagy)

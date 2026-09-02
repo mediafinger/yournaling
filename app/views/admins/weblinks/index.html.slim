@@ -1,2 +1,5 @@
-#weblinks
-  = render @weblinks
+.ex-stack
+  = render Yui::HeadlineComponent.new("Weblinks", level: 1)
+  #weblinks.ex-stack
+    = render @weblinks
+  = render Yui::PaginationComponent.new(pagy: @pagy)

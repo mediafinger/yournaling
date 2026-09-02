@@ -5,7 +5,7 @@ module Admins
     include ChronicleFormHandling
 
     def index
-      @chronicles = Chronicle.includes(entries: :entry)
+      @pagy, @chronicles = pagy(:offset, Chronicle.includes(entries: :entry).order(created_at: :desc))
       Chronicle.preload_attachments(@chronicles)
     end
 

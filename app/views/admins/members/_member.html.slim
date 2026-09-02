@@ -1,16 +1,13 @@
-article id= dom_id(member)
-
-  p
-    strong User:
-    = link_to(member.user.name, admin_user_path(member.user))
-    i
-      | (
-      = member.user_id
-      | )
-  p
-    strong Roles:
-    = member.roles
-  hr
-  = render AdminShowTeamComponent.new(team: member.team)
-  = render AdminShowMetaInformationComponent.new(record: member)
+= render Yui::CardComponent.new(id: dom_id(member)) do
+  = render Yui::HeadlineComponent.new(member.user.name, level: 3)
+  dl.ex-details
+    dt User
+    dd
+      = link_to member.user.name, admin_user_path(member.user), class: "ex-link"
+      = " "
+      code.ex-code = member.user_id
+    dt Roles
+    dd = member.roles.to_sentence
+    = render AdminShowTeamComponent.new(team: member.team)
+    = render AdminShowMetaInformationComponent.new(record: member)
   = render AdminActionsComponent.new(record: member, name: "member")

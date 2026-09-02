@@ -3,7 +3,7 @@
 module Admins
   class WeblinksController < AdminController
     def index
-      @weblinks = Weblink.all
+      @pagy, @weblinks = pagy(:offset, Weblink.includes(:team).order(created_at: :desc))
     end
 
     def show

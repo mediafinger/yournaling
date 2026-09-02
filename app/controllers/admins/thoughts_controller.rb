@@ -3,7 +3,7 @@
 module Admins
   class ThoughtsController < AdminController
     def index
-      @thoughts = Thought.all
+      @pagy, @thoughts = pagy(:offset, Thought.includes(:team).order(created_at: :desc))
     end
 
     def show

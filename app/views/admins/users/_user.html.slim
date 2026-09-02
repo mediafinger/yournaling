@@ -1,12 +1,11 @@
-article id= dom_id(user)
-
-  p
-    strong Name:
-    = user.name
-  p
-    strong Email:
-    = user.email
-  hr
-  = render AdminShowUserTeamsComponent.new(user: user)
-  = render AdminShowMetaInformationComponent.new(record: user)
+= render Yui::CardComponent.new(id: dom_id(user)) do
+  = render Yui::HeadlineComponent.new(user.name, level: 3)
+  dl.ex-details
+    dt Email
+    dd = user.email
+    - if user.respond_to?(:role) && user.role.present?
+      dt Role
+      dd = user.role
+    = render AdminShowUserTeamsComponent.new(user: user)
+    = render AdminShowMetaInformationComponent.new(record: user)
   = render AdminActionsComponent.new(record: user, name: "user")

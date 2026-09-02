@@ -1,15 +1,14 @@
-article id= dom_id(weblink)
-
-  p
-    strong Name:
-    = weblink.name
-  p
-    strong Url:
-    = render ExternalLinkComponent.new(url: weblink.url, text: weblink.url)
-  p
-    strong Description:
-    = weblink.description
-  hr
-  = render AdminShowTeamComponent.new(team: weblink.team)
-  = render AdminShowMetaInformationComponent.new(record: weblink)
+= render Yui::CardComponent.new(id: dom_id(weblink)) do
+  = render Yui::HeadlineComponent.new(weblink.name, level: 3)
+  dl.ex-details
+    dt URL
+    dd = render ExternalLinkComponent.new(url: weblink.url, text: weblink.url)
+    - if weblink.description.present?
+      dt Description
+      dd = weblink.description
+    - if weblink.date
+      dt Date
+      dd = weblink.date
+    = render AdminShowTeamComponent.new(team: weblink.team)
+    = render AdminShowMetaInformationComponent.new(record: weblink)
   = render AdminActionsComponent.new(record: weblink, name: "weblink")

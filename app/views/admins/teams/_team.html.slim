@@ -1,9 +1,6 @@
-article id= dom_id(team)
-
-  p
-    strong Name:
-    = team.name
-  hr
-  = render AdminShowTeamMembersComponent.new(team: team)
-  = render AdminShowMetaInformationComponent.new(record: team)
+= render Yui::CardComponent.new(id: dom_id(team)) do
+  = render Yui::HeadlineComponent.new(team.name, level: 3)
+  dl.ex-details
+    = render AdminShowTeamMembersComponent.new(team: team)
+    = render AdminShowMetaInformationComponent.new(record: team)
   = render AdminActionsComponent.new(record: team, name: "team")

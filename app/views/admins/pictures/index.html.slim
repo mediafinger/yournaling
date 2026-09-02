@@ -1,2 +1,5 @@
-#pictures
-  = render @pictures
+.ex-stack
+  = render Yui::HeadlineComponent.new("Pictures", level: 1)
+  #pictures.ex-record-grid
+    = render @pictures
+  = render Yui::PaginationComponent.new(pagy: @pagy)

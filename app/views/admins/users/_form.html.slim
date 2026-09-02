@@ -1,19 +1,9 @@
-article
-  = form_with(model: [:admin, user]) do |form|
+= render Yui::CardComponent.new do
+  = form_with(model: [:admin, user], builder: YuiFormBuilder, html: { class: "ex-stack" }) do |form|
+    = render Yui::HeadlineComponent.new(form_legend, level: 3)
     = render partial: "shared_partials/form_validation_errors", locals: { record: user }
-    fieldset
-      h3
-        legend
-          = form_legend
-      div
-        = form.label :name
-        = form.text_field :name
-      div
-        = form.label :email
-        = form.text_field :email
-      / - # TODO: do not allow Admin to set or change user password manually, only to reset it
-      div
-        = form.label :password
-        = form.password_field :password
-      .inline
-        = form.submit
+    = form.text_field :name
+    = form.text_field :email, label: "Email"
+    / TODO: an admin should reset a password, not set it directly
+    = form.password_field :password
+    = form.submit
