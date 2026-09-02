@@ -76,6 +76,7 @@ Layout/LineLength:
   Max: 125
   Exclude:
     - "**/db/migrate/*.rb"
+    - config/app_conf.rb
 
 Layout/MultilineMethodCallBraceLayout:
   Enabled: false
