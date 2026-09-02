@@ -1,0 +1,6 @@
+= form_with(model: Chronicle.new(visibility: "draft"), url: "#", builder: YuiFormBuilder, html: { class: "yui-stack", novalidate: true }) do |form|
+  = form.text_field :name, hint: "A short, memorable title."
+  = form.text_area :notice, rows: 3, hint: "What is this chronicle about?"
+  = form.date_field :start_date
+  = form.select :visibility, Chronicle::VISIBILITY_STATES.map { |v| [v.titleize, v] }
+  = form.submit "Save chronicle"
