@@ -8,8 +8,12 @@ class AdminActionsComponent < ApplicationComponent
 
   attr_reader :name
 
+  def action_name
+    helpers.controller.action_name
+  end
+
   def show?
-    helpers.action_name != "show"
+    action_name != "show"
   end
 
   def show_path
