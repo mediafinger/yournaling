@@ -43,8 +43,8 @@ module Yournaling
     # Let `bin/rails zeitwerk:check` verify the preview classes, and let CI
     # (test env, eager_load = true) boot-check them — otherwise a mis-named
     # preview only surfaces when someone opens /lookbook. Guarded because spec/
-    # is not shipped to production.
-    config.eager_load_paths << previews_path unless Rails.env.production?
+    # is not shipped to production(-like) environments (staging included).
+    config.eager_load_paths << previews_path unless AppConf.production_env
 
     # Lookbook is development-only (see the :development group in the Gemfile).
     if defined?(Lookbook)
