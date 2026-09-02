@@ -65,6 +65,23 @@ RSpec.describe YuiFormBuilder do
 
       expect(rendered).to have_css("option[value='draft']", text: "Only me")
     end
+
+    it "prepends a blank option with include_blank" do
+      rendered = html(form.select(:visibility, Memory::VISIBILITY_STATES, include_blank: true))
+
+      expect(rendered).to have_css("select option:first-child[value='']")
+    end
+
+    it "renders a multiple select with a []-suffixed name and a blank hidden field" do
+      allow(memory).to receive_messages(respond_to?: true, tags: %w[a c])
+      rendered = html(form.select(:tags, %w[a b c], multiple: true))
+
+      expect(rendered).to have_css("input[type='hidden'][name='memory[tags][]'][value='']", visible: :all)
+      expect(rendered).to have_css("select[multiple][name='memory[tags][]']")
+      expect(rendered).to have_css("option[selected][value='a']")
+      expect(rendered).to have_css("option[selected][value='c']")
+      expect(rendered).to have_no_css("option[selected][value='b']")
+    end
   end
 
   describe "#collection_select" do

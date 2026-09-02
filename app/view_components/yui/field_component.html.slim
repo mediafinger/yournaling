@@ -8,14 +8,17 @@
       = value
 
   - elsif kind == :select
-    .ex-select-wrap
+    .ex-select-wrap class=("ex-select-wrap--multiple" if multiple)
       select.ex-select(id=field_id name=name required=required disabled=disabled
-        autofocus=autofocus aria-describedby=described_by aria-invalid=aria_invalid)
+        multiple=multiple autofocus=autofocus aria-describedby=described_by aria-invalid=aria_invalid)
+        - if include_blank
+          option value="" = blank_option_label
         - Array(options).each do |option|
           - option_label, option_value = option.is_a?(Array) ? option : [option, option]
-          option value=option_value selected=(option_value.to_s == value.to_s)
+          option value=option_value selected=option_selected?(option_value)
             = option_label
-      = render(Yui::IconComponent.new("chevron-down"))
+      - unless multiple
+        = render(Yui::IconComponent.new("chevron-down"))
 
   - else
     input.ex-input(type=type id=field_id name=name value=value placeholder=placeholder

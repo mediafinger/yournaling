@@ -28,6 +28,28 @@ RSpec.describe Yui::FieldComponent, type: :component do
     expect(rendered).to have_css("option[selected][value='team']", text: "Team")
   end
 
+  it "prepends a labelled blank option with include_blank" do
+    rendered = render_inline(
+      described_class.new(label: "Team", name: "t", as: :select, include_blank: "— pick —",
+        options: [%w[Alps 1]])
+    )
+
+    expect(rendered).to have_css("select option:first-child[value='']", text: "— pick —")
+  end
+
+  it "renders a multiple select and selects each matching value" do
+    rendered = render_inline(
+      described_class.new(label: "Roles", name: "m[roles]", as: :select, multiple: true,
+        value: %w[owner editor], options: %w[owner editor publisher])
+    )
+
+    expect(rendered).to have_css("select[multiple]")
+    expect(rendered).to have_css("option[selected][value='owner']")
+    expect(rendered).to have_css("option[selected][value='editor']")
+    expect(rendered).to have_no_css("option[selected][value='publisher']")
+    expect(rendered).to have_no_css(".ex-select-wrap .ex-icon")
+  end
+
   it "marks a required field on its label" do
     rendered = render_inline(described_class.new(label: "Title", name: "t", required: true))
 

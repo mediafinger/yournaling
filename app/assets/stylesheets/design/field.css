@@ -111,6 +111,17 @@
     cursor: pointer;
   }
 
+  /* Multi-select: no chevron affordance, size to a few rows. */
+  .ex-select-wrap--multiple .ex-select {
+    height: auto;
+    min-height: 6rem;
+    padding-right: var(--ex-space-xs);
+  }
+
+  .ex-select[multiple] option {
+    padding: 0.15rem 0.25rem;
+  }
+
   .ex-hint {
     font-size: var(--ex-text-xs);
     line-height: var(--ex-leading-normal);

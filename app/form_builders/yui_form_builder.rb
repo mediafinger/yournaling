@@ -39,8 +39,12 @@ class YuiFormBuilder < ActionView::Helpers::FormBuilder
 
   # `choices` accepts what Rails `options_for_select` does at its simplest:
   # an array of strings or of [label, value] pairs, or a Hash.
+  # `include_blank:` and `multiple:` behave as on the Rails helper.
   def select(method, choices = nil, options = {}, html_options = {})
-    yui_field(method, options.merge(html_options), as: :select, choices: normalize_choices(choices))
+    merged = options.merge(html_options)
+    field = yui_field(method, merged, as: :select, choices: normalize_choices(choices))
+    # Match Rails: a multiple select needs a blank hidden field so clearing it submits.
+    merged[:multiple] ? hidden_field(method, value: "", id: nil, multiple: true) + field : field
   end
 
   def collection_select(method, collection, value_method, text_method, options = {}, html_options = {})
@@ -66,9 +70,10 @@ class YuiFormBuilder < ActionView::Helpers::FormBuilder
 
   def yui_field(method, options, as:, type: "text", choices: [])
     options = options.symbolize_keys
+    multiple = options[:multiple] || false
     @template.render(Yui::FieldComponent.new(
       label: options[:label] || object_label(method),
-      name: field_name(method),
+      name: field_name(method, multiple:),
       as:, type:,
       value: options.key?(:value) ? options[:value] : field_value(method),
       placeholder: options[:placeholder],
@@ -78,6 +83,8 @@ class YuiFormBuilder < ActionView::Helpers::FormBuilder
       disabled: options[:disabled] || false,
       autofocus: options[:autofocus] || false,
       autocomplete: options[:autocomplete],
+      include_blank: options[:include_blank] || false,
+      multiple:,
       options: choices,
       rows: options[:rows] || 4
     ))
