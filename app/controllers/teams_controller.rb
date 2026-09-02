@@ -9,11 +9,6 @@ class TeamsController < ApplicationController
     @teams = Team.all
   end
 
-  def show
-    @team = Team.urlsafe_find!(params[:id])
-    authorize! @team
-  end
-
   def new
     @team = Team.new
     authorize! @team
