@@ -73,6 +73,9 @@ ActiveRecordDoctor.configure do
     Memory.memo
     Picture.name
     Picture.id
+    Story.name
+    Story.content
+    Story.id
     Team.name
     Team.id
     Thought.text

@@ -39,9 +39,17 @@
     color: var(--yui-ink);
   }
 
-  .yui-prose h1 { font-size: var(--yui-text-h2); }
-  .yui-prose h2 { font-size: var(--yui-text-h3, var(--yui-text-lg)); }
-  .yui-prose h3 { font-size: var(--yui-text-lg); }
+  .yui-prose h1 {
+    font-size: var(--yui-text-h2);
+  }
+
+  .yui-prose h2 {
+    font-size: var(--yui-text-h3, var(--yui-text-lg));
+  }
+
+  .yui-prose h3 {
+    font-size: var(--yui-text-lg);
+  }
 
   .yui-prose a {
     color: var(--yui-accent);

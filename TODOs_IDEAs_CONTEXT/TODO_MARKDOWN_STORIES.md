@@ -1,6 +1,13 @@
 # Story Insight + Markdown editor & rendering (Marksmith / GFM)
 
-Status: **in progress** (branch `markdown-story`). Supersedes `TODO_MARKDOWN_STORY.md`.
+Status: **MVP implemented** (branch `markdown-story`). Supersedes `TODO_MARKDOWN_STORY.md`.
+
+Done: `Story` model + migration, `MarkdownRenderer` (CommonMarker GFM + sanitizer,
+also overrides `Marksmith::Renderer`), current_team / teams / admins CRUD + views,
+Marksmith editor wired through importmap (vendored bundles, CSP-safe), `.yui-prose`
+styling, and full Chronicle attachment (entry type, resolver, attacher, form
+components + JS). `rake ci` green. Follow-ups below remain open (image uploads,
+side-by-side preview, text-expander, applying Markdown to other fields).
 Consolidates the notes from the old `markdown-stories` branch + implementation plan.
 Related: #18 (Markdown), [TODO_CHRONICLES.md](TODO_CHRONICLES.md) §2.2.
 
