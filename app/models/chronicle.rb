@@ -24,6 +24,9 @@ class Chronicle < ApplicationRecordForContentAndPosts
   has_many :locations, -> {
     reorder("chronicle_entries.position ASC")
   }, through: :entries, source: :entry, source_type: "Location"
+  has_many :stories, -> {
+    reorder("chronicle_entries.position ASC")
+  }, through: :entries, source: :entry, source_type: "Story"
   has_many :thoughts, -> {
     reorder("chronicle_entries.position ASC")
   }, through: :entries, source: :entry, source_type: "Thought"

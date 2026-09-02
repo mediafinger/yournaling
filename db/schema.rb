@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_22_090100) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_03_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -271,6 +271,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_22_090100) do
     t.index ["visit_id"], name: "index_record_events_on_visit_id"
   end
 
+  create_table "stories", id: :string, force: :cascade do |t|
+    t.text "content", null: false
+    t.datetime "created_at", null: false
+    t.date "date"
+    t.string "name", null: false
+    t.string "team_id", null: false
+    t.datetime "updated_at", null: false
+    t.enum "visibility", default: "draft", null: false, enum_type: "content_visibility"
+    t.index ["team_id", "date"], name: "index_stories_on_team_id_and_date"
+    t.index ["team_id", "name"], name: "index_stories_on_team_id_and_name"
+  end
+
   create_table "teams", id: :string, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name", null: false
@@ -334,6 +346,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_22_090100) do
   add_foreign_key "pg_search_documents", "teams"
   add_foreign_key "pictures", "teams"
   add_foreign_key "publishings", "teams"
+  add_foreign_key "stories", "teams"
   add_foreign_key "thoughts", "teams"
   add_foreign_key "weblinks", "teams"
 

@@ -5,6 +5,7 @@ class ChronicleInsightAttacher
     entry_ids
     picture_id picture_file picture_name
     location_id location_name location_address location_country_code location_url location_description
+    story_id story_name story_content
     thought_id thought_text
     weblink_id weblink_name weblink_url weblink_description
   ].freeze
@@ -52,6 +53,11 @@ class ChronicleInsightAttacher
         location_url: params[:location_url],
         location_description: params[:location_description]
       )
+      attach_story(
+        story_id: params[:story_id],
+        story_name: params[:story_name],
+        story_content: params[:story_content]
+      )
       attach_thought(
         thought_id: params[:thought_id],
         thought_text: params[:thought_text]
@@ -81,6 +87,7 @@ class ChronicleInsightAttacher
   def find_entry_by_id(id)
     team.pictures.find_by(id: id) ||
       team.locations.find_by(id: id) ||
+      team.stories.find_by(id: id) ||
       team.thoughts.find_by(id: id) ||
       team.weblinks.find_by(id: id) ||
       team.memories.find_by(id: id)
@@ -109,6 +116,15 @@ class ChronicleInsightAttacher
       location_description: location_description
     )
     chronicle.entries.create!(entry: target_loc, team: team) if target_loc
+  end
+
+  def attach_story(story_id: nil, story_name: nil, story_content: nil)
+    target_story = resolver.resolve_story(
+      story_id: story_id,
+      story_name: story_name,
+      story_content: story_content
+    )
+    chronicle.entries.create!(entry: target_story, team: team) if target_story
   end
 
   def attach_thought(thought_id: nil, thought_text: nil)

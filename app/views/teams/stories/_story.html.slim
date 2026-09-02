@@ -1,0 +1,5 @@
+= render Yui::CardComponent.new(id: dom_id(story)) do
+  = render Yui::HeadlineComponent.new(story.name, level: 3)
+  - if story.date.present?
+    p.yui-meta = story.date
+  .yui-prose = markdown(story.content)

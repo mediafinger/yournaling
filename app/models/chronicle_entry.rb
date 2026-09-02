@@ -5,7 +5,7 @@
 class ChronicleEntry < ApplicationRecordYidEnabled
   YID_CODE = "crent"
 
-  VALID_ENTRY_TYPES = %w[Memory Picture Location Thought Weblink].freeze
+  VALID_ENTRY_TYPES = %w[Memory Picture Location Story Thought Weblink].freeze
 
   default_scope { order(position: :asc) }
 

@@ -41,6 +41,7 @@ Rails.application.routes.draw do
 
     resources :locations, only: %i[show]
     resources :pictures, only: %i[show]
+    resources :stories, only: %i[show]
     resources :thoughts, only: %i[show]
     resources :weblinks, only: %i[show]
 
@@ -62,6 +63,7 @@ Rails.application.routes.draw do
     resources :members
     resources :memories
     resources :pictures
+    resources :stories
     resources :thoughts
     resources :weblinks
 
@@ -94,6 +96,7 @@ Rails.application.routes.draw do
     resources :pictures
     resources :teams
     resources :users
+    resources :stories
     resources :thoughts
     resources :weblinks
     get "record_events", to: "record_events#index", as: :record_events

@@ -15,6 +15,7 @@ gem "bcrypt", "~> 3.1" # Use bcrypt for secure password hashing
 gem "blazer", "~> 3.1" # Run SQL queries from the browser and display ahoy analytics in tables and graphs
 gem "bootsnap", require: false
 gem "chimera_http_client", "~> 1.6" # HTTP client based on Typhoeus / lib_curl
+gem "commonmarker", "~> 2.9" # Render GitHub Flavored Markdown to safe HTML (Stories)
 gem "countries", "~> 8.1" # Lists of countries, their ISO codes, emoji flags and more
 gem "csv", require: false
 gem "device_detector", "~> 1.1"
@@ -24,6 +25,7 @@ gem "geocoder" # (reverse) geocode addresses and GPS coordinates
 gem "image_processing", "~> 2.0" # Use image_processing for image resizing in ActiveStorage variants
 gem "importmap-rails", "~> 2.0" # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
 # gem "logstasher" # better formatted JSON logs for Logstash
+gem "marksmith", "~> 0.6" # GitHub-style Markdown editor for the Story insight [https://github.com/avo-hq/marksmith]
 gem "mission_control-jobs", "~> 1.0" # dashboard for SolidQueue jobs
 gem "pagy", "~> 43.0" # fast and lightweight pagination solution
 gem "pg", "~> 1.1"

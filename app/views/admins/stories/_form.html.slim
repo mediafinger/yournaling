@@ -1,0 +1,11 @@
+= render Yui::CardComponent.new do
+  = form_with(model: [:admin, story], builder: YuiFormBuilder, html: { class: "yui-stack" }) do |form|
+    = render Yui::HeadlineComponent.new(form_legend, level: 3)
+    = render partial: "shared_partials/form_validation_errors", locals: { record: story }
+    = render partial: "admins/team_field", locals: { form: form }
+    = form.text_field :name, label: "Headline", required: true
+    .yui-field
+      label.yui-label for="story_content" Story
+      = form.marksmith :content
+    = form.date_field :date
+    = form.submit

@@ -58,6 +58,26 @@ class InsightResolver
     end
   end
 
+  def resolve_story(story_id: nil, story_name: nil, story_content: nil)
+    if story_content.present? || story_name.present?
+      story = Story.new(
+        name: story_name.presence || "Untitled story",
+        content: story_content,
+        date: date,
+        team: team,
+        visibility: visibility
+      )
+      Story.create_with_event(record: story, event_params: { team: team, user: user })
+      if story.persisted?
+        story
+      else
+        merge_errors_and_raise!(story, :story_content)
+      end
+    elsif story_id.present?
+      team.stories.find_by(id: story_id) || team.stories.urlsafe_find(story_id)
+    end
+  end
+
   def resolve_thought(thought_id: nil, thought_text: nil)
     if thought_text.present?
       thot = Thought.new(

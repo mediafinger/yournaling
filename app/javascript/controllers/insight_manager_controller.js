@@ -10,10 +10,12 @@ export default class extends Controller {
     "drawerFormContainer",
     "locationTemplate",
     "pictureTemplate",
+    "storyTemplate",
     "thoughtTemplate",
     "weblinkTemplate",
     "existingLocationTemplate",
     "existingPictureTemplate",
+    "existingStoryTemplate",
     "existingThoughtTemplate",
     "existingWeblinkTemplate",
     "locationIdInput",
@@ -22,6 +24,7 @@ export default class extends Controller {
     "weblinkIdInput",
     "locationMenuItem",
     "pictureMenuItem",
+    "storyMenuItem",
     "thoughtMenuItem",
     "weblinkMenuItem"
   ]
@@ -31,6 +34,7 @@ export default class extends Controller {
     recordName: { type: String, default: "memory" },
     createLocationUrl: String,
     createPictureUrl: String,
+    createStoryUrl: String,
     createThoughtUrl: String,
     createWeblinkUrl: String
   }
@@ -75,6 +79,7 @@ export default class extends Controller {
     const titles = {
       location: action === "create" ? "Create New Location" : "Select Existing Location",
       picture: action === "create" ? "Create New Picture" : "Select Existing Picture",
+      story: action === "create" ? "Create New Story" : "Select Existing Story",
       thought: action === "create" ? "Create New Thought" : "Select Existing Thought",
       weblink: action === "create" ? "Create New Weblink" : "Select Existing Weblink"
     }
@@ -118,6 +123,7 @@ export default class extends Controller {
     const urlMap = {
       location: this.createLocationUrlValue,
       picture: this.createPictureUrlValue,
+      story: this.createStoryUrlValue,
       thought: this.createThoughtUrlValue,
       weblink: this.createWeblinkUrlValue
     }
@@ -240,6 +246,7 @@ export default class extends Controller {
     const icons = {
       location: "📍",
       picture: "🖼",
+      story: "📖",
       thought: "💭",
       weblink: "🔗"
     }

@@ -11,7 +11,7 @@ class InsightDestroyModalComponent < ApplicationComponent
   end
 
   def memories
-    @memories ||= @insight.memories
+    @memories ||= @insight.respond_to?(:memories) ? @insight.memories : Memory.none
   end
 
   def referenced?
@@ -21,6 +21,7 @@ class InsightDestroyModalComponent < ApplicationComponent
   def destroy_path
     case @insight
     when Picture then current_team_picture_path(@insight)
+    when Story then current_team_story_path(@insight)
     when Thought then current_team_thought_path(@insight)
     when Location then current_team_location_path(@insight)
     when Weblink then current_team_weblink_path(@insight)
