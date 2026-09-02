@@ -64,7 +64,11 @@ test:
     url: <%= "#{AppConf.yournaling_queue_db_url}_test#{ENV['TEST_ENV_NUMBER']}" %>
     migrations_paths: db/migrate_queue
 
-production:
+# Staging and production share the exact same shape: the four connection URLs
+# come straight from AppConf with no environment suffix. They only differ in
+# what those URLs point at -- one server for staging, dedicated database
+# servers for production -- which is set via ENV on the server.
+production: &production_and_staging
   primary:
     <<: *postgres
     url: <%= AppConf.yournaling_db_url %>
@@ -81,3 +85,6 @@ production:
     <<: *postgres
     url: <%= AppConf.yournaling_cable_db_url %>
     migrations_paths: db/migrate_cable
+
+staging:
+  <<: *production_and_staging
