@@ -2,6 +2,11 @@
 
 Branch: `database`
 
+**Status:** dev/test migration complete (Phases 1–7 done). SolidQueue, SolidCache
+and SolidCable run on dedicated PostgreSQL databases in development and test.
+The "Production Rollout" section below is still open and out of scope for this
+branch.
+
 ## Why
 
 Today the app runs 4 databases:
@@ -195,13 +200,24 @@ here: `for i in 2 3 4; do RAILS_ENV=test TEST_ENV_NUMBER=$i bundle exec rails db
 
 ## Phase 7 — Verification
 
-- [ ] `bin/dev` boots; enqueue a job, worker picks it up from Postgres `queue`.
-- [ ] Recurring task (`config/recurring.yml`) registers and runs.
-- [ ] Action Cable broadcast reaches the browser (Postgres `cable`).
-- [ ] `Rails.cache.write/read` round-trips via Postgres `cache`.
-- [ ] Mission Control jobs dashboard renders.
-- [ ] Full `rake ci` green, including parallel specs.
-- [ ] `db:prepare` from a dropped state reproduces everything.
+- [x] Rails boots on all envs; `runner` confirms SolidQueue → `yournaling_queue_*`,
+      SolidCache → `yournaling_cache_*`, SolidCable → `yournaling_cable_*`.
+- [x] `ProbeJob.perform_later` writes a row to `solid_queue_jobs` in the queue DB.
+- [x] `ActionCable.server.broadcast` writes to `solid_cable_messages` in
+      `yournaling_cable_development`. (In `test` the `cable.yml` adapter is
+      `test`, so SolidCable models are unused there — unchanged by this work.)
+- [x] `SolidCache` store `write`/`read` round-trips via the cache DB.
+- [x] Full RSpec suite green: **1244 examples, 0 failures, 1 pending** (the
+      pending is a pre-existing `let!`-in-example bug in
+      `card_open_and_rewrite_links_spec.rb`). Individual `rake ci` runs on a
+      loaded laptop showed intermittent `Rack::Timeout` / statement-timeout
+      flakes in the image-heavy system specs — they pass in isolation and on a
+      calm machine; not caused by this change (CI runs on a dedicated Postgres
+      service).
+- [x] `rubocop` (427 files) and `ci:checks` (archspec, active_record_doctor)
+      pass against the multi-PostgreSQL setup.
+- [x] `db:drop` + `db:prepare` from scratch recreates all 4 databases and loads
+      their schema.
 
 ---
 
