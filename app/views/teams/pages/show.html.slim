@@ -1,0 +1,14 @@
+.yui-stack
+  = render Yui::HeadlineComponent.new(team.name, level: 1)
+  #publishings
+    - if @publishings.any?
+      .yui-record-grid
+        - @publishings.each do |publishing|
+          - next if publishing.post.blank?
+          - if publishing.post_type == "Chronicle"
+            = render partial: "teams/chronicles/chronicle", locals: { team: publishing.team, chronicle: publishing.post }
+          - elsif publishing.post_type == "Memory"
+            = render partial: "teams/memories/memory", locals: { team: publishing.team, memory: publishing.post }
+    - else
+      = render EmptyStateComponent.new(icon: "📖", title: "Nothing published yet", description: "#{team.name} has not published any stories or memories yet.")
+  = render Yui::PaginationComponent.new(pagy: @pagy)
