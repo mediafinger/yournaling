@@ -16,6 +16,7 @@ module Yui
     # currentColor. Keep them alphabetised.
     PATHS = {
       "arrow-right" => '<path d="M5 12h14"/><path d="m13 6 6 6-6 6"/>',
+      "arrow-up" => '<path d="M12 19V5"/><path d="m6 11 6-6 6 6"/>',
       "arrow-up-right" => '<path d="M7 17 17 7"/><path d="M8 7h9v9"/>',
       "bell" => '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>',
       "book" => '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>' \
