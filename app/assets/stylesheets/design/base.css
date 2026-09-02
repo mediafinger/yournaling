@@ -34,6 +34,15 @@
     box-sizing: border-box;
   }
 
+  /* The `hidden` attribute must beat component `display` rules. Without this a
+     layered rule like `.yui-feed-banner { display: block }` (or a tab panel the
+     yui-tabs controller toggles) overrides the UA `[hidden] { display: none }`,
+     so `<button hidden class="yui-feed-banner">` shows on page load. */
+  .yui-scope [hidden],
+  .yui-body [hidden] {
+    display: none !important;
+  }
+
   /* Safety nets for content markup that isn't wrapped in a component:
      unclassed links, raw images. Classed elements (.yui-btn, .yui-link, …) opt
      out via :not([class]). */
