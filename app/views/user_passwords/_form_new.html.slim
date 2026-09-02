@@ -1,6 +1,6 @@
-.ex-narrow
+.yui-narrow
   = render Yui::CardComponent.new do
     = render Yui::HeadlineComponent.new(form_legend, level: 3)
-    = form_with url: user_password_path, builder: YuiFormBuilder, html: { class: "ex-stack" } do |form|
+    = form_with url: user_password_path, builder: YuiFormBuilder, html: { class: "yui-stack" } do |form|
       = form.email_field :email, required: true, autofocus: true, autocomplete: "email"
       = form.submit "Send Instructions"

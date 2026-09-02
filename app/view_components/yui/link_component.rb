@@ -18,7 +18,7 @@ module Yui
       super()
       @text = text
       @href = href
-      @variant = ex_token(variant, allowed: VARIANTS, default: :default)
+      @variant = yui_token(variant, allowed: VARIANTS, default: :default)
       @external = external
     end
 
@@ -27,7 +27,7 @@ module Yui
     end
 
     def css_class
-      ex_class("ex-link", variant != :default && "ex-link--#{variant}")
+      yui_class("yui-link", variant != :default && "yui-link--#{variant}")
     end
 
     def link_options

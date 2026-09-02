@@ -1,40 +1,40 @@
 @layer components {
   /* Primary navigation — Yui::Navbar / Yui::NavItem.
-     `.ex-navbar-host` is the sticky <header> wrapper (a sticky element needs a
+     `.yui-navbar-host` is the sticky <header> wrapper (a sticky element needs a
      taller parent; <header>'s parent is <body>). navbar_controller.js toggles
      the scroll-hide classes on it. */
 
-  .ex-navbar-host {
+  .yui-navbar-host {
     position: sticky;
     top: 0;
     z-index: 100;
     padding-block: 0;
-    background-color: var(--ex-surface-raised);
-    border-bottom: var(--ex-border-hairline);
-    transition: opacity var(--ex-transition-slow);
+    background-color: var(--yui-surface-raised);
+    border-bottom: var(--yui-border-hairline);
+    transition: opacity var(--yui-transition-slow);
   }
 
-  .ex-navbar-host.navbar--transparent:not(.navbar--hover) {
+  .yui-navbar-host.navbar--transparent:not(.navbar--hover) {
     opacity: 0;
   }
 
-  .ex-navbar {
-    font-family: var(--ex-font-body);
-    border-top: 3px solid var(--ex-accent);
+  .yui-navbar {
+    font-family: var(--yui-font-body);
+    border-top: 3px solid var(--yui-accent);
   }
 
-  .ex-navbar__inner {
+  .yui-navbar__inner {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--ex-space-xs) var(--ex-space-md);
+    gap: var(--yui-space-xs) var(--yui-space-md);
     align-items: center;
     justify-content: space-between;
-    max-width: var(--ex-container);
-    padding: var(--ex-space-2xs) clamp(1rem, 0.5rem + 2vw, 2rem);
+    max-width: var(--yui-container);
+    padding: var(--yui-space-2xs) clamp(1rem, 0.5rem + 2vw, 2rem);
     margin-inline: auto;
   }
 
-  .ex-navbar__group {
+  .yui-navbar__group {
     display: flex;
     flex-wrap: wrap;
     gap: 0.15rem;
@@ -44,48 +44,48 @@
     list-style: none;
   }
 
-  .ex-navbar__item {
+  .yui-navbar__item {
     display: inline-flex;
     align-items: center;
   }
 
-  .ex-nav-item {
+  .yui-nav-item {
     display: inline-flex;
     gap: 0.4em;
     align-items: center;
     padding: 0.4rem 0.7rem;
-    font-size: var(--ex-text-sm);
-    font-weight: var(--ex-weight-medium);
+    font-size: var(--yui-text-sm);
+    font-weight: var(--yui-weight-medium);
     line-height: 1.2;
-    color: var(--ex-ink-soft);
+    color: var(--yui-ink-soft);
     white-space: nowrap;
     text-decoration: none;
-    border-radius: var(--ex-radius-sm);
+    border-radius: var(--yui-radius-sm);
     transition:
-      color var(--ex-transition-fast),
-      background-color var(--ex-transition-fast);
+      color var(--yui-transition-fast),
+      background-color var(--yui-transition-fast);
   }
 
-  .ex-nav-item:hover {
-    color: var(--ex-ink);
-    background-color: var(--ex-surface-sunken);
+  .yui-nav-item:hover {
+    color: var(--yui-ink);
+    background-color: var(--yui-surface-sunken);
   }
 
-  .ex-nav-item--strong {
-    color: var(--ex-accent-ink);
-    background-color: var(--ex-accent);
+  .yui-nav-item--strong {
+    color: var(--yui-accent-ink);
+    background-color: var(--yui-accent);
   }
 
-  .ex-nav-item--strong:hover {
-    color: var(--ex-accent-ink);
-    background-color: var(--ex-accent-strong);
+  .yui-nav-item--strong:hover {
+    color: var(--yui-accent-ink);
+    background-color: var(--yui-accent-strong);
   }
 
-  .ex-nav-item--active {
-    font-weight: var(--ex-weight-semibold);
+  .yui-nav-item--active {
+    font-weight: var(--yui-weight-semibold);
   }
 
-  .ex-navbar__group form {
+  .yui-navbar__group form {
     display: inline-flex;
     margin: 0;
   }
@@ -93,14 +93,14 @@
   /* Admin-area "Scope to Team" marker. */
   .scope-to-team {
     padding: 0.25rem 0.5rem;
-    font-size: var(--ex-text-xs);
-    color: var(--ex-ink-faint);
+    font-size: var(--yui-text-xs);
+    color: var(--yui-ink-faint);
     border: 1px dashed currentcolor;
-    border-radius: var(--ex-radius-xs);
+    border-radius: var(--yui-radius-xs);
   }
 
   @media (width <= 40rem) {
-    .ex-navbar__inner {
+    .yui-navbar__inner {
       justify-content: flex-start;
     }
   }

@@ -1,240 +1,240 @@
 @layer typography {
   /* 4. ------------------------------------------------------------ TYPOGRAPHY */
 
-  .ex-eyebrow {
-    margin: 0 0 var(--ex-space-2xs);
-    font-family: var(--ex-font-body);
-    font-size: var(--ex-text-xs);
-    font-weight: var(--ex-weight-semibold);
-    color: var(--ex-accent);
+  .yui-eyebrow {
+    margin: 0 0 var(--yui-space-2xs);
+    font-family: var(--yui-font-body);
+    font-size: var(--yui-text-xs);
+    font-weight: var(--yui-weight-semibold);
+    color: var(--yui-accent);
     text-transform: uppercase;
-    letter-spacing: var(--ex-tracking-eyebrow);
+    letter-spacing: var(--yui-tracking-eyebrow);
   }
 
-  .ex-h1,
-  .ex-h2,
-  .ex-h3,
-  .ex-h4 {
+  .yui-h1,
+  .yui-h2,
+  .yui-h3,
+  .yui-h4 {
     margin: 0;
-    font-family: var(--ex-font-display);
-    font-weight: var(--ex-weight-semibold);
-    color: var(--ex-ink);
+    font-family: var(--yui-font-display);
+    font-weight: var(--yui-weight-semibold);
+    color: var(--yui-ink);
     text-wrap: balance;
   }
 
-  .ex-display {
+  .yui-display {
     margin: 0;
-    font-family: var(--ex-font-display);
-    font-size: var(--ex-text-display);
-    font-weight: var(--ex-weight-semibold);
-    line-height: var(--ex-leading-tight);
-    color: var(--ex-ink);
-    letter-spacing: var(--ex-tracking-tight);
+    font-family: var(--yui-font-display);
+    font-size: var(--yui-text-display);
+    font-weight: var(--yui-weight-semibold);
+    line-height: var(--yui-leading-tight);
+    color: var(--yui-ink);
+    letter-spacing: var(--yui-tracking-tight);
     text-wrap: balance;
   }
 
-  .ex-h1 {
-    font-size: var(--ex-text-h1);
-    line-height: var(--ex-leading-tight);
-    letter-spacing: var(--ex-tracking-tight);
+  .yui-h1 {
+    font-size: var(--yui-text-h1);
+    line-height: var(--yui-leading-tight);
+    letter-spacing: var(--yui-tracking-tight);
   }
 
-  .ex-h2 {
-    font-size: var(--ex-text-h2);
-    line-height: var(--ex-leading-snug);
-    letter-spacing: var(--ex-tracking-tight);
+  .yui-h2 {
+    font-size: var(--yui-text-h2);
+    line-height: var(--yui-leading-snug);
+    letter-spacing: var(--yui-tracking-tight);
   }
 
-  .ex-h3 {
-    font-size: var(--ex-text-h3);
-    line-height: var(--ex-leading-snug);
+  .yui-h3 {
+    font-size: var(--yui-text-h3);
+    line-height: var(--yui-leading-snug);
   }
 
-  .ex-h4 {
-    font-size: var(--ex-text-h4);
-    font-weight: var(--ex-weight-semibold);
-    line-height: var(--ex-leading-normal);
+  .yui-h4 {
+    font-size: var(--yui-text-h4);
+    font-weight: var(--yui-weight-semibold);
+    line-height: var(--yui-leading-normal);
   }
 
-  .ex-h1--serif-italic {
+  .yui-h1--serif-italic {
     font-style: italic;
-    font-weight: var(--ex-weight-regular);
+    font-weight: var(--yui-weight-regular);
   }
 
-  .ex-align-center {
+  .yui-align-center {
     text-align: center;
   }
 
-  .ex-align-center .ex-eyebrow {
+  .yui-align-center .yui-eyebrow {
     text-align: center;
   }
 
-  .ex-lead {
-    max-width: var(--ex-measure);
+  .yui-lead {
+    max-width: var(--yui-measure);
     margin: 0;
-    font-family: var(--ex-font-serif);
-    font-size: var(--ex-text-lg);
-    line-height: var(--ex-leading-relaxed);
-    color: var(--ex-ink-soft);
+    font-family: var(--yui-font-serif);
+    font-size: var(--yui-text-lg);
+    line-height: var(--yui-leading-relaxed);
+    color: var(--yui-ink-soft);
   }
 
-  .ex-text {
-    max-width: var(--ex-measure);
+  .yui-text {
+    max-width: var(--yui-measure);
     margin: 0;
-    font-size: var(--ex-text-base);
-    line-height: var(--ex-leading-relaxed);
-    color: var(--ex-ink);
+    font-size: var(--yui-text-base);
+    line-height: var(--yui-leading-relaxed);
+    color: var(--yui-ink);
   }
 
-  .ex-text--muted {
-    color: var(--ex-ink-faint);
+  .yui-text--muted {
+    color: var(--yui-ink-faint);
   }
 
   /* Key/value list for record detail pages (dl > dt + dd pairs). */
-  .ex-details {
+  .yui-details {
     display: grid;
     grid-template-columns: auto 1fr;
-    gap: var(--ex-space-3xs) var(--ex-space-md);
+    gap: var(--yui-space-3xs) var(--yui-space-md);
     margin: 0;
-    font-size: var(--ex-text-sm);
+    font-size: var(--yui-text-sm);
   }
 
-  .ex-details dt {
-    font-weight: var(--ex-weight-semibold);
-    color: var(--ex-ink-faint);
+  .yui-details dt {
+    font-weight: var(--yui-weight-semibold);
+    color: var(--yui-ink-faint);
   }
 
-  .ex-details dd {
+  .yui-details dd {
     margin: 0;
-    color: var(--ex-ink);
+    color: var(--yui-ink);
   }
 
-  .ex-text--sm {
-    font-size: var(--ex-text-sm);
-    line-height: var(--ex-leading-normal);
+  .yui-text--sm {
+    font-size: var(--yui-text-sm);
+    line-height: var(--yui-leading-normal);
   }
 
-  .ex-strong {
-    font-weight: var(--ex-weight-semibold);
-    color: var(--ex-ink);
+  .yui-strong {
+    font-weight: var(--yui-weight-semibold);
+    color: var(--yui-ink);
   }
 
   /* Inline monospace — record ids, YIDs, tokens (mostly the admin area). */
-  .ex-code {
+  .yui-code {
     padding: 0.1em 0.35em;
-    font-family: var(--ex-font-mono);
+    font-family: var(--yui-font-mono);
     font-size: 0.9em;
-    color: var(--ex-ink-soft);
+    color: var(--yui-ink-soft);
     word-break: break-all;
-    background-color: var(--ex-surface-sunken);
-    border-radius: var(--ex-radius-xs);
+    background-color: var(--yui-surface-sunken);
+    border-radius: var(--yui-radius-xs);
   }
 
-  .ex-quote {
-    font-family: var(--ex-font-serif);
+  .yui-quote {
+    font-family: var(--yui-font-serif);
     font-style: italic;
-    color: var(--ex-ink-soft);
+    color: var(--yui-ink-soft);
   }
 
   /* Rich prose block — style raw HTML content coherently */
-  .ex-prose {
-    max-width: var(--ex-measure);
-    font-size: var(--ex-text-base);
-    line-height: var(--ex-leading-relaxed);
-    color: var(--ex-ink);
+  .yui-prose {
+    max-width: var(--yui-measure);
+    font-size: var(--yui-text-base);
+    line-height: var(--yui-leading-relaxed);
+    color: var(--yui-ink);
   }
 
-  .ex-prose > * + * {
-    margin-block-start: var(--ex-space-sm);
+  .yui-prose > * + * {
+    margin-block-start: var(--yui-space-sm);
   }
 
-  .ex-prose h2,
-  .ex-prose h3 {
-    margin-block-start: var(--ex-space-lg);
-    font-family: var(--ex-font-display);
-    font-weight: var(--ex-weight-semibold);
-    line-height: var(--ex-leading-snug);
+  .yui-prose h2,
+  .yui-prose h3 {
+    margin-block-start: var(--yui-space-lg);
+    font-family: var(--yui-font-display);
+    font-weight: var(--yui-weight-semibold);
+    line-height: var(--yui-leading-snug);
   }
 
-  .ex-prose h2 {
-    font-size: var(--ex-text-h3);
+  .yui-prose h2 {
+    font-size: var(--yui-text-h3);
   }
 
-  .ex-prose h3 {
-    font-size: var(--ex-text-h4);
+  .yui-prose h3 {
+    font-size: var(--yui-text-h4);
   }
 
-  .ex-prose a {
-    color: var(--ex-accent);
+  .yui-prose a {
+    color: var(--yui-accent);
     text-decoration: underline;
     text-decoration-thickness: 1px;
-    text-decoration-color: var(--ex-border-strong);
+    text-decoration-color: var(--yui-border-strong);
     text-underline-offset: 0.16em;
   }
 
-  .ex-prose a:hover {
-    text-decoration-color: var(--ex-accent);
+  .yui-prose a:hover {
+    text-decoration-color: var(--yui-accent);
   }
 
-  .ex-prose strong {
-    font-weight: var(--ex-weight-semibold);
+  .yui-prose strong {
+    font-weight: var(--yui-weight-semibold);
   }
 
-  .ex-prose em {
-    font-family: var(--ex-font-serif);
+  .yui-prose em {
+    font-family: var(--yui-font-serif);
   }
 
-  .ex-prose ul,
-  .ex-prose ol {
+  .yui-prose ul,
+  .yui-prose ol {
     padding-inline-start: 1.4em;
   }
 
-  .ex-prose li + li {
-    margin-block-start: var(--ex-space-3xs);
+  .yui-prose li + li {
+    margin-block-start: var(--yui-space-3xs);
   }
 
-  .ex-prose li::marker {
-    color: var(--ex-accent);
+  .yui-prose li::marker {
+    color: var(--yui-accent);
   }
 
-  .ex-prose code {
+  .yui-prose code {
     padding: 0.1em 0.36em;
-    font-family: var(--ex-font-mono);
+    font-family: var(--yui-font-mono);
     font-size: 0.9em;
-    background: var(--ex-surface-sunken);
-    border: var(--ex-border-hairline);
-    border-radius: var(--ex-radius-xs);
+    background: var(--yui-surface-sunken);
+    border: var(--yui-border-hairline);
+    border-radius: var(--yui-radius-xs);
   }
 
   /* Blockquote / pull quote */
-  .ex-blockquote {
-    padding: var(--ex-space-sm) 0 var(--ex-space-sm) var(--ex-space-md);
+  .yui-blockquote {
+    padding: var(--yui-space-sm) 0 var(--yui-space-sm) var(--yui-space-md);
     margin: 0;
-    border-inline-start: var(--ex-border-accent);
+    border-inline-start: var(--yui-border-accent);
   }
 
-  .ex-blockquote blockquote {
+  .yui-blockquote blockquote {
     margin: 0;
-    font-family: var(--ex-font-serif);
-    font-size: var(--ex-text-md);
+    font-family: var(--yui-font-serif);
+    font-size: var(--yui-text-md);
     font-style: italic;
-    line-height: var(--ex-leading-relaxed);
-    color: var(--ex-ink-soft);
+    line-height: var(--yui-leading-relaxed);
+    color: var(--yui-ink-soft);
   }
 
-  .ex-blockquote figcaption {
-    margin-block-start: var(--ex-space-2xs);
-    font-family: var(--ex-font-body);
-    font-size: var(--ex-text-sm);
+  .yui-blockquote figcaption {
+    margin-block-start: var(--yui-space-2xs);
+    font-family: var(--yui-font-body);
+    font-size: var(--yui-text-sm);
     font-style: normal;
-    color: var(--ex-ink-faint);
+    color: var(--yui-ink-faint);
   }
 
-  .ex-blockquote--card {
-    padding: var(--ex-space-md);
-    background: var(--ex-surface-sunken);
-    border: var(--ex-border-hairline);
-    border-inline-start: var(--ex-border-accent);
-    border-radius: 0 var(--ex-radius-md) var(--ex-radius-md) 0;
+  .yui-blockquote--card {
+    padding: var(--yui-space-md);
+    background: var(--yui-surface-sunken);
+    border: var(--yui-border-hairline);
+    border-inline-start: var(--yui-border-accent);
+    border-radius: 0 var(--yui-radius-md) var(--yui-radius-md) 0;
   }
 }

@@ -1,6 +1,6 @@
 = render Yui::CardComponent.new(id: dom_id(weblink)) do
   = render Yui::HeadlineComponent.new(weblink.name, level: 3)
-  dl.ex-details
+  dl.yui-details
     dt URL
     dd = render ExternalLinkComponent.new(url: weblink.url, text: weblink.url)
     - if weblink.description.present?

@@ -1,117 +1,117 @@
 @layer components {
   /* 4e. ------------------------------------------------------------- CARD */
 
-  .ex-card {
-    --_pad: var(--ex-space-md);
+  .yui-card {
+    --_pad: var(--yui-space-md);
 
     display: flex;
     flex-direction: column;
     overflow: clip;
-    color: var(--ex-ink);
-    background-color: var(--ex-surface);
-    border: var(--ex-border-hairline);
-    border-radius: var(--ex-radius-lg);
+    color: var(--yui-ink);
+    background-color: var(--yui-surface);
+    border: var(--yui-border-hairline);
+    border-radius: var(--yui-radius-lg);
   }
 
-  .ex-card--elevated {
+  .yui-card--elevated {
     border-color: transparent;
-    box-shadow: var(--ex-shadow-md);
+    box-shadow: var(--yui-shadow-md);
   }
 
-  .ex-card--outline {
+  .yui-card--outline {
     background-color: transparent;
-    border-color: var(--ex-border-strong);
+    border-color: var(--yui-border-strong);
   }
 
-  .ex-card--sunken {
-    background-color: var(--ex-surface-sunken);
+  .yui-card--sunken {
+    background-color: var(--yui-surface-sunken);
     border-color: transparent;
   }
 
-  a.ex-card {
-    color: var(--ex-ink);
+  a.yui-card {
+    color: var(--yui-ink);
     text-decoration: none;
   }
 
-  .ex-card--interactive {
+  .yui-card--interactive {
     cursor: pointer;
     transition:
-      transform var(--ex-transition),
-      box-shadow var(--ex-transition),
-      border-color var(--ex-transition);
+      transform var(--yui-transition),
+      box-shadow var(--yui-transition),
+      border-color var(--yui-transition);
   }
 
-  .ex-card--interactive:hover {
+  .yui-card--interactive:hover {
     border-color: transparent;
-    box-shadow: var(--ex-shadow-lg);
+    box-shadow: var(--yui-shadow-lg);
     transform: translateY(-3px);
   }
 
-  .ex-card--accent {
-    border-inline-start: 4px solid var(--ex-card-accent, var(--ex-accent));
+  .yui-card--accent {
+    border-inline-start: 4px solid var(--yui-card-accent, var(--yui-accent));
   }
 
-  .ex-card__media {
+  .yui-card__media {
     margin: calc(-1 * var(--_pad)) calc(-1 * var(--_pad)) 0;
-    background-color: var(--ex-surface-sunken);
+    background-color: var(--yui-surface-sunken);
   }
 
-  .ex-card__media > * {
+  .yui-card__media > * {
     display: block;
     width: 100%;
   }
 
-  .ex-card__media img {
+  .yui-card__media img {
     display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
 
-  .ex-card__body {
+  .yui-card__body {
     display: flex;
     flex-direction: column;
-    gap: var(--ex-space-xs);
+    gap: var(--yui-space-xs);
     padding: var(--_pad);
   }
 
-  .ex-card__header {
+  .yui-card__header {
     padding: var(--_pad) var(--_pad) 0;
   }
 
-  .ex-card__header + .ex-card__body {
-    padding-block-start: var(--ex-space-sm);
+  .yui-card__header + .yui-card__body {
+    padding-block-start: var(--yui-space-sm);
   }
 
-  .ex-card__footer {
+  .yui-card__footer {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--ex-space-xs);
+    gap: var(--yui-space-xs);
     align-items: center;
-    padding: var(--ex-space-xs) var(--_pad);
+    padding: var(--yui-space-xs) var(--_pad);
     margin-top: auto;
-    background-color: var(--ex-surface-raised);
-    border-top: var(--ex-border-hairline);
+    background-color: var(--yui-surface-raised);
+    border-top: var(--yui-border-hairline);
   }
 
-  .ex-card--pad-sm {
-    --_pad: var(--ex-space-sm);
+  .yui-card--pad-sm {
+    --_pad: var(--yui-space-sm);
   }
 
-  .ex-card--pad-lg {
-    --_pad: var(--ex-space-lg);
+  .yui-card--pad-lg {
+    --_pad: var(--yui-space-lg);
   }
 
   /* Meta row (avatar + who / when) */
-  .ex-meta {
+  .yui-meta {
     display: flex;
-    gap: var(--ex-space-2xs);
+    gap: var(--yui-space-2xs);
     align-items: center;
-    font-size: var(--ex-text-sm);
-    color: var(--ex-ink-faint);
+    font-size: var(--yui-text-sm);
+    color: var(--yui-ink-faint);
   }
 
-  .ex-meta__sep {
+  .yui-meta__sep {
     width: 3px;
     height: 3px;
     background-color: currentcolor;
@@ -119,8 +119,8 @@
     opacity: 0.6;
   }
 
-  .ex-meta strong {
-    font-weight: var(--ex-weight-semibold);
-    color: var(--ex-ink-soft);
+  .yui-meta strong {
+    font-weight: var(--yui-weight-semibold);
+    color: var(--yui-ink-soft);
   }
 }

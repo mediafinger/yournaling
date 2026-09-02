@@ -17,12 +17,12 @@ module Yui
       @label = label
       @href = href
       @active = active
-      @variant = ex_token(variant, allowed: VARIANTS, default: :link)
+      @variant = yui_token(variant, allowed: VARIANTS, default: :link)
       @data = data
     end
 
     def call
-      tag.li(class: "ex-navbar__item") do
+      tag.li(class: "yui-navbar__item") do
         link_to(@label || content, @href, class: link_class, aria: { current: (@active ? "page" : nil) }, data: @data)
       end
     end
@@ -30,7 +30,7 @@ module Yui
     private
 
     def link_class
-      ex_class("ex-nav-item", (@variant == :cta || @active) && "ex-nav-item--strong", @active && "ex-nav-item--active")
+      yui_class("yui-nav-item", (@variant == :cta || @active) && "yui-nav-item--strong", @active && "yui-nav-item--active")
     end
   end
 end

@@ -71,7 +71,7 @@ module Yui
     def initialize(name, size: :md, label: nil)
       super()
       @name = name.to_s
-      @size = ex_token(size, allowed: SIZES, default: :md)
+      @size = yui_token(size, allowed: SIZES, default: :md)
       @label = label.presence
     end
 
@@ -80,7 +80,7 @@ module Yui
     end
 
     def css_class
-      ex_class("ex-icon", size != :md && "ex-icon--#{size}")
+      yui_class("yui-icon", size != :md && "yui-icon--#{size}")
     end
   end
 end

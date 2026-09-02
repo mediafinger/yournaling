@@ -32,7 +32,7 @@ export default class extends Controller {
       const on = i === active
       tab.setAttribute("aria-selected", on ? "true" : "false")
       tab.setAttribute("tabindex", on ? "0" : "-1")
-      tab.classList.toggle("ex-tabs__tab--active", on)
+      tab.classList.toggle("yui-tabs__tab--active", on)
     })
     this.panelTargets.forEach((panel, i) => {
       panel.hidden = i !== active

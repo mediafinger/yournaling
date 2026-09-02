@@ -1,54 +1,54 @@
 @layer components {
   /* Header row of a record card — BrowseHeaderComponent / ManageHeaderComponent. */
 
-  .ex-record-header {
+  .yui-record-header {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--ex-space-2xs) var(--ex-space-sm);
+    gap: var(--yui-space-2xs) var(--yui-space-sm);
     align-items: flex-start;
     justify-content: space-between;
     width: 100%;
   }
 
-  .ex-record-header__title {
+  .yui-record-header__title {
     margin: 0 0 0.15rem;
-    font-family: var(--ex-font-display);
-    font-size: var(--ex-text-h4);
-    font-weight: var(--ex-weight-semibold);
-    line-height: var(--ex-leading-snug);
-    color: var(--ex-ink);
+    font-family: var(--yui-font-display);
+    font-size: var(--yui-text-h4);
+    font-weight: var(--yui-weight-semibold);
+    line-height: var(--yui-leading-snug);
+    color: var(--yui-ink);
   }
 
-  .ex-record-header__meta {
+  .yui-record-header__meta {
     display: flex;
     flex-wrap: wrap;
     gap: 0.15rem 0.5rem;
     align-items: baseline;
-    font-size: var(--ex-text-sm);
-    color: var(--ex-ink-faint);
+    font-size: var(--yui-text-sm);
+    color: var(--yui-ink-faint);
   }
 
-  .ex-record-header__meta strong {
-    font-weight: var(--ex-weight-semibold);
-    color: var(--ex-ink-soft);
+  .yui-record-header__meta strong {
+    font-weight: var(--yui-weight-semibold);
+    color: var(--yui-ink-soft);
   }
 
-  .ex-record-header__actions {
+  .yui-record-header__actions {
     display: flex;
     flex-shrink: 0;
-    gap: var(--ex-space-3xs);
+    gap: var(--yui-space-3xs);
   }
 
   /* ContentVisibilityModalComponent — a stack of full-width choice buttons. */
-  .ex-visibility-choices {
+  .yui-visibility-choices {
     display: flex;
     flex-direction: column;
-    gap: var(--ex-space-2xs);
+    gap: var(--yui-space-2xs);
   }
 
   /* stylelint-disable-next-line selector-class-pattern */
-  .ex-visibility-choices form.button_to,
-  .ex-visibility-choices .ex-btn {
+  .yui-visibility-choices form.button_to,
+  .yui-visibility-choices .yui-btn {
     display: block;
     width: 100%;
   }

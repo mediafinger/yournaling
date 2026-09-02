@@ -12,7 +12,7 @@ module Yui
 
     # Trivial single-element wrapper — no template (see Yui::BaseComponent).
     def call
-      tag.em(@text || content, class: "ex-quote")
+      tag.em(@text || content, class: "yui-quote")
     end
   end
 end

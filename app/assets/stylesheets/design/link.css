@@ -1,55 +1,55 @@
 @layer components {
   /* Links ---------------------------------------------------------------- */
-  .ex-link {
-    font-weight: var(--ex-weight-medium);
-    color: var(--ex-accent);
+  .yui-link {
+    font-weight: var(--yui-weight-medium);
+    color: var(--yui-accent);
     text-decoration: underline;
     text-decoration-thickness: 1px;
-    text-decoration-color: var(--ex-border-strong);
+    text-decoration-color: var(--yui-border-strong);
     text-underline-offset: 0.16em;
     transition:
-      color var(--ex-transition-fast),
-      text-decoration-color var(--ex-transition-fast);
+      color var(--yui-transition-fast),
+      text-decoration-color var(--yui-transition-fast);
   }
 
-  .ex-link:hover {
-    color: var(--ex-accent-strong);
-    text-decoration-color: var(--ex-accent);
+  .yui-link:hover {
+    color: var(--yui-accent-strong);
+    text-decoration-color: var(--yui-accent);
   }
 
-  .ex-link--muted {
-    color: var(--ex-ink-soft);
-    text-decoration-color: var(--ex-border);
+  .yui-link--muted {
+    color: var(--yui-ink-soft);
+    text-decoration-color: var(--yui-border);
   }
 
-  .ex-link--muted:hover {
-    color: var(--ex-ink);
+  .yui-link--muted:hover {
+    color: var(--yui-ink);
   }
 
-  .ex-link--standalone {
+  .yui-link--standalone {
     display: inline-flex;
     gap: 0.35em;
     align-items: center;
-    font-weight: var(--ex-weight-semibold);
+    font-weight: var(--yui-weight-semibold);
     text-decoration: none;
   }
 
   /* Title link that sits on a card — inherits ink, underlines only on hover */
-  .ex-link--cover {
+  .yui-link--cover {
     font-weight: inherit;
     color: inherit;
     text-decoration: none;
   }
 
-  .ex-link--cover:hover {
-    color: var(--ex-accent);
+  .yui-link--cover:hover {
+    color: var(--yui-accent);
   }
 
-  .ex-link--standalone .ex-icon {
-    transition: transform var(--ex-transition);
+  .yui-link--standalone .yui-icon {
+    transition: transform var(--yui-transition);
   }
 
-  .ex-link--standalone:hover .ex-icon {
+  .yui-link--standalone:hover .yui-icon {
     transform: translateX(3px);
   }
 }

@@ -13,7 +13,7 @@ module Yui
 
     # Trivial single-element wrapper — no template (see Yui::BaseComponent).
     def call
-      tag.strong(@text || content, class: "ex-strong")
+      tag.strong(@text || content, class: "yui-strong")
     end
   end
 end

@@ -1,25 +1,25 @@
 - location.country_code ||= "de"
 = render Yui::CardComponent.new do
-  = form_with(model: [:current_team, location], builder: YuiFormBuilder, html: { class: "ex-stack" }) do |form|
+  = form_with(model: [:current_team, location], builder: YuiFormBuilder, html: { class: "yui-stack" }) do |form|
     = render Yui::HeadlineComponent.new(form_legend, level: 3)
     = render partial: "shared_partials/form_validation_errors", locals: { record: location }
     = form.text_field :name, label: "Location Name", placeholder: "e.g. Cabo de Gata Camping", required: true
     = form.date_field :date
     = form.select :country_code, CountriesEnForSelectService.call.map { |k, v| [v, k] }, label: "Country", required: true
 
-    .ex-field data-controller="yui-tabs"
-      label.ex-label
+    .yui-field data-controller="yui-tabs"
+      label.yui-label
         strong Location Details (Choose one)
-      .ex-btn-group role="group"
-        button.ex-tabs__tab type="button" data-yui-tabs-target="tab" data-tab-index="0" data-action="click->yui-tabs#select keydown->yui-tabs#onKeydown" Address
-        button.ex-tabs__tab type="button" data-yui-tabs-target="tab" data-tab-index="1" data-action="click->yui-tabs#select keydown->yui-tabs#onKeydown" GPS Coordinates
-        button.ex-tabs__tab type="button" data-yui-tabs-target="tab" data-tab-index="2" data-action="click->yui-tabs#select keydown->yui-tabs#onKeydown" Map / Web URL
+      .yui-btn-group role="group"
+        button.yui-tabs__tab type="button" data-yui-tabs-target="tab" data-tab-index="0" data-action="click->yui-tabs#select keydown->yui-tabs#onKeydown" Address
+        button.yui-tabs__tab type="button" data-yui-tabs-target="tab" data-tab-index="1" data-action="click->yui-tabs#select keydown->yui-tabs#onKeydown" GPS Coordinates
+        button.yui-tabs__tab type="button" data-yui-tabs-target="tab" data-tab-index="2" data-action="click->yui-tabs#select keydown->yui-tabs#onKeydown" Map / Web URL
 
       div data-yui-tabs-target="panel"
         = form.text_field :address, label: "Street Address / City", placeholder: "e.g. Playa de los Genoveses, San Jose"
 
       div data-yui-tabs-target="panel"
-        .ex-grid-pair
+        .yui-grid-pair
           = form.text_field :lat, label: "Latitude", placeholder: "e.g. 36.7491"
           = form.text_field :long, label: "Longitude", placeholder: "e.g. -2.2425"
 

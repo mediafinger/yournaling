@@ -35,20 +35,20 @@ module Yui
   #   for a tiny, logic-free existing template. Never `<<-SLIM` / bare `<<SLIM`;
   #   `<<~'SLIM'` only when `#{...}` must reach the browser literally.
   #
-  # Variant/size params go through `ex_token` so bad input degrades to the
+  # Variant/size params go through `yui_token` so bad input degrades to the
   # default instead of raising. Treat `Yui::Field` / `Yui::Button` / `Yui::Card`
   # as stable API — changes go through a deprecation cycle (§8).
   class BaseComponent < ViewComponent::Base
     # Join an arbitrary list of class fragments, dropping blanks/nils/false.
     #
-    #   ex_class("ex-btn", "ex-btn--#{variant}", full_width && "ex-btn--block")
-    #   # => "ex-btn ex-btn--primary ex-btn--block"
-    def ex_class(*fragments)
+    #   yui_class("yui-btn", "yui-btn--#{variant}", full_width && "yui-btn--block")
+    #   # => "yui-btn yui-btn--primary yui-btn--block"
+    def yui_class(*fragments)
       fragments.flatten.compact.reject { |fragment| fragment == false || fragment.to_s.strip.empty? }.join(" ")
     end
 
     # Coerce a user supplied variant/size to a known token, falling back safely.
-    def ex_token(value, allowed:, default:)
+    def yui_token(value, allowed:, default:)
       token = value.to_s.to_sym
       allowed.include?(token) ? token : default
     end

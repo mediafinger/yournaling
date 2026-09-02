@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Progressive enhancement for a <details class="ex-menu">: close on outside
+// Progressive enhancement for a <details class="yui-menu">: close on outside
 // click, on Escape, and after choosing an item; keep aria-expanded in sync.
 export default class extends Controller {
   static targets = ["trigger", "panel"]

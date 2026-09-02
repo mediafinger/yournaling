@@ -20,7 +20,7 @@ RSpec.describe "Picture Lightbox Modal", type: :system do
   it "renders picture with lightbox modal trigger and displays enlarged picture with original link" do
     visit root_url
 
-    within("article.ex-memory-card[id='#{dom_id(memory)}']") do
+    within("article.yui-memory-card[id='#{dom_id(memory)}']") do
       expect(page).to have_css("div[data-controller='yui-modal']")
       expect(page).to have_css("[data-action='click->yui-modal#open']")
       expect(page).to have_css("dialog[data-yui-modal-target='dialog']")

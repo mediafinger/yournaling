@@ -1,6 +1,6 @@
-.ex-cluster style="padding: 0 0 10rem"
-  = render(Yui::MenuComponent.new("Insights", align: :start, trigger_class: "ex-nav-item ex-nav-item")) do
+.yui-cluster style="padding: 0 0 10rem"
+  = render(Yui::MenuComponent.new("Insights", align: :start, trigger_class: "yui-nav-item yui-nav-item")) do
     = render Yui::MenuItemComponent.new("Memory", href: "#")
     = render Yui::MenuItemComponent.new("Chronicle", href: "#", active: true)
-    .ex-menu__sep
+    .yui-menu__sep
     = render Yui::MenuItemComponent.new("Delete", href: "#", variant: :danger)

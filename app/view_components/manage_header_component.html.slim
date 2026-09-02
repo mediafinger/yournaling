@@ -1,7 +1,7 @@
-.ex-record-header
+.yui-record-header
   div
-    = content_tag(heading_tag, title, class: "ex-record-header__title")
-    .ex-record-header__meta
+    = content_tag(heading_tag, title, class: "yui-record-header__title")
+    .yui-record-header__meta
       - if date.present?
         span
           strong = "#{date_label}: "
@@ -13,7 +13,7 @@
           = render ContentVisibilityModalComponent.new(record: @record, user: current_user, team: current_team, member: current_member)
 
   - unless @hide_actions
-    .ex-record-header__actions
+    .yui-record-header__actions
       - if show_open_button?
         = render Yui::ButtonComponent.new("Open", href: show_path, variant: :secondary, size: :sm)
       - if can_rewrite?

@@ -20,22 +20,22 @@ RSpec.describe YuiFormBuilder do
     it "renders a Yui::FieldComponent with the humanised label and the model value" do
       rendered = html(form.text_field(:memo))
 
-      input = rendered.find("input.ex-input")
-      expect(rendered).to have_css("label.ex-label[for='#{input[:id]}']", text: "Memo")
+      input = rendered.find("input.yui-input")
+      expect(rendered).to have_css("label.yui-label[for='#{input[:id]}']", text: "Memo")
       expect(input.value).to eq("hi")
       expect(input[:name]).to eq("memory[memo]")
     end
 
     it "carries a hint through" do
-      expect(html(form.text_field(:memo, hint: "Keep it short."))).to have_css(".ex-hint", text: "Keep it short.")
+      expect(html(form.text_field(:memo, hint: "Keep it short."))).to have_css(".yui-hint", text: "Keep it short.")
     end
 
     it "surfaces the model's validation error and marks the field invalid" do
       memory.valid?
       rendered = html(form.text_field(:memo))
 
-      expect(rendered).to have_css(".ex-field--invalid")
-      expect(rendered).to have_css(".ex-error", text: "is too short (minimum is 4 characters)")
+      expect(rendered).to have_css(".yui-field--invalid")
+      expect(rendered).to have_css(".yui-error", text: "is too short (minimum is 4 characters)")
       expect(rendered.find("input")[:"aria-invalid"]).to eq("true")
     end
 
@@ -47,7 +47,7 @@ RSpec.describe YuiFormBuilder do
 
   describe "#text_area" do
     it "renders a textarea field" do
-      expect(html(form.text_area(:memo))).to have_css("textarea.ex-textarea", text: "hi")
+      expect(html(form.text_area(:memo))).to have_css("textarea.yui-textarea", text: "hi")
     end
   end
 
@@ -56,7 +56,7 @@ RSpec.describe YuiFormBuilder do
       memory.visibility = "published"
       rendered = html(form.select(:visibility, Memory::VISIBILITY_STATES))
 
-      expect(rendered).to have_css(".ex-select-wrap select[name='memory[visibility]']")
+      expect(rendered).to have_css(".yui-select-wrap select[name='memory[visibility]']")
       expect(rendered).to have_css("option[selected][value='published']")
     end
 
@@ -101,15 +101,15 @@ RSpec.describe YuiFormBuilder do
     it "renders a Yui::ChoiceComponent plus the Rails hidden field" do
       rendered = html(form.check_box(:pinned, { label: "Pin it" }, "1", "0"))
 
-      expect(rendered).to have_css("label.ex-choice input[type='checkbox'][name='memory[pinned]']")
-      expect(rendered).to have_css("label.ex-choice", text: "Pin it")
+      expect(rendered).to have_css("label.yui-choice input[type='checkbox'][name='memory[pinned]']")
+      expect(rendered).to have_css("label.yui-choice", text: "Pin it")
       expect(rendered).to have_css("input[type='hidden'][name='memory[pinned]'][value='0']", visible: :all)
     end
   end
 
   describe "#submit" do
     it "renders a Yui::ButtonComponent of type submit" do
-      expect(html(form.submit("Save memory"))).to have_button("Save memory", type: "submit", class: "ex-btn")
+      expect(html(form.submit("Save memory"))).to have_button("Save memory", type: "submit", class: "yui-btn")
     end
   end
 

@@ -13,7 +13,7 @@ RSpec.describe Yui::TabsComponent, type: :component do
   it "renders a tablist wired to the yui-tabs controller" do
     rendered = render_tabs
 
-    expect(rendered).to have_css(".ex-tabs[data-controller='yui-tabs']")
+    expect(rendered).to have_css(".yui-tabs[data-controller='yui-tabs']")
     expect(rendered).to have_css("[role='tablist'][aria-label='Location']")
     expect(rendered).to have_css("button[role='tab'][data-yui-tabs-target='tab']", count: 2)
     expect(rendered).to have_css("button[role='tab']", text: "Address")

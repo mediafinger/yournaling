@@ -3,7 +3,7 @@
 module Example
   # A single colour swatch for the palette documentation.
   #
-  #   Example::SwatchComponent.new(name: "Accent", token: "--ex-accent", value: "#b5541e")
+  #   Example::SwatchComponent.new(name: "Accent", token: "--yui-accent", value: "#b5541e")
   class SwatchComponent < Yui::BaseComponent
     attr_reader :name, :token, :value
 
@@ -15,11 +15,11 @@ module Example
     end
 
     slim_template <<~'SLIM'
-      .ex-swatch
-        .ex-swatch__chip style="background-color: var(#{token})"
-        .ex-swatch__meta
-          span.ex-swatch__name = name
-          span.ex-swatch__value = value || token
+      .yui-swatch
+        .yui-swatch__chip style="background-color: var(#{token})"
+        .yui-swatch__meta
+          span.yui-swatch__name = name
+          span.yui-swatch__value = value || token
     SLIM
   end
 end

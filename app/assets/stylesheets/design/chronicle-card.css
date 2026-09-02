@@ -2,67 +2,67 @@
   /* 5. --------------------------------------------------- COMPOSED RECORDS */
 
   /* Shared timeline track (used by chronicle card) */
-  .ex-timeline {
+  .yui-timeline {
     position: relative;
     display: flex;
     flex-direction: column;
-    gap: var(--ex-space-sm);
+    gap: var(--yui-space-sm);
     padding-inline-start: 1.35rem;
-    border-inline-start: 2px solid var(--ex-border);
+    border-inline-start: 2px solid var(--yui-border);
   }
 
-  .ex-timeline__item {
+  .yui-timeline__item {
     position: relative;
   }
 
-  .ex-timeline__item::before {
+  .yui-timeline__item::before {
     position: absolute;
     inset-inline-start: calc(-1.35rem - 6px);
     top: 0.4em;
     width: 10px;
     height: 10px;
     content: "";
-    background-color: var(--ex-accent);
+    background-color: var(--yui-accent);
     border-radius: 50%;
-    box-shadow: 0 0 0 4px var(--ex-paper);
+    box-shadow: 0 0 0 4px var(--yui-paper);
   }
 
-  .ex-timeline__date {
-    font-size: var(--ex-text-xs);
-    font-weight: var(--ex-weight-semibold);
-    color: var(--ex-ink-faint);
+  .yui-timeline__date {
+    font-size: var(--yui-text-xs);
+    font-weight: var(--yui-weight-semibold);
+    color: var(--yui-ink-faint);
     text-transform: uppercase;
-    letter-spacing: var(--ex-tracking-wide);
+    letter-spacing: var(--yui-tracking-wide);
   }
 
-  .ex-timeline__title {
-    font-family: var(--ex-font-serif);
-    font-size: var(--ex-text-base);
-    color: var(--ex-ink);
+  .yui-timeline__title {
+    font-family: var(--yui-font-serif);
+    font-size: var(--yui-text-base);
+    color: var(--yui-ink);
   }
 
   /* Chronicle card */
-  .ex-chronicle-card {
-    --ex-card-accent: var(--ex-accent);
+  .yui-chronicle-card {
+    --yui-card-accent: var(--yui-accent);
   }
 
-  .ex-chronicle-card__cover {
+  .yui-chronicle-card__cover {
     aspect-ratio: 16 / 6;
   }
 
-  .ex-chronicle-card__summary {
+  .yui-chronicle-card__summary {
     margin: 0;
-    font-family: var(--ex-font-serif);
-    font-size: var(--ex-text-base);
-    line-height: var(--ex-leading-relaxed);
-    color: var(--ex-ink-soft);
+    font-family: var(--yui-font-serif);
+    font-size: var(--yui-text-base);
+    line-height: var(--yui-leading-relaxed);
+    color: var(--yui-ink-soft);
   }
 
-  .ex-chronicle-card__dates {
+  .yui-chronicle-card__dates {
     display: inline-flex;
     gap: 0.4em;
     align-items: center;
-    font-size: var(--ex-text-sm);
-    color: var(--ex-ink-faint);
+    font-size: var(--yui-text-sm);
+    color: var(--yui-ink-faint);
   }
 }

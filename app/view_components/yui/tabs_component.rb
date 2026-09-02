@@ -22,7 +22,7 @@ module Yui
     attr_reader :label, :active
 
     def uid
-      @uid ||= "ex-tabs-#{SecureRandom.hex(4)}"
+      @uid ||= "yui-tabs-#{SecureRandom.hex(4)}"
     end
 
     # A single tab + its panel. `title` is the clickable tab label.

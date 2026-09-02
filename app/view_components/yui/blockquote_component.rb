@@ -16,7 +16,7 @@ module Yui
       super()
       @quote = quote
       @cite = cite.presence
-      @variant = ex_token(variant, allowed: VARIANTS, default: :plain)
+      @variant = yui_token(variant, allowed: VARIANTS, default: :plain)
       @dom_id = id.presence
     end
 
@@ -25,7 +25,7 @@ module Yui
     end
 
     def css_class
-      ex_class("ex-blockquote", variant == :card && "ex-blockquote--card")
+      yui_class("yui-blockquote", variant == :card && "yui-blockquote--card")
     end
   end
 end

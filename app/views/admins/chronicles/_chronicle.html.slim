@@ -1,7 +1,7 @@
 - full = local_assigns[:full] || action_name == "show"
 = render Yui::CardComponent.new(id: dom_id(chronicle)) do
   = render Yui::HeadlineComponent.new(chronicle.name, level: 3)
-  dl.ex-details
+  dl.yui-details
     dt Dates
     dd
       = chronicle.start_date
@@ -15,11 +15,11 @@
     = render AdminShowMetaInformationComponent.new(record: chronicle)
 
   - if full && chronicle.entries.any?
-    section.ex-stack.ex-stack--sm
+    section.yui-stack.yui-stack--sm
       = render Yui::HeadlineComponent.new("Entries", level: 4)
-      .ex-timeline
+      .yui-timeline
         - chronicle.entries.each do |chronicle_entry|
-          .ex-timeline__item
+          .yui-timeline__item
             = render ChronicleEntryComponent.new(chronicle_entry: chronicle_entry, scope: "admin")
   - elsif chronicle.first_picture.present?
     = render partial: "admins/pictures/picture", locals: { picture: chronicle.first_picture, hide_actions: true }

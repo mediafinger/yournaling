@@ -1,97 +1,97 @@
 @layer components {
   /* Modal dialog — Yui::Modal (native <dialog>). */
 
-  .ex-modal-wrap {
+  .yui-modal-wrap {
     display: contents;
   }
 
-  .ex-modal__trigger {
+  .yui-modal__trigger {
     display: contents;
   }
 
-  .ex-modal {
+  .yui-modal {
     width: min(32rem, calc(100vw - 2rem));
     max-height: calc(100dvh - 4rem);
     padding: 0;
-    color: var(--ex-ink);
-    background-color: var(--ex-surface);
-    border: var(--ex-border-hairline);
-    border-radius: var(--ex-radius-lg);
-    box-shadow: var(--ex-shadow-lg);
+    color: var(--yui-ink);
+    background-color: var(--yui-surface);
+    border: var(--yui-border-hairline);
+    border-radius: var(--yui-radius-lg);
+    box-shadow: var(--yui-shadow-lg);
   }
 
-  .ex-modal--sm {
+  .yui-modal--sm {
     width: min(24rem, calc(100vw - 2rem));
   }
 
-  .ex-modal--lg {
+  .yui-modal--lg {
     width: min(48rem, calc(100vw - 2rem));
   }
 
-  .ex-modal::backdrop {
-    background-color: var(--ex-overlay);
+  .yui-modal::backdrop {
+    background-color: var(--yui-overlay);
   }
 
   @starting-style {
-    .ex-modal[open] {
+    .yui-modal[open] {
       opacity: 0;
       transform: translateY(0.5rem);
     }
   }
 
-  .ex-modal[open] {
+  .yui-modal[open] {
     transition:
-      opacity var(--ex-transition),
-      transform var(--ex-transition);
+      opacity var(--yui-transition),
+      transform var(--yui-transition);
   }
 
-  .ex-modal__panel {
+  .yui-modal__panel {
     display: flex;
     flex-direction: column;
     max-height: inherit;
   }
 
-  .ex-modal__header {
+  .yui-modal__header {
     display: flex;
-    gap: var(--ex-space-sm);
+    gap: var(--yui-space-sm);
     align-items: flex-start;
     justify-content: space-between;
-    padding: var(--ex-space-md) var(--ex-space-md) 0;
+    padding: var(--yui-space-md) var(--yui-space-md) 0;
   }
 
-  .ex-modal__title {
+  .yui-modal__title {
     margin: 0;
-    font-family: var(--ex-font-display);
-    font-size: var(--ex-text-h4);
-    font-weight: var(--ex-weight-semibold);
+    font-family: var(--yui-font-display);
+    font-size: var(--yui-text-h4);
+    font-weight: var(--yui-weight-semibold);
   }
 
-  .ex-modal__close {
+  .yui-modal__close {
     display: inline-flex;
     flex: none;
     padding: 0.2rem;
-    color: var(--ex-ink-faint);
+    color: var(--yui-ink-faint);
     cursor: pointer;
     background: none;
     border: 0;
-    border-radius: var(--ex-radius-xs);
+    border-radius: var(--yui-radius-xs);
   }
 
-  .ex-modal__close:hover {
-    color: var(--ex-ink);
-    background-color: var(--ex-surface-sunken);
+  .yui-modal__close:hover {
+    color: var(--yui-ink);
+    background-color: var(--yui-surface-sunken);
   }
 
-  .ex-modal__body {
-    padding: var(--ex-space-md);
+  .yui-modal__body {
+    padding: var(--yui-space-md);
     overflow-y: auto;
   }
 
-  .ex-modal__footer {
+  .yui-modal__footer {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--ex-space-2xs);
+    gap: var(--yui-space-2xs);
     justify-content: flex-end;
-    padding: 0 var(--ex-space-md) var(--ex-space-md);
+    padding: 0 var(--yui-space-md) var(--yui-space-md);
   }
 }

@@ -1,12 +1,12 @@
-.ex-record-header
-  .ex-record-header__meta
+.yui-record-header
+  .yui-record-header__meta
     - if date.present?
       span = date
     - if @team.present?
       span = @team.name
 
   - if show_open_button? || can_rewrite?
-    .ex-record-header__actions
+    .yui-record-header__actions
       - if show_open_button?
         = render Yui::ButtonComponent.new("Open", href: show_path, variant: :secondary, size: :sm)
       - if can_rewrite?

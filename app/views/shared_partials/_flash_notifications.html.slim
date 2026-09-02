@@ -1,5 +1,5 @@
 - if flash.any?
-  .ex-toast-region
+  .yui-toast-region
     - flash.each do |key, message|
       - variant = Yui::ToastComponent::FLASH_VARIANTS.fetch(key.to_s, :info)
       - Array(message).each do |line|

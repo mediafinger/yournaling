@@ -1,26 +1,26 @@
-nav.ex-pagination aria-label=label
-  ul.ex-pagination__list
+nav.yui-pagination aria-label=label
+  ul.yui-pagination__list
     li
       - if prev_page
-        a.ex-pagination__link.ex-pagination__link--nav href=page_url(prev_page) rel="prev" title="Previous page" aria-label="Previous page"
+        a.yui-pagination__link.yui-pagination__link--nav href=page_url(prev_page) rel="prev" title="Previous page" aria-label="Previous page"
           = render Yui::IconComponent.new("chevron-left", size: :sm)
       - else
-        span.ex-pagination__link.ex-pagination__link--nav aria-disabled="true"
+        span.yui-pagination__link.yui-pagination__link--nav aria-disabled="true"
           = render Yui::IconComponent.new("chevron-left", size: :sm)
 
     - series.each do |item|
       li
         - if item == :gap
-          span.ex-pagination__gap aria-hidden="true" …
+          span.yui-pagination__gap aria-hidden="true" …
         - elsif item == current_page
-          span.ex-pagination__link.ex-pagination__link--current aria-current="page" = item
+          span.yui-pagination__link.yui-pagination__link--current aria-current="page" = item
         - else
-          a.ex-pagination__link href=page_url(item) aria-label="Page #{item}" = item
+          a.yui-pagination__link href=page_url(item) aria-label="Page #{item}" = item
 
     li
       - if next_page
-        a.ex-pagination__link.ex-pagination__link--nav href=page_url(next_page) rel="next" title="Next page" aria-label="Next page"
+        a.yui-pagination__link.yui-pagination__link--nav href=page_url(next_page) rel="next" title="Next page" aria-label="Next page"
           = render Yui::IconComponent.new("chevron-right", size: :sm)
       - else
-        span.ex-pagination__link.ex-pagination__link--nav aria-disabled="true"
+        span.yui-pagination__link.yui-pagination__link--nav aria-disabled="true"
           = render Yui::IconComponent.new("chevron-right", size: :sm)

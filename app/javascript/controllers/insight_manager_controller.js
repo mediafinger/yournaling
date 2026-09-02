@@ -90,9 +90,9 @@ export default class extends Controller {
     if (!this.hasDrawerErrorTarget) return
     const errorList = Array.isArray(errors) ? errors : [errors]
     this.drawerErrorTarget.innerHTML = `
-      <div class="ex-insight-drawer__error" role="alert">
+      <div class="yui-insight-drawer__error" role="alert">
         <strong>Please fix the following:</strong>
-        <ul class="ex-stack ex-stack--xs">
+        <ul class="yui-stack yui-stack--xs">
           ${errorList.map(err => `<li>${err}</li>`).join("")}
         </ul>
       </div>
@@ -247,21 +247,21 @@ export default class extends Controller {
     const icon = icons[type] || "📌"
     let mediaSnippet = ""
     if (type === "picture" && thumb_url) {
-      mediaSnippet = `<img class="ex-insight-chip__thumb" src="${thumb_url}" alt="" />`
+      mediaSnippet = `<img class="yui-insight-chip__thumb" src="${thumb_url}" alt="" />`
     }
 
     const chip = document.createElement("div")
-    chip.className = "ex-insight-chip"
+    chip.className = "yui-insight-chip"
     chip.dataset.insightChip = "true"
     chip.dataset.type = type
     chip.dataset.id = id
 
     chip.innerHTML = `
-      <span class="ex-insight-chip__label">
+      <span class="yui-insight-chip__label">
         ${mediaSnippet}
         <span><strong>${icon} ${this.capitalize(type)}:&nbsp;</strong>${this.escapeHtml(label)}</span>
       </span>
-      <button type="button" class="ex-btn ex-btn--ghost ex-btn--sm ex-insight-chip__remove" data-action="click->insight-manager#removeInsight" data-type="${type}" title="Remove">✕</button>
+      <button type="button" class="yui-btn yui-btn--ghost yui-btn--sm yui-insight-chip__remove" data-action="click->insight-manager#removeInsight" data-type="${type}" title="Remove">✕</button>
     `
 
     this.attachedContainerTarget.appendChild(chip)

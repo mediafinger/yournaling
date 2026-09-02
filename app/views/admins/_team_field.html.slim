@@ -1,11 +1,11 @@
 / Admin team picker: read-only for a persisted record, a select for a new one.
 - record = form.object
 - if record.persisted? && record.try(:team)
-  .ex-field
-    span.ex-label Team
-    p.ex-text
+  .yui-field
+    span.yui-label Team
+    p.yui-text
       = record.team.name
       = " "
-      code.ex-code = record.team.id
+      code.yui-code = record.team.id
 - else
   = form.select :team_id, Team.order(:name).pluck(:name, :id), label: "Team", include_blank: true, required: true

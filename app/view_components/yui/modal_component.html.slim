@@ -1,18 +1,18 @@
-.ex-modal-wrap data-controller="yui-modal"
+.yui-modal-wrap data-controller="yui-modal"
   - if trigger
-    span.ex-modal__trigger data-action="click->yui-modal#open"
+    span.yui-modal__trigger data-action="click->yui-modal#open"
       = trigger
   dialog(class=dialog_class data-yui-modal-target="dialog" aria-labelledby=(title.present? ? title_id : nil))
-    .ex-modal__panel
+    .yui-modal__panel
       - if title.present? || dismissible
-        header.ex-modal__header
+        header.yui-modal__header
           - if title.present?
-            h2.ex-modal__title id=title_id = title
+            h2.yui-modal__title id=title_id = title
           - if dismissible
-            button.ex-modal__close type="button" aria-label="Close" data-action="click->yui-modal#close"
+            button.yui-modal__close type="button" aria-label="Close" data-action="click->yui-modal#close"
               = render Yui::IconComponent.new("x", size: :sm)
-      .ex-modal__body
+      .yui-modal__body
         = content
       - if footer
-        footer.ex-modal__footer
+        footer.yui-modal__footer
           = footer

@@ -1,6 +1,6 @@
 - location.country_code ||= "de"
 = render Yui::CardComponent.new do
-  = form_with(model: [:admin, location], builder: YuiFormBuilder, html: { class: "ex-stack" }) do |form|
+  = form_with(model: [:admin, location], builder: YuiFormBuilder, html: { class: "yui-stack" }) do |form|
     = render Yui::HeadlineComponent.new(form_legend, level: 3)
     = render partial: "shared_partials/form_validation_errors", locals: { record: location }
     = render partial: "admins/team_field", locals: { form: form }
@@ -9,7 +9,7 @@
     = form.select :country_code, CountriesEnForSelectService.call.map { |k, v| [v, k] }, label: "Country"
     = form.text_field :address
     = form.text_field :url, label: "URL"
-    .ex-grid-pair
+    .yui-grid-pair
       = form.text_field :lat, label: "Latitude"
       = form.text_field :long, label: "Longitude"
     = form.text_area :description

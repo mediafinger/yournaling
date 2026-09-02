@@ -6,7 +6,7 @@ RSpec.describe Yui::AvatarComponent, type: :component do
   it "derives initials from the name and hides them from assistive tech" do
     rendered = render_inline(described_class.new(name: "Andreas Finger"))
 
-    expect(rendered).to have_css("span.ex-avatar[title='Andreas Finger']")
+    expect(rendered).to have_css("span.yui-avatar[title='Andreas Finger']")
     expect(rendered).to have_css("span[aria-hidden='true']", text: "AF")
   end
 
@@ -25,6 +25,6 @@ RSpec.describe Yui::AvatarComponent, type: :component do
   it "maps size to a modifier class" do
     rendered = render_inline(described_class.new(name: "X Y", size: :lg))
 
-    expect(rendered).to have_css(".ex-avatar.ex-avatar--lg")
+    expect(rendered).to have_css(".yui-avatar.yui-avatar--lg")
   end
 end

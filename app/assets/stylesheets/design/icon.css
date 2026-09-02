@@ -1,7 +1,7 @@
 @layer components {
   /* 4b. -------------------------------------------------------------- ICON */
 
-  .ex-icon {
+  .yui-icon {
     display: inline-block;
     flex: none;
     width: 1.25em;
@@ -14,12 +14,12 @@
     stroke-linejoin: round;
   }
 
-  .ex-icon--sm {
+  .yui-icon--sm {
     width: 1em;
     height: 1em;
   }
 
-  .ex-icon--lg {
+  .yui-icon--lg {
     width: 1.75em;
     height: 1.75em;
     stroke-width: 1.5;

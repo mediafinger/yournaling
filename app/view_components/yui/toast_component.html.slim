@@ -1,7 +1,7 @@
-.ex-toast(class=css_class role=(variant == :danger ? "alert" : "status") aria-live=(variant == :danger ? "assertive" : "polite")
+.yui-toast(class=css_class role=(variant == :danger ? "alert" : "status") aria-live=(variant == :danger ? "assertive" : "polite")
   data-controller="yui-toast" data-yui-toast-delay-value=delay)
-  .ex-toast__icon
+  .yui-toast__icon
     = render Yui::IconComponent.new(ICONS.fetch(variant), size: :sm)
-  p.ex-toast__body = message
-  button.ex-toast__dismiss type="button" aria-label="Dismiss" data-action="yui-toast#dismiss"
+  p.yui-toast__body = message
+  button.yui-toast__dismiss type="button" aria-label="Dismiss" data-action="yui-toast#dismiss"
     = render Yui::IconComponent.new("x", size: :sm)

@@ -30,7 +30,7 @@ RSpec.describe AdminNavComponent, type: :component do
   it "renders insight audit dropdown, ops tools, scope to team, and logout" do
     rendered = render_inline(described_class.new)
 
-    expect(rendered.to_html).to have_css("details.ex-menu summary", text: "Insights")
+    expect(rendered.to_html).to have_css("details.yui-menu summary", text: "Insights")
     expect(rendered.to_html).to have_link("Pictures", href: "/admin/pictures", visible: :all)
     expect(rendered.to_html).to have_link("Record Events", href: "/admin/record_events")
     expect(rendered.to_html).to have_link("Analytics", href: "/admin/blazer")

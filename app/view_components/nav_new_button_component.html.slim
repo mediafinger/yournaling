@@ -2,7 +2,7 @@
 - if items.nil? && mode == :browse
   = render Yui::NavItemComponent.new("+ New", href: plain_link_path, variant: :cta)
 - elsif items
-  li.ex-navbar__item
-    = render(Yui::MenuComponent.new("+ New", align: :end, trigger_class: "ex-nav-item ex-nav-item--strong")) do
+  li.yui-navbar__item
+    = render(Yui::MenuComponent.new("+ New", align: :end, trigger_class: "yui-nav-item yui-nav-item--strong")) do
       - items.each do |label, path_helper|
         = render Yui::MenuItemComponent.new(label, href: public_send(path_helper))

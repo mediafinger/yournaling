@@ -8,11 +8,11 @@ html
     = csp_meta_tag
     = render "shared_partials/design_head"
     = javascript_importmap_tags
-  body.ex-body
-    header.ex-navbar-host data-controller="navbar"
+  body.yui-body
+    header.yui-navbar-host data-controller="navbar"
       = render AdminNavComponent.new
     = render partial: "shared_partials/flash_notifications"
-    main.ex-scope data-area="admin"
+    main.yui-scope data-area="admin"
       = yield
-    button.ex-scroll-top data-controller="scroll-to-top" data-scroll-to-top-target="button" data-action="click->scroll-to-top#scrollToTop" aria-label="Scroll to top"
+    button.yui-scroll-top data-controller="scroll-to-top" data-scroll-to-top-target="button" data-action="click->scroll-to-top#scrollToTop" aria-label="Scroll to top"
       = render Yui::IconComponent.new("arrow-up-right")

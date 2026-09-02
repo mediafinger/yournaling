@@ -1,5 +1,5 @@
-.ex-narrow.ex-stack
+.yui-narrow.yui-stack
   = render partial: "form", locals: { chronicle: @chronicle, form_legend: "Edit chronicle" }
-  .ex-cluster
+  .yui-cluster
     = render Yui::ButtonComponent.new("Open", href: current_team_chronicle_path(@chronicle), variant: :secondary)
     = render PostDestroyModalComponent.new(post: @chronicle, name: "chronicle")

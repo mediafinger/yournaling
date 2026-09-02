@@ -1,11 +1,11 @@
 = render Yui::CardComponent.new(id: dom_id(member)) do
   = render Yui::HeadlineComponent.new(member.user.name, level: 3)
-  dl.ex-details
+  dl.yui-details
     dt User
     dd
-      = link_to member.user.name, admin_user_path(member.user), class: "ex-link"
+      = link_to member.user.name, admin_user_path(member.user), class: "yui-link"
       = " "
-      code.ex-code = member.user_id
+      code.yui-code = member.user_id
     dt Roles
     dd = member.roles.to_sentence
     = render AdminShowTeamComponent.new(team: member.team)

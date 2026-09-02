@@ -13,13 +13,13 @@ module Yui
     def initialize(label = nil, size: :md)
       super()
       @label = label
-      @size = ex_token(size, allowed: SIZES, default: :md)
+      @size = yui_token(size, allowed: SIZES, default: :md)
     end
 
     attr_reader :label, :size
 
     def wrapper_class
-      ex_class("ex-spinner", size != :md && "ex-spinner--#{size}")
+      yui_class("yui-spinner", size != :md && "yui-spinner--#{size}")
     end
 
     # Screen-reader text is always present; a visible label is optional.

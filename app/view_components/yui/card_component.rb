@@ -17,7 +17,7 @@ module Yui
   # padding: :sm, :md (default), :lg
   # href:    makes the whole card a link
   # class:   extra class(es) for the card root — used by composed cards
-  #          (`Yui::MemoryCardComponent` passes "ex-memory-card")
+  #          (`Yui::MemoryCardComponent` passes "yui-memory-card")
   # id / data: passed to the card root — record partials need `id: dom_id(record)`
   #          (and `data:` for Stimulus / Turbo) so a card can be a stream target.
   class CardComponent < BaseComponent
@@ -33,9 +33,9 @@ module Yui
     def initialize(variant: :default, accent: nil, padding: :md, href: nil, interactive: false,
                    class: nil, id: nil, data: {})
       super()
-      @variant = ex_token(variant, allowed: VARIANTS, default: :default)
+      @variant = yui_token(variant, allowed: VARIANTS, default: :default)
       @accent = accent.presence
-      @padding = ex_token(padding, allowed: PADDINGS, default: :md)
+      @padding = yui_token(padding, allowed: PADDINGS, default: :md)
       @href = href.presence
       @interactive = interactive || href.present?
       @extra_class = binding.local_variable_get(:class).presence
@@ -44,18 +44,18 @@ module Yui
     end
 
     def css_class
-      ex_class(
-        "ex-card",
-        variant != :default && "ex-card--#{variant}",
-        padding != :md && "ex-card--pad-#{padding}",
-        accent && "ex-card--accent",
-        interactive && "ex-card--interactive",
+      yui_class(
+        "yui-card",
+        variant != :default && "yui-card--#{variant}",
+        padding != :md && "yui-card--pad-#{padding}",
+        accent && "yui-card--accent",
+        interactive && "yui-card--interactive",
         extra_class,
       )
     end
 
     def inline_style
-      "--ex-card-accent: var(--ex-#{accent})" if accent
+      "--yui-card-accent: var(--yui-#{accent})" if accent
     end
 
     def wrapper_tag

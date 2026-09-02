@@ -1,5 +1,5 @@
-.ex-narrow.ex-stack
+.yui-narrow.yui-stack
   = render partial: "form", locals: { memory: @memory, form_legend: "Edit memory" }
-  .ex-cluster
+  .yui-cluster
     = render Yui::ButtonComponent.new("Open", href: current_team_memory_path(@memory), variant: :secondary)
     = render PostDestroyModalComponent.new(post: @memory, name: "memory")

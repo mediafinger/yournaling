@@ -21,7 +21,7 @@ module Yui
     end
 
     def link_options
-      opts = { class: "ex-tag", id: dom_id }
+      opts = { class: "yui-tag", id: dom_id }
       opts[:target] = "_blank" if external
       opts[:rel] = "noopener noreferrer" if external
       opts

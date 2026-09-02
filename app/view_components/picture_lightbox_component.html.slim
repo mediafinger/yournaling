@@ -1,15 +1,15 @@
 = render Yui::ModalComponent.new(title: modal_title, size: :lg) do |modal|
   - modal.with_trigger do
-    button.ex-lightbox-trigger type="button" aria-label="Enlarge #{modal_title}"
-      = image_tag(picture.send(size), alt: (picture.name.presence || "Picture"), class: "ex-lightbox-thumb", loading: "lazy")
+    button.yui-lightbox-trigger type="button" aria-label="Enlarge #{modal_title}"
+      = image_tag(picture.send(size), alt: (picture.name.presence || "Picture"), class: "yui-lightbox-thumb", loading: "lazy")
 
-  .ex-lightbox-body
+  .yui-lightbox-body
     - if original_picture_url
-      = link_to original_picture_url, target: "_blank", rel: "noopener noreferrer", title: "Open the full original in a new tab", class: "ex-media-link" do
-        = image_tag(picture.large, alt: (picture.name.presence || "Picture"), class: "ex-lightbox-full")
+      = link_to original_picture_url, target: "_blank", rel: "noopener noreferrer", title: "Open the full original in a new tab", class: "yui-media-link" do
+        = image_tag(picture.large, alt: (picture.name.presence || "Picture"), class: "yui-lightbox-full")
     - else
-      = image_tag(picture.large, alt: (picture.name.presence || "Picture"), class: "ex-lightbox-full")
+      = image_tag(picture.large, alt: (picture.name.presence || "Picture"), class: "yui-lightbox-full")
 
   - if original_picture_url
     - modal.with_footer do
-      = link_to "Open original in new tab ↗", original_picture_url, target: "_blank", rel: "noopener noreferrer", class: "ex-btn ex-btn--secondary ex-btn--sm"
+      = link_to "Open original in new tab ↗", original_picture_url, target: "_blank", rel: "noopener noreferrer", class: "yui-btn yui-btn--secondary yui-btn--sm"

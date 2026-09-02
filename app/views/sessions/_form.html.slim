@@ -1,10 +1,10 @@
-.ex-narrow
+.yui-narrow
   = render Yui::CardComponent.new do
     = render Yui::HeadlineComponent.new(form_legend, level: 3)
-    = form_with url: login_path, builder: YuiFormBuilder, html: { class: "ex-stack" } do |form|
+    = form_with url: login_path, builder: YuiFormBuilder, html: { class: "yui-stack" } do |form|
       = form.email_field :email, autofocus: true, autocomplete: "email"
       = form.password_field :password, autocomplete: "current-password"
       = form.submit form_legend
-    .ex-stack.ex-stack--xs
+    .yui-stack.yui-stack--xs
       = render Yui::LinkComponent.new("Forgot your password?", href: new_user_password_path)
       = render Yui::LinkComponent.new("Create an account", href: new_registration_path)

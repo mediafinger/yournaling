@@ -1,10 +1,10 @@
 = render Yui::CardComponent.new(id: dom_id(user)) do
-  dl.ex-details
+  dl.yui-details
     dt Name
     dd = user.name
     dt Email
     dd = user.email
-  .ex-cluster
+  .yui-cluster
     - if action_name != "show"
       = render Yui::ButtonComponent.new("Show this user", href: user_path(user), variant: :secondary, size: :sm)
     = render Yui::ButtonComponent.new("Edit this user", href: edit_user_path(user), variant: :secondary, size: :sm)

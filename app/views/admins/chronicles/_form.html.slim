@@ -1,5 +1,5 @@
 = render Yui::CardComponent.new do
-  = form_with(model: [:admin, chronicle], builder: YuiFormBuilder, multipart: true, html: { class: "ex-stack" }, data: { controller: "picture-select" }) do |form|
+  = form_with(model: [:admin, chronicle], builder: YuiFormBuilder, multipart: true, html: { class: "yui-stack" }, data: { controller: "picture-select" }) do |form|
     = render Yui::HeadlineComponent.new(form_legend, level: 3)
     = render partial: "shared_partials/form_validation_errors", locals: { record: chronicle }
     = render partial: "admins/team_field", locals: { form: form }

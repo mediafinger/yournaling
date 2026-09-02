@@ -3,7 +3,7 @@
 - else
   = render Yui::CardComponent.new(id: dom_id(weblink)) do
     = render ManageHeaderComponent.new(record: weblink, hide_actions: false)
-    dl.ex-details
+    dl.yui-details
       dt URL
       dd = render ExternalLinkComponent.new(url: weblink.url, text: weblink.url)
       - if weblink.description.present?

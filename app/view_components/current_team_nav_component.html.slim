@@ -8,7 +8,7 @@
   - bar.with_group do
     = render Yui::NavItemComponent.new("Chronicles", href: current_team_chronicles_path, active: active_path?(current_team_chronicles_path))
     = render Yui::NavItemComponent.new("Memories", href: current_team_memories_path, active: active_path?(current_team_memories_path))
-    li.ex-navbar__item
+    li.yui-navbar__item
       = render InsightsDropdownComponent.new(scope: :current_team)
     = render Yui::NavItemComponent.new("Members", href: current_team_members_path, active: active_path?(current_team_members_path))
     = render Yui::NavItemComponent.new("🔍 Search", href: current_team_new_search_path, active: active_path?(current_team_new_search_path))

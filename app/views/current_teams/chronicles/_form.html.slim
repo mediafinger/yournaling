@@ -1,5 +1,5 @@
 = render Yui::CardComponent.new do
-  = form_with(model: [:current_team, chronicle], builder: YuiFormBuilder, multipart: true, html: { class: "ex-stack" }) do |form|
+  = form_with(model: [:current_team, chronicle], builder: YuiFormBuilder, multipart: true, html: { class: "yui-stack" }) do |form|
     = render Yui::HeadlineComponent.new(form_legend, level: 3)
     = render partial: "shared_partials/form_validation_errors", locals: { record: chronicle }
     = form.text_field :name, required: true

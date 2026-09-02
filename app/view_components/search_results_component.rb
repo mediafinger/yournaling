@@ -16,7 +16,7 @@ class SearchResultsComponent < ApplicationComponent
       return
     end
 
-    link_to("#{record.class.name}: #{result.content.truncate(60)}", record_path(record), class: "ex-link")
+    link_to("#{record.class.name}: #{result.content.truncate(60)}", record_path(record), class: "yui-link")
   end
 
   def record_path(record)

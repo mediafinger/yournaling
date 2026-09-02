@@ -1,13 +1,13 @@
 = content_tag(wrapper_tag, class: css_class, style: inline_style, href: href, id: dom_id, data: data) do
   - if media?
-    .ex-card__media
+    .yui-card__media
       = media
   - if header?
-    .ex-card__header
+    .yui-card__header
       = header
   - if content.present?
-    .ex-card__body
+    .yui-card__body
       = content
   - if footer?
-    .ex-card__footer
+    .yui-card__footer
       = footer

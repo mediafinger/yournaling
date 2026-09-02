@@ -17,7 +17,7 @@ module Yui
       super()
       @name = name.to_s
       @src = src.presence
-      @size = ex_token(size, allowed: SIZES, default: :md)
+      @size = yui_token(size, allowed: SIZES, default: :md)
     end
 
     def initials
@@ -28,7 +28,7 @@ module Yui
     end
 
     def css_class
-      ex_class("ex-avatar", size != :md && "ex-avatar--#{size}")
+      yui_class("yui-avatar", size != :md && "yui-avatar--#{size}")
     end
   end
 end

@@ -1,57 +1,57 @@
 - if @chronicle.entries.any?
-  fieldset.ex-attached-entries
-    legend.ex-attached-entries__legend
-      h4.ex-h4 Attached Entries
-      p.ex-text.ex-text--sm.ex-text--muted
+  fieldset.yui-attached-entries
+    legend.yui-attached-entries__legend
+      h4.yui-h4 Attached Entries
+      p.yui-text.yui-text--sm.yui-text--muted
         | Check "Remove" to detach an entry from this chronicle upon saving. Use "Edit" to modify the insight itself.
 
-    .ex-attached-entries__list data-controller="sortable" data-action="dragover->sortable#dragover"
+    .yui-attached-entries__list data-controller="sortable" data-action="dragover->sortable#dragover"
       = @form.fields_for :entries, builder: ActionView::Helpers::FormBuilder do |entry_form|
         - c_entry = entry_form.object
         - target = c_entry.entry
         - next if target.blank?
 
-        .ex-attached-entry id=dom_id(c_entry) data-sortable-target="item" draggable="true" data-action="dragstart->sortable#dragstart dragend->sortable#dragend"
+        .yui-attached-entry id=dom_id(c_entry) data-sortable-target="item" draggable="true" data-action="dragstart->sortable#dragstart dragend->sortable#dragend"
           = entry_form.hidden_field :id
           = entry_form.hidden_field :position, data: { sortable_target: "position" }
 
-          .ex-attached-entry__main
-            span.ex-attached-entry__handle data-sortable-target="handle" title="Drag to reorder" ⠿
+          .yui-attached-entry__main
+            span.yui-attached-entry__handle data-sortable-target="handle" title="Drag to reorder" ⠿
 
-            .ex-attached-entry__nudge
-              button.ex-btn.ex-btn--ghost.ex-btn--sm type="button" data-sortable-target="upButton" data-action="click->sortable#moveUp" title="Move up" ▲
-              button.ex-btn.ex-btn--ghost.ex-btn--sm type="button" data-sortable-target="downButton" data-action="click->sortable#moveDown" title="Move down" ▼
+            .yui-attached-entry__nudge
+              button.yui-btn.yui-btn--ghost.yui-btn--sm type="button" data-sortable-target="upButton" data-action="click->sortable#moveUp" title="Move up" ▲
+              button.yui-btn.yui-btn--ghost.yui-btn--sm type="button" data-sortable-target="downButton" data-action="click->sortable#moveDown" title="Move down" ▼
 
             - case c_entry.entry_type
             - when "Picture"
-              img.ex-attached-entry__thumb src=rails_representation_path(target.thumbnail) alt=target.name
-              .ex-attached-entry__body
-                strong.ex-attached-entry__title = entry_display_title(target)
-                small.ex-text--muted = "Picture #{target.date}"
+              img.yui-attached-entry__thumb src=rails_representation_path(target.thumbnail) alt=target.name
+              .yui-attached-entry__body
+                strong.yui-attached-entry__title = entry_display_title(target)
+                small.yui-text--muted = "Picture #{target.date}"
             - when "Location"
-              .ex-attached-entry__body
+              .yui-attached-entry__body
                 strong = entry_display_title(target)
                 - if target.address.present?
-                  small.ex-text--muted style="display: block;" = target.address
-                small.ex-text--muted Location
+                  small.yui-text--muted style="display: block;" = target.address
+                small.yui-text--muted Location
             - when "Thought"
-              .ex-attached-entry__body
+              .yui-attached-entry__body
                 em style="display: block;" = "“#{target.text.truncate(90)}”#{team_suffix(target)}"
-                small.ex-text--muted Thought
+                small.yui-text--muted Thought
             - when "Weblink"
-              .ex-attached-entry__body
+              .yui-attached-entry__body
                 strong = entry_display_title(target)
-                small.ex-text--muted style="display: block;" = target.url
-                small.ex-text--muted Weblink
+                small.yui-text--muted style="display: block;" = target.url
+                small.yui-text--muted Weblink
             - when "Memory"
-              .ex-attached-entry__body
+              .yui-attached-entry__body
                 em style="display: block;" = "#{target.memo.truncate(90)}#{team_suffix(target)}"
-                small.ex-text--muted Memory
+                small.yui-text--muted Memory
 
-          .ex-attached-entry__actions
+          .yui-attached-entry__actions
             - if (edit_path = entry_edit_path(c_entry.entry_type, target))
-              = link_to "Edit", edit_path, target: "_blank", rel: "noopener noreferrer", class: "ex-btn ex-btn--secondary ex-btn--sm"
+              = link_to "Edit", edit_path, target: "_blank", rel: "noopener noreferrer", class: "yui-btn yui-btn--secondary yui-btn--sm"
 
-            label.ex-attached-entry__remove
+            label.yui-attached-entry__remove
               = entry_form.check_box :_destroy
               | Remove

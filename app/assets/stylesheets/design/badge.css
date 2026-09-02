@@ -1,56 +1,56 @@
 @layer components {
   /* 4d. ------------------------------------------------------ BADGES & TAGS */
 
-  .ex-badge {
-    --_bg: var(--ex-surface-sunken);
-    --_fg: var(--ex-ink-soft);
+  .yui-badge {
+    --_bg: var(--yui-surface-sunken);
+    --_fg: var(--yui-ink-soft);
 
     display: inline-flex;
     gap: 0.4em;
     align-items: center;
     padding: 0.3rem 0.6rem;
-    font-family: var(--ex-font-body);
-    font-size: var(--ex-text-xs);
-    font-weight: var(--ex-weight-semibold);
+    font-family: var(--yui-font-body);
+    font-size: var(--yui-text-xs);
+    font-weight: var(--yui-weight-semibold);
     color: var(--_fg);
     text-transform: uppercase;
-    letter-spacing: var(--ex-tracking-wide);
+    letter-spacing: var(--yui-tracking-wide);
     white-space: nowrap;
     background-color: var(--_bg);
-    border-radius: var(--ex-radius-xs);
+    border-radius: var(--yui-radius-xs);
   }
 
-  .ex-badge--accent {
-    --_bg: var(--ex-accent-soft);
-    --_fg: var(--ex-accent-strong);
+  .yui-badge--accent {
+    --_bg: var(--yui-accent-soft);
+    --_fg: var(--yui-accent-strong);
   }
 
-  .ex-badge--success {
-    --_bg: var(--ex-success-soft);
-    --_fg: var(--ex-success);
+  .yui-badge--success {
+    --_bg: var(--yui-success-soft);
+    --_fg: var(--yui-success);
   }
 
-  .ex-badge--warning {
-    --_bg: var(--ex-warning-soft);
-    --_fg: var(--ex-warning);
+  .yui-badge--warning {
+    --_bg: var(--yui-warning-soft);
+    --_fg: var(--yui-warning);
   }
 
-  .ex-badge--danger {
-    --_bg: var(--ex-danger-soft);
-    --_fg: var(--ex-danger);
+  .yui-badge--danger {
+    --_bg: var(--yui-danger-soft);
+    --_fg: var(--yui-danger);
   }
 
-  .ex-badge--info {
-    --_bg: var(--ex-info-soft);
-    --_fg: var(--ex-info);
+  .yui-badge--info {
+    --_bg: var(--yui-info-soft);
+    --_fg: var(--yui-info);
   }
 
-  .ex-badge--gold {
-    --_bg: var(--ex-gold-soft);
-    --_fg: var(--ex-gold);
+  .yui-badge--gold {
+    --_bg: var(--yui-gold-soft);
+    --_fg: var(--yui-gold);
   }
 
-  .ex-badge__dot {
+  .yui-badge__dot {
     width: 0.45em;
     height: 0.45em;
     background-color: currentcolor;

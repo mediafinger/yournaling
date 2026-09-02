@@ -17,7 +17,7 @@ RSpec.describe MapLinkComponent, type: :component do
   it "renders a static map image linked to Google Maps coordinates" do
     rendered = render_inline(described_class.new(location: location, width: 400, height: 300))
 
-    expect(rendered.to_html).to have_css("a.ex-media-link")
+    expect(rendered.to_html).to have_css("a.yui-media-link")
     expect(rendered.to_html).to have_link(href: location.gmaps_coordinates_url)
 
     link = rendered.css("a").first

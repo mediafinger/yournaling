@@ -1,9 +1,9 @@
-details.ex-menu(class=("ex-menu--end" if align == :end) data-controller="yui-menu")
+details.yui-menu(class=("yui-menu--end" if align == :end) data-controller="yui-menu")
   summary class=summary_class data-yui-menu-target="trigger"
     - if trigger
       = trigger
     - else
       = label
       = render Yui::IconComponent.new("chevron-down", size: :sm)
-  .ex-menu__panel(role="menu" data-yui-menu-target="panel" aria-labelledby=label_id data-action="click->yui-menu#choose")
+  .yui-menu__panel(role="menu" data-yui-menu-target="panel" aria-labelledby=label_id data-action="click->yui-menu#choose")
     = content

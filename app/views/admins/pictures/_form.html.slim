@@ -1,11 +1,11 @@
 = render Yui::CardComponent.new do
-  = form_with(model: [:admin, picture], builder: YuiFormBuilder, multipart: true, html: { class: "ex-stack" }) do |form|
+  = form_with(model: [:admin, picture], builder: YuiFormBuilder, multipart: true, html: { class: "yui-stack" }) do |form|
     = render Yui::HeadlineComponent.new(form_legend, level: 3)
     = render partial: "shared_partials/form_validation_errors", locals: { record: picture }
     = render partial: "admins/team_field", locals: { form: form }
-    .ex-field
-      = form.label :file, "Image File", class: "ex-label"
-      = form.file_field :file, class: "ex-input", accept: Picture::ALLOWED_IMAGE_TYPES.map { |type| ".#{type}" }.join(", ")
+    .yui-field
+      = form.label :file, "Image File", class: "yui-label"
+      = form.file_field :file, class: "yui-input", accept: Picture::ALLOWED_IMAGE_TYPES.map { |type| ".#{type}" }.join(", ")
     = form.text_field :name
     = form.date_field :date
     = form.submit

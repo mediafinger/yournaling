@@ -1,10 +1,10 @@
-.ex-empty-state
+.yui-empty-state
   - if icon.present?
-    .ex-empty-state__icon aria-hidden="true"
+    .yui-empty-state__icon aria-hidden="true"
       = icon
   = render Yui::HeadlineComponent.new(title, level: 3, align: :center)
   - if description.present?
-    p.ex-empty-state__body
+    p.yui-empty-state__body
       = description
   - if cta_label.present? && cta_path.present?
     = render Yui::ButtonComponent.new(cta_label, href: cta_path, variant: :primary)

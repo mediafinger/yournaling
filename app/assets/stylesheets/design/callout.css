@@ -1,48 +1,48 @@
 @layer components {
   /* 4h. --------------------------------------------------------- CALLOUT */
 
-  .ex-callout {
-    --_accent: var(--ex-info);
-    --_bg: var(--ex-info-soft);
+  .yui-callout {
+    --_accent: var(--yui-info);
+    --_bg: var(--yui-info-soft);
 
     display: flex;
-    gap: var(--ex-space-xs);
-    padding: var(--ex-space-sm) var(--ex-space-md);
-    color: var(--ex-ink);
+    gap: var(--yui-space-xs);
+    padding: var(--yui-space-sm) var(--yui-space-md);
+    color: var(--yui-ink);
     background-color: var(--_bg);
     border: 1px solid color-mix(in srgb, var(--_accent) 26%, transparent);
-    border-radius: var(--ex-radius-md);
+    border-radius: var(--yui-radius-md);
   }
 
-  .ex-callout--success {
-    --_accent: var(--ex-success);
-    --_bg: var(--ex-success-soft);
+  .yui-callout--success {
+    --_accent: var(--yui-success);
+    --_bg: var(--yui-success-soft);
   }
 
-  .ex-callout--warning {
-    --_accent: var(--ex-warning);
-    --_bg: var(--ex-warning-soft);
+  .yui-callout--warning {
+    --_accent: var(--yui-warning);
+    --_bg: var(--yui-warning-soft);
   }
 
-  .ex-callout--danger {
-    --_accent: var(--ex-danger);
-    --_bg: var(--ex-danger-soft);
+  .yui-callout--danger {
+    --_accent: var(--yui-danger);
+    --_bg: var(--yui-danger-soft);
   }
 
-  .ex-callout__icon {
+  .yui-callout__icon {
     flex: none;
     color: var(--_accent);
   }
 
-  .ex-callout__title {
+  .yui-callout__title {
     margin: 0 0 0.15rem;
-    font-weight: var(--ex-weight-semibold);
+    font-weight: var(--yui-weight-semibold);
   }
 
-  .ex-callout__body {
+  .yui-callout__body {
     margin: 0;
-    font-size: var(--ex-text-sm);
-    line-height: var(--ex-leading-normal);
-    color: var(--ex-ink-soft);
+    font-size: var(--yui-text-sm);
+    line-height: var(--yui-leading-normal);
+    color: var(--yui-ink-soft);
   }
 }

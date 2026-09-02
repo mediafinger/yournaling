@@ -1,12 +1,12 @@
 = render Yui::CardComponent.new do
-  = form_with(model: [:current_team, picture], builder: YuiFormBuilder, multipart: true, html: { class: "ex-stack" }, data: { controller: "picture-select" }) do |form|
+  = form_with(model: [:current_team, picture], builder: YuiFormBuilder, multipart: true, html: { class: "yui-stack" }, data: { controller: "picture-select" }) do |form|
     = render Yui::HeadlineComponent.new(form_legend, level: 3)
     = render partial: "shared_partials/form_validation_errors", locals: { record: picture }
 
-    .ex-field
-      = form.label :file, "Image File", class: "ex-label"
-      = form.file_field :file, class: "ex-input", accept: Picture::ALLOWED_IMAGE_TYPES.map { |type| ".#{type}" }.join(", "), required: form.object.new_record?, data: { picture_select_target: "fileInput", action: "change->picture-select#updateFilePreview" }
-      img.ex-file-preview data-picture-select-target="filePreview" style="display: none;" alt="Selected image preview"
+    .yui-field
+      = form.label :file, "Image File", class: "yui-label"
+      = form.file_field :file, class: "yui-input", accept: Picture::ALLOWED_IMAGE_TYPES.map { |type| ".#{type}" }.join(", "), required: form.object.new_record?, data: { picture_select_target: "fileInput", action: "change->picture-select#updateFilePreview" }
+      img.yui-file-preview data-picture-select-target="filePreview" style="display: none;" alt="Selected image preview"
 
     = form.text_field :name, label: "Picture Name (Optional)", placeholder: "Defaults to image file name", data: { picture_select_target: "pictureNameInput" }
     = form.date_field :date

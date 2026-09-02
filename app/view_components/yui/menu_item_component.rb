@@ -16,7 +16,8 @@ module Yui
     end
 
     def call
-      klass = ex_class("ex-menu__item", @variant == :danger && "ex-menu__item--danger", @active && "ex-menu__item--active")
+      klass = yui_class("yui-menu__item", @variant == :danger && "yui-menu__item--danger",
+        @active && "yui-menu__item--active")
       aria = { current: (@active ? "page" : nil) }
       if @as == :button || @href.nil?
         tag.button(@label || content, type: "button", role: "menuitem", class: klass, aria:, data: @data)

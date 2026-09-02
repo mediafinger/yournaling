@@ -1,20 +1,20 @@
 = render Yui::CardComponent.new do
-  = form_with(model: [:admin, member], builder: YuiFormBuilder, html: { class: "ex-stack" }) do |form|
+  = form_with(model: [:admin, member], builder: YuiFormBuilder, html: { class: "yui-stack" }) do |form|
     = render Yui::HeadlineComponent.new(form_legend, level: 3)
     = render partial: "shared_partials/form_validation_errors", locals: { record: member }
     - if member.persisted?
-      .ex-field
-        span.ex-label Team
-        p.ex-text
+      .yui-field
+        span.yui-label Team
+        p.yui-text
           = member.team.name
           = " "
-          code.ex-code = member.team.id
-      .ex-field
-        span.ex-label User
-        p.ex-text
+          code.yui-code = member.team.id
+      .yui-field
+        span.yui-label User
+        p.yui-text
           = member.user.name
           = " "
-          code.ex-code = member.user.id
+          code.yui-code = member.user.id
     - else
       = form.select :team_id, Team.order(:name).pluck(:name, :id), label: "Team", include_blank: true, required: true
       = form.select :user_id, User.order(:email).pluck(:email, :id), label: "User", include_blank: true, required: true

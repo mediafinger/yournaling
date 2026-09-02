@@ -18,14 +18,14 @@ module Example
     end
 
     slim_template <<~'SLIM'
-      section.ex-section id=anchor
-        .ex-container
-          header.ex-section__head
+      section.yui-section id=anchor
+        .yui-container
+          header.yui-section__head
             - if number
-              span.ex-section__number = "#{number} —"
+              span.yui-section__number = "#{number} —"
             = render(Yui::HeadlineComponent.new(title, level: 2))
             - if description
-              p.ex-section__desc = description
+              p.yui-section__desc = description
           = content
     SLIM
   end

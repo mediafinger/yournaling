@@ -2,67 +2,67 @@
   /* PictureSelectFieldComponent — pick an existing team picture from a
      disclosure list, or expand "Or Upload New Picture" to attach a file. */
 
-  .ex-picture-select {
+  .yui-picture-select {
     display: flex;
     flex-direction: column;
-    gap: var(--ex-space-sm);
+    gap: var(--yui-space-sm);
     padding: 0;
     margin: 0;
     border: 0;
   }
 
-  .ex-picture-select__menu {
+  .yui-picture-select__menu {
     position: relative;
   }
 
-  .ex-picture-select__menu > summary {
+  .yui-picture-select__menu > summary {
     list-style: none;
   }
 
-  .ex-picture-select__menu > summary::-webkit-details-marker {
+  .yui-picture-select__menu > summary::-webkit-details-marker {
     display: none;
   }
 
-  .ex-picture-select__list {
+  .yui-picture-select__list {
     position: absolute;
     z-index: 50;
     min-width: 100%;
     max-height: 300px;
-    padding: var(--ex-space-3xs);
+    padding: var(--yui-space-3xs);
     overflow-y: auto;
     list-style: none;
-    background-color: var(--ex-surface);
-    border: var(--ex-border-hairline);
-    border-radius: var(--ex-radius-md);
-    box-shadow: var(--ex-shadow-md);
+    background-color: var(--yui-surface);
+    border: var(--yui-border-hairline);
+    border-radius: var(--yui-radius-md);
+    box-shadow: var(--yui-shadow-md);
   }
 
-  .ex-picture-select__option {
+  .yui-picture-select__option {
     display: flex;
-    gap: var(--ex-space-xs);
+    gap: var(--yui-space-xs);
     align-items: center;
-    padding: var(--ex-space-2xs);
-    font-weight: var(--ex-weight-medium);
+    padding: var(--yui-space-2xs);
+    font-weight: var(--yui-weight-medium);
     text-decoration: none;
-    border-radius: var(--ex-radius-sm);
+    border-radius: var(--yui-radius-sm);
   }
 
-  .ex-picture-select__option:hover,
-  .ex-picture-select__option:focus-visible {
-    background-color: var(--ex-surface-sunken);
+  .yui-picture-select__option:hover,
+  .yui-picture-select__option:focus-visible {
+    background-color: var(--yui-surface-sunken);
   }
 
-  .ex-picture-select__thumb {
+  .yui-picture-select__thumb {
     flex-shrink: 0;
     width: 60px;
     height: 45px;
     object-fit: cover;
-    border-radius: var(--ex-radius-xs);
+    border-radius: var(--yui-radius-xs);
   }
 
-  .ex-picture-select__upload {
+  .yui-picture-select__upload {
     display: flex;
     flex-direction: column;
-    gap: var(--ex-space-2xs);
+    gap: var(--yui-space-2xs);
   }
 }

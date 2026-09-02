@@ -6,8 +6,8 @@ RSpec.describe Yui::ChoiceComponent, type: :component do
   it "wraps the input in its label so the whole row is clickable" do
     rendered = render_inline(described_class.new("Make public", name: "visibility"))
 
-    expect(rendered).to have_css("label.ex-choice > input[type='checkbox'][name='visibility']")
-    expect(rendered).to have_css("label.ex-choice", text: "Make public")
+    expect(rendered).to have_css("label.yui-choice > input[type='checkbox'][name='visibility']")
+    expect(rendered).to have_css("label.yui-choice", text: "Make public")
   end
 
   it "renders a radio when type: :radio" do
@@ -19,7 +19,7 @@ RSpec.describe Yui::ChoiceComponent, type: :component do
   it "renders helper text" do
     rendered = render_inline(described_class.new("Comments", name: "c", hint: "You can turn this off later."))
 
-    expect(rendered).to have_css(".ex-choice__text small", text: "You can turn this off later.")
+    expect(rendered).to have_css(".yui-choice__text small", text: "You can turn this off later.")
   end
 
   it "reflects checked and disabled state" do

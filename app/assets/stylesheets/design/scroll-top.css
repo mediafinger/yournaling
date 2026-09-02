@@ -1,10 +1,10 @@
 @layer components {
   /* Floating "back to top" button — toggled visible by scroll_to_top_controller. */
 
-  .ex-scroll-top {
+  .yui-scroll-top {
     position: fixed;
-    right: var(--ex-space-lg);
-    bottom: var(--ex-space-lg);
+    right: var(--yui-space-lg);
+    bottom: var(--yui-space-lg);
     z-index: 90;
     display: flex;
     visibility: hidden;
@@ -12,28 +12,28 @@
     justify-content: center;
     width: 2.75rem;
     height: 2.75rem;
-    color: var(--ex-accent-ink);
-    background-color: var(--ex-accent);
+    color: var(--yui-accent-ink);
+    background-color: var(--yui-accent);
     border: 0;
-    border-radius: var(--ex-radius-pill);
-    box-shadow: var(--ex-shadow-md);
+    border-radius: var(--yui-radius-pill);
+    box-shadow: var(--yui-shadow-md);
     opacity: 0;
     transform: translateY(0.5rem);
     transition:
-      opacity var(--ex-transition),
-      visibility var(--ex-transition),
-      transform var(--ex-transition-fast),
-      background-color var(--ex-transition-fast);
+      opacity var(--yui-transition),
+      visibility var(--yui-transition),
+      transform var(--yui-transition-fast),
+      background-color var(--yui-transition-fast);
   }
 
-  .ex-scroll-top.visible {
+  .yui-scroll-top.visible {
     visibility: visible;
     opacity: 0.92;
     transform: translateY(0);
   }
 
-  .ex-scroll-top:hover {
-    background-color: var(--ex-accent-strong);
+  .yui-scroll-top:hover {
+    background-color: var(--yui-accent-strong);
     opacity: 1;
     transform: translateY(-2px);
   }

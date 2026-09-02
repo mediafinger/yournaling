@@ -24,8 +24,8 @@ module Yui
       super()
       @label = label
       @href = href
-      @variant = ex_token(variant, allowed: VARIANTS, default: :primary)
-      @size = ex_token(size, allowed: SIZES, default: :md)
+      @variant = yui_token(variant, allowed: VARIANTS, default: :primary)
+      @size = yui_token(size, allowed: SIZES, default: :md)
       @type = type
       @icon = icon.presence
       @trailing_icon = trailing_icon.presence
@@ -38,12 +38,12 @@ module Yui
     end
 
     def css_class
-      ex_class(
-        "ex-btn",
-        "ex-btn--#{variant}",
-        size != :md && "ex-btn--#{size}",
-        full_width && "ex-btn--block",
-        disabled && href.present? && "ex-btn--disabled",
+      yui_class(
+        "yui-btn",
+        "yui-btn--#{variant}",
+        size != :md && "yui-btn--#{size}",
+        full_width && "yui-btn--block",
+        disabled && href.present? && "yui-btn--disabled",
       )
     end
 

@@ -1,6 +1,6 @@
 = render Yui::CardComponent.new do
   = render Yui::HeadlineComponent.new(form_legend, level: 3)
-  = form_with model: team, builder: YuiFormBuilder, html: { class: "ex-stack" } do |form|
+  = form_with model: team, builder: YuiFormBuilder, html: { class: "yui-stack" } do |form|
     = render partial: "shared_partials/form_validation_errors", locals: { record: team }
     = form.text_field :name, autofocus: true
     = form.submit

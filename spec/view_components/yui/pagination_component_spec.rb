@@ -18,14 +18,14 @@ RSpec.describe Yui::PaginationComponent, type: :component do
   it "renders a nav with the current page marked and the others linked" do
     rendered = render_inline(described_class.new(pagy: pagy(count: 235, page: 5), url:))
 
-    expect(rendered).to have_css("nav.ex-pagination[aria-label='Pagination']")
-    expect(rendered).to have_css("span.ex-pagination__link--current[aria-current='page']", text: "5")
+    expect(rendered).to have_css("nav.yui-pagination[aria-label='Pagination']")
+    expect(rendered).to have_css("span.yui-pagination__link--current[aria-current='page']", text: "5")
     expect(rendered).to have_link("6", href: "/admin/things?page=6")
   end
 
   it "disables the prev control on the first page and links it elsewhere" do
     first = render_inline(described_class.new(pagy: pagy(count: 235, page: 1), url:))
-    expect(first).to have_css("span.ex-pagination__link--nav[aria-disabled='true']", count: 1)
+    expect(first).to have_css("span.yui-pagination__link--nav[aria-disabled='true']", count: 1)
     expect(first).to have_link("Next page", href: "/admin/things?page=2")
 
     mid = render_inline(described_class.new(pagy: pagy(count: 235, page: 5), url:))
@@ -36,7 +36,7 @@ RSpec.describe Yui::PaginationComponent, type: :component do
   it "inserts gaps for large page counts" do
     rendered = render_inline(described_class.new(pagy: pagy(count: 1000, page: 25), url:))
 
-    expect(rendered).to have_css("span.ex-pagination__gap", minimum: 1)
+    expect(rendered).to have_css("span.yui-pagination__gap", minimum: 1)
     expect(rendered).to have_link("1", href: "/admin/things?page=1")
     expect(rendered).to have_link("50", href: "/admin/things?page=50")
   end

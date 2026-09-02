@@ -3,139 +3,139 @@
      / Weblinks to a Memory or Chronicle. The "+ Add Insight" disclosure, the
      attached-item chips and the in-flow creation drawer. */
 
-  .ex-insight-manager {
+  .yui-insight-manager {
     display: flex;
     flex-direction: column;
-    gap: var(--ex-space-sm);
+    gap: var(--yui-space-sm);
     padding: 0;
     margin: 0;
     border: 0;
   }
 
-  .ex-insight-manager__legend {
+  .yui-insight-manager__legend {
     display: block;
     padding: 0;
   }
 
-  .ex-insight-manager__legend .ex-h4 {
-    margin-bottom: var(--ex-space-3xs);
+  .yui-insight-manager__legend .yui-h4 {
+    margin-bottom: var(--yui-space-3xs);
   }
 
   /* Attached-item chips */
-  .ex-insight-chips {
+  .yui-insight-chips {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--ex-space-2xs);
+    gap: var(--yui-space-2xs);
   }
 
-  .ex-insight-chips:empty {
+  .yui-insight-chips:empty {
     display: none;
   }
 
-  .ex-insight-chip {
+  .yui-insight-chip {
     display: inline-flex;
-    gap: var(--ex-space-xs);
+    gap: var(--yui-space-xs);
     align-items: center;
     justify-content: space-between;
-    padding: var(--ex-space-2xs) var(--ex-space-xs);
-    font-size: var(--ex-text-sm);
-    background-color: var(--ex-surface-sunken);
-    border: var(--ex-border-hairline);
-    border-radius: var(--ex-radius-sm);
+    padding: var(--yui-space-2xs) var(--yui-space-xs);
+    font-size: var(--yui-text-sm);
+    background-color: var(--yui-surface-sunken);
+    border: var(--yui-border-hairline);
+    border-radius: var(--yui-radius-sm);
   }
 
-  .ex-insight-chip__label {
+  .yui-insight-chip__label {
     display: inline-flex;
-    gap: var(--ex-space-3xs);
+    gap: var(--yui-space-3xs);
     align-items: center;
   }
 
-  .ex-insight-chip__thumb {
+  .yui-insight-chip__thumb {
     width: 40px;
     height: 30px;
-    margin-right: var(--ex-space-3xs);
+    margin-right: var(--yui-space-3xs);
     object-fit: cover;
-    border-radius: var(--ex-radius-xs);
+    border-radius: var(--yui-radius-xs);
   }
 
-  .ex-insight-chip__remove {
+  .yui-insight-chip__remove {
     flex-shrink: 0;
   }
 
   /* "+ Add Insight" disclosure menu */
-  .ex-insight-menu {
+  .yui-insight-menu {
     position: relative;
     align-self: flex-start;
   }
 
-  .ex-insight-menu > summary {
+  .yui-insight-menu > summary {
     list-style: none;
   }
 
-  .ex-insight-menu > summary::-webkit-details-marker {
+  .yui-insight-menu > summary::-webkit-details-marker {
     display: none;
   }
 
-  .ex-insight-menu ul {
+  .yui-insight-menu ul {
     position: absolute;
     z-index: 200;
     min-width: 16rem;
-    padding: var(--ex-space-3xs);
-    margin-top: var(--ex-space-3xs);
+    padding: var(--yui-space-3xs);
+    margin-top: var(--yui-space-3xs);
     list-style: none;
-    background-color: var(--ex-surface);
-    border: var(--ex-border-hairline);
-    border-radius: var(--ex-radius-md);
-    box-shadow: var(--ex-shadow-md);
+    background-color: var(--yui-surface);
+    border: var(--yui-border-hairline);
+    border-radius: var(--yui-radius-md);
+    box-shadow: var(--yui-shadow-md);
   }
 
-  .ex-insight-menu__group {
+  .yui-insight-menu__group {
     display: block;
-    padding: var(--ex-space-3xs) var(--ex-space-2xs) 0;
-    font-size: var(--ex-text-sm);
-    font-weight: var(--ex-weight-semibold);
-    color: var(--ex-ink-faint);
+    padding: var(--yui-space-3xs) var(--yui-space-2xs) 0;
+    font-size: var(--yui-text-sm);
+    font-weight: var(--yui-weight-semibold);
+    color: var(--yui-ink-faint);
   }
 
-  .ex-insight-menu li > div {
+  .yui-insight-menu li > div {
     display: flex;
     flex-direction: column;
   }
 
-  .ex-insight-menu li a {
+  .yui-insight-menu li a {
     display: block;
-    padding: var(--ex-space-3xs) var(--ex-space-2xs);
-    font-size: var(--ex-text-sm);
-    color: var(--ex-ink-soft);
+    padding: var(--yui-space-3xs) var(--yui-space-2xs);
+    font-size: var(--yui-text-sm);
+    color: var(--yui-ink-soft);
     text-decoration: none;
-    border-radius: var(--ex-radius-sm);
+    border-radius: var(--yui-radius-sm);
   }
 
-  .ex-insight-menu li a:hover,
-  .ex-insight-menu li a:focus-visible {
-    color: var(--ex-ink);
-    background-color: var(--ex-surface-sunken);
+  .yui-insight-menu li a:hover,
+  .yui-insight-menu li a:focus-visible {
+    color: var(--yui-ink);
+    background-color: var(--yui-surface-sunken);
   }
 
-  .ex-insight-menu hr {
+  .yui-insight-menu hr {
     height: 1px;
-    margin: var(--ex-space-3xs) 0;
-    background-color: var(--ex-border);
+    margin: var(--yui-space-3xs) 0;
+    background-color: var(--yui-border);
     border: 0;
   }
 
   /* In-flow creation / selection drawer */
-  .ex-insight-drawer {
-    margin-block: var(--ex-space-sm);
+  .yui-insight-drawer {
+    margin-block: var(--yui-space-sm);
   }
 
   /* Error box injected by insight_manager_controller.js on a failed create. */
-  .ex-insight-drawer__error {
-    padding: var(--ex-space-xs) var(--ex-space-sm);
-    margin-bottom: var(--ex-space-sm);
-    font-size: var(--ex-text-sm);
-    color: var(--ex-danger);
-    background-color: var(--ex-danger-soft);
-    border-radius: var(--ex-radius-sm);
+  .yui-insight-drawer__error {
+    padding: var(--yui-space-xs) var(--yui-space-sm);
+    margin-bottom: var(--yui-space-sm);
+    font-size: var(--yui-text-sm);
+    color: var(--yui-danger);
+    background-color: var(--yui-danger-soft);
+    border-radius: var(--yui-radius-sm);
   }
 }

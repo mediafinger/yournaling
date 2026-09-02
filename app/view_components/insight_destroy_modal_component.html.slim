@@ -4,25 +4,25 @@
 
   - if referenced?
     = render Yui::CalloutComponent.new(variant: :warning) do
-      p.ex-text = "This #{@name} cannot be destroyed because it is still referenced by other content:"
+      p.yui-text = "This #{@name} cannot be destroyed because it is still referenced by other content:"
       - if chronicles.any?
-        p.ex-text.ex-text--sm
+        p.yui-text.yui-text--sm
           strong Chronicles:
-        ul.ex-stack.ex-stack--xs
+        ul.yui-stack.yui-stack--xs
           - chronicles.each do |chronicle|
-            li = link_to chronicle.name, current_team_chronicle_path(chronicle), class: "ex-link"
+            li = link_to chronicle.name, current_team_chronicle_path(chronicle), class: "yui-link"
       - if memories.any?
-        p.ex-text.ex-text--sm
+        p.yui-text.yui-text--sm
           strong Memories:
-        ul.ex-stack.ex-stack--xs
+        ul.yui-stack.yui-stack--xs
           - memories.each do |memory|
-            li = link_to memory.memo.truncate(60), current_team_memory_path(memory), class: "ex-link"
+            li = link_to memory.memo.truncate(60), current_team_memory_path(memory), class: "yui-link"
     - modal.with_footer do
-      button.ex-btn.ex-btn--ghost type="button" data-action="click->yui-modal#close"
+      button.yui-btn.yui-btn--ghost type="button" data-action="click->yui-modal#close"
         | Close
-      button.ex-btn.ex-btn--danger type="button" disabled=true title="Cannot destroy while referenced"
+      button.yui-btn.yui-btn--danger type="button" disabled=true title="Cannot destroy while referenced"
         | Destroy Insight
   - else
-    p.ex-text = "Are you sure you want to destroy this #{@name}?"
+    p.yui-text = "Are you sure you want to destroy this #{@name}?"
     - modal.with_footer do
-      = button_to "Destroy Insight", destroy_path, method: :delete, class: "ex-btn ex-btn--danger"
+      = button_to "Destroy Insight", destroy_path, method: :delete, class: "yui-btn yui-btn--danger"

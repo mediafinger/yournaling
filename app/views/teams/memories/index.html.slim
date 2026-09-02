@@ -1,6 +1,6 @@
 #memories
   - if @memories.any?
-    .ex-record-grid
+    .yui-record-grid
       - @memories.each do |memory|
         = render partial: "teams/memories/memory", locals: { team:, memory: }
   - else

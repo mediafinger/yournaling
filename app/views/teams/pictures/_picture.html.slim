@@ -1,7 +1,7 @@
 - is_picture_show = (controller_name == "pictures" || controller_path.to_s.end_with?("pictures")) && action_name == "show"
 - if is_picture_show
   = render Yui::CardComponent.new(id: dom_id(picture)) do
-    dl.ex-details
+    dl.yui-details
       dt Name
       dd
         = picture.name
@@ -9,8 +9,8 @@
           = " (#{picture.date})"
       dt Original
       dd = "#{picture.width} × #{picture.height} · #{number_to_human_size(picture.megabytes.megabytes)} · #{picture.content_type} · #{picture.filename}"
-    = link_to team_picture_only_path(team_id: team.to_param, id: picture.to_param), target: "_blank", rel: "noopener noreferrer", class: "ex-media-link" do
-      = image_tag(picture.large, alt: picture.name, class: "ex-lightbox-full")
+    = link_to team_picture_only_path(team_id: team.to_param, id: picture.to_param), target: "_blank", rel: "noopener noreferrer", class: "yui-media-link" do
+      = image_tag(picture.large, alt: picture.name, class: "yui-lightbox-full")
 - else
   div id= dom_id(picture)
     = render PictureLightboxComponent.new(picture: picture, team: team)

@@ -17,7 +17,7 @@ class AdminShowRecordEventComponent < ApplicationComponent
   def record_link
     if @record.present?
       link_to(@record.class.name, send(:"admin_#{@record.class.name.tableize.singularize}_path", @record),
-        class: "ex-link")
+        class: "yui-link")
     else
       ApplicationRecordYidEnabled.id_code_models[record_event.record_id.split("_").first].name
     end
@@ -26,7 +26,7 @@ class AdminShowRecordEventComponent < ApplicationComponent
   def user_link
     return if @user.blank?
 
-    link_to(@user.name, admin_user_path(@user), class: "ex-link")
+    link_to(@user.name, admin_user_path(@user), class: "yui-link")
   end
 
   def team_display
@@ -34,7 +34,7 @@ class AdminShowRecordEventComponent < ApplicationComponent
     when "admin" then "admin"
     when "none" then "none"
     else
-      @team && link_to(@team.name, admin_team_path(@team), class: "ex-link")
+      @team && link_to(@team.name, admin_team_path(@team), class: "yui-link")
     end
   end
 end

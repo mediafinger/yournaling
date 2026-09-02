@@ -3,98 +3,98 @@
      already attached to a chronicle, each with reorder nudges and a Remove
      checkbox. Drag state (opacity) is set inline by the `sortable` controller. */
 
-  .ex-attached-entries {
+  .yui-attached-entries {
     display: flex;
     flex-direction: column;
-    gap: var(--ex-space-2xs);
+    gap: var(--yui-space-2xs);
     padding: 0;
     margin: 0;
     border: 0;
   }
 
-  .ex-attached-entries__legend {
+  .yui-attached-entries__legend {
     display: block;
     padding: 0;
   }
 
-  .ex-attached-entries__legend .ex-h4 {
-    margin-bottom: var(--ex-space-3xs);
+  .yui-attached-entries__legend .yui-h4 {
+    margin-bottom: var(--yui-space-3xs);
   }
 
-  .ex-attached-entries__list {
+  .yui-attached-entries__list {
     display: flex;
     flex-direction: column;
-    gap: var(--ex-space-xs);
+    gap: var(--yui-space-xs);
   }
 
-  .ex-attached-entry {
+  .yui-attached-entry {
     display: flex;
-    gap: var(--ex-space-sm);
+    gap: var(--yui-space-sm);
     align-items: center;
     justify-content: space-between;
-    padding: var(--ex-space-xs);
-    background-color: var(--ex-surface);
-    border: var(--ex-border-hairline);
-    border-radius: var(--ex-radius-sm);
+    padding: var(--yui-space-xs);
+    background-color: var(--yui-surface);
+    border: var(--yui-border-hairline);
+    border-radius: var(--yui-radius-sm);
   }
 
-  .ex-attached-entry__main {
+  .yui-attached-entry__main {
     display: flex;
-    gap: var(--ex-space-2xs);
+    gap: var(--yui-space-2xs);
     align-items: center;
     min-width: 0;
   }
 
-  .ex-attached-entry__handle {
-    padding-right: var(--ex-space-3xs);
+  .yui-attached-entry__handle {
+    padding-right: var(--yui-space-3xs);
     font-size: 1.25rem;
     line-height: 1;
-    color: var(--ex-ink-faint);
+    color: var(--yui-ink-faint);
     cursor: grab;
     user-select: none;
   }
 
-  .ex-attached-entry__nudge {
+  .yui-attached-entry__nudge {
     display: flex;
     flex-direction: column;
     gap: 2px;
-    margin-right: var(--ex-space-3xs);
+    margin-right: var(--yui-space-3xs);
   }
 
-  .ex-attached-entry__thumb {
+  .yui-attached-entry__thumb {
     flex-shrink: 0;
     width: 60px;
     height: 45px;
     object-fit: cover;
-    border-radius: var(--ex-radius-xs);
+    border-radius: var(--yui-radius-xs);
   }
 
-  .ex-attached-entry__body {
+  .yui-attached-entry__body {
     min-width: 0;
-    font-size: var(--ex-text-sm);
+    font-size: var(--yui-text-sm);
   }
 
-  .ex-attached-entry__title {
+  .yui-attached-entry__title {
     display: block;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
-  .ex-attached-entry__actions {
+  .yui-attached-entry__actions {
     display: flex;
     flex-shrink: 0;
-    gap: var(--ex-space-sm);
+    gap: var(--yui-space-sm);
     align-items: center;
   }
 
-  .ex-attached-entry__remove {
+  .yui-attached-entry__remove {
     display: flex;
-    gap: var(--ex-space-3xs);
+    gap: var(--yui-space-3xs);
     align-items: center;
     margin-bottom: 0;
-    font-size: var(--ex-text-sm);
-    color: var(--ex-danger);
+    font-size: var(--yui-text-sm);
+    color: var(--yui-danger);
     cursor: pointer;
   }
 }

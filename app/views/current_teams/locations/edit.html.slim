@@ -1,7 +1,7 @@
-.ex-narrow.ex-stack
+.yui-narrow.yui-stack
   - if current_team == @location.team
     = render partial: "form", locals: { location: @location, form_legend: "Edit location" }
-  .ex-cluster
+  .yui-cluster
     = render Yui::ButtonComponent.new("Open", href: current_team_location_path(@location), variant: :secondary)
     - if current_team == @location.team
       = render InsightDestroyModalComponent.new(insight: @location, name: "location")

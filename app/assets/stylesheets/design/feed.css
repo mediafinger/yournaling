@@ -3,33 +3,33 @@
      controller toggles, and the loading row shown while a lazy next-page Turbo
      frame resolves. */
 
-  .ex-feed-banner {
+  .yui-feed-banner {
     display: block;
     width: fit-content;
-    padding: var(--ex-space-2xs) var(--ex-space-md);
-    margin: var(--ex-space-xs) auto var(--ex-space-md);
-    font-size: var(--ex-text-sm);
-    font-weight: var(--ex-weight-semibold);
-    color: var(--ex-accent-ink);
+    padding: var(--yui-space-2xs) var(--yui-space-md);
+    margin: var(--yui-space-xs) auto var(--yui-space-md);
+    font-size: var(--yui-text-sm);
+    font-weight: var(--yui-weight-semibold);
+    color: var(--yui-accent-ink);
     text-align: center;
     cursor: pointer;
-    background-color: var(--ex-accent);
+    background-color: var(--yui-accent);
     border: 0;
-    border-radius: var(--ex-radius-pill);
-    box-shadow: var(--ex-shadow-sm);
+    border-radius: var(--yui-radius-pill);
+    box-shadow: var(--yui-shadow-sm);
     transition:
-      transform var(--ex-transition-fast),
-      opacity var(--ex-transition-fast);
+      transform var(--yui-transition-fast),
+      opacity var(--yui-transition-fast);
   }
 
-  .ex-feed-banner:hover {
+  .yui-feed-banner:hover {
     opacity: 0.95;
     transform: translateY(-1px);
   }
 
-  .ex-feed-loading {
+  .yui-feed-loading {
     display: flex;
     justify-content: center;
-    padding: var(--ex-space-lg) 0;
+    padding: var(--yui-space-lg) 0;
   }
 }

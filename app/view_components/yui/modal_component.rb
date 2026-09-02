@@ -21,18 +21,18 @@ module Yui
     def initialize(title: nil, size: :md, dismissible: true)
       super()
       @title = title
-      @size = ex_token(size, allowed: SIZES, default: :md)
+      @size = yui_token(size, allowed: SIZES, default: :md)
       @dismissible = dismissible
     end
 
     attr_reader :title, :size, :dismissible
 
     def title_id
-      @title_id ||= "ex-modal-#{SecureRandom.hex(4)}"
+      @title_id ||= "yui-modal-#{SecureRandom.hex(4)}"
     end
 
     def dialog_class
-      ex_class("ex-modal", size != :md && "ex-modal--#{size}")
+      yui_class("yui-modal", size != :md && "yui-modal--#{size}")
     end
   end
 end

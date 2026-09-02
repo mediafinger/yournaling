@@ -1,139 +1,139 @@
 @layer layout {
   /* 3. ------------------------------------------------------ LAYOUT UTILITIES */
 
-  .ex-container {
+  .yui-container {
     width: 100%;
-    max-width: var(--ex-container);
+    max-width: var(--yui-container);
     padding-inline: clamp(1.25rem, 0.5rem + 3vw, 3rem);
     margin-inline: auto;
   }
 
-  .ex-container--narrow {
-    max-width: var(--ex-container-narrow);
+  .yui-container--narrow {
+    max-width: var(--yui-container-narrow);
   }
 
   /* The layout's <main> — centred, generous on large screens, vertical rhythm.
      Content that reads better narrow (forms, a single record) wraps its inner
-     block in .ex-narrow. */
-  main.ex-scope {
+     block in .yui-narrow. */
+  main.yui-scope {
     width: 100%;
-    max-width: var(--ex-container);
-    padding: var(--ex-space-xl) clamp(1.25rem, 0.5rem + 3vw, 3rem);
+    max-width: var(--yui-container);
+    padding: var(--yui-space-xl) clamp(1.25rem, 0.5rem + 3vw, 3rem);
     margin-inline: auto;
   }
 
-  .ex-narrow {
-    max-width: var(--ex-container-narrow);
+  .yui-narrow {
+    max-width: var(--yui-container-narrow);
     margin-inline: auto;
   }
 
   /* Vertical rhythm: consistent gap between direct children */
-  .ex-stack {
+  .yui-stack {
     display: flex;
     flex-direction: column;
   }
 
-  .ex-stack > * {
+  .yui-stack > * {
     margin-block: 0;
   }
 
-  /* .ex-stack on a list drops the markers/indent. */
-  .ex-stack:is(ul, ol) {
+  /* .yui-stack on a list drops the markers/indent. */
+  .yui-stack:is(ul, ol) {
     padding-inline-start: 0;
     list-style: none;
   }
 
-  .ex-stack > * + * {
-    margin-block-start: var(--ex-stack-gap, var(--ex-space-md));
+  .yui-stack > * + * {
+    margin-block-start: var(--yui-stack-gap, var(--yui-space-md));
   }
 
-  .ex-stack--xs {
-    --ex-stack-gap: var(--ex-space-2xs);
+  .yui-stack--xs {
+    --yui-stack-gap: var(--yui-space-2xs);
   }
 
-  .ex-stack--sm {
-    --ex-stack-gap: var(--ex-space-xs);
+  .yui-stack--sm {
+    --yui-stack-gap: var(--yui-space-xs);
   }
 
-  .ex-stack--lg {
-    --ex-stack-gap: var(--ex-space-lg);
+  .yui-stack--lg {
+    --yui-stack-gap: var(--yui-space-lg);
   }
 
-  .ex-stack--xl {
-    --ex-stack-gap: var(--ex-space-xl);
+  .yui-stack--xl {
+    --yui-stack-gap: var(--yui-space-xl);
   }
 
   /* Horizontal wrap group */
-  .ex-cluster {
+  .yui-cluster {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--ex-cluster-gap, var(--ex-space-xs));
+    gap: var(--yui-cluster-gap, var(--yui-space-xs));
     align-items: center;
   }
 
-  .ex-cluster--sm {
-    --ex-cluster-gap: var(--ex-space-2xs);
+  .yui-cluster--sm {
+    --yui-cluster-gap: var(--yui-space-2xs);
   }
 
-  .ex-cluster--lg {
-    --ex-cluster-gap: var(--ex-space-sm);
+  .yui-cluster--lg {
+    --yui-cluster-gap: var(--yui-space-sm);
   }
 
-  .ex-cluster--between {
+  .yui-cluster--between {
     justify-content: space-between;
   }
 
-  .ex-grid {
+  .yui-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
-    gap: var(--ex-space-md);
+    gap: var(--yui-space-md);
   }
 
   /* Two equal columns that collapse to one on narrow screens. */
-  .ex-grid-pair {
+  .yui-grid-pair {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
-    gap: var(--ex-space-sm);
+    gap: var(--yui-space-sm);
   }
 
   /* Record-card feed — 1 / 2 / 3 columns responsively, centred by `<main>`'s
      90rem container (3 × 28rem + gaps fits). `start` so a short card doesn't
      stretch to the tallest in its row. */
-  .ex-record-grid {
+  .yui-record-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(min(100%, 28rem), 1fr));
-    gap: var(--ex-space-md);
+    gap: var(--yui-space-md);
     align-items: start;
-    margin-block: var(--ex-space-md) var(--ex-space-xl);
+    margin-block: var(--yui-space-md) var(--yui-space-xl);
   }
 
-  .ex-grid--wide {
+  .yui-grid--wide {
     grid-template-columns: repeat(auto-fill, minmax(min(100%, 24rem), 1fr));
   }
 
-  .ex-divider {
-    margin-block: var(--ex-space-lg);
+  .yui-divider {
+    margin-block: var(--yui-space-lg);
     border: 0;
-    border-top: var(--ex-border-hairline);
+    border-top: var(--yui-border-hairline);
   }
 
-  .ex-divider--labeled {
+  .yui-divider--labeled {
     display: flex;
-    gap: var(--ex-space-sm);
+    gap: var(--yui-space-sm);
     align-items: center;
-    margin-block: var(--ex-space-lg);
-    font-size: var(--ex-text-xs);
-    font-weight: var(--ex-weight-semibold);
-    color: var(--ex-ink-faint);
+    margin-block: var(--yui-space-lg);
+    font-size: var(--yui-text-xs);
+    font-weight: var(--yui-weight-semibold);
+    color: var(--yui-ink-faint);
     text-transform: uppercase;
-    letter-spacing: var(--ex-tracking-eyebrow);
+    letter-spacing: var(--yui-tracking-eyebrow);
     border: 0;
   }
 
-  .ex-divider--labeled::before,
-  .ex-divider--labeled::after {
+  .yui-divider--labeled::before,
+  .yui-divider--labeled::after {
     flex: 1;
     content: "";
-    border-top: var(--ex-border-hairline);
+    border-top: var(--yui-border-hairline);
   }
 }

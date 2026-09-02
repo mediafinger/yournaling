@@ -1,5 +1,5 @@
 = render Yui::CardComponent.new do
-  = form_with(model: [:admin, thought], builder: YuiFormBuilder, html: { class: "ex-stack" }) do |form|
+  = form_with(model: [:admin, thought], builder: YuiFormBuilder, html: { class: "yui-stack" }) do |form|
     = render Yui::HeadlineComponent.new(form_legend, level: 3)
     = render partial: "shared_partials/form_validation_errors", locals: { record: thought }
     = render partial: "admins/team_field", locals: { form: form }

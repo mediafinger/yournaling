@@ -57,20 +57,20 @@ RSpec.describe "Responsive Timeline Grid & Card Redesign", type: :system do
   end
 
   describe "Browse Mode Timeline Grid & Cards" do
-    it "renders timeline items inside a responsive .ex-record-grid with card styling" do
+    it "renders timeline items inside a responsive .yui-record-grid with card styling" do
       visit root_url
 
-      expect(page).to have_css(".ex-record-grid")
-      expect(page).to have_css("article.ex-chronicle-card[id='#{dom_id(chronicle)}']")
-      expect(page).to have_css("article.ex-memory-card[id='#{dom_id(memory)}']")
+      expect(page).to have_css(".yui-record-grid")
+      expect(page).to have_css("article.yui-chronicle-card[id='#{dom_id(chronicle)}']")
+      expect(page).to have_css("article.yui-memory-card[id='#{dom_id(memory)}']")
 
-      within("article.ex-chronicle-card") do
-        expect(page).to have_css(".ex-eyebrow", text: /Chronicle/)
+      within("article.yui-chronicle-card") do
+        expect(page).to have_css(".yui-eyebrow", text: /Chronicle/)
         expect(page).to have_text("Alpine Expedition 2026")
       end
 
-      within("article.ex-memory-card") do
-        expect(page).to have_css(".ex-badge", text: /Memory/)
+      within("article.yui-memory-card") do
+        expect(page).to have_css(".yui-badge", text: /Memory/)
         expect(page).to have_text("Sunset over Lake Geneva")
       end
     end
@@ -80,23 +80,23 @@ RSpec.describe "Responsive Timeline Grid & Card Redesign", type: :system do
 
       visit root_url
 
-      within("article.ex-memory-card") do
-        expect(page).to have_css(".ex-blockquote blockquote", text: "The mountains are calling and I must go right now.")
-        expect(page).to have_css("a.ex-tag[href='#{weblink.url}']", text: /Swiss Alpine Club/)
-        expect(page).to have_css("span.ex-tag", text: /Matterhorn Base Camp/)
+      within("article.yui-memory-card") do
+        expect(page).to have_css(".yui-blockquote blockquote", text: "The mountains are calling and I must go right now.")
+        expect(page).to have_css("a.yui-tag[href='#{weblink.url}']", text: /Swiss Alpine Club/)
+        expect(page).to have_css("span.yui-tag", text: /Matterhorn Base Camp/)
       end
     end
   end
 
   describe "Manage Mode Timeline Grid & Cards" do
-    it "renders manage mode artefacts in .ex-record-grid with cards" do
+    it "renders manage mode artefacts in .yui-record-grid with cards" do
       visit_sign_in(user)
       visit_switch_current_team(team)
       visit current_team_home_url
 
-      expect(page).to have_css(".ex-record-grid")
-      expect(page).to have_css("article.ex-chronicle-card")
-      expect(page).to have_css("article.ex-memory-card")
+      expect(page).to have_css(".yui-record-grid")
+      expect(page).to have_css("article.yui-chronicle-card")
+      expect(page).to have_css("article.yui-memory-card")
     end
   end
 end

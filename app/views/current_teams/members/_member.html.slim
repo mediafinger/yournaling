@@ -1,5 +1,5 @@
 = render Yui::CardComponent.new(id: dom_id(member)) do
   = render ManageHeaderComponent.new(record: member, hide_actions: local_assigns[:hide_actions])
-  dl.ex-details
+  dl.yui-details
     dt Roles
     dd = member.roles.to_sentence

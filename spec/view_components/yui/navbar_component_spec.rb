@@ -9,13 +9,13 @@ RSpec.describe Yui::NavbarComponent, type: :component do
       bar.with_group { "<li>b</li>".html_safe }
     end
 
-    expect(rendered).to have_css("nav.ex-navbar > .ex-navbar__inner > ul.ex-navbar__group", count: 2)
+    expect(rendered).to have_css("nav.yui-navbar > .yui-navbar__inner > ul.yui-navbar__group", count: 2)
   end
 
   it "sets aria-label and data-area" do
     rendered = render_inline(described_class.new(area: "team", label: "Workspace")) { |b| b.with_group { "x" } }
 
-    expect(rendered).to have_css("nav.ex-navbar[aria-label='Workspace'][data-area='team']")
+    expect(rendered).to have_css("nav.yui-navbar[aria-label='Workspace'][data-area='team']")
   end
 
   it "omits data-area when no area is given" do

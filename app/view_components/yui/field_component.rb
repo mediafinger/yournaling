@@ -32,7 +32,7 @@ module Yui
       super()
       @label = label
       @name = name
-      @kind = ex_token(as, allowed: KINDS, default: :input)
+      @kind = yui_token(as, allowed: KINDS, default: :input)
       @type = type
       @value = value
       @placeholder = placeholder
@@ -63,7 +63,7 @@ module Yui
     end
 
     def field_id
-      @field_id ||= "ex-#{name.to_s.gsub(/[^a-z0-9]+/i, '-').gsub(/(^-|-$)/, '')}"
+      @field_id ||= "yui-#{name.to_s.gsub(/[^a-z0-9]+/i, '-').gsub(/(^-|-$)/, '')}"
     end
 
     def invalid?
@@ -83,7 +83,7 @@ module Yui
     end
 
     def wrapper_class
-      ex_class("ex-field", invalid? && "ex-field--invalid")
+      yui_class("yui-field", invalid? && "yui-field--invalid")
     end
   end
 end

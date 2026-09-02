@@ -1,7 +1,7 @@
 - is_location_show = local_assigns[:full] || (controller_name == "locations" && action_name == "show")
 - if is_location_show
   = render Yui::CardComponent.new(id: dom_id(location)) do
-    dl.ex-details
+    dl.yui-details
       dt Name
       dd = location.name
       - if location.country_label

@@ -1,6 +1,6 @@
 = render Yui::CardComponent.new(id: dom_id(location)) do
   = render Yui::HeadlineComponent.new(location.name, level: 3)
-  dl.ex-details
+  dl.yui-details
     - if location.country_label
       dt Country
       dd = location.country_label
@@ -10,7 +10,7 @@
     - if location.geocoded_address.present?
       dt Geocoded
       dd
-        ul.ex-stack.ex-stack--xs
+        ul.yui-stack.yui-stack--xs
           - location.geocoded_address.sort.each do |k, v|
             li = "#{k}: #{v}"
     - if location.url.present?

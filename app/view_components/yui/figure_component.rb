@@ -21,7 +21,7 @@ module Yui
     end
 
     def css_class
-      ex_class("ex-figure", RATIOS[ratio] && "ex-figure--ratio-#{RATIOS[ratio]}")
+      yui_class("yui-figure", RATIOS[ratio] && "yui-figure--ratio-#{RATIOS[ratio]}")
     end
   end
 end

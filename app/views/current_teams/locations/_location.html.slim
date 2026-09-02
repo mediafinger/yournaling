@@ -6,7 +6,7 @@
 - else
   = render Yui::CardComponent.new(id: dom_id(location)) do
     = render ManageHeaderComponent.new(record: location, hide_actions: false)
-    dl.ex-details
+    dl.yui-details
       - if location.country_label
         dt Country
         dd = location.country_label

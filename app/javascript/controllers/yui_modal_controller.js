@@ -34,7 +34,7 @@ export default class extends Controller {
 
   // Clicking the ::backdrop registers as a click on the <dialog> itself.
   onDialogClick(event) {
-    const panel = this.dialog.querySelector(".ex-modal__panel")
+    const panel = this.dialog.querySelector(".yui-modal__panel")
     if (panel && !panel.contains(event.target)) this.close()
   }
 }

@@ -2,28 +2,28 @@
   /* Empty state — rendered by EmptyStateComponent (an app component that
      composes Yui:: primitives). */
 
-  .ex-empty-state {
+  .yui-empty-state {
     display: flex;
     flex-direction: column;
-    gap: var(--ex-space-sm);
+    gap: var(--yui-space-sm);
     align-items: center;
     max-width: 34rem;
-    padding: var(--ex-space-2xl) var(--ex-space-lg);
-    margin: var(--ex-space-2xl) auto;
+    padding: var(--yui-space-2xl) var(--yui-space-lg);
+    margin: var(--yui-space-2xl) auto;
     text-align: center;
-    background-color: var(--ex-surface-sunken);
-    border: 1px dashed var(--ex-border-strong);
-    border-radius: var(--ex-radius-lg);
+    background-color: var(--yui-surface-sunken);
+    border: 1px dashed var(--yui-border-strong);
+    border-radius: var(--yui-radius-lg);
   }
 
-  .ex-empty-state__icon {
+  .yui-empty-state__icon {
     font-size: 2.5rem;
     line-height: 1;
   }
 
-  .ex-empty-state__body {
+  .yui-empty-state__body {
     max-width: 28rem;
     margin: 0;
-    color: var(--ex-ink-soft);
+    color: var(--yui-ink-soft);
   }
 }

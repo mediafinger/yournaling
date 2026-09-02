@@ -1,13 +1,13 @@
 - if show_admin_link?
   = render Yui::NavItemComponent.new("🛡️ Admin Area", href: "/admin", active: active_path?("/admin"))
 - if mode == :admin
-  li.ex-navbar__item
+  li.yui-navbar__item
     span.scope-to-team Scope to Team
 - if signed_in?
   - if show_switch_team?
     = render Yui::NavItemComponent.new("Switch Team", href: switch_current_teams_path, active: active_path?(switch_current_teams_path))
   = render Yui::NavItemComponent.new("👤 #{current_user.name}", href: login_records_path, active: active_path?(login_records_path))
-  li.ex-navbar__item
-    = link_to "Logout", logout_path, data: { turbo_method: :delete }, class: "ex-nav-item logout"
+  li.yui-navbar__item
+    = link_to "Logout", logout_path, data: { turbo_method: :delete }, class: "yui-nav-item logout"
 - else
   = render Yui::NavItemComponent.new("Login", href: login_path, active: active_path?(login_path))

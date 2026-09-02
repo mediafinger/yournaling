@@ -17,12 +17,12 @@ module Yui
 
     def initialize(variant: :info, title: nil)
       super()
-      @variant = ex_token(variant, allowed: VARIANTS, default: :info)
+      @variant = yui_token(variant, allowed: VARIANTS, default: :info)
       @title = title.presence
     end
 
     def css_class
-      ex_class("ex-callout", variant != :info && "ex-callout--#{variant}")
+      yui_class("yui-callout", variant != :info && "yui-callout--#{variant}")
     end
   end
 end

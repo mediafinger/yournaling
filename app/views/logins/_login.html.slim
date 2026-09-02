@@ -1,5 +1,5 @@
 = render Yui::CardComponent.new(id: dom_id(login)) do
-  dl.ex-details
+  dl.yui-details
     dt Last login
     dd = login.updated_at.rfc822
     dt Device
@@ -9,4 +9,4 @@
   - if login.device_id == session[:device_id]
     = render Yui::BadgeComponent.new("Current session", variant: :success)
   - else
-    = button_to "Destroy this session", login_record_path(login), method: :delete, class: "ex-btn ex-btn--danger ex-btn--sm"
+    = button_to "Destroy this session", login_record_path(login), method: :delete, class: "yui-btn yui-btn--danger yui-btn--sm"

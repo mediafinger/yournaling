@@ -10,7 +10,7 @@
     = render Yui::NavItemComponent.new("Members", href: admin_members_path, active: active_path?(admin_members_path))
     = render Yui::NavItemComponent.new("Chronicles", href: admin_chronicles_path, active: active_path?(admin_chronicles_path))
     = render Yui::NavItemComponent.new("Memories", href: admin_memories_path, active: active_path?(admin_memories_path))
-    li.ex-navbar__item
+    li.yui-navbar__item
       = render InsightsDropdownComponent.new(scope: :admin)
     = render Yui::NavItemComponent.new("Record Events", href: admin_record_events_path, active: active_path?(admin_record_events_path))
     = render Yui::NavItemComponent.new("Analytics", href: "/admin/blazer")

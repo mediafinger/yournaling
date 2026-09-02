@@ -1,7 +1,7 @@
 - is_weblink_show = local_assigns[:full] || (controller_name == "weblinks" && action_name == "show")
 - if is_weblink_show
   = render Yui::CardComponent.new(id: dom_id(weblink)) do
-    dl.ex-details
+    dl.yui-details
       dt Name
       dd = weblink.name
       dt URL

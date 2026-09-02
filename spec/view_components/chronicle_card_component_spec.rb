@@ -16,12 +16,12 @@ RSpec.describe ChronicleCardComponent, type: :component do
     it "renders the eyebrow, its own title, the notice and a meta line" do
       rendered = render_card(scope: :browse)
 
-      expect(rendered).to have_css("article.ex-card.ex-chronicle-card##{ActionView::RecordIdentifier.dom_id(chronicle)}")
-      expect(rendered).to have_css(".ex-eyebrow", text: "Chronicle")
+      expect(rendered).to have_css("article.yui-card.yui-chronicle-card##{ActionView::RecordIdentifier.dom_id(chronicle)}")
+      expect(rendered).to have_css(".yui-eyebrow", text: "Chronicle")
       expect(rendered).to have_css("h3", text: "A year on the coast")
-      expect(rendered).to have_css(".ex-chronicle-card__summary", text: "Twelve months of small tides.")
-      expect(rendered).to have_css(".ex-meta", text: "The Coast Year")
-      expect(rendered).to have_no_css(".ex-record-header")
+      expect(rendered).to have_css(".yui-chronicle-card__summary", text: "Twelve months of small tides.")
+      expect(rendered).to have_css(".yui-meta", text: "The Coast Year")
+      expect(rendered).to have_no_css(".yui-record-header")
     end
 
     context "with entries (built in memory)" do
@@ -38,12 +38,12 @@ RSpec.describe ChronicleCardComponent, type: :component do
       it "renders a timeline of entries when full" do
         rendered = render_card(chronicle: with_entries, scope: :browse, full: true)
 
-        expect(rendered).to have_css(".ex-timeline .ex-timeline__item", count: 2)
-        expect(rendered).to have_css(".ex-timeline", text: "First swim of the year.")
+        expect(rendered).to have_css(".yui-timeline .yui-timeline__item", count: 2)
+        expect(rendered).to have_css(".yui-timeline", text: "First swim of the year.")
       end
 
       it "does not render the timeline when not full" do
-        expect(render_card(chronicle: with_entries, scope: :browse, full: false)).to have_no_css(".ex-timeline")
+        expect(render_card(chronicle: with_entries, scope: :browse, full: false)).to have_no_css(".yui-timeline")
       end
     end
   end
@@ -54,6 +54,6 @@ RSpec.describe ChronicleCardComponent, type: :component do
 
     rendered = render_inline(described_class.new(chronicle: chronicle, scope: :browse, team: chronicle.team))
 
-    expect(rendered).to have_css(".ex-record-header", text: "The Coast Year")
+    expect(rendered).to have_css(".yui-record-header", text: "The Coast Year")
   end
 end

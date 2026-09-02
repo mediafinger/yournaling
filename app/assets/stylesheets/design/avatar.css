@@ -1,7 +1,7 @@
 @layer components {
   /* 4f. ----------------------------------------------------------- AVATAR */
 
-  .ex-avatar {
+  .yui-avatar {
     --_size: 2.25rem;
 
     display: inline-flex;
@@ -11,30 +11,30 @@
     width: var(--_size);
     height: var(--_size);
     overflow: hidden;
-    font-family: var(--ex-font-body);
+    font-family: var(--yui-font-body);
     font-size: calc(var(--_size) * 0.4);
-    font-weight: var(--ex-weight-semibold);
-    color: var(--ex-accent-strong);
-    background-color: var(--ex-accent-soft);
+    font-weight: var(--yui-weight-semibold);
+    color: var(--yui-accent-strong);
+    background-color: var(--yui-accent-soft);
     border: 1px solid rgb(42 37 32 / 6%);
     border-radius: 50%;
   }
 
-  .ex-avatar img {
+  .yui-avatar img {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
 
-  .ex-avatar--sm {
+  .yui-avatar--sm {
     --_size: 1.75rem;
   }
 
-  .ex-avatar--lg {
+  .yui-avatar--lg {
     --_size: 3rem;
   }
 
-  .ex-avatar--xl {
+  .yui-avatar--xl {
     --_size: 4rem;
   }
 }

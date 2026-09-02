@@ -18,7 +18,7 @@ module Yui
     def initialize(message = nil, variant: :info, delay: 6000)
       super()
       @message = message
-      @variant = ex_token(variant, allowed: VARIANTS, default: :info)
+      @variant = yui_token(variant, allowed: VARIANTS, default: :info)
       @delay = delay
     end
 
@@ -29,7 +29,7 @@ module Yui
     end
 
     def css_class
-      ex_class("ex-toast", variant != :info && "ex-toast--#{variant}")
+      yui_class("yui-toast", variant != :info && "yui-toast--#{variant}")
     end
   end
 end

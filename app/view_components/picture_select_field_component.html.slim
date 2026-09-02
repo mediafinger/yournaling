@@ -1,18 +1,18 @@
-fieldset.ex-picture-select
-  legend.ex-label Attach Picture (Optional)
-  .ex-field
-    = label_tag "#{@form.object_name}_picture_id", "Select Existing Picture", class: "ex-label"
+fieldset.yui-picture-select
+  legend.yui-label Attach Picture (Optional)
+  .yui-field
+    = label_tag "#{@form.object_name}_picture_id", "Select Existing Picture", class: "yui-label"
     = hidden_field_tag "#{@form.object_name}[picture_id]", picture_id_value, id: "#{@form.object_name}_picture_id", data: { picture_select_target: "hiddenInput" }
-    details.ex-picture-select__menu data-picture-select-target="dropdown"
-      summary.ex-btn.ex-btn--secondary data-picture-select-target="summary"
+    details.yui-picture-select__menu data-picture-select-target="dropdown"
+      summary.yui-btn.yui-btn--secondary data-picture-select-target="summary"
         - if selected_picture&.persisted? && selected_picture.file.attached?
-          span.ex-cluster.ex-cluster--sm
+          span.yui-cluster.yui-cluster--sm
             - if (thumb = selected_picture.thumbnail)
-              img.ex-picture-select__thumb src=rails_representation_path(thumb) alt=""
+              img.yui-picture-select__thumb src=rails_representation_path(thumb) alt=""
             span = picture_label(selected_picture)
         - else
           | Choose an existing picture...
-      ul.ex-picture-select__list
+      ul.yui-picture-select__list
         li
           a href="#" data-action="click->picture-select#selectOption" data-picture-id="" data-picture-name="Choose an existing picture..." data-preview-url=""
             | None (no picture)
@@ -20,17 +20,17 @@ fieldset.ex-picture-select
           - thumb_url = rails_representation_path(pic.thumbnail)
           - label = picture_label(pic)
           li
-            a.ex-picture-select__option href="#" data-action="click->picture-select#selectOption" data-picture-id=pic.id data-picture-name=label data-preview-url=thumb_url
-              img.ex-picture-select__thumb src=thumb_url alt=pic.name
+            a.yui-picture-select__option href="#" data-action="click->picture-select#selectOption" data-picture-id=pic.id data-picture-name=label data-preview-url=thumb_url
+              img.yui-picture-select__thumb src=thumb_url alt=pic.name
               span = label
 
-  details.ex-picture-select__upload data-picture-select-target="uploadDetails" open=(upload_details_open ? "open" : nil)
+  details.yui-picture-select__upload data-picture-select-target="uploadDetails" open=(upload_details_open ? "open" : nil)
     summary Or Upload New Picture
-    .ex-field
-      = label_tag "#{@form.object_name}_picture_file", "Picture File", class: "ex-label"
-      = file_field_tag "#{@form.object_name}[picture_file]", accept: "image/*", id: "#{@form.object_name}_picture_file", class: "ex-input", data: { picture_select_target: "fileInput", action: "change->picture-select#updateFilePreview" }
-      img.ex-file-preview data-picture-select-target="filePreview" style="display: none;" alt="Uploaded picture preview"
+    .yui-field
+      = label_tag "#{@form.object_name}_picture_file", "Picture File", class: "yui-label"
+      = file_field_tag "#{@form.object_name}[picture_file]", accept: "image/*", id: "#{@form.object_name}_picture_file", class: "yui-input", data: { picture_select_target: "fileInput", action: "change->picture-select#updateFilePreview" }
+      img.yui-file-preview data-picture-select-target="filePreview" style="display: none;" alt="Uploaded picture preview"
 
-    .ex-field
-      = label_tag "#{@form.object_name}_picture_name", "Picture Name (Optional)", class: "ex-label"
-      = text_field_tag "#{@form.object_name}[picture_name]", picture_name_value, id: "#{@form.object_name}_picture_name", class: "ex-input", placeholder: "Defaults to image file name", data: { picture_select_target: "pictureNameInput" }
+    .yui-field
+      = label_tag "#{@form.object_name}_picture_name", "Picture Name (Optional)", class: "yui-label"
+      = text_field_tag "#{@form.object_name}[picture_name]", picture_name_value, id: "#{@form.object_name}_picture_name", class: "yui-input", placeholder: "Defaults to image file name", data: { picture_select_target: "pictureNameInput" }
