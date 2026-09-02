@@ -1,0 +1,28 @@
+= render Yui::CardComponent.new(id: helpers.dom_id(record_event)) do
+  .ex-cluster.ex-cluster--sm
+    = render Yui::BadgeComponent.new(record_event.name)
+    span.ex-meta = occurred_at
+    - if record_event.done_by_admin?
+      = render Yui::BadgeComponent.new("by admin", variant: :warning)
+
+  dl.ex-details
+    dt Record
+    dd
+      = record_link
+      = " "
+      code.ex-code = record_event.record_id
+    dt User
+    dd
+      - if user_link
+        = user_link
+        = " "
+      code.ex-code = record_event.user_id
+    dt Team
+    dd
+      = team_display
+      - if @team
+        = " "
+        code.ex-code = record_event.team_id
+    dt ID
+    dd
+      code.ex-code = record_event.id

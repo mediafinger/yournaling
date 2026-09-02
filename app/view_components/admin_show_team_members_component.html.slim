@@ -1,0 +1,11 @@
+/ dt/dd fragment — the caller wraps a dl.ex-details.
+dt Members
+dd
+  ul.ex-stack.ex-stack--xs
+    - members.each do |member|
+      li
+        = link_to member.user.name, admin_user_path(member.user), class: "ex-link"
+        = " "
+        code.ex-code = member.id
+        = " · "
+        = link_to member.roles.join(", "), admin_member_path(member), class: "ex-link"

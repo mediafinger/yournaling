@@ -119,6 +119,17 @@
     color: var(--ex-ink);
   }
 
+  /* Inline monospace — record ids, YIDs, tokens (mostly the admin area). */
+  .ex-code {
+    padding: 0.1em 0.35em;
+    font-family: var(--ex-font-mono);
+    font-size: 0.9em;
+    color: var(--ex-ink-soft);
+    word-break: break-all;
+    background-color: var(--ex-surface-sunken);
+    border-radius: var(--ex-radius-xs);
+  }
+
   .ex-quote {
     font-family: var(--ex-font-serif);
     font-style: italic;

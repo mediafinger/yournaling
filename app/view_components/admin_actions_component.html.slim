@@ -1,0 +1,5 @@
+.ex-cluster.ex-cluster--sm
+  - if show?
+    = render Yui::ButtonComponent.new("Show this #{name}", href: show_path, variant: :secondary, size: :sm)
+  = render Yui::ButtonComponent.new("Edit this #{name}", href: edit_path, variant: :secondary, size: :sm)
+  = render Yui::ButtonComponent.new("Events", href: events_path, variant: :ghost, size: :sm)
