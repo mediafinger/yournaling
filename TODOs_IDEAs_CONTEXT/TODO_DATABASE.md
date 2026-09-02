@@ -82,111 +82,48 @@ the existing `yournaling_db_*` pattern:
 
 ## Phase 2 — `db/` layout & schema files
 
-Goal: `primary` and `queue` are migration-managed and schema-dumped; `cache` and
-`cable` load from a committed schema and are not migrated.
+Decision: keep all four databases **fully rake-managed**, exactly as today — each
+keeps its own `migrations_paths` and its own dumped schema file. This is the
+smallest possible change and keeps `bin/rails db:prepare` / `db:migrate` working
+for every database with no special-casing. (`database_tasks: false` +
+`schema_dump:` was considered but rejected for dev/test: it would stop
+`db:create`/`db:prepare` from provisioning those databases, hurting the
+first-run developer experience. Revisit for production if desired.)
 
-- [ ] Keep `db/migrate` (primary) and `db/migrate_queue` (queue).
-- [ ] Regenerate the Solid schema files for **PostgreSQL** (they are currently
-      SQLite-shaped):
-  - [ ] `db/queue_schema.rb` — take the canonical Postgres schema from the
-        installed `solid_queue` gem (re-run its installer/generator against
-        Postgres) rather than hand-editing `force: :cascade` etc.
-  - [ ] `db/cache_schema.rb` — same, from `solid_cache`.
-  - [ ] `db/cable_schema.rb` — same, from `solid_cable`.
-  - [ ] Replace `db/migrate_queue/*` with the gem's current Postgres migration
-        (or re-dump the create-tables migration for Postgres).
-  - [ ] `db/migrate_cache/*` and `db/migrate_cable/*` can be deleted once those
-        databases are created via `db:schema:load` from the new schema files
-        (they will be `database_tasks: false`).
-- [ ] `bin/rails db:prepare` must create and load all 4 databases from a clean
-      state.
-- [ ] Remove the now-unused `storage/*.sqlite3` files from the working tree and
-      confirm `storage/` handling in `.gitignore` still makes sense.
+The existing migrations and schema files are already database-agnostic standard
+ActiveRecord (`t.binary limit: …` → `bytea`, `t.integer limit: 8` → `bigint`),
+so nothing needs hand-editing — Rails re-dumps them in PostgreSQL format on the
+first `db:migrate`.
+
+- [x] Keep `db/migrate`, `db/migrate_queue`, `db/migrate_cache`, `db/migrate_cable`.
+- [x] Keep `db/schema.rb`, `db/queue_schema.rb`, `db/cache_schema.rb`,
+      `db/cable_schema.rb` — they get re-dumped in PostgreSQL format (Phase 5).
+- [x] `bin/rails db:prepare` creates and loads all 4 databases from a clean state.
+- [x] Remove the now-unused `storage/*.sqlite3` files from the working tree.
+      `.gitignore` already has `/storage/*.sqlite3*`, which stays (harmless, and
+      documents intent).
 
 ---
 
 ## Phase 3 — `config/database.yml` rewrite
 
-Replace the SQLite anchors with Postgres. Target shape:
+Replaced the `sqlite3` anchor and the `*_config` anchors with a single
+`postgres` anchor (adapter + encoding + timeouts + `statement_timeout`), reused
+by all four databases in every environment. Each database gets a URL from
+AppConf plus its `migrations_paths`.
 
-```yaml
-default: &default
-  adapter: postgresql
-  encoding: unicode
-  pool: <%= AppConf.rails_max_threads.to_i + 3 * AppConf.job_concurrency.to_i + 5 %>
-  timeout: <%= AppConf.yournaling_db_timeout_seconds.to_i * 1000 %>
-  connect_timeout: <%= AppConf.yournaling_db_timeout_seconds.to_i %>
-  reconnect: true
-  variables:
-    statement_timeout: <%= AppConf.yournaling_db_timeout_seconds.to_i * 1000 %>
-
-development:
-  primary:
-    <<: *default
-    url: <%= "#{AppConf.yournaling_db_url}_development" %>
-    migrations_paths: db/migrate
-  queue:
-    <<: *default
-    url: <%= "#{AppConf.yournaling_queue_db_url}_development" %>
-    migrations_paths: db/migrate_queue
-  cache:
-    <<: *default
-    url: <%= "#{AppConf.yournaling_cache_db_url}_development" %>
-    schema_dump: cache_schema.rb
-    database_tasks: false
-  cable:
-    <<: *default
-    url: <%= "#{AppConf.yournaling_cable_db_url}_development" %>
-    schema_dump: cable_schema.rb
-    database_tasks: false
-
-test:
-  primary:
-    <<: *default
-    url: <%= "#{AppConf.yournaling_db_url}_test#{ENV['TEST_ENV_NUMBER']}" %>
-    migrations_paths: db/migrate
-  queue:
-    <<: *default
-    url: <%= "#{AppConf.yournaling_queue_db_url}_test#{ENV['TEST_ENV_NUMBER']}" %>
-    migrations_paths: db/migrate_queue
-  cache:
-    <<: *default
-    url: <%= "#{AppConf.yournaling_cache_db_url}_test#{ENV['TEST_ENV_NUMBER']}" %>
-    schema_dump: cache_schema.rb
-    database_tasks: false
-  cable:
-    <<: *default
-    url: <%= "#{AppConf.yournaling_cable_db_url}_test#{ENV['TEST_ENV_NUMBER']}" %>
-    schema_dump: cable_schema.rb
-    database_tasks: false
-
-production:
-  # see the "Production Rollout" section — kept minimal here on purpose
-  primary:
-    <<: *default
-    url: <%= AppConf.yournaling_db_url %>
-    migrations_paths: db/migrate
-  queue:
-    <<: *default
-    url: <%= AppConf.yournaling_queue_db_url %>
-    migrations_paths: db/migrate_queue
-  cache:
-    <<: *default
-    url: <%= AppConf.yournaling_cache_db_url %>
-    schema_dump: cache_schema.rb
-    database_tasks: false
-  cable:
-    <<: *default
-    url: <%= AppConf.yournaling_cable_db_url %>
-    schema_dump: cable_schema.rb
-    database_tasks: false
-```
-
-- [ ] Keep the `TEST_ENV_NUMBER` suffix on **every** database name so parallel
+- [x] `postgres` anchor carries adapter, `encoding: unicode`, `connect_timeout`,
+      `read_timeout`, `reconnect`, and `variables.statement_timeout` — the same
+      values the old `postgres` anchor used for the primary.
+- [x] Keep the `TEST_ENV_NUMBER` suffix on **every** database URL so parallel
       specs stay isolated — each parallel worker gets its own set of 4 Postgres
       databases.
-- [ ] Update the header NOTE comment block to describe "4 PostgreSQL databases".
-- [ ] Drop the `sqlite3:` / `*_config` anchors entirely.
+- [x] Updated the header NOTE comment block to describe the 4 PostgreSQL
+      databases and to point at "Production Rollout" for PgBouncer/replica/backups.
+- [x] Dropped the `sqlite3:`, `cable_config:`, `cache_config:`, `queue_config:`
+      anchors entirely.
+- [x] `config/database.yml` is now the only file that referenced SQLite; grep
+      for `sqlite` across the app is clean afterwards.
 
 ---
 

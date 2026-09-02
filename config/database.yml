@@ -1,9 +1,20 @@
 # NOTE
-# The app uses currently 4 databases:
-#   * the primary PostgreSQL database for ActiveRecord
-#   * the cache SQLite database for SolidCache
-#   * the cable SQLite database for SolidCable
-#   * the queue SQLite database for SolidQueue
+# The app uses 4 PostgreSQL databases, all on the same server:
+#   * the primary database for ActiveRecord (domain data)
+#   * the queue database for SolidQueue (jobs, recurring tasks, semaphores)
+#   * the cache database for SolidCache (cache entries)
+#   * the cable database for SolidCable (Action Cable pub/sub messages)
+#
+# All four are managed by the usual `bin/rails db:*` tasks and each keeps its
+# own schema file (db/schema.rb, db/queue_schema.rb, db/cache_schema.rb,
+# db/cable_schema.rb) and migration path.
+#
+# The connection URLs come from AppConf (see config/app_conf.rb); this file only
+# appends the environment suffix (_development, _test<N>) to them.
+#
+# Production connection pooling (PgBouncer), a read replica and backups are
+# tracked separately in TODOs_IDEAs_CONTEXT/TODO_DATABASE.md — "Production
+# Rollout" — and are intentionally not configured here.
 
 default: &default
   pool: <%= AppConf.rails_max_threads.to_i + 3 * AppConf.job_concurrency.to_i + 5 %>
@@ -14,73 +25,63 @@ postgres: &postgres
   adapter: postgresql
   connect_timeout: <%= AppConf.yournaling_db_timeout_seconds.to_i * 1000 %>
   encoding: unicode
-  migrations_paths: db/migrate
   read_timeout: <%= AppConf.yournaling_db_timeout_seconds.to_i * 1000 %>
   reconnect: true
-  # database: <%= AppConf.yournaling_db_name %>
-  # host: <%= AppConf.yournaling_db_host %>
-  # password: <%= AppConf.yournaling_db_password %>
-  # port: <%= AppConf.yournaling_db_port.to_i %>
-  # username: <%= AppConf.yournaling_db_username %>
   variables:
     statement_timeout: <%= AppConf.yournaling_db_timeout_seconds.to_i * 1000 %>
-
-sqlite3: &sqlite3
-  <<: *default
-  adapter: sqlite3
-  encoding: utf-8
-
-cable_config: &cable_config
-  <<: *sqlite3
-  database: <%= "storage/#{AppConf.yournaling_db_name}_cable.sqlite3" %>
-  migrations_paths: db/migrate_cable
-
-cache_config: &cache_config
-  <<: *sqlite3
-  database: <%= "storage/#{AppConf.yournaling_db_name}_cache.sqlite3" %>
-  migrations_paths: db/migrate_cache
-
-queue_config: &queue_config
-  <<: *sqlite3
-  database: <%= "storage/#{AppConf.yournaling_db_name}_queue.sqlite3" %>
-  migrations_paths: db/migrate_queue
 
 development:
   primary:
     <<: *postgres
     url: <%= "#{AppConf.yournaling_db_url}_development" %>
-  cable:
-    <<: *cable_config
-    database: <%= "storage/#{AppConf.yournaling_db_name}_development_cable.sqlite3" %>
-  cache:
-    <<: *cache_config
-    database: <%= "storage/#{AppConf.yournaling_db_name}_development_cache.sqlite3" %>
+    migrations_paths: db/migrate
   queue:
-    <<: *queue_config
-    database: <%= "storage/#{AppConf.yournaling_db_name}_development_queue.sqlite3" %>
+    <<: *postgres
+    url: <%= "#{AppConf.yournaling_queue_db_url}_development" %>
+    migrations_paths: db/migrate_queue
+  cache:
+    <<: *postgres
+    url: <%= "#{AppConf.yournaling_cache_db_url}_development" %>
+    migrations_paths: db/migrate_cache
+  cable:
+    <<: *postgres
+    url: <%= "#{AppConf.yournaling_cable_db_url}_development" %>
+    migrations_paths: db/migrate_cable
 
 test:
-  # unfortunately _test is necessary, as some `rake db:` commands work against dev & test env
+  # unfortunately the _test suffix is necessary, as some `rake db:` commands
+  # work against dev & test env, and TEST_ENV_NUMBER isolates parallel workers
   primary:
     <<: *postgres
     url: <%= "#{AppConf.yournaling_db_url}_test#{ENV['TEST_ENV_NUMBER']}" %>
-  cable:
-    <<: *cable_config
-    database: <%= "storage/#{AppConf.yournaling_db_name}_test#{ENV['TEST_ENV_NUMBER']}_cable.sqlite3" %>
-  cache:
-    <<: *cache_config
-    database: <%= "storage/#{AppConf.yournaling_db_name}_test#{ENV['TEST_ENV_NUMBER']}_cache.sqlite3" %>
+    migrations_paths: db/migrate
   queue:
-    <<: *queue_config
-    database: <%= "storage/#{AppConf.yournaling_db_name}_test#{ENV['TEST_ENV_NUMBER']}_queue.sqlite3" %>
+    <<: *postgres
+    url: <%= "#{AppConf.yournaling_queue_db_url}_test#{ENV['TEST_ENV_NUMBER']}" %>
+    migrations_paths: db/migrate_queue
+  cache:
+    <<: *postgres
+    url: <%= "#{AppConf.yournaling_cache_db_url}_test#{ENV['TEST_ENV_NUMBER']}" %>
+    migrations_paths: db/migrate_cache
+  cable:
+    <<: *postgres
+    url: <%= "#{AppConf.yournaling_cable_db_url}_test#{ENV['TEST_ENV_NUMBER']}" %>
+    migrations_paths: db/migrate_cable
 
 production:
   primary:
     <<: *postgres
     url: <%= AppConf.yournaling_db_url %>
-  cable:
-    <<: *cable_config
-  cache:
-    <<: *cache_config
+    migrations_paths: db/migrate
   queue:
-    <<: *queue_config
+    <<: *postgres
+    url: <%= AppConf.yournaling_queue_db_url %>
+    migrations_paths: db/migrate_queue
+  cache:
+    <<: *postgres
+    url: <%= AppConf.yournaling_cache_db_url %>
+    migrations_paths: db/migrate_cache
+  cable:
+    <<: *postgres
+    url: <%= AppConf.yournaling_cable_db_url %>
+    migrations_paths: db/migrate_cable
