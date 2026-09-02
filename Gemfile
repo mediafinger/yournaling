@@ -46,6 +46,15 @@ gem "stimulus-rails" # Hotwire's modest JavaScript framework [https://stimulus.h
 gem "turbo-rails" # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
 gem "view_component" # Use view_component for reusable view components [https://viewcomponent.org]
 
+group :staging, :production do
+  gem "aws-sdk-s3", require: false # ActiveStorage S3 service adapter (see config/storage.yml)
+  gem "thruster", require: false # HTTP/2, asset caching & compression proxy in front of Puma
+end
+
+group :deploy do
+  gem "kamal", require: false # deploy tooling — not loaded by the app, only run from CLI/CI
+end
+
 group :development do
   # gem "rails-erd"
   gem "fix-db-schema-conflicts" # to keep the schema.rb file sorted alphabetically without strong_migrations
@@ -65,7 +74,6 @@ group :development, :test do
   gem "factory_bot-awesome_linter", "~> 1.0"
   gem "factory_bot_rails", "~> 6.2"
   gem "faker", "~> 3.2"
-  gem "kamal"
   gem "parallel"
   gem "rspec-rails", "~> 8.0"
   gem "rubocop-capybara", "~> 3.0"
