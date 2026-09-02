@@ -29,7 +29,7 @@ fieldset.yui-picture-select
     .yui-field
       = label_tag "#{@form.object_name}_picture_file", "Picture File", class: "yui-label"
       = file_field_tag "#{@form.object_name}[picture_file]", accept: "image/*", id: "#{@form.object_name}_picture_file", class: "yui-input", data: { picture_select_target: "fileInput", action: "change->picture-select#updateFilePreview" }
-      img.yui-file-preview data-picture-select-target="filePreview" style="display: none;" alt="Uploaded picture preview"
+      img.yui-file-preview data-picture-select-target="filePreview" hidden=true alt="Uploaded picture preview"
 
     .yui-field
       = label_tag "#{@form.object_name}_picture_name", "Picture Name (Optional)", class: "yui-label"

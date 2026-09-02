@@ -77,11 +77,11 @@ fieldset.yui-insight-manager data-controller="insight-manager" data-insight-mana
           a href="#" data-action="click->insight-manager#openSelect" data-type="weblink" Select Existing Weblink...
 
   / In-flow drawer
-  article.yui-card.yui-insight-drawer data-insight-manager-target="drawer" style="display: none;"
+  article.yui-card.yui-insight-drawer data-insight-manager-target="drawer" hidden=true
     .yui-cluster.yui-cluster--between
       h4.yui-h4 data-insight-manager-target="drawerTitle"
       button.yui-btn.yui-btn--ghost.yui-btn--sm type="button" data-action="click->insight-manager#closeDrawer" title="Close" ✕
-    div data-insight-manager-target="drawerError" style="display: none;"
+    div data-insight-manager-target="drawerError" hidden=true
     div data-insight-manager-target="drawerFormContainer"
 
   / Templates for in-flow creation
@@ -131,7 +131,7 @@ fieldset.yui-insight-manager data-controller="insight-manager" data-insight-mana
       .yui-field
         label.yui-label for="drawer_picture_file" Image File
         input.yui-input type="file" id="drawer_picture_file" name="picture[file]" accept=allowed_image_types_accept required=true data-picture-select-target="fileInput" data-action="change->picture-select#updateFilePreview"
-        img.yui-file-preview data-picture-select-target="filePreview" style="display: none;" alt="Selected image preview"
+        img.yui-file-preview data-picture-select-target="filePreview" hidden=true alt="Selected image preview"
       .yui-field
         label.yui-label for="drawer_picture_name" Picture Name (Optional)
         input.yui-input type="text" id="drawer_picture_name" name="picture[name]" placeholder="Defaults to image file name" data-picture-select-target="pictureNameInput"

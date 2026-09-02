@@ -18,13 +18,5 @@ module Example
     def css_class
       yui_class("yui-specimen", center && "yui-specimen--center")
     end
-
-    slim_template <<~SLIM
-      .yui-specimen class=("yui-specimen--center" if center)
-        - if label
-          span.yui-specimen__label = label
-        .yui-specimen__row
-          = content
-    SLIM
   end
 end

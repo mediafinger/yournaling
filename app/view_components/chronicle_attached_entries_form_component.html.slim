@@ -27,26 +27,26 @@
               img.yui-attached-entry__thumb src=rails_representation_path(target.thumbnail) alt=target.name
               .yui-attached-entry__body
                 strong.yui-attached-entry__title = entry_display_title(target)
-                small.yui-text--muted = "Picture #{target.date}"
+                small.yui-attached-entry__note = "Picture #{target.date}"
             - when "Location"
               .yui-attached-entry__body
-                strong = entry_display_title(target)
+                strong.yui-attached-entry__title = entry_display_title(target)
                 - if target.address.present?
-                  small.yui-text--muted style="display: block;" = target.address
-                small.yui-text--muted Location
+                  small.yui-attached-entry__note = target.address
+                small.yui-attached-entry__note Location
             - when "Thought"
               .yui-attached-entry__body
-                em style="display: block;" = "“#{target.text.truncate(90)}”#{team_suffix(target)}"
-                small.yui-text--muted Thought
+                em.yui-attached-entry__note = "“#{target.text.truncate(90)}”#{team_suffix(target)}"
+                small.yui-attached-entry__note Thought
             - when "Weblink"
               .yui-attached-entry__body
-                strong = entry_display_title(target)
-                small.yui-text--muted style="display: block;" = target.url
-                small.yui-text--muted Weblink
+                strong.yui-attached-entry__title = entry_display_title(target)
+                small.yui-attached-entry__note = target.url
+                small.yui-attached-entry__note Weblink
             - when "Memory"
               .yui-attached-entry__body
-                em style="display: block;" = "#{target.memo.truncate(90)}#{team_suffix(target)}"
-                small.yui-text--muted Memory
+                em.yui-attached-entry__note = "#{target.memo.truncate(90)}#{team_suffix(target)}"
+                small.yui-attached-entry__note Memory
 
           .yui-attached-entry__actions
             - if (edit_path = entry_edit_path(c_entry.entry_type, target))

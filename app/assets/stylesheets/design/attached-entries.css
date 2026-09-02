@@ -81,6 +81,11 @@
     white-space: nowrap;
   }
 
+  .yui-attached-entry__note {
+    display: block;
+    color: var(--yui-ink-faint);
+  }
+
   .yui-attached-entry__actions {
     display: flex;
     flex-shrink: 0;

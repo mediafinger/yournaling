@@ -31,9 +31,9 @@ module Yui
   # - **`def call` with `tag` / `content_tag`, no template** — for a trivial
   #   one-element wrapper (`Yui::Emphasis`, `Yui::Eyebrow`, `Yui::Quote`,
   #   `Yui::Prose`).
-  # - **Inline `slim_template <<~SLIM`** — avoid for new components; keep only
-  #   for a tiny, logic-free existing template. Never `<<-SLIM` / bare `<<SLIM`;
-  #   `<<~'SLIM'` only when `#{...}` must reach the browser literally.
+  # - **Inline `slim_template`** — not used anywhere any more; a grep gate in
+  #   `spec/lib/design_conventions_spec.rb` keeps it that way. New markup goes
+  #   in a sidecar `.slim` (`<<~'SLIM'` heredocs are also banned there).
   #
   # Variant/size params go through `yui_token` so bad input degrades to the
   # default instead of raising. Treat `Yui::Field` / `Yui::Button` / `Yui::Card`

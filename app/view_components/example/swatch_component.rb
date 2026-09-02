@@ -13,13 +13,5 @@ module Example
       @token = token
       @value = value
     end
-
-    slim_template <<~'SLIM'
-      .yui-swatch
-        .yui-swatch__chip style="background-color: var(#{token})"
-        .yui-swatch__meta
-          span.yui-swatch__name = name
-          span.yui-swatch__value = value || token
-    SLIM
   end
 end

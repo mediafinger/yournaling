@@ -37,7 +37,7 @@ export default class extends Controller {
     }
     if (this.hasFilePreviewTarget) {
       this.filePreviewTarget.src = ""
-      this.filePreviewTarget.style.display = "none"
+      this.filePreviewTarget.hidden = true
     }
     if (this.hasPictureNameInputTarget) {
       this.pictureNameInputTarget.value = ""
@@ -56,7 +56,7 @@ export default class extends Controller {
       const reader = new FileReader()
       reader.onload = (e) => {
         this.filePreviewTarget.src = e.target.result
-        this.filePreviewTarget.style.display = "block"
+        this.filePreviewTarget.hidden = false
       }
       reader.readAsDataURL(file)
 
@@ -74,7 +74,7 @@ export default class extends Controller {
       }
     } else {
       this.filePreviewTarget.src = ""
-      this.filePreviewTarget.style.display = "none"
+      this.filePreviewTarget.hidden = true
     }
   }
 }

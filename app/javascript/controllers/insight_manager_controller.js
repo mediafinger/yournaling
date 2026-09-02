@@ -62,7 +62,7 @@ export default class extends Controller {
   closeDrawer(event) {
     if (event) event.preventDefault()
     if (this.hasDrawerTarget) {
-      this.drawerTarget.style.display = "none"
+      this.drawerTarget.hidden = true
       this.drawerFormContainerTarget.innerHTML = ""
       this.hideDrawerError()
     }
@@ -82,7 +82,7 @@ export default class extends Controller {
     this.drawerTitleTarget.textContent = titles[type] || "Add Insight"
     this.drawerFormContainerTarget.innerHTML = this[templateName].innerHTML
     this.hideDrawerError()
-    this.drawerTarget.style.display = "block"
+    this.drawerTarget.hidden = false
     this.drawerTarget.scrollIntoView({ behavior: "smooth", block: "nearest" })
   }
 
@@ -97,13 +97,13 @@ export default class extends Controller {
         </ul>
       </div>
     `
-    this.drawerErrorTarget.style.display = "block"
+    this.drawerErrorTarget.hidden = false
   }
 
   hideDrawerError() {
     if (this.hasDrawerErrorTarget) {
       this.drawerErrorTarget.innerHTML = ""
-      this.drawerErrorTarget.style.display = "none"
+      this.drawerErrorTarget.hidden = true
     }
   }
 
@@ -277,11 +277,7 @@ export default class extends Controller {
       const isAttached = this[inputTarget] && Boolean(this[inputTarget].value)
 
       if (this[menuItemTarget]) {
-        if (isAttached) {
-          this[menuItemTarget].style.display = "none"
-        } else {
-          this[menuItemTarget].style.display = "block"
-        }
+        this[menuItemTarget].hidden = isAttached
       }
     })
   }

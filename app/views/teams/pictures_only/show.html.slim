@@ -1,14 +1,15 @@
 doctype html
 html
   head
+    meta charset="utf-8"
+    meta name="viewport" content="width=device-width,initial-scale=1"
     title
-      | Yournaling
-  body[style="font-family: sans-serif"]
-    p
-      strong
-        = @picture.name
-      = " #{@picture.width} x #{@picture.height} | #{number_to_human_size(@picture.megabytes.megabytes)} | #{@picture.content_type} | #{@picture.filename}"
-    p
-      / - # TODO: to prevent direct linking of image, keep visibility: :internal
-      / - # and only display images in the context of a Memory, Chronicle, Experience... to other users
-      = image_tag(@picture.file, style: "width: auto;")
+      = "#{@picture.name} · Yournaling"
+    = csp_meta_tag
+    = render "shared_partials/design_head"
+  body.yui-body
+    main.yui-scope.yui-narrow.yui-stack
+      = render Yui::HeadlineComponent.new(@picture.name.presence || "Picture", level: 1)
+      p.yui-text.yui-text--sm.yui-text--muted
+        = "#{@picture.width} × #{@picture.height} · #{number_to_human_size(@picture.megabytes.megabytes)} · #{@picture.content_type} · #{@picture.filename}"
+      = image_tag(@picture.file, alt: @picture.name)
