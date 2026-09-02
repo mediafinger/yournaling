@@ -290,6 +290,8 @@ testing — not required for deploy.
 - [x] `Dockerfile` (ruby:4.0.6-slim, Thruster `CMD`, libvips + libpoppler-glib8 +
       postgresql-client runtime, build-essential/libpq-dev/git/pkg-config build stage,
       non-root, no DB-URL ARG) + `.dockerignore`. No Node — assets are plain Propshaft.
+      **Built & run-tested on OrbStack** (arm64): `docker build` OK, entrypoint creates the
+      four DBs, `GET /` → 200, `GET /alive` → 200. `Gemfile.lock` gained `aarch64-linux`.
 - [x] **DB URL handling = approach (b):** the four `YOURNALING_*_DB_URL` are no longer
       `required:`; they compose from `YOURNALING_DB_{HOST,PORT,NAME,USERNAME,PASSWORD}`.
 - [x] `config/deploy.yml` (shared) + `config/deploy.staging.yml` (destination) — single
@@ -299,8 +301,11 @@ testing — not required for deploy.
       / `_queue` — no init SQL file needed.
 - [x] `.kamal/secrets` — committed template (1Password block + plain-ENV fallthrough); no
       real values. (Creating the actual 1Password item is still open.)
-- [x] `/up` SSL-redirect exclusion enabled in `production.rb` (host-auth exclusion was
-      already in `staging.rb`).
+- [x] `config.secret_key_base` wired from `AppConf.rails_secret_key_base` in `production.rb`
+      (Rails only reads `SECRET_KEY_BASE`/credentials otherwise — staging wouldn't boot).
+- [x] `/alive` liveness route added for the Kamal proxy healthcheck (`/up` queries the DB and
+      503s until a `User` exists, so it can't gate a first deploy). `/up` + `/alive` excluded
+      from `force_ssl` redirect and host authorization.
 - [x] SMTP wired in `production.rb` from `AppConf` (`SMTP_*` / `MAILER_FROM` registered);
       delivery stays off until `SMTP_ADDRESS` is set.
 - [x] `assets:precompile` verified in the `production` env with `SECRET_KEY_BASE_DUMMY=1`
@@ -316,9 +321,9 @@ testing — not required for deploy.
       `AMAZON_S3_SECRET_ACCESS_KEY`, `GEOAPIFY_API_KEY`; variable `STAGING_HOST`.
       (`GITHUB_TOKEN` covers GHCR.)
 - [ ] Create the 1Password item for local `kamal` runs (or just export the vars).
-- [ ] **Local verification on a real Docker host:** `docker buildx build --platform
-      linux/amd64 … --load` succeeds; container boots against a local Postgres with the four
-      DBs; `/up` → 200; assets served; a SolidQueue job runs (in-Puma supervisor).
+- [ ] Run an **amd64** build (`bin/kamal build push -d staging` or
+      `docker buildx build --platform linux/amd64`) — only the native arm64 build has been
+      exercised. (SolidQueue-in-Puma supervisor also still to be observed running a job.)
 - [ ] Provision the staging server (adapt `bin/provision` from `origin/kamal`): Ubuntu 22+,
       Docker, a Postgres data dir, swap, fail2ban; firewall 22/80/443; DNS
       `staging.yournaling.com` → host. **The old Hetzner box / IPs are no longer ours —

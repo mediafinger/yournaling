@@ -4,8 +4,10 @@ Containerised deployment with **Kamal 2**. Target: a **staging** environment on 
 **single server** (Puma + SolidQueue-in-Puma + a PostgreSQL 17 accessory holding all
 four databases). Production is deferred — see `TODOs_IDEAs_CONTEXT/TODO_KAMAL.md` §5.
 
-> Status: not yet deployed. No server exists, no GitHub/1Password secrets are set.
-> The image has not been built on a real Docker host yet.
+> Status: not yet deployed — no server exists and no GitHub/1Password secrets are set.
+> The image **does** build and run: verified locally on OrbStack (Apple Silicon) —
+> `docker build` succeeds, the entrypoint creates the four databases, `GET /` → 200,
+> `GET /alive` → 200.
 
 ---
 
@@ -125,7 +127,9 @@ docker run --rm -p 8080:80 \
   -e AMAZON_S3_ACCESS_KEY_ID=x -e AMAZON_S3_SECRET_ACCESS_KEY=x \
   -e AMAZON_S3_BUCKET_NAME=x -e GEOAPIFY_API_KEY=x \
   yournaling:local
-# -> http://localhost:8080/up
+# -> http://localhost:8080/alive  (200)
+# -> http://localhost:8080/       (200)
+# -> http://localhost:8080/up     (503 until the DB has a User — this is by design)
 ```
 
 ### Via GitHub Actions
@@ -158,6 +162,7 @@ deploys migrate automatically.
 - Provision a staging server; set `STAGING_HOST` and the secrets.
 - Decide the real staging hostname (`staging.yournaling.com` assumed).
 - Postgres backups: `pg_dump` of all four DBs → S3 (cron or accessory); test restore.
-- Confirm the image builds on a real Docker host and `/up` returns 200.
+- Run an amd64 build (`bin/kamal build push -d staging`) — only the native arm64
+  build has been exercised so far.
 - SMTP provider for staging (or leave mail delivery disabled).
 - Then: enable the `push: [main]` trigger for auto-deploy.
