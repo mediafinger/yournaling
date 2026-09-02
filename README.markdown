@@ -12,9 +12,11 @@ The Yournaling app will become a place where single people, couples or teams can
 * keep a travel journal, displaying the route taken on a map
 * ...
 
+_There are more READMEs to describe some topics in more depth:_
 
+* [AI README](README_CONDUCTOR.markdown)
+* [CI README](README_RAKE_CI.markdown)
 
----
 
 > **The points below explain technical concepts of the yournaling app.**
 

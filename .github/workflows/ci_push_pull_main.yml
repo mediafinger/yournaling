@@ -116,6 +116,7 @@ jobs:
           tar -xf "$RUNNER_TEMP"/actionlint_*_linux_amd64.tar.gz -C "$RUNNER_TEMP" actionlint
           echo "$RUNNER_TEMP" >> "$GITHUB_PATH"
 
+      # psql -U postgres-ci -c "CREATE ROLE root WITH LOGIN CREATEDB;" || true
       - name: Setup DB
         env:
           POSTGRES_HOST: localhost # use 'postgres' when running the app in Docker as well
@@ -124,10 +125,7 @@ jobs:
           bundle exec rake db:drop db:create db:migrate
           bundle exec rake "parallel:setup[4]"
 
-        # psql -U postgres-ci -c "CREATE ROLE root WITH LOGIN CREATEDB;" || true
-        # bundle exec rake db:drop db:create db:migrate
-
-      # this could be parallelized by running the individual jobs in different workflows
+      # the jobs are internally parallelized, running on 4 threads
       - name: Run rake:ci
         run: |
-          bundle exec rake ci
+          CI_VERBOSE=1 bundle exec rake ci
