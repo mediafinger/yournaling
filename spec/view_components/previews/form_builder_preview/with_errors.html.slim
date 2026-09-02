@@ -1,0 +1,6 @@
+- record = Chronicle.new(name: "", visibility: "draft")
+- record.valid?
+= form_with(model: record, url: "#", builder: YuiFormBuilder, html: { class: "yui-stack", novalidate: true }) do |form|
+  = form.text_field :name, hint: "A short, memorable title."
+  = form.text_area :notice, rows: 3
+  = form.submit "Save chronicle"
