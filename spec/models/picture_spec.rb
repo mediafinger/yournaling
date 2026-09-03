@@ -54,6 +54,17 @@ RSpec.describe Picture, type: :model do
       expect(picture).not_to be_valid
       expect(picture.errors[:visibility]).to be_present
     end
+
+    it "reports the actual byte size in the file-size error (not a hardcoded 0)" do
+      undersized = described_class.new(team: team, visibility: "draft")
+      undersized.file = ActiveStorage::Blob.create_and_upload!(
+        io: StringIO.new("x" * 42), filename: "small.webp", content_type: "image/webp"
+      )
+
+      undersized.valid?
+
+      expect(undersized.errors[:file].join).to include("current size is 42 Bytes")
+    end
   end
 
   describe "helper methods" do
@@ -121,6 +132,139 @@ RSpec.describe Picture, type: :model do
 
     it "returns the record via the searchable association" do
       expect(saved_picture.pg_search_document.searchable).to eq(saved_picture)
+    end
+  end
+
+  describe "#assign_uploaded_file" do
+    subject(:picture) { described_class.new(team: team, visibility: "draft") }
+
+    it "attaches a stripped webp and returns the extracted metadata", aggregate_failures: true do
+      metadata = picture.assign_uploaded_file(
+        ImageFixtures.upload(:original), name: "Cologne rooftop"
+      )
+      picture.save!
+
+      expect(picture.content_type).to eq("image/webp")
+      expect(picture.exif_stripped).to be(true)
+      expect(metadata).to be_a(Images::Metadata)
+    end
+
+    it "records EXIF geometry, GPS, timestamp and camera on dedicated columns", aggregate_failures: true do
+      picture.assign_uploaded_file(ImageFixtures.upload(:original), name: "Cologne rooftop")
+      picture.save!
+
+      expect(picture.image_width).to eq(1832)
+      expect(picture.image_height).to eq(1270)
+      expect(picture.original_content_type).to eq("image/jpeg")
+      expect(picture.original_byte_size).to eq(File.size(ImageFixtures::ORIGINAL))
+      expect(picture.camera_make).to eq("Google")
+      expect(picture.camera_model).to eq("Pixel 4a")
+      expect(picture.latitude).to be_within(0.0001).of(ImageFixtures::EXIF_LATITUDE)
+      expect(picture.longitude).to be_within(0.0001).of(ImageFixtures::EXIF_LONGITUDE)
+      expect(picture.taken_at).to eq(ImageFixtures::EXIF_TAKEN_AT)
+    end
+
+    it "defaults the date to the EXIF capture day when none is given" do
+      picture.assign_uploaded_file(ImageFixtures.upload(:original), name: "x")
+
+      expect(picture.date).to eq(Date.new(2022, 4, 12))
+    end
+
+    it "keeps an explicitly supplied date" do
+      picture.assign_uploaded_file(ImageFixtures.upload(:original), name: "x", date: "2024-01-02")
+
+      expect(picture.date).to eq(Date.new(2024, 1, 2))
+    end
+
+    it "leaves EXIF columns nil for a scrubbed upload" do
+      picture.assign_uploaded_file(ImageFixtures.upload(:no_exif), name: "anon")
+      picture.save!
+
+      expect(picture.latitude).to be_nil
+      expect(picture.taken_at).to be_nil
+      expect(picture.date).to be_nil
+      expect(picture).not_to be_geotagged
+    end
+
+    it "raises ImageTooSmall for an undersized image" do
+      expect {
+        picture.assign_uploaded_file(ImageFixtures.upload(:tiny), name: "tiny")
+      }.to raise_error(ImageUploadConversionService::ImageTooSmall)
+    end
+  end
+
+  describe "orientation and geometry helpers" do
+    it "classifies a landscape upload" do
+      picture = described_class.new(team: team, visibility: "draft")
+      picture.assign_uploaded_file(ImageFixtures.upload(:original), name: "l")
+      picture.save!
+
+      expect(picture).to be_landscape
+      expect(picture.orientation).to eq(:landscape)
+      expect(picture.aspect_ratio).to eq((1832 / 1270.0).round(4))
+    end
+
+    it "classifies a portrait upload" do
+      picture = described_class.new(team: team, visibility: "draft")
+      picture.assign_uploaded_file(ImageFixtures.upload(:portrait_gps), name: "p")
+      picture.save!
+
+      expect(picture).to be_portrait
+    end
+
+    it "classifies a square upload" do
+      picture = described_class.new(team: team, visibility: "draft")
+      picture.assign_uploaded_file(ImageFixtures.upload(:square_gps), name: "s")
+      picture.save!
+
+      expect(picture).to be_square
+      expect(picture.aspect_ratio).to eq(1.0)
+    end
+
+    it "falls back to the analyzed blob metadata when the columns are blank" do
+      picture.save!
+      picture.file.blob.analyze
+      picture.update_columns(image_width: nil, image_height: nil)
+
+      expect(picture.reload.dimensions).to eq([picture.file.blob.metadata[:width],
+                                               picture.file.blob.metadata[:height]])
+      expect(picture.orientation).to be_in(%i[landscape portrait square])
+    end
+  end
+
+  describe "GPS helpers" do
+    before do
+      picture.assign_attributes(latitude: 50.9337, longitude: 6.9408)
+    end
+
+    it "exposes coordinates when geotagged" do
+      expect(picture).to be_geotagged
+      expect(picture.coordinates).to eq([50.9337, 6.9408])
+      expect(picture.location_attributes_from_exif).to eq(lat: 50.9337, long: 6.9408)
+    end
+
+    it "validates the coordinate ranges" do
+      picture.latitude = 120
+      expect(picture).not_to be_valid
+      expect(picture.errors[:latitude]).to be_present
+    end
+
+    it "has no coordinates without a fix" do
+      picture.assign_attributes(latitude: nil, longitude: nil)
+      expect(picture).not_to be_geotagged
+      expect(picture.coordinates).to be_nil
+      expect(picture.location_attributes_from_exif).to eq({})
+    end
+  end
+
+  describe "#original_size" do
+    it "humanises the pre-conversion byte size" do
+      picture.original_byte_size = 2_500_000
+      expect(picture.original_size).to eq("2.38 MB")
+    end
+
+    it "is nil when unknown" do
+      expect(picture.original_size).to be_nil
     end
   end
 

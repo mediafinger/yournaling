@@ -48,9 +48,17 @@ module CurrentTeams
       # the variants can be cropped to fit the desired aspect ratio for all preview images on the website
       # create the other variants (consider portrait, square, landscape orginal picture aspect ratios)
       #
-      @picture.file = ImageUploadConversionService.call(file: picture_params[:file], name: picture_params[:name])
-      @picture.name = picture_params[:name]
-      @picture.date = picture_params[:date]
+      begin
+        @picture.assign_uploaded_file(
+          picture_params[:file], name: picture_params[:name], date: picture_params[:date]
+        )
+      rescue ImageUploadConversionService::ImageTooSmall => e
+        respond_to do |format|
+          format.html { raise CustomError.new(e.message, status: 422, code: :unprocessable_content) }
+          format.json { render json: { errors: [e.message] }, status: :unprocessable_content }
+        end
+        return
+      end
 
       Picture.create_with_event(record: @picture, event_params: { team: current_team, user: current_user })
 

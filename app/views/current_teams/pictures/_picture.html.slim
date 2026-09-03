@@ -8,8 +8,23 @@
     - is_picture_show = (controller_name == "pictures" || controller_path.to_s.end_with?("pictures")) && action_name == "show"
     - if is_picture_show
       dl.yui-details
-        dt Original
-        dd = "#{picture.width} × #{picture.height} · #{number_to_human_size(picture.megabytes.megabytes)} · #{picture.content_type} · #{picture.filename}"
+        dt Stored
+        dd = "#{picture.width} × #{picture.height} · #{picture.orientation} · #{number_to_human_size(picture.megabytes.megabytes)} · #{picture.content_type} · #{picture.filename}"
+        - if picture.original_size
+          dt Uploaded
+          dd = "#{picture.original_size}#{" · #{picture.original_content_type}" if picture.original_content_type} · EXIF #{picture.exif_stripped? ? "stripped" : "kept"}"
+        - if picture.taken_at
+          dt Taken
+          dd = picture.taken_at.to_fs(:long)
+        - if picture.geotagged?
+          dt Coordinates
+          dd
+            = link_to "#{picture.latitude.round(5)}, #{picture.longitude.round(5)}", "https://www.openstreetmap.org/?mlat=#{picture.latitude}&mlon=#{picture.longitude}#map=15/#{picture.latitude}/#{picture.longitude}", target: "_blank", rel: "noopener noreferrer"
+            - if picture.altitude
+              = " · #{picture.altitude.round} m"
+        - if picture.camera
+          dt Camera
+          dd = picture.camera
       - original_href = picture.visibility == "published" ? team_picture_only_path(current_team, picture) : rails_blob_path(picture.file)
       = link_to original_href, target: "_blank", rel: "noopener noreferrer", class: "yui-media-link" do
         = image_tag(picture.large, alt: picture.name, class: "yui-lightbox-full")

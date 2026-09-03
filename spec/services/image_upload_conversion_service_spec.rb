@@ -67,6 +67,43 @@ RSpec.describe ImageUploadConversionService, type: :service do
       end
     end
 
+    context "with a JPEG that carries EXIF / GPS metadata" do
+      let(:exif_upload) { Rack::Test::UploadedFile.new(ImageFixtures::ORIGINAL, "image/jpeg") }
+
+      it "strips all EXIF, GPS and ICC metadata from the stored file" do
+        blob = described_class.call(file: exif_upload, name: "stripped")
+
+        image = Vips::Image.new_from_buffer(blob.download, "")
+        leaked = image.get_fields.grep(/exif|gps|orientation|icc|xmp/i)
+        expect(leaked).to be_empty
+      end
+    end
+
+    context "with a JPEG rotated only via its EXIF Orientation tag" do
+      let(:rotated_upload) do
+        Rack::Test::UploadedFile.new(ImageFixtures.path(:exif_orientation_6), "image/jpeg")
+      end
+
+      it "bakes the rotation into the pixels (portrait output, no orientation tag)" do
+        blob = described_class.call(file: rotated_upload, name: "rotated")
+
+        image = Vips::Image.new_from_buffer(blob.download, "")
+        expect(image.height).to be > image.width
+        expect { image.get("orientation") }.to raise_error(Vips::Error)
+      end
+    end
+
+    context "with an image below the minimum pixel size" do
+      let(:tiny_upload) { Rack::Test::UploadedFile.new(ImageFixtures.path(:tiny), "image/jpeg") }
+
+      it "raises ImageTooSmall and does not create a blob" do
+        expect {
+          expect { described_class.call(file: tiny_upload, name: "tiny") }
+            .to raise_error(ImageUploadConversionService::ImageTooSmall, /minimum/)
+        }.not_to(change { ActiveStorage::Blob.count })
+      end
+    end
+
     context "with a corrupted non-image file" do
       let(:corrupt_tempfile) do
         Tempfile.new(["corrupt", ".jpg"]).tap do |file|

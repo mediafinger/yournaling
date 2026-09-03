@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_03_130000) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_03_221921) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -225,13 +225,25 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_03_130000) do
   end
 
   create_table "pictures", id: :string, force: :cascade do |t|
+    t.decimal "altitude", precision: 8, scale: 2
+    t.string "camera_make"
+    t.string "camera_model"
     t.datetime "created_at", null: false
     t.date "date"
+    t.boolean "exif_stripped", default: true, null: false
+    t.integer "image_height"
+    t.integer "image_width"
+    t.decimal "latitude", precision: 10, scale: 6
+    t.decimal "longitude", precision: 10, scale: 6
     t.string "name"
+    t.bigint "original_byte_size"
+    t.string "original_content_type"
+    t.datetime "taken_at"
     t.string "team_id", null: false
     t.datetime "updated_at", null: false
     t.enum "visibility", default: "draft", null: false, enum_type: "content_visibility"
-    t.index ["team_id"], name: "index_pictures_on_team_id"
+    t.index ["latitude", "longitude"], name: "index_pictures_on_latitude_and_longitude"
+    t.index ["team_id", "taken_at"], name: "index_pictures_on_team_id_and_taken_at"
   end
 
   create_table "publishings", id: :string, force: :cascade do |t|

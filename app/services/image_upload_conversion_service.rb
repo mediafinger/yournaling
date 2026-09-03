@@ -1,59 +1,74 @@
 # frozen_string_literal: true
 
-# NOTE: this service need the libvips library installed, to convert images
-# installing optional dependencies for JPG, EXIF, ... might be necessary as well
-# https://github.com/libvips/libvips#optional-dependencies
+# Converts an uploaded image into the canonical stored form:
+#   * auto-rotated so the pixels are upright (EXIF Orientation is honoured by
+#     libvips' thumbnail step, then dropped)
+#   * downsized so neither edge exceeds Picture::MAX_PIXEL_* (aspect kept)
+#   * re-encoded as WebP at AppConf.picture_webp_quality
+#   * stripped of EXIF / GPS / ICC metadata (AppConf.picture_strip_metadata)
 #
+# EXIF is read *before* this runs (see Images::MetadataExtractor /
+# Picture#assign_uploaded_file) because this step destroys it.
+#
+# NOTE: needs the libvips system library. Raises ImageTooSmall for images below
+# the minimum pixel size, and Vips::Error for unreadable / non-image input.
 class ImageUploadConversionService
+  class ImageTooSmall < StandardError; end
+
+  ROTATED_ORIENTATIONS = [5, 6, 7, 8].freeze
+
   class << self
     def call(file:, name:)
       converted_image = process_image(file)
 
       ActiveStorage::Blob.create_and_upload!(
         io: converted_image,
-        filename: "#{name.parameterize(separator: '_')}.webp", # what happens with duplicate names?
+        filename: "#{name.parameterize(separator: '_')}.webp",
         content_type: "image/webp" # we convert all images to this format
       )
     end
 
     private
 
-    # calls resize_and_convert_before_storage(file) to downsize the image and convert to webp
-    # returns the new file (not the original one)
-    # with updated filename and content_type to indicate the new file type "image/webp"
     def process_image(file)
-      # TODO: validate uploaded file first!
-      # is image?
-      # Pictures::ALLOWED_CONTENT_TYPES
-      # file size MByte (min..max)
-      # file size Pixels (min..max)
-      # landscape vs portrait or square?
-
-      # original_extension = File.extname(file.tempfile)
-      # updated_filename = file.original_filename.gsub(/(#{original_extension})$/, ".webp")
-      # new_file = file.dup
-      # new_file.content_type = "image/webp"
+      ensure_minimum_dimensions!(file.tempfile.path)
 
       resize_and_convert_before_storage(file)
     end
 
-    # NOTE
-    # resizes (downsizes) uploaded image to max of 4000x3000 pixels
-    # converts to webp
-    # does not (yet) strip EXIF data (e.g. GPS coordinates, date/time, camera model, dimensions, etc.)
-    # sets quality to 90%
-    # and only then the file is saved to disk
+    # Reject images that are too small to be useful *before* spending time on
+    # the conversion. Checks the display dimensions (EXIF rotation applied).
+    def ensure_minimum_dimensions!(path)
+      image = ::Vips::Image.new_from_file(path, access: :sequential)
+      orientation = begin
+        image.get("orientation")
+      rescue ::Vips::Error
+        1
+      end
+      width, height = ROTATED_ORIENTATIONS.include?(orientation) ? [image.height, image.width] : [image.width, image.height]
+
+      return if width >= Picture::MIN_PIXEL_WIDTH && height >= Picture::MIN_PIXEL_HEIGHT
+
+      raise ImageTooSmall.new("image is #{width}×#{height}px, the minimum is " \
+                              "#{Picture::MIN_PIXEL_WIDTH}×#{Picture::MIN_PIXEL_HEIGHT}px")
+    end
+
     # inspired by: https://vitobotta.com/2020/09/24/resize-and-optimise-images-on-upload-with-activestorage/
     #
+    # `resize_to_limit` uses libvips' thumbnail operation, which auto-rotates
+    # per EXIF Orientation and only ever downsizes (small images pass through).
+    # WebP is lossy here for every source format (PNG/GIF transparency is
+    # preserved, animation is not).
     def resize_and_convert_before_storage(file)
-      # TODO: check file size in pixels and fail when too small? e.g. less than
-      #       Picture::MIN_PIXEL_WIDTH x Picture::MIN_PIXEL_HEIGHT pixels
-      # TODO: check conversion to WebP for all images - lossless for PNG and GIF, lossy for JPEG and TIFF ?
-      #       or at least keep transparency for PNGs and GIFs? (but no animated GIFs)
-      # TODO: only replace when downsized is smaller than original ?! Would need checks on pixel size as well as file size.
+      save_options = { quality: Picture.webp_quality }
+      save_options[:strip] = true if Picture.strip_metadata?
 
-      ImageProcessing::Vips.source(file.tempfile).resize_to_limit(Picture::MAX_PIXEL_WIDTH,
-        Picture::MAX_PIXEL_HEIGHT).convert("webp").saver(quality: 90).call!
+      ImageProcessing::Vips
+        .source(file.tempfile)
+        .resize_to_limit(Picture::MAX_PIXEL_WIDTH, Picture::MAX_PIXEL_HEIGHT)
+        .convert("webp")
+        .saver(**save_options)
+        .call!
     end
   end
 end
