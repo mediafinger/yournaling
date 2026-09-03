@@ -2,21 +2,22 @@
 
 # @label Chronicle card
 #
-# Rendered with `actions: false` — see MemoryCardComponentPreview for why.
+# Rendered with `actions: true` (real Browse/Manage header) — see
+# MemoryCardComponentPreview for the guest-context caveats.
 class ChronicleCardComponentPreview < ViewComponent::Preview
   # @param scope select [browse, manage]
   # @param full toggle
   def playground(scope: :browse, full: true)
-    render ChronicleCardComponent.new(chronicle: demo_chronicle, scope: scope, full: full, actions: false)
+    render ChronicleCardComponent.new(chronicle: demo_chronicle, scope: scope, full: full, actions: true)
   end
 
   def collapsed
-    render ChronicleCardComponent.new(chronicle: demo_chronicle, scope: :browse, full: false, actions: false)
+    render ChronicleCardComponent.new(chronicle: demo_chronicle, scope: :browse, full: false, actions: true)
   end
 
   def with_timeline
     render ChronicleCardComponent.new(chronicle: demo_chronicle(with_entries: true), scope: :browse, full: true,
-      actions: false)
+      actions: true)
   end
 
   private
@@ -33,11 +34,15 @@ class ChronicleCardComponentPreview < ViewComponent::Preview
         []
       end
 
-    Chronicle.new(
+    # build_stubbed (not .new) so the record + team carry ids and the
+    # Browse/Manage header can build `team_chronicle_path` etc. without a
+    # "missing required keys: [:id]" route error.
+    FactoryBot.build_stubbed(
+      :chronicle,
       name: "A year on the coast",
       notice: "Twelve months of small tides on the Portuguese shore, collected walk by walk.",
       start_date: Date.new(2024, 1, 1), end_date: Date.new(2024, 12, 31),
-      team: Team.new(name: "The Coast Year"), entries: entries
+      team: FactoryBot.build_stubbed(:team, name: "The Coast Year"), entries: entries
     )
   end
 end

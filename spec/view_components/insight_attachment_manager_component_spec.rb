@@ -121,6 +121,22 @@ RSpec.describe InsightAttachmentManagerComponent, type: :component do
     expect(rendered.to_html).not_to include('id="drawer_thought_date" name="thought[date]" value=')
   end
 
+  it "renders drawer creation templates without a nested <form> (would be dropped inside the record form)" do
+    view_context = ActionController::Base.new.view_context
+    form = ActionView::Helpers::FormBuilder.new(:memory, memory, view_context, {})
+
+    rendered = render_inline(described_class.new(form: form, scope: "current_team", mode: :single))
+
+    doc = Nokogiri::HTML5.fragment(rendered.to_html)
+    %w[locationTemplate pictureTemplate thoughtTemplate weblinkTemplate storyTemplate].each do |template_name|
+      node = doc.at_css("template[data-insight-manager-target='#{template_name}']")
+      next if node.nil? # storyTemplate only in :multiple mode
+
+      inner = Nokogiri::HTML5.fragment(node.inner_html)
+      expect(inner.css("form")).to be_empty, "#{template_name} must not contain a <form>"
+    end
+  end
+
   it "renders Add action button labels in templates instead of Attach" do
     view_context = ActionController::Base.new.view_context
     form = ActionView::Helpers::FormBuilder.new(:memory, memory, view_context, {})
