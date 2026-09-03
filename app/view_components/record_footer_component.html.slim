@@ -1,0 +1,8 @@
+.yui-card-footer
+  - if date.present?
+    span.yui-card-footer__date = date
+  - if browse? && team.present?
+    = link_to "@#{team.name}", team_timeline_path, class: "yui-card-footer__owner"
+  - elsif !browse?
+    span.yui-card-footer__owner title="Created by"
+      = creator_name
