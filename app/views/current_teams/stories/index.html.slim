@@ -1,3 +1,4 @@
-#stories.yui-stack
-  - @stories.each do |story|
-    = render partial: "current_teams/stories/story", locals: { story: }
+#stories
+  .yui-record-grid
+    - @stories.each do |story|
+      = render partial: "current_teams/stories/story", locals: { story: }

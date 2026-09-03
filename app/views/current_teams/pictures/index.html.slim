@@ -1,3 +1,4 @@
 #pictures
-  - @pictures.each do |picture|
-    = render partial: "current_teams/pictures/picture", locals: { picture: }
+  .yui-record-grid
+    - @pictures.each do |picture|
+      = render partial: "current_teams/pictures/picture", locals: { picture: }

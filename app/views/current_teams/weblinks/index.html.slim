@@ -1,3 +1,4 @@
-#weblinks.yui-stack
-  - @weblinks.each do |weblink|
-    = render partial: "current_teams/weblinks/weblink", locals: { weblink: }
+#weblinks
+  .yui-record-grid
+    - @weblinks.each do |weblink|
+      = render partial: "current_teams/weblinks/weblink", locals: { weblink: }

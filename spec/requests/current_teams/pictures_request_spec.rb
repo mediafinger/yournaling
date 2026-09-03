@@ -40,6 +40,14 @@ RSpec.describe "/current_team/pictures", type: :request do
       expect(response).to be_successful
       expect(response.body).to include(CGI.escapeHTML(name))
     end
+
+    it "lays the cards out in the shared responsive record grid" do
+      Picture.create! valid_attributes
+
+      get current_team_pictures_url
+
+      expect(response.body).to include("yui-record-grid")
+    end
   end
 
   describe "GET /show" do

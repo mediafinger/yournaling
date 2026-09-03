@@ -1,3 +1,4 @@
-#members.yui-stack
-  - @members.each do |member|
-    = render partial: "teams/members/member", locals: { team:, member: }
+#members
+  .yui-record-grid
+    - @members.each do |member|
+      = render partial: "teams/members/member", locals: { team:, member: }

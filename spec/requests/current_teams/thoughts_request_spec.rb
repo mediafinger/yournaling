@@ -25,6 +25,14 @@ RSpec.describe "/current_team/thoughts", type: :request do
 
       expect(response).to be_successful
     end
+
+    it "lays the cards out in the shared responsive record grid" do
+      Thought.create!(valid_attributes)
+
+      get current_team_thoughts_url
+
+      expect(response.body).to include("yui-record-grid")
+    end
   end
 
   describe "GET /show" do

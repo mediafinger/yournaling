@@ -1,3 +1,4 @@
-#thoughts.yui-stack
-  - @thoughts.each do |thought|
-    = render partial: "current_teams/thoughts/thought", locals: { thought: }
+#thoughts
+  .yui-record-grid
+    - @thoughts.each do |thought|
+      = render partial: "current_teams/thoughts/thought", locals: { thought: }

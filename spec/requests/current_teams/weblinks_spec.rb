@@ -35,6 +35,12 @@ RSpec.describe "/current_team/weblinks", type: :request do
       get current_team_weblinks_url
       expect(response).to be_successful
     end
+
+    it "lays the cards out in the shared responsive record grid" do
+      Weblink.create! valid_attributes
+      get current_team_weblinks_url
+      expect(response.body).to include("yui-record-grid")
+    end
   end
 
   describe "GET /show" do
