@@ -24,7 +24,12 @@ class ContentVisibilityModalComponent < ApplicationComponent
   end
 
   def current_member
-    @member.presence || (respond_to?(:helpers) && helpers.respond_to?(:current_member) ? helpers.current_member : super)
+    return @member if @member.present?
+    # No persisted user (guest browsing, or a Lookbook preview) => no membership
+    # to look up. Guard the DB fallback so `current_member` never raises here.
+    return nil unless current_user&.persisted?
+
+    respond_to?(:helpers) && helpers.respond_to?(:current_member) ? helpers.current_member : super
   end
 
   def visibility_states

@@ -39,6 +39,12 @@ RSpec.describe ManageHeaderComponent, type: :component do
     expect(rendered.to_html).to have_link("Rewrite", href: "/current_team/memories/#{memory.to_param}/edit")
   end
 
+  it "renders in a guest context (no user/member) without raising on current_member" do
+    expect {
+      render_inline(described_class.new(record: chronicle, team: team))
+    }.not_to raise_error
+  end
+
   it "renders member header with user name, member since date, visibility, and action buttons" do
     rendered = render_inline(described_class.new(record: member, user: user, team: team, member: member))
 

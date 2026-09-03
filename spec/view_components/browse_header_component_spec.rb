@@ -32,6 +32,12 @@ RSpec.describe BrowseHeaderComponent, type: :component do
     expect(rendered.to_html).to have_link("Open", href: "/teams/#{team.to_param}/chronicles/#{chronicle.to_param}")
   end
 
+  it "renders in a guest context without raising on current_member (Lookbook / public browse)" do
+    expect {
+      render_inline(described_class.new(record: chronicle, team: team))
+    }.not_to raise_error
+  end
+
   it "renders memory date and link to memory show page" do
     rendered = render_inline(described_class.new(record: memory, team: team))
 

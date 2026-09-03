@@ -2,29 +2,29 @@
 
 # @label Memory card
 #
-# Rendered with `actions: false` — Lookbook has no auth / routing context, so
-# the Browse/Manage header component (policy-gated buttons, `team_memory_path`)
-# can't run here. `actions: false` swaps it for a plain meta line. A
-# full-fidelity preview (real header, guest user) is a TODO — see
-# TODO_UI_DESIGN.md Phase 4 → "Records — component previews".
+# Rendered with `actions: true` — the real Browse/Manage header component.
+# Lookbook has no signed-in user, so the header runs in a guest context: the
+# policy-gated "Rewrite" button and the visibility modal stay hidden, only the
+# "Open" link shows. The demo records are `build_stubbed` so they carry ids and
+# the header's path helpers (`team_memory_path`, …) resolve.
 class MemoryCardComponentPreview < ViewComponent::Preview
   # @param scope select [browse, manage]
   def playground(scope: :browse)
-    render MemoryCardComponent.new(memory: demo_memory, scope: scope, actions: false)
+    render MemoryCardComponent.new(memory: demo_memory, scope: scope, actions: true)
   end
 
   def browse
-    render MemoryCardComponent.new(memory: demo_memory, scope: :browse, actions: false)
+    render MemoryCardComponent.new(memory: demo_memory, scope: :browse, actions: true)
   end
 
   def manage
-    render MemoryCardComponent.new(memory: demo_memory, scope: :manage, actions: false)
+    render MemoryCardComponent.new(memory: demo_memory, scope: :manage, actions: true)
   end
 
   def with_attachments
     memory = demo_memory
     memory.location = FactoryBot.build_stubbed(:location, name: "Ericeira", country_code: "pt")
-    render MemoryCardComponent.new(memory: memory, scope: :browse, actions: false)
+    render MemoryCardComponent.new(memory: memory, scope: :browse, actions: true)
   end
 
   private
