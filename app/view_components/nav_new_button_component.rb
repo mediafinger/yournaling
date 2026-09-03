@@ -6,13 +6,15 @@ class NavNewButtonComponent < ApplicationComponent
   MENUS = {
     manage: [
       ["Memory", :new_current_team_memory_path], ["Chronicle", :new_current_team_chronicle_path],
-      ["Picture", :new_current_team_picture_path], ["Thought", :new_current_team_thought_path],
+      ["Picture", :new_current_team_picture_path], ["Story", :new_current_team_story_path],
+      ["Thought", :new_current_team_thought_path],
       ["Location", :new_current_team_location_path], ["Weblink", :new_current_team_weblink_path]
     ],
     admin: [
       ["Memory", :new_admin_memory_path], ["Chronicle", :new_admin_chronicle_path],
       ["Picture", :new_admin_picture_path], ["Location", :new_admin_location_path],
-      ["Thought", :new_admin_thought_path], ["Weblink", :new_admin_weblink_path],
+      ["Story", :new_admin_story_path], ["Thought", :new_admin_thought_path],
+      ["Weblink", :new_admin_weblink_path],
       ["Team", :new_admin_team_path], ["User", :new_admin_user_path], ["Member", :new_admin_member_path]
     ],
   }.freeze
@@ -36,7 +38,10 @@ class NavNewButtonComponent < ApplicationComponent
     when :browse
       return nil unless current_user&.persisted? && current_team.present?
 
-      [["Memory", :new_current_team_memory_path], ["Chronicle", :new_current_team_chronicle_path]]
+      [
+        ["Memory", :new_current_team_memory_path], ["Chronicle", :new_current_team_chronicle_path],
+        ["Story", :new_current_team_story_path]
+      ]
     end
   end
 

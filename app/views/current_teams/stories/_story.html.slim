@@ -1,0 +1,8 @@
+- if local_assigns[:hide_actions]
+  article.yui-stack.yui-stack--sm id=dom_id(story)
+    = render Yui::HeadlineComponent.new(story.name, level: 4)
+    .yui-prose = markdown(story.content)
+- else
+  = render Yui::CardComponent.new(id: dom_id(story)) do
+    = render ManageHeaderComponent.new(record: story, hide_actions: false)
+    .yui-prose = markdown(story.content)

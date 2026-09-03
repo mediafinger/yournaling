@@ -40,6 +40,16 @@ class InsightAttachmentManagerComponent < ApplicationComponent
     end
   end
 
+  def team_stories
+    if team
+      team.stories.order(created_at: :desc)
+    elsif @scope == "admin"
+      Story.order(created_at: :desc)
+    else
+      Story.none
+    end
+  end
+
   def team_thoughts
     if team
       team.thoughts.order(created_at: :desc)
@@ -66,6 +76,10 @@ class InsightAttachmentManagerComponent < ApplicationComponent
 
   def create_picture_url
     @scope == "admin" ? "/admin/pictures.json" : "/current_team/pictures.json"
+  end
+
+  def create_story_url
+    @scope == "admin" ? "/admin/stories.json" : "/current_team/stories.json"
   end
 
   def create_thought_url

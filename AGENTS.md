@@ -52,18 +52,29 @@ source /opt/homebrew/share/chruby/chruby.sh && chruby $(cat .ruby-version 2>/dev
 
 ## Code Quality & Verification Rules
 
-1. **Ruby Change Validation**:
+1. **Regression tests are mandatory for every bug — no exceptions**:
+   - Whenever a bug is reported to you, OR you discover one yourself while working,
+     you MUST add a regression test that fails before your fix and passes after it.
+   - Never fix a bug with only a code change. The test comes with the fix, in the
+     same change set.
+   - Write the failing test first, watch it fail for the right reason, then fix.
+   - The regression test must target the specific broken behaviour (the exact
+     nav entry, the exact route, the exact rendered element, …), so a future
+     change that reintroduces the bug is caught.
+   - This applies to bugs of any size, including "one-line" fixes and config /
+     routing / view / JS-wiring bugs.
+
+2. **Ruby Change Validation**:
    - Always run `bin/mcp_rake_ci` to confirm all changes pass before concluding a task.
    - Follow strict TDD: plan first, write failing specs first, then implement changes.
-   - For every bug or regression discovered, add a regression test.
 
-2. **RuboCop Auto-correction**:
+3. **RuboCop Auto-correction**:
    - After modifying any Ruby file and before running tests or CI, run safe auto-correct:
      ```bash
      bin/mcp_rubocop -A <modified_files>
      ```
 
-3. **Domain Hierarchy**:
+4. **Domain Hierarchy**:
    Keep domain models aligned with the content hierarchy:
    $$\text{Team} \longrightarrow \text{Journey} \longrightarrow \text{Experience} \longrightarrow \text{Chronicle} \longrightarrow \text{Memory} \longrightarrow \text{Insights}$$
 

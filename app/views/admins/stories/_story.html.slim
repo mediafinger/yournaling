@@ -1,0 +1,11 @@
+= render Yui::CardComponent.new(id: dom_id(story)) do
+  = render Yui::HeadlineComponent.new(story.name, level: 3)
+  dl.yui-details
+    dt Headline
+    dd = story.name
+    dt Date
+    dd = story.date
+    = render AdminShowTeamComponent.new(team: story.team)
+    = render AdminShowMetaInformationComponent.new(record: story)
+  .yui-prose = markdown(story.content)
+  = render AdminActionsComponent.new(record: story, name: "story")

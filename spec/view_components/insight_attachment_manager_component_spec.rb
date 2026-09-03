@@ -56,6 +56,30 @@ RSpec.describe InsightAttachmentManagerComponent, type: :component do
     expect(rendered.to_html).to include('data-insight-manager-target="existingWeblinkTemplate"')
   end
 
+  it "offers a Story with a Marksmith editor in multiple mode (Chronicle)" do
+    chronicle = FactoryBot.create(:chronicle, team: team)
+    FactoryBot.create(:story, team: team, name: "Existing Chapter")
+    view_context = ActionController::Base.new.view_context
+    form = ActionView::Helpers::FormBuilder.new(:chronicle, chronicle, view_context, {})
+
+    rendered = render_inline(described_class.new(form: form, scope: "current_team", mode: :multiple))
+
+    expect(rendered.to_html).to include("+ Create New Story")
+    expect(rendered.to_html).to include('data-insight-manager-target="storyTemplate"')
+    expect(rendered.to_html).to include('data-insight-manager-target="existingStoryTemplate"')
+    expect(rendered.to_html).to include('data-controller="marksmith list-continuation"')
+    expect(rendered.to_html).to include("Existing Chapter")
+  end
+
+  it "hides the Story option in single mode (Memory)" do
+    view_context = ActionController::Base.new.view_context
+    form = ActionView::Helpers::FormBuilder.new(:memory, memory, view_context, {})
+
+    rendered = render_inline(described_class.new(form: form, scope: "current_team", mode: :single))
+
+    expect(rendered.to_html).not_to include("+ Create New Story")
+  end
+
   it "renders location creation template with tabs for address, coordinates, and URL" do
     view_context = ActionController::Base.new.view_context
     form = ActionView::Helpers::FormBuilder.new(:memory, memory, view_context, {})

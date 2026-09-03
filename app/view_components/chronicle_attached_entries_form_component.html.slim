@@ -34,6 +34,10 @@
                 - if target.address.present?
                   small.yui-attached-entry__note = target.address
                 small.yui-attached-entry__note Location
+            - when "Story"
+              .yui-attached-entry__body
+                strong.yui-attached-entry__title = entry_display_title(target)
+                small.yui-attached-entry__note Story
             - when "Thought"
               .yui-attached-entry__body
                 em.yui-attached-entry__note = "“#{target.text.truncate(90)}”#{team_suffix(target)}"

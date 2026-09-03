@@ -127,6 +127,38 @@ RSpec.describe InsightResolver do
     end
   end
 
+  describe "#resolve_story" do
+    it "creates a new story when content is provided" do
+      story = nil
+      expect {
+        story = resolver.resolve_story(story_name: "Granada", story_content: "A long walk through the Albaicín at dusk.")
+      }.to change { Story.count }.by(1)
+
+      expect(story).to be_persisted
+      expect(story.name).to eq("Granada")
+      expect(story.content).to eq("A long walk through the Albaicín at dusk.")
+      expect(story.visibility).to eq("published")
+    end
+
+    it "defaults the name when only content is provided" do
+      story = resolver.resolve_story(story_content: "Content that is definitely long enough to persist.")
+      expect(story.name).to eq("Untitled story")
+    end
+
+    it "finds an existing story by ID when no content is provided" do
+      existing = FactoryBot.create(:story, team: team)
+      expect(resolver.resolve_story(story_id: existing.id)).to eq(existing)
+    end
+
+    it "raises ActiveRecord::RecordInvalid when the story is invalid" do
+      expect {
+        resolver.resolve_story(story_name: "x", story_content: "too short")
+      }.to raise_error(ActiveRecord::RecordInvalid)
+
+      expect(parent.errors[:story_content]).to be_present
+    end
+  end
+
   describe "#resolve_weblink" do
     it "creates a new weblink when url/name is provided" do
       link = nil

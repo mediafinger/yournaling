@@ -1,0 +1,10 @@
+= render Yui::CardComponent.new do
+  = form_with(model: [:current_team, story], builder: YuiFormBuilder, html: { class: "yui-stack" }) do |form|
+    = render Yui::HeadlineComponent.new(form_legend, level: 3)
+    = render partial: "shared_partials/form_validation_errors", locals: { record: story }
+    = form.text_field :name, label: "Headline", required: true, placeholder: "The title of your story"
+    .yui-field
+      label.yui-label for="story_content" Story
+      = form.marksmith :content, placeholder: "Write your story in Markdown. GitHub Flavored Markdown is supported."
+    = form.date_field :date
+    = form.submit

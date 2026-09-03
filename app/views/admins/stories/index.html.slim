@@ -1,0 +1,5 @@
+.yui-stack
+  = render Yui::HeadlineComponent.new("Stories", level: 1)
+  #stories.yui-stack
+    = render @stories
+  = render Yui::PaginationComponent.new(pagy: @pagy)

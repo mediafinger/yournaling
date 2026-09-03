@@ -190,6 +190,50 @@ RSpec.describe ChronicleInsightAttacher do
       end
     end
 
+    context "when attaching stories" do
+      let(:existing_story) { FactoryBot.create(:story, team: team, name: "Existing story", visibility: "internal") }
+
+      it "attaches an existing story by ID and aligns visibility" do
+        expect {
+          described_class.call(chronicle: chronicle, params: { story_id: existing_story.id }, user: user)
+        }.to change { chronicle.entries.count }.by(1)
+
+        expect(chronicle.entries.last.entry).to eq(existing_story)
+        expect(existing_story.reload.visibility).to eq("published")
+      end
+
+      it "creates and attaches a new story" do
+        expect {
+          described_class.call(
+            chronicle: chronicle,
+            params: { story_name: "Day One", story_content: "The van finally left the driveway at noon." },
+            user: user
+          )
+        }.to change { Story.count }.by(1).and change { chronicle.entries.count }.by(1)
+
+        new_story = chronicle.entries.last.entry
+        expect(new_story.name).to eq("Day One")
+        expect(new_story.team).to eq(team)
+        expect(new_story.visibility).to eq("published")
+      end
+
+      it "does not attach a story from another team" do
+        other_story = FactoryBot.create(:story, team: FactoryBot.create(:team))
+
+        expect {
+          described_class.call(chronicle: chronicle, params: { story_id: other_story.id }, user: user)
+        }.not_to(change { chronicle.entries.count })
+      end
+
+      it "attaches a story passed through entry_ids (the JS drawer path)" do
+        expect {
+          described_class.call(chronicle: chronicle, params: { entry_ids: [existing_story.id] }, user: user)
+        }.to change { chronicle.entries.count }.by(1)
+
+        expect(chronicle.entries.last.entry).to eq(existing_story)
+      end
+    end
+
     context "when attaching weblinks" do
       let(:existing_weblink) { FactoryBot.create(:weblink, team: team, name: "Existing Link", url: "https://existing.com", visibility: "internal") }
 

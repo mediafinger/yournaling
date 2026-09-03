@@ -4,6 +4,11 @@ Rails.application.routes.draw do
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
   mount Lookbook::Engine, at: "/lookbook" if Rails.env.development?
 
+  # Marksmith Markdown editor preview endpoint. Mounted here explicitly (auto-mount
+  # is off, see config/initializers/marksmith.rb) so it sits above the "*path"
+  # catch-all at the bottom of this file.
+  mount Marksmith::Engine, at: "/marksmith"
+
   root to: "pages#show"
   get "check_newer", to: "pages#check_newer", as: :check_newer_pages
   get "newer", to: "pages#newer", as: :newer_pages
@@ -41,6 +46,7 @@ Rails.application.routes.draw do
 
     resources :locations, only: %i[show]
     resources :pictures, only: %i[show]
+    resources :stories, only: %i[show]
     resources :thoughts, only: %i[show]
     resources :weblinks, only: %i[show]
 
@@ -62,6 +68,7 @@ Rails.application.routes.draw do
     resources :members
     resources :memories
     resources :pictures
+    resources :stories
     resources :thoughts
     resources :weblinks
 
@@ -94,6 +101,7 @@ Rails.application.routes.draw do
     resources :pictures
     resources :teams
     resources :users
+    resources :stories
     resources :thoughts
     resources :weblinks
     get "record_events", to: "record_events#index", as: :record_events

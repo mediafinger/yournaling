@@ -1,4 +1,4 @@
-fieldset.yui-insight-manager data-controller="insight-manager" data-insight-manager-mode-value=@mode data-insight-manager-record-name-value=record_name data-insight-manager-create-location-url-value=create_location_url data-insight-manager-create-picture-url-value=create_picture_url data-insight-manager-create-thought-url-value=create_thought_url data-insight-manager-create-weblink-url-value=create_weblink_url
+fieldset.yui-insight-manager data-controller="insight-manager" data-insight-manager-mode-value=@mode data-insight-manager-record-name-value=record_name data-insight-manager-create-location-url-value=create_location_url data-insight-manager-create-picture-url-value=create_picture_url data-insight-manager-create-story-url-value=create_story_url data-insight-manager-create-thought-url-value=create_thought_url data-insight-manager-create-weblink-url-value=create_weblink_url
   legend.yui-insight-manager__legend
     h4.yui-h4 Attached Insights
     p.yui-text.yui-text--sm.yui-text--muted
@@ -62,6 +62,14 @@ fieldset.yui-insight-manager data-controller="insight-manager" data-insight-mana
           a href="#" data-action="click->insight-manager#openCreate" data-type="picture" + Upload New Picture
           a href="#" data-action="click->insight-manager#openSelect" data-type="picture" Select Existing Picture...
         hr
+
+      - unless @mode == "single"
+        li data-insight-manager-target="storyMenuItem"
+          span.yui-insight-menu__group 📖 Story
+          div
+            a href="#" data-action="click->insight-manager#openCreate" data-type="story" + Create New Story
+            a href="#" data-action="click->insight-manager#openSelect" data-type="story" Select Existing Story...
+          hr
 
       li data-insight-manager-target="thoughtMenuItem"
         span.yui-insight-menu__group 💭 Thought
@@ -142,6 +150,21 @@ fieldset.yui-insight-manager data-controller="insight-manager" data-insight-mana
         button.yui-btn.yui-btn--primary.yui-btn--sm type="button" data-action="click->insight-manager#submitCreate" data-type="picture" Create Picture
         button.yui-btn.yui-btn--secondary.yui-btn--sm type="button" data-action="click->insight-manager#closeDrawer" Cancel
 
+  template data-insight-manager-target="storyTemplate"
+    form.yui-stack.yui-stack--sm
+      .yui-field
+        label.yui-label for="drawer_story_name" Headline
+        input.yui-input type="text" id="drawer_story_name" name="story[name]" placeholder="The title of your story" required=true
+      .yui-field
+        label.yui-label Story
+        = helpers.marksmith_tag "story[content]", id: "drawer-story-marksmith"
+      .yui-field
+        label.yui-label for="drawer_story_date" Date
+        input.yui-input type="date" id="drawer_story_date" name="story[date]"
+      .yui-cluster
+        button.yui-btn.yui-btn--primary.yui-btn--sm type="button" data-action="click->insight-manager#submitCreate" data-type="story" Create Story
+        button.yui-btn.yui-btn--secondary.yui-btn--sm type="button" data-action="click->insight-manager#closeDrawer" Cancel
+
   template data-insight-manager-target="thoughtTemplate"
     form.yui-stack.yui-stack--sm
       .yui-field
@@ -195,6 +218,18 @@ fieldset.yui-insight-manager data-controller="insight-manager" data-insight-mana
             option value=pic.id data-thumb-url=(rails_representation_path(pic.thumbnail) if pic.thumbnail) = pic.name
       .yui-cluster
         button.yui-btn.yui-btn--primary.yui-btn--sm type="button" data-action="click->insight-manager#selectExisting" Add Picture
+        button.yui-btn.yui-btn--secondary.yui-btn--sm type="button" data-action="click->insight-manager#closeDrawer" Cancel
+
+  template data-insight-manager-target="existingStoryTemplate"
+    .yui-stack.yui-stack--sm
+      .yui-field
+        label.yui-label for="select_existing_story" Select from your team's stories:
+        select.yui-select id="select_existing_story" data-type="story"
+          option value="" -- Choose a Story --
+          - team_stories.each do |st|
+            option value=st.id = st.name
+      .yui-cluster
+        button.yui-btn.yui-btn--primary.yui-btn--sm type="button" data-action="click->insight-manager#selectExisting" Add Story
         button.yui-btn.yui-btn--secondary.yui-btn--sm type="button" data-action="click->insight-manager#closeDrawer" Cancel
 
   template data-insight-manager-target="existingThoughtTemplate"

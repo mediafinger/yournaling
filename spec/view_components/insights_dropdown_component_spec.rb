@@ -8,6 +8,7 @@ RSpec.describe InsightsDropdownComponent, type: :component do
 
     expect(rendered.to_html).to have_css("details.yui-menu summary", text: "Insights")
     expect(rendered.to_html).to have_link("Pictures", href: "/current_team/pictures", visible: :all)
+    expect(rendered.to_html).to have_link("Stories", href: "/current_team/stories", visible: :all)
     expect(rendered.to_html).to have_link("Thoughts", href: "/current_team/thoughts", visible: :all)
     expect(rendered.to_html).to have_link("Locations", href: "/current_team/locations", visible: :all)
     expect(rendered.to_html).to have_link("Weblinks", href: "/current_team/weblinks", visible: :all)
@@ -19,6 +20,7 @@ RSpec.describe InsightsDropdownComponent, type: :component do
     expect(rendered.to_html).to have_css("details.yui-menu summary", text: "Insights")
     expect(rendered.to_html).to have_link("Pictures", href: "/admin/pictures", visible: :all)
     expect(rendered.to_html).to have_link("Locations", href: "/admin/locations", visible: :all)
+    expect(rendered.to_html).to have_link("Stories", href: "/admin/stories", visible: :all)
     expect(rendered.to_html).to have_link("Thoughts", href: "/admin/thoughts", visible: :all)
     expect(rendered.to_html).to have_link("Weblinks", href: "/admin/weblinks", visible: :all)
   end
