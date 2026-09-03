@@ -116,7 +116,6 @@ export default class extends Controller {
     event.preventDefault()
     this.hideDrawerError()
 
-    const form = event.currentTarget.closest("form") || this.drawerFormContainerTarget.querySelector("form")
     const type = event.currentTarget.dataset.type
     const submitBtn = event.currentTarget
 
@@ -130,7 +129,10 @@ export default class extends Controller {
     const url = urlMap[type]
     if (!url) return
 
-    const formData = new FormData(form)
+    // The drawer template is a plain <div>, not a <form> (it lives inside the
+    // outer record form, and nested forms are dropped by the parser). Collect
+    // the drawer's own named fields so we never serialize the outer form.
+    const formData = this.collectDrawerFields()
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute("content")
 
     submitBtn.disabled = true
@@ -162,6 +164,22 @@ export default class extends Controller {
       submitBtn.disabled = false
       submitBtn.textContent = originalBtnText
     }
+  }
+
+  collectDrawerFields() {
+    const formData = new FormData()
+    const fields = this.drawerFormContainerTarget.querySelectorAll("input[name], select[name], textarea[name]")
+    fields.forEach(field => {
+      if (field.disabled) return
+      if (field.type === "file") {
+        if (field.files && field.files.length > 0) formData.append(field.name, field.files[0])
+      } else if (field.type === "checkbox" || field.type === "radio") {
+        if (field.checked) formData.append(field.name, field.value)
+      } else {
+        formData.append(field.name, field.value)
+      }
+    })
+    return formData
   }
 
   selectExisting(event) {

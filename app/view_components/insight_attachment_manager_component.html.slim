@@ -93,8 +93,13 @@ fieldset.yui-insight-manager data-controller="insight-manager" data-insight-mana
     div data-insight-manager-target="drawerFormContainer"
 
   / Templates for in-flow creation
+  / NOTE: these use a plain div, not a <form>. The drawer lives inside the outer
+  / record <form>, and the HTML parser drops a nested <form> on inject — which
+  / made `closest("form")` in the Stimulus controller resolve to the outer form
+  / (submitting its `_method=patch` / memo fields to `/pictures.json`, breaking
+  / picture upload on the edit page). The controller collects fields by name.
   template data-insight-manager-target="locationTemplate"
-    form.yui-stack.yui-stack--sm
+    .yui-stack.yui-stack--sm.yui-insight-drawer__form
       .yui-field
         label.yui-label for="drawer_location_name" Location Name
         input.yui-input type="text" id="drawer_location_name" name="location[name]" placeholder="e.g. Cabo de Gata Camping" required=true
@@ -135,7 +140,7 @@ fieldset.yui-insight-manager data-controller="insight-manager" data-insight-mana
         button.yui-btn.yui-btn--secondary.yui-btn--sm type="button" data-action="click->insight-manager#closeDrawer" Cancel
 
   template data-insight-manager-target="pictureTemplate"
-    form.yui-stack.yui-stack--sm data-controller="picture-select"
+    .yui-stack.yui-stack--sm.yui-insight-drawer__form data-controller="picture-select"
       .yui-field
         label.yui-label for="drawer_picture_file" Image File
         input.yui-input type="file" id="drawer_picture_file" name="picture[file]" accept=allowed_image_types_accept required=true data-picture-select-target="fileInput" data-action="change->picture-select#updateFilePreview"
@@ -151,7 +156,7 @@ fieldset.yui-insight-manager data-controller="insight-manager" data-insight-mana
         button.yui-btn.yui-btn--secondary.yui-btn--sm type="button" data-action="click->insight-manager#closeDrawer" Cancel
 
   template data-insight-manager-target="storyTemplate"
-    form.yui-stack.yui-stack--sm
+    .yui-stack.yui-stack--sm.yui-insight-drawer__form
       .yui-field
         label.yui-label for="drawer_story_name" Headline
         input.yui-input type="text" id="drawer_story_name" name="story[name]" placeholder="The title of your story" required=true
@@ -166,7 +171,7 @@ fieldset.yui-insight-manager data-controller="insight-manager" data-insight-mana
         button.yui-btn.yui-btn--secondary.yui-btn--sm type="button" data-action="click->insight-manager#closeDrawer" Cancel
 
   template data-insight-manager-target="thoughtTemplate"
-    form.yui-stack.yui-stack--sm
+    .yui-stack.yui-stack--sm.yui-insight-drawer__form
       .yui-field
         label.yui-label for="drawer_thought_text" Thought Text
         textarea.yui-textarea id="drawer_thought_text" name="thought[text]" rows="4" placeholder="Write a memorable thought, quote, or reflection..." required=true
@@ -178,7 +183,7 @@ fieldset.yui-insight-manager data-controller="insight-manager" data-insight-mana
         button.yui-btn.yui-btn--secondary.yui-btn--sm type="button" data-action="click->insight-manager#closeDrawer" Cancel
 
   template data-insight-manager-target="weblinkTemplate"
-    form.yui-stack.yui-stack--sm
+    .yui-stack.yui-stack--sm.yui-insight-drawer__form
       .yui-field
         label.yui-label for="drawer_weblink_name" Link Name
         input.yui-input type="text" id="drawer_weblink_name" name="weblink[name]" placeholder="e.g. Route Planning Guide" required=true
