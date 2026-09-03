@@ -42,7 +42,7 @@ RSpec.describe "/current_team/thoughts", type: :request do
       get current_team_thought_url(thought)
 
       expect(response).to be_successful
-      expect(response.body).to include("Visibility:")
+      expect(response.body).to include("Change visibility")
       expect(response.body).to include("Rewrite")
     end
   end

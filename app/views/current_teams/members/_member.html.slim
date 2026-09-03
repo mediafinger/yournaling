@@ -1,5 +1,9 @@
-= render Yui::CardComponent.new(id: dom_id(member)) do
-  = render ManageHeaderComponent.new(record: member, hide_actions: local_assigns[:hide_actions])
+= render Yui::CardComponent.new(id: dom_id(member)) do |card|
+  - card.with_header do
+    = render ManageHeaderComponent.new(record: member, hide_actions: local_assigns[:hide_actions])
+  - unless local_assigns[:hide_actions]
+    - card.with_footer do
+      = render RecordFooterComponent.new(record: member, scope: :manage)
   dl.yui-details
     dt Roles
     dd = member.roles.to_sentence

@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-# A Chronicle rendered as a card: the "Chronicle" eyebrow + a Browse / Manage
-# header, the notice, and — when expanded — a vertical timeline of its entries
-# (or its first picture as a fallback).
+# A Chronicle rendered as a card: a Browse / Manage header (name + actions),
+# the notice, a footer (date + team/creator), and — when expanded — a vertical
+# timeline of its entries (or its first picture as a fallback).
 #
 #   = render ChronicleCardComponent.new(chronicle: chronicle, scope: :browse, team: team)
 #   = render ChronicleCardComponent.new(chronicle: chronicle, scope: :manage, full: true)
@@ -31,12 +31,6 @@ class ChronicleCardComponent < ApplicationComponent
 
   def expanded?
     @full || (helpers.controller_name == "chronicles" && helpers.action_name == "show")
-  end
-
-  # The manage header renders its own title; the browse header does not, and
-  # neither does the static meta line.
-  def render_own_title?
-    scope == :browse || !actions?
   end
 
   def header_component

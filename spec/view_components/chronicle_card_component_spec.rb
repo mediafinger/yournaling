@@ -5,7 +5,8 @@ require "rails_helper"
 RSpec.describe ChronicleCardComponent, type: :component do
   let(:team) { FactoryBot.build_stubbed(:team, name: "The Coast Year") }
   let(:chronicle) do
-    FactoryBot.build_stubbed(:chronicle, name: "A year on the coast", notice: "Twelve months of small tides.", team: team)
+    FactoryBot.build_stubbed(:chronicle, name: "A year on the coast", notice: "Twelve months of small tides.", team: team,
+      start_date: Date.new(2024, 1, 1))
   end
 
   context "with actions: false (previews / static)" do
@@ -13,15 +14,16 @@ RSpec.describe ChronicleCardComponent, type: :component do
       render_inline(described_class.new(chronicle: chronicle || self.chronicle, actions: false, **))
     end
 
-    it "renders the eyebrow, its own title, the notice and a meta line" do
+    it "renders an h4 title, the notice, a meta line and a footer — no eyebrow, no record-header" do
       rendered = render_card(scope: :browse)
 
       expect(rendered).to have_css("article.yui-card.yui-chronicle-card##{ActionView::RecordIdentifier.dom_id(chronicle)}")
-      expect(rendered).to have_css(".yui-eyebrow", text: "Chronicle")
-      expect(rendered).to have_css("h3", text: "A year on the coast")
+      expect(rendered).to have_no_css(".yui-eyebrow")
+      expect(rendered).to have_css("h4", text: "A year on the coast")
       expect(rendered).to have_css(".yui-chronicle-card__summary", text: "Twelve months of small tides.")
       expect(rendered).to have_css(".yui-meta", text: "The Coast Year")
       expect(rendered).to have_no_css(".yui-record-header")
+      expect(rendered).to have_css(".yui-card-footer")
     end
 
     context "with entries (built in memory)" do
@@ -48,12 +50,14 @@ RSpec.describe ChronicleCardComponent, type: :component do
     end
   end
 
-  it "renders the Browse header (no buttons for a guest) when actions: true" do
+  it "renders the Browse header (h4 name, no buttons for a guest) and an @team footer link when actions: true" do
     chronicle = FactoryBot.create(:chronicle, team: FactoryBot.create(:team, name: "The Coast Year"),
       visibility: "published")
 
     rendered = render_inline(described_class.new(chronicle: chronicle, scope: :browse, team: chronicle.team))
 
-    expect(rendered).to have_css(".yui-record-header", text: "The Coast Year")
+    expect(rendered).to have_css(".yui-record-header h4.yui-record-header__title", text: chronicle.name)
+    expect(rendered).to have_css(".yui-record-header", text: chronicle.name)
+    expect(rendered).to have_link("@The Coast Year", href: "/teams/#{chronicle.team.to_param}")
   end
 end

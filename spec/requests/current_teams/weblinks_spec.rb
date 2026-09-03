@@ -48,7 +48,7 @@ RSpec.describe "/current_team/weblinks", type: :request do
       weblink = Weblink.create! valid_attributes
       get current_team_weblink_url(weblink)
       expect(response).to be_successful
-      expect(response.body).to include("Visibility:")
+      expect(response.body).to include("Change visibility")
       expect(response.body).to include("Rewrite")
     end
   end

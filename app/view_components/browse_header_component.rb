@@ -32,26 +32,12 @@ class BrowseHeaderComponent < ApplicationComponent
   def title
     return @title if @title.present?
 
-    if @record.respond_to?(:name) && @record.name.present?
-      @record.name
+    case @record
+    when Member then @record.user.name
+    when Memory then @record.memo.to_s.truncate(60)
+    when Thought then @record.text.to_s.truncate(60)
     else
-      @record.class.model_name.human
-    end
-  end
-
-  def date
-    return @date if @date.present?
-
-    if @record.is_a?(Chronicle)
-      if @record.end_date.present?
-        "#{@record.start_date} – #{@record.end_date}"
-      else
-        @record.start_date.to_s
-      end
-    elsif @record.respond_to?(:date) && @record.date.present?
-      @record.date.to_s
-    elsif @record.respond_to?(:created_at) && @record.created_at.present?
-      @record.created_at.to_date.to_s
+      @record.try(:name).presence || @record.class.model_name.human
     end
   end
 

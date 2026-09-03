@@ -39,8 +39,14 @@ class RecordFooterComponent < ApplicationComponent
     scope == :browse
   end
 
+  def team_handle
+    "@#{team.name}"
+  end
+
+  # A persisted team has a route; the in-memory records on /example and in
+  # Lookbook previews do not, so there the handle renders as plain text.
   def team_timeline_path
-    helpers.team_home_path(team)
+    helpers.team_home_path(team) if team&.persisted?
   end
 
   def creator_name

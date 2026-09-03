@@ -1,15 +1,30 @@
 # frozen_string_literal: true
 
+# The header row of a record card in the manage area: the record name on the
+# left (always an <h4>), and the action buttons grouped on the right —
+# Open, Rewrite, and the visibility control.
+#
+# The visibility control replaces the old "Visibility: <state>" meta text plus
+# pencil icon: when the current user may change visibility it is the primary
+# button that opens ContentVisibilityModalComponent; otherwise it is a static
+# badge showing the state. The record's date and creator live in the card
+# footer now (see RecordFooterComponent), not here.
 class ManageHeaderComponent < ApplicationComponent
-  def initialize(record:, user: nil, team: nil, member: nil, title: nil, date: nil, date_label: nil,
+  VISIBILITY_BADGE_VARIANTS = {
+    "draft" => :neutral,
+    "internal" => :info,
+    "published" => :success,
+    "archived" => :warning,
+    "blocked" => :danger,
+  }.freeze
+
+  def initialize(record:, user: nil, team: nil, member: nil, title: nil,
                  hide_actions: false, full: false, heading_tag: nil)
     @record = record
     @user = user
     @team = team
     @member = member
     @title = title
-    @date = date
-    @date_label = date_label
     @hide_actions = hide_actions
     @full = full
     @heading_tag = heading_tag
@@ -35,45 +50,17 @@ class ManageHeaderComponent < ApplicationComponent
   def title
     return @title if @title.present?
 
-    if @record.is_a?(Member)
-      @record.user.name
-    elsif @record.respond_to?(:name) && @record.name.present?
-      @record.name
+    case @record
+    when Member then @record.user.name
+    when Memory then @record.memo.to_s.truncate(60)
+    when Thought then @record.text.to_s.truncate(60)
     else
-      @record.class.model_name.human
-    end
-  end
-
-  def date
-    return @date if @date.present?
-
-    if @record.is_a?(Chronicle)
-      if @record.end_date.present?
-        "#{@record.start_date} – #{@record.end_date}"
-      else
-        @record.start_date.to_s
-      end
-    elsif @record.respond_to?(:date) && @record.date.present?
-      @record.date.to_s
-    elsif @record.respond_to?(:created_at) && @record.created_at.present?
-      @record.created_at.to_date.to_s
-    end
-  end
-
-  def date_label
-    return @date_label if @date_label.present?
-
-    if @record.is_a?(Member)
-      "Member since"
-    elsif @record.is_a?(Chronicle) && @record.end_date.present?
-      "Dates"
-    else
-      "Date"
+      @record.try(:name).presence || @record.class.model_name.human
     end
   end
 
   def heading_tag
-    @heading_tag || (@record.is_a?(Chronicle) ? :h3 : :h4)
+    @heading_tag || :h4
   end
 
   def show_path
@@ -106,5 +93,24 @@ class ManageHeaderComponent < ApplicationComponent
     return false if helpers.respond_to?(:action_name) && helpers.action_name == "show"
 
     true
+  end
+
+  def show_visibility?
+    !@hide_actions && @record.respond_to?(:visibility) && @record.visibility.present?
+  end
+
+  def can_change_visibility?
+    return false unless show_visibility?
+    return false unless current_user.present?
+
+    allowed_to?(:update?, @record, with: ContentVisibilityPolicy)
+  end
+
+  def visibility_badge_variant
+    VISIBILITY_BADGE_VARIANTS.fetch(@record.visibility.to_s, :neutral)
+  end
+
+  def visibility_label
+    @record.visibility.to_s.capitalize
   end
 end

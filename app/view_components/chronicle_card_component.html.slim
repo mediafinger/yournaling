@@ -1,14 +1,14 @@
 = render Yui::CardComponent.new(id: helpers.dom_id(chronicle), variant: :elevated, accent: "accent", class: "yui-chronicle-card") do |card|
   - card.with_header do
-    .yui-stack.yui-stack--sm
-      .yui-cluster.yui-cluster--between
-        = render Yui::EyebrowComponent.new("Chronicle")
-        - if actions?
-          = render header_component
-        - elsif static_meta.present?
-          span.yui-meta = static_meta
-      - if render_own_title?
-        = render Yui::HeadlineComponent.new(chronicle.name, level: 3)
+    - if actions?
+      = render header_component
+    - else
+      = render Yui::HeadlineComponent.new(chronicle.name, level: 4)
+      - if static_meta.present?
+        span.yui-meta = static_meta
+
+  - card.with_footer do
+    = render RecordFooterComponent.new(record: chronicle, scope: scope, team: team)
 
   - if chronicle.notice.present?
     p.yui-chronicle-card__summary = chronicle.notice

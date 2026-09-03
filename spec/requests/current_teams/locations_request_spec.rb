@@ -52,7 +52,7 @@ RSpec.describe "/current_team/locations", type: :request do
       get current_team_location_url(location)
 
       expect(response).to be_successful
-      expect(response.body).to include("Visibility:")
+      expect(response.body).to include("Change visibility")
       expect(response.body).to include("Rewrite")
     end
   end

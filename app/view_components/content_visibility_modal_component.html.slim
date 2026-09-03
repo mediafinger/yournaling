@@ -1,7 +1,7 @@
 = render Yui::ModalComponent.new(title: "Change visibility", size: :sm) do |modal|
   - modal.with_trigger do
-    button.yui-btn.yui-btn--ghost.yui-btn--sm type="button" title="Change visibility" aria-label="Change visibility"
-      = render Yui::IconComponent.new("pencil", size: :sm)
+    button.yui-btn.yui-btn--primary.yui-btn--sm type="button" title="Change visibility" aria-label="Change visibility"
+      = @record.visibility.to_s.capitalize
 
   .yui-visibility-choices
     - visibility_states.each do |state|

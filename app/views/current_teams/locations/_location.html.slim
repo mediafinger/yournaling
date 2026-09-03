@@ -4,8 +4,11 @@
     - if location.country
       = " #{location.country.emoji_flag}"
 - else
-  = render Yui::CardComponent.new(id: dom_id(location)) do
-    = render ManageHeaderComponent.new(record: location, hide_actions: false)
+  = render Yui::CardComponent.new(id: dom_id(location)) do |card|
+    - card.with_header do
+      = render ManageHeaderComponent.new(record: location)
+    - card.with_footer do
+      = render RecordFooterComponent.new(record: location, scope: :manage)
     dl.yui-details
       - if location.country_label
         dt Country

@@ -1,8 +1,11 @@
 - if local_assigns[:hide_actions]
   = render Yui::TagComponent.new(weblink.name.presence || weblink.url, href: weblink.url, external: true, icon: "link", id: dom_id(weblink))
 - else
-  = render Yui::CardComponent.new(id: dom_id(weblink)) do
-    = render ManageHeaderComponent.new(record: weblink, hide_actions: false)
+  = render Yui::CardComponent.new(id: dom_id(weblink)) do |card|
+    - card.with_header do
+      = render ManageHeaderComponent.new(record: weblink)
+    - card.with_footer do
+      = render RecordFooterComponent.new(record: weblink, scope: :manage)
     dl.yui-details
       dt URL
       dd = render ExternalLinkComponent.new(url: weblink.url, text: weblink.url)

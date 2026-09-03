@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
-# A Memory rendered as a card: the "Memory" badge + a Browse / Manage header,
-# the memo, and its attached insights (picture / thought / location / weblink).
+# A Memory rendered as a card: a Browse / Manage header (truncated memo as the
+# name + actions), a footer (date + team/creator), the memo, and its attached
+# insights (picture / thought / location / weblink).
 #
 #   = render MemoryCardComponent.new(memory: memory, scope: :browse, team: team)
 #   = render MemoryCardComponent.new(memory: memory, scope: :manage)
