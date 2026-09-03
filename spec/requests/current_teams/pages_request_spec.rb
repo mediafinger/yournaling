@@ -42,6 +42,16 @@ RSpec.describe "CurrentTeams::Pages (Manage Timeline)", type: :request do
         expect(response.body).not_to include("Other Team Post")
       end
 
+      it "renders stories in the manage timeline with their Markdown rendered" do
+        FactoryBot.create(:story, team: team, name: "Timeline Story", content: "## Heading\n\nA rendered chapter.",
+          visibility: "draft", updated_at: 30.minutes.ago)
+
+        get current_team_home_url
+
+        expect(response.body).to include("Timeline Story")
+        expect(response.body).to include("A rendered chapter.")
+      end
+
       it "renders feed refresh controller markup and banner" do
         get current_team_home_url
 

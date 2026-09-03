@@ -8,6 +8,8 @@
     = render partial: "current_teams/pictures/picture", locals: { picture: artefact.artefact }
   - when "Location"
     = render partial: "current_teams/locations/location", locals: { location: artefact.artefact }
+  - when "Story"
+    = render partial: "current_teams/stories/story", locals: { story: artefact.artefact }
   - when "Thought"
     = render partial: "current_teams/thoughts/thought", locals: { thought: artefact.artefact }
   - when "Weblink"

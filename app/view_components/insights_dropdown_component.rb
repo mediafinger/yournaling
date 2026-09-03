@@ -3,8 +3,8 @@
 # The "Insights" nav menu (pictures / locations / thoughts / weblinks).
 class InsightsDropdownComponent < ApplicationComponent
   SECTIONS = {
-    admin: %w[pictures locations thoughts weblinks],
-    current_team: %w[pictures thoughts locations weblinks],
+    admin: %w[pictures locations stories thoughts weblinks],
+    current_team: %w[pictures stories thoughts locations weblinks],
   }.freeze
 
   def initialize(scope: :current_team)

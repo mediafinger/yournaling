@@ -58,6 +58,7 @@ RSpec.describe NavNewButtonComponent, type: :component do
       expect(rendered.to_html).to have_css("details.yui-menu summary", text: "+ New")
       expect(rendered.to_html).to have_link("Memory", href: "/current_team/memories/new", visible: :all)
       expect(rendered.to_html).to have_link("Picture", href: "/current_team/pictures/new", visible: :all)
+      expect(rendered.to_html).to have_link("Story", href: "/current_team/stories/new", visible: :all)
       expect(rendered.to_html).to have_link("Member", href: "/current_team/members/new", visible: :all)
     end
   end

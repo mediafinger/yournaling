@@ -140,9 +140,16 @@ column or fragment cache if profiling shows cost.
   tests for `javascript:`/`data:` URLs, `on*=` handlers, `<style>`/`<iframe>`.
 - **Length limit** is on the Markdown source (16_384), not the rendered HTML.
 - **Search** indexes raw Markdown (syntax noise) — acceptable for v1.
-- **Quick-create drawer** in the Chronicle form uses a plain `<textarea>` for the
-  new-Story path (no full Marksmith editor in the cloned `<template>`); the rich
-  editor lives on the dedicated Story new/edit pages. Acceptable MVP trade-off.
+- **Quick-create drawer** in the Chronicle form renders the full Marksmith editor
+  inside the cloned `<template>` (`helpers.marksmith_tag "story[content]"`);
+  Stimulus connects it when the drawer inserts the markup.
+- The Marksmith engine's **auto-mount appends its routes after the `*path`
+  catch-all**, so the preview endpoint 404s. Fixed by `automatically_mount_engine
+  = false` in `config/initializers/marksmith.rb` + an explicit
+  `mount Marksmith::Engine, at: "/marksmith"` near the top of `config/routes.rb`.
+- `Story` had to be added to the `team_artefacts` SQL view (v2) and the
+  `current_teams/pages/_artefact` partial, or it never appears in the manage feed;
+  and to `NavNewButtonComponent` / `InsightsDropdownComponent` for the nav menus.
 - **Visibility default** `draft` (not `internal`) — see §2.
 - **No Memory association** — `InsightDestroyModalComponent#memories` and
   `VisibilityConstrainedByParents` must tolerate a `Story` without `#memories`.

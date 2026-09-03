@@ -156,8 +156,8 @@ fieldset.yui-insight-manager data-controller="insight-manager" data-insight-mana
         label.yui-label for="drawer_story_name" Headline
         input.yui-input type="text" id="drawer_story_name" name="story[name]" placeholder="The title of your story" required=true
       .yui-field
-        label.yui-label for="drawer_story_content" Story (Markdown)
-        textarea.yui-textarea id="drawer_story_content" name="story[content]" rows="8" placeholder="Write your story in Markdown. Open the dedicated Story editor for a rich toolbar and preview." required=true
+        label.yui-label Story
+        = helpers.marksmith_tag "story[content]", id: "drawer-story-marksmith"
       .yui-field
         label.yui-label for="drawer_story_date" Date
         input.yui-input type="date" id="drawer_story_date" name="story[date]"

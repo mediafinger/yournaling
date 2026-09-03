@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_03_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_03_130000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -382,6 +382,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_03_120000) do
       locations.updated_at,
       locations.created_at
      FROM locations
+  UNION ALL
+   SELECT stories.id AS artefact_id,
+      'Story'::text AS artefact_type,
+      stories.team_id,
+      stories.visibility,
+      stories.updated_at,
+      stories.created_at
+     FROM stories
   UNION ALL
    SELECT thoughts.id AS artefact_id,
       'Thought'::text AS artefact_type,

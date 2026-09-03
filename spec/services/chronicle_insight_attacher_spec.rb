@@ -224,6 +224,14 @@ RSpec.describe ChronicleInsightAttacher do
           described_class.call(chronicle: chronicle, params: { story_id: other_story.id }, user: user)
         }.not_to(change { chronicle.entries.count })
       end
+
+      it "attaches a story passed through entry_ids (the JS drawer path)" do
+        expect {
+          described_class.call(chronicle: chronicle, params: { entry_ids: [existing_story.id] }, user: user)
+        }.to change { chronicle.entries.count }.by(1)
+
+        expect(chronicle.entries.last.entry).to eq(existing_story)
+      end
     end
 
     context "when attaching weblinks" do
