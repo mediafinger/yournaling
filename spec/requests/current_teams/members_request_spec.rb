@@ -44,6 +44,11 @@ RSpec.describe "/current_team/members", type: :request do
         get current_team_members_url
         expect(response).to be_successful
       end
+
+      it "lays the cards out in the shared responsive record grid" do
+        get current_team_members_url
+        expect(response.body).to include("yui-record-grid")
+      end
     end
   end
 

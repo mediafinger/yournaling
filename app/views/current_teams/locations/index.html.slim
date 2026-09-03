@@ -1,3 +1,4 @@
 #locations
-  - @locations.each do |location|
-    = render partial: "current_teams/locations/location", locals: { location: }
+  .yui-record-grid
+    - @locations.each do |location|
+      = render partial: "current_teams/locations/location", locals: { location: }
