@@ -16,11 +16,13 @@
       - if location.address.present?
         dt Address
         dd = location.address
+      - if location.located?
+        dt Map
+        dd = render ExternalLinkComponent.new(url: location.gmaps_coordinates_url, text: "Google Maps")
       - if location.url.present?
-        dt URL
+        dt Website
         dd = render ExternalLinkComponent.new(url: location.url, text: location.url)
       - if location.description.present?
         dt Description
         dd = location.description
-    - if location.coordinates.present?
-      = render MapLinkComponent.new(location: location, width: 600, height: 400)
+    = render MapLinkComponent.new(location: location, width: 600, height: 400)

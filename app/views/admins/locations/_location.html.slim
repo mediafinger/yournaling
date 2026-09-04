@@ -14,7 +14,7 @@
           - location.geocoded_address.sort.each do |k, v|
             li = "#{k}: #{v}"
     - if location.url.present?
-      dt URL
+      dt Website
       dd = render ExternalLinkComponent.new(url: location.url, text: location.url)
     - if location.lat.present? || location.long.present?
       dt Coordinates

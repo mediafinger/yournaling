@@ -19,7 +19,10 @@ RSpec.describe "/current_team/locations", type: :request do
   let(:user) { FactoryBot.create(:user) }
   let(:roles) { %i[owner manager editor] }
 
-  let(:valid_attributes) { { name: "Camping spot near the beach", country_code: "de", url: "www.yournaling.com", team: } }
+  let(:valid_attributes) do
+    { name: "Camping spot near the beach", country_code: "de", address: "Hamburg Hafenstraße",
+      lat: 53.5453, long: 9.9622, url: "www.yournaling.com", team: }
+  end
   let(:invalid_attributes) { { name: nil } }
 
   before do

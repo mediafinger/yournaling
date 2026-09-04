@@ -13,7 +13,7 @@
       .yui-btn-group role="group"
         button.yui-tabs__tab type="button" data-yui-tabs-target="tab" data-tab-index="0" data-action="click->yui-tabs#select keydown->yui-tabs#onKeydown" Address
         button.yui-tabs__tab type="button" data-yui-tabs-target="tab" data-tab-index="1" data-action="click->yui-tabs#select keydown->yui-tabs#onKeydown" GPS Coordinates
-        button.yui-tabs__tab type="button" data-yui-tabs-target="tab" data-tab-index="2" data-action="click->yui-tabs#select keydown->yui-tabs#onKeydown" Map / Web URL
+        button.yui-tabs__tab type="button" data-yui-tabs-target="tab" data-tab-index="2" data-action="click->yui-tabs#select keydown->yui-tabs#onKeydown" Map Link
 
       div data-yui-tabs-target="panel"
         = form.text_field :address, label: "Street Address / City", placeholder: "e.g. Playa de los Genoveses, San Jose"
@@ -24,7 +24,8 @@
           = form.text_field :long, label: "Longitude", placeholder: "e.g. -2.2425"
 
       div data-yui-tabs-target="panel"
-        = form.url_field :url, label: "Map / Website URL", placeholder: "e.g. https://maps.google.com/..."
+        = form.url_field :map_url, label: "Map Link", placeholder: "Paste a Google / Apple / OpenStreetMap link", hint: "We read the coordinates out of the link."
 
+    = form.url_field :url, label: "Website (optional)", placeholder: "e.g. https://campsite.example.com", hint: "Official site, booking or info page — not the map."
     = form.text_area :description, label: "Notes / Description (Optional)", placeholder: "Additional details about this place..."
     = form.submit
