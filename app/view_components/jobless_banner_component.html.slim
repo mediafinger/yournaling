@@ -1,0 +1,14 @@
+.yui-toast-region.yui-toast-region--jobless
+  .yui-toast.yui-toast--jobless role="alert" aria-live="assertive" data-controller="yui-toast" data-yui-toast-delay-value="0"
+    .yui-toast__icon
+      = render Yui::IconComponent.new("triangle-alert", size: :sm)
+    .yui-toast__body
+      p.yui-toast__title No background jobs are running
+      p
+        ' Solid Queue has no worker. Restart with
+        code bin/dev
+        '  instead of
+        code bin/rails server
+        | , or jobs will never run.
+    button.yui-toast__dismiss type="button" aria-label="Dismiss" data-action="yui-toast#dismiss"
+      = render Yui::IconComponent.new("x", size: :sm)
