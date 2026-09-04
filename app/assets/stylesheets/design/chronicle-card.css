@@ -41,17 +41,13 @@
     color: var(--yui-ink);
   }
 
-  /* Chronicle card */
+  /* Chronicle card. `container-type` so the collapsed body below can clamp
+     itself to a multiple of the *card's* width (cqw), which the responsive
+     grid keeps changing. */
   .yui-chronicle-card {
     --yui-card-accent: var(--yui-accent);
-  }
 
-  /* The chronicle's first picture, shown as a cover teaser when collapsed
-     (no timeline). Bigger than the default .yui-lightbox-thumb — fills the
-     card's full content width at a taller ratio, not capped at 25rem. */
-  .yui-chronicle-card__cover .yui-lightbox-thumb {
-    max-width: none;
-    aspect-ratio: 16 / 9;
+    container-type: inline-size;
   }
 
   .yui-chronicle-card__summary {
@@ -70,19 +66,23 @@
     color: var(--yui-ink-faint);
   }
 
-  /* A collapsed card (not the full chronicle) fades its content out just
-     above the footer, hinting there's more than what's shown. */
+  /* A collapsed card (not the full chronicle) shows the notice and as many
+     entries as fit in 1.5× the card's own width, then fades the cut-off edge
+     out into the card surface just above the footer. "Show more" (browse)
+     drops this class to lift the clip — see card_expand_controller.js. */
   .yui-chronicle-card--collapsed .yui-card__body {
     position: relative;
+    max-height: 150cqw;
+    overflow: hidden;
   }
 
   .yui-chronicle-card--collapsed .yui-card__body::after {
     position: absolute;
     inset-inline: 0;
     bottom: 0;
-    height: 2.5rem;
+    height: 6rem;
     pointer-events: none;
     content: "";
-    background: linear-gradient(to bottom, transparent, var(--yui-surface));
+    background: linear-gradient(to bottom, transparent, var(--yui-surface) 70%);
   }
 }

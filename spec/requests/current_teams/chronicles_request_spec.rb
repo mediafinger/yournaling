@@ -54,12 +54,13 @@ RSpec.describe "/current_team/chronicles", type: :request do
         FactoryBot.create(:chronicle_entry, chronicle: chronicle, team: team, entry: thought, position: 2)
       end
 
-      it "renders a successful response displaying the first picture and omitting other entries" do
+      it "renders the notice and the entries, clipped by the collapsed modifier rather than omitted" do
         get current_team_chronicles_url
         expect(response).to be_successful
         expect(response.body).to include("Roadtrip through Andalusia")
         expect(response.body).to include("Beach View")
-        expect(response.body).not_to include("Secret campsite notes")
+        expect(response.body).to include("Secret campsite notes")
+        expect(response.body).to include("yui-chronicle-card--collapsed")
       end
     end
   end

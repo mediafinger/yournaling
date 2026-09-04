@@ -11,21 +11,16 @@
   - if chronicle.notice.present?
     p.yui-chronicle-card__summary = chronicle.notice
 
-  - if expanded? && entries.any?
-    section.yui-stack.yui-stack--sm
-      = render Yui::HeadlineComponent.new("Entries", level: 4)
-      .yui-timeline
-        - entries.each do |chronicle_entry|
-          .yui-timeline__item
-            = render ChronicleEntryComponent.new(chronicle_entry: chronicle_entry, scope: entry_scope, team: team)
-  - elsif chronicle.first_picture.present?
-    .yui-chronicle-card__cover
-      = render partial: insight_partial_path(chronicle.first_picture), locals: insight_partial_locals(chronicle.first_picture)
+  / IDEA: refactor to hero banner
+  / - if chronicle.first_picture.present?
+  /   .yui-chronicle-card__cover
+  /     = render partial: insight_partial_path(chronicle.first_picture), locals: insight_partial_locals(chronicle.first_picture)
 
-  - if show_more?
-    section.yui-stack.yui-stack--sm hidden=true data-card-expand-target="entries"
-      = render Yui::HeadlineComponent.new("Entries", level: 4)
-      .yui-timeline
-        - entries.each do |chronicle_entry|
-          .yui-timeline__item
-            = render ChronicleEntryComponent.new(chronicle_entry: chronicle_entry, scope: entry_scope, team: team)
+  / The entries always render. A collapsed card clips them to a max height
+  / (see .yui-chronicle-card--collapsed) and fades them out above the footer;
+  / "Show more" just lifts that clip — nothing is hidden or re-fetched.
+  - if entries.any?
+    .yui-timeline
+      - entries.each do |chronicle_entry|
+        .yui-timeline__item
+          = render ChronicleEntryComponent.new(chronicle_entry: chronicle_entry, scope: entry_scope, team: team)

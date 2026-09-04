@@ -31,22 +31,29 @@ RSpec.describe ChronicleCardComponent, type: :component do
         ]
       end
 
-      it "does not render the timeline outright, but offers a 'Show more' toggle with the hidden timeline" do
+      it "renders the timeline once, clipped by the collapsed modifier, with a 'Show more' toggle" do
         rendered = render_inline(described_class.new(chronicle: chronicle, scope: :browse, team: team, full: false))
 
-        expect(rendered).to have_no_css(".yui-timeline", visible: :visible)
+        expect(rendered).to have_css(".yui-timeline .yui-timeline__item", count: 2)
+        expect(rendered).to have_css("article.yui-chronicle-card--collapsed")
         expect(rendered).to have_css("[data-controller='card-expand']")
         expect(rendered).to have_css(".yui-card-footer__center a", text: "Show more")
-        expect(rendered).to have_css("[data-card-expand-target='entries'][hidden] .yui-timeline .yui-timeline__item",
-          count: 2, visible: :all)
       end
 
-      it "renders the timeline outright, with no 'Show more', when full" do
+      it "renders the timeline unclipped, with no 'Show more', when full" do
         rendered = render_inline(described_class.new(chronicle: chronicle, scope: :browse, team: team, full: true))
 
         expect(rendered).to have_css(".yui-timeline .yui-timeline__item", count: 2)
+        expect(rendered).to have_no_css("article.yui-chronicle-card--collapsed")
         expect(rendered).to have_no_css("[data-controller='card-expand']")
         expect(rendered).to have_no_text("Show more")
+      end
+
+      it "renders no 'Entries' subheadline and no repeated first picture" do
+        rendered = render_inline(described_class.new(chronicle: chronicle, scope: :browse, team: team, full: false))
+
+        expect(rendered).to have_no_text("Entries")
+        expect(rendered).to have_no_css(".yui-chronicle-card__cover")
       end
     end
 

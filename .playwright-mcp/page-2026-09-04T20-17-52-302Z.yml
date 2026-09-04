@@ -1,0 +1,167 @@
+- generic [active] [ref=f1e1]:
+  - banner [ref=f1e2]:
+    - navigation "Primary" [ref=f1e3]:
+      - generic [ref=f1e4]:
+        - list [ref=f1e5]:
+          - listitem [ref=f1e6]:
+            - link "🌐 Yournaling" [ref=f1e7] [cursor=pointer]:
+              - /url: /
+          - listitem [ref=f1e8]:
+            - link "+ New" [ref=f1e9] [cursor=pointer]:
+              - /url: /login
+        - list [ref=f1e10]:
+          - listitem [ref=f1e11]:
+            - link "@Teams" [ref=f1e12] [cursor=pointer]:
+              - /url: /teams
+          - listitem [ref=f1e13]:
+            - link "🔍 Search" [ref=f1e14] [cursor=pointer]:
+              - /url: /search
+        - list [ref=f1e15]:
+          - listitem [ref=f1e16]:
+            - link "Login" [ref=f1e17] [cursor=pointer]:
+              - /url: /login
+  - main [ref=f1e18]:
+    - generic [ref=f1e20]:
+      - generic [ref=f1e21]:
+        - article [ref=f1e22]:
+          - heading [level=4] [ref=f1e24]:
+            - link "Once upon a time in a land far far away" [ref=f1e25] [cursor=pointer]:
+              - /url: /teams/dGVhbV8yMDI2LTA4LTIyVDIyOjM0OjQ5LjE2NDM0NVpfYjcwZTQwZWMyMjA1/chronicles/Y3Jvbl8yMDI2LTA5LTA0VDE0OjAzOjI3LjIzNDI5MVpfZTZiNTg0ZWI4ZDYy
+          - generic [ref=f1e26]:
+            - paragraph [ref=f1e27]: "There were two evil friars living outside this small village. The friars had tried unsuccessfully to overtake and capture the town, but finally this time, they believed they had hit upon a foolproof scheme that would allow them to rule the village. They had, through mad scientist experiments in their floral shop, come up with a plant that would devour the townspeople one by one until none were left. They set forth to put their plan into action by planting the man-eating plants so they encircled the village. As the plants rapidly grew, they began devouring everything living in their path. The townspeople grew frightened; who or what would save them from their eminent doom? Finally, the town's elder remember Hugh, a woodcutter who lived on the outskirts of town. Frantically, the townspeople penned a desperate plea for help, tied it to the leg of a pigeon, and directed the bird toward Hugh's cabin. Meanwhile, outside of town, Hugh had received the note from the townspeople, and realizing they were in grave danger, set forth to do what he needed to do. He honed his mightiest axe to razor-sharpness, grabbed his hat, and off he went. Chopping his way through the dense vines, he single-handedly destroyed the carnivorous plants one by one, until all were destroyed. Then he set out to rid the village of the evil friars, chasing them out of town. The town was saved!!! The people rejoiced and knighted Hugh for his brave and timely efforts to save the village!!! And the moral of the story is: Hugh, and only Hugh, can prevent florist friars."
+            - generic [ref=f1e28]:
+              - generic [ref=f1e29]: Fischmarkt 🇩🇪
+              - button "Enlarge Malangutti Sar" [ref=f1e38]:
+                - img "Malangutti Sar" [ref=f1e39]
+              - button "Enlarge Hamburg" [ref=f1e44]:
+                - img "Hamburg" [ref=f1e45]
+              - article [ref=f1e47]:
+                - generic [ref=f1e48]:
+                  - heading "Puma" [level=3] [ref=f1e50]
+                  - paragraph [ref=f1e51]: 2026-09-08
+                  - generic [ref=f1e52]:
+                    - heading "yournaling" [level=1] [ref=f1e53]
+                    - heading "smaller" [level=2] [ref=f1e54]
+                    - heading "Puma starting in single mode..." [level=3] [ref=f1e55]
+                    - list [ref=f1e56]:
+                      - listitem [ref=f1e57]: "Puma version: 8.0.2 (\"Into the Arena\")"
+                      - listitem [ref=f1e58]: "Ruby version: ruby 4.0.6 (2026-07-14 revision 03b6d3f889) +YJIT +PRISM"
+                      - listitem [ref=f1e59]: "Min threads: 2"
+                      - listitem [ref=f1e60]:
+                        - text: Listening on
+                        - link "localhost" [ref=f1e61] [cursor=pointer]:
+                          - /url: http://0.0.0.0:3000
+                    - paragraph [ref=f1e62]:
+                      - text: Use
+                      - code [ref=f1e63]: Ctrl-C
+                      - text: to stop
+                    - separator [ref=f1e64]
+                    - code [ref=f1e66]: blockquote a = b + c
+                    - blockquote [ref=f1e67]:
+                      - paragraph [ref=f1e68]: nice quote
+                    - paragraph [ref=f1e69]: text
+              - link "Yournaling" [ref=f1e71] [cursor=pointer]:
+                - /url: https://www.yournaling.com
+              - figure [ref=f1e76]:
+                - blockquote [ref=f1e77]: Schön wars mal wieder!
+              - generic [ref=f1e78]: Tarifa - La Peña 🇪🇸
+              - button "Enlarge Hanging in there (2024-08-30)" [ref=f1e87]:
+                - img "Hanging in there" [ref=f1e88]
+          - generic [ref=f1e90]:
+            - generic [ref=f1e91]: 2026-09-12 – 2026-09-26
+            - link "Show more" [ref=f1e93] [cursor=pointer]:
+              - /url: "#"
+            - link "@RanTanVan" [ref=f1e95] [cursor=pointer]:
+              - /url: /teams/dGVhbV8yMDI2LTA4LTIyVDIyOjM0OjQ5LjE2NDM0NVpfYjcwZTQwZWMyMjA1
+        - article [ref=f1e96]:
+          - generic [ref=f1e97]:
+            - button "Enlarge Hamburg" [ref=f1e101]:
+              - img "Hamburg" [ref=f1e102]
+            - paragraph [ref=f1e103]: Here could be the text of a tweet. Or toot. Or tweep. Or just a normal posting, sharing an idea, a thought, a memory with the world. The only odd thing is the repeated start of the message.
+            - figure [ref=f1e104]:
+              - blockquote [ref=f1e105]: Schön wars mal wieder!
+            - generic [ref=f1e106]: Fischmarkt 🇩🇪
+            - link "Yournaling" [ref=f1e110] [cursor=pointer]:
+              - /url: https://www.yournaling.com
+          - generic [ref=f1e115]:
+            - generic [ref=f1e116]: 2026-09-04
+            - link "@RanTanVan" [ref=f1e118] [cursor=pointer]:
+              - /url: /teams/dGVhbV8yMDI2LTA4LTIyVDIyOjM0OjQ5LjE2NDM0NVpfYjcwZTQwZWMyMjA1
+        - article [ref=f1e119]:
+          - heading [level=4] [ref=f1e121]:
+            - link "Chrony" [ref=f1e122] [cursor=pointer]:
+              - /url: /teams/dGVhbV8yMDI2LTA4LTIyVDIyOjM0OjQ5LjE2NDM0NVpfYjcwZTQwZWMyMjA1/chronicles/Y3Jvbl8yMDI2LTA5LTAzVDA3OjQ2OjM4LjU1NzI2MVpfNTgyNTQ1NTE4NjI3
+          - generic [ref=f1e123]:
+            - paragraph [ref=f1e124]: Look at the Markdown below!
+            - generic [ref=f1e125]:
+              - article [ref=f1e127]:
+                - generic [ref=f1e128]:
+                  - heading "md test" [level=3] [ref=f1e130]
+                  - paragraph [ref=f1e131]: 2026-09-25
+                  - generic [ref=f1e132]:
+                    - heading "Hello" [level=1] [ref=f1e133]
+                    - paragraph [ref=f1e134]:
+                      - text: Is this
+                      - emphasis [ref=f1e135]: really
+                      - text: markdown?
+                    - list [ref=f1e136]:
+                      - listitem [ref=f1e137]: a
+                      - listitem [ref=f1e138]: b
+                      - listitem [ref=f1e139]: c
+                    - paragraph [ref=f1e140]:
+                      - text: Or is it
+                      - strong [ref=f1e141]: not?
+              - article [ref=f1e143]:
+                - generic [ref=f1e144]:
+                  - heading "Puma" [level=3] [ref=f1e146]
+                  - paragraph [ref=f1e147]: 2026-09-08
+                  - generic [ref=f1e148]:
+                    - heading "yournaling" [level=1] [ref=f1e149]
+                    - heading "smaller" [level=2] [ref=f1e150]
+                    - heading "Puma starting in single mode..." [level=3] [ref=f1e151]
+                    - list [ref=f1e152]:
+                      - listitem [ref=f1e153]: "Puma version: 8.0.2 (\"Into the Arena\")"
+                      - listitem [ref=f1e154]: "Ruby version: ruby 4.0.6 (2026-07-14 revision 03b6d3f889) +YJIT +PRISM"
+                      - listitem [ref=f1e155]: "Min threads: 2"
+                      - listitem [ref=f1e156]:
+                        - text: Listening on
+                        - link "localhost" [ref=f1e157] [cursor=pointer]:
+                          - /url: http://0.0.0.0:3000
+                    - paragraph [ref=f1e158]:
+                      - text: Use
+                      - code [ref=f1e159]: Ctrl-C
+                      - text: to stop
+                    - separator [ref=f1e160]
+                    - code [ref=f1e162]: blockquote a = b + c
+                    - blockquote [ref=f1e163]:
+                      - paragraph [ref=f1e164]: nice quote
+                    - paragraph [ref=f1e165]: text
+          - generic [ref=f1e167]:
+            - generic [ref=f1e168]: 2026-09-24
+            - link "Show more" [ref=f1e170] [cursor=pointer]:
+              - /url: "#"
+            - link "@RanTanVan" [ref=f1e172] [cursor=pointer]:
+              - /url: /teams/dGVhbV8yMDI2LTA4LTIyVDIyOjM0OjQ5LjE2NDM0NVpfYjcwZTQwZWMyMjA1
+        - article [ref=f1e173]:
+          - generic [ref=f1e174]:
+            - button "Enlarge PicPic (2026-09-23)" [ref=f1e178]:
+              - img "PicPic" [ref=f1e179]
+            - paragraph [ref=f1e180]: Good times!
+          - generic [ref=f1e182]:
+            - generic [ref=f1e183]: 2026-09-02
+            - link "@RanTanVan" [ref=f1e185] [cursor=pointer]:
+              - /url: /teams/dGVhbV8yMDI2LTA4LTIyVDIyOjM0OjQ5LjE2NDM0NVpfYjcwZTQwZWMyMjA1
+        - article [ref=f1e186]:
+          - generic [ref=f1e187]:
+            - button "Enlarge Hamburg" [ref=f1e191]:
+              - img "Hamburg" [ref=f1e192]
+            - paragraph [ref=f1e193]: Hamburger Nächte sind lang...!
+            - figure "— 2026-09-26" [ref=f1e194]:
+              - blockquote [ref=f1e195]: What a night!
+            - generic [ref=f1e197]: Fischmarkt 🇩🇪
+          - generic [ref=f1e202]:
+            - generic [ref=f1e203]: 2026-09-02
+            - link "@RanTanVan" [ref=f1e205] [cursor=pointer]:
+              - /url: /teams/dGVhbV8yMDI2LTA4LTIyVDIyOjM0OjQ5LjE2NDM0NVpfYjcwZTQwZWMyMjA1
+      - status [ref=f1e208]:
+        - generic [ref=f1e210]: Loading more stories…
