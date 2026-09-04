@@ -60,6 +60,19 @@ RSpec.describe "/current_team/pictures", type: :request do
       expect(response.body).to include("Change visibility")
       expect(response.body).to include("Rewrite")
     end
+
+    it "shows the extracted EXIF metadata (capture time, coordinates, camera)" do
+      picture = Picture.new(team: team, visibility: "draft")
+      picture.assign_uploaded_file(ImageFixtures.upload(:original), name: "Cologne")
+      picture.save!
+
+      get current_team_picture_url(picture.urlsafe_id)
+
+      expect(response.body).to include("Taken")
+      expect(response.body).to include("Coordinates")
+      expect(response.body).to include("Pixel 4a")
+      expect(response.body).to include("EXIF stripped")
+    end
   end
 
   describe "GET /new" do
@@ -96,6 +109,31 @@ RSpec.describe "/current_team/pictures", type: :request do
         }.to change { Picture.count }.by(1)
 
         expect(response).to redirect_to(current_team_picture_url(Picture.first))
+      end
+
+      it "extracts and stores the photo's EXIF geometry, GPS and timestamp" do
+        post current_team_pictures_url, params: {
+          picture: { file: ImageFixtures.upload(:original), name: name },
+        }
+
+        picture = Picture.first
+        expect(picture.image_width).to eq(1832)
+        expect(picture.orientation).to eq(:landscape)
+        expect(picture).to be_geotagged
+        expect(picture.latitude).to be_within(0.001).of(ImageFixtures::EXIF_LATITUDE)
+        expect(picture.camera_model).to eq("Pixel 4a")
+        expect(picture.date).to eq(Date.new(2022, 4, 12))
+        expect(picture.exif_stripped).to be(true)
+      end
+
+      it "rejects an image below the minimum pixel size with 422" do
+        expect {
+          post current_team_pictures_url, params: {
+            picture: { file: ImageFixtures.upload(:tiny), name: name },
+          }
+        }.not_to(change { Picture.count })
+
+        expect(response).to have_http_status(:unprocessable_content)
       end
 
       it "creates a new Picture and records the event" do

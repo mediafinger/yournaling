@@ -32,12 +32,15 @@ module Admins
       # the variants can be cropped to fit the desired aspect ratio for all preview images on the website
       # create the other variants (consider portrait, square, landscape orginal picture aspect ratios)
       #
-      @picture = Picture.new(
-        file: ImageUploadConversionService.call(file: picture_params[:file], name: picture_params[:name]),
-        name: picture_params[:name], # looks redundant, but image filename is parameterized
-        date: picture_params[:date],
-        team_id: picture_params[:team_id]
-      )
+      @picture = Picture.new(team_id: picture_params[:team_id])
+
+      begin
+        @picture.assign_uploaded_file(
+          picture_params[:file], name: picture_params[:name], date: picture_params[:date]
+        )
+      rescue ImageUploadConversionService::ImageTooSmall => e
+        raise CustomError.new(e.message, status: 422, code: :unprocessable_content)
+      end
 
       Picture.create_with_event(record: @picture, event_params: { team: nil, user: current_user, done_by_admin: true })
 

@@ -20,7 +20,7 @@ gem "countries", "~> 8.1" # Lists of countries, their ISO codes, emoji flags and
 gem "csv", require: false
 gem "device_detector", "~> 1.1"
 gem "dry-validation", "~> 1.10" # Use dry-validation for validations [https://dry-rb.org/gems/dry-validation]
-# gem "exifr", "~> 1.3" # Read EXIF metadata from JPEG images
+gem "exifr", "~> 1.4" # Read EXIF metadata (GPS, timestamps, camera) from JPEG/TIFF uploads
 gem "geocoder" # (reverse) geocode addresses and GPS coordinates
 gem "image_processing", "~> 2.0" # Use image_processing for image resizing in ActiveStorage variants
 gem "importmap-rails", "~> 2.0" # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]

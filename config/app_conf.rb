@@ -123,6 +123,15 @@ class AppConf
   # Pagination configuration
   register :items_per_page, default: 5 # mostly for development will likely be 25 in production
 
+  # Picture / image upload constraints (see README_PICTURES.md).
+  # The test environment uses smaller limits so fixtures can stay tiny.
+  register :picture_max_byte_size, default: 6 * 1024 * 1024 # 6 MB (post-conversion webp)
+  register :picture_min_byte_size, default: production_env ? 150 * 1024 : 5 * 1024
+  register :picture_max_pixels, default: 4000 # longest edge, per axis
+  register :picture_min_pixels, default: production_env ? 400 : 120
+  register :picture_webp_quality, default: 90 # 0..100, lossy webp encode quality
+  register :picture_strip_metadata, default: true # drop EXIF/GPS/ICC from the stored file
+
   # Logs & Logging
   register :log_level, default: if is?(:debug, true)
                                   :debug

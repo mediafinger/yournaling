@@ -192,6 +192,7 @@ GEM
     ethon (0.18.0)
       ffi (>= 1.15.0)
       logger
+    exifr (1.5.1)
     factory_bot (6.6.0)
       activesupport (>= 6.1.0)
     factory_bot-awesome_linter (1.0.6)
@@ -608,6 +609,7 @@ DEPENDENCIES
   csv
   device_detector (~> 1.1)
   dry-validation (~> 1.10)
+  exifr (~> 1.4)
   factory_bot-awesome_linter (~> 1.0)
   factory_bot_rails (~> 6.2)
   faker (~> 3.2)
