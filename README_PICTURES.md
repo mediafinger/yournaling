@@ -1,5 +1,9 @@
 # Pictures — upload, conversion, metadata
 
+> We should really improve picture display - they should take in more space in the cards, propably full width.
+> When opening a card pictures should be shown even larger.
+> And we should use the coordinates to either generate a Location from it, or to show the pictures on a map.
+
 How Yournaling ingests, stores and describes uploaded images.
 
 ## Pipeline overview
@@ -36,14 +40,14 @@ only in the database columns; the file a visitor can download is stripped.
 
 ## Configuration (`AppConf`, overridable via ENV)
 
-| Setting | ENV | Default (prod) | Default (test) |
-|---|---|---|---|
-| `picture_max_byte_size`  | `PICTURE_MAX_BYTE_SIZE`  | 6 MB   | 6 MB   |
-| `picture_min_byte_size`  | `PICTURE_MIN_BYTE_SIZE`  | 150 KB | 5 KB   |
-| `picture_max_pixels`     | `PICTURE_MAX_PIXELS`     | 4000   | 4000   |
-| `picture_min_pixels`     | `PICTURE_MIN_PIXELS`     | 400    | 120    |
-| `picture_webp_quality`   | `PICTURE_WEBP_QUALITY`   | 90     | 90     |
-| `picture_strip_metadata` | `PICTURE_STRIP_METADATA` | true   | true   |
+| Setting                  | ENV                      | Default (prod) | Default (test) |
+|--------------------------|--------------------------|----------------|----------------|
+| `picture_max_byte_size`  | `PICTURE_MAX_BYTE_SIZE`  | 6 MB           | 6 MB           |
+| `picture_min_byte_size`  | `PICTURE_MIN_BYTE_SIZE`  | 150 KB         | 5 KB           |
+| `picture_max_pixels`     | `PICTURE_MAX_PIXELS`     | 4000           | 4000           |
+| `picture_min_pixels`     | `PICTURE_MIN_PIXELS`     | 400            | 120            |
+| `picture_webp_quality`   | `PICTURE_WEBP_QUALITY`   | 90             | 90             |
+| `picture_strip_metadata` | `PICTURE_STRIP_METADATA` | true           | true           |
 
 `Picture::MAX_BYTE_SIZE`, `MIN_PIXEL_WIDTH`, … are derived from these at load
 time. The test environment lowers the minimums so fixtures stay tiny.
@@ -54,29 +58,29 @@ Returns an immutable `Images::Metadata` (`Data`). **Never raises** — an
 unreadable file or a format without EXIF just yields `nil` fields, so upload
 code can call it unconditionally.
 
-| Field | Source | Notes |
-|---|---|---|
-| `width`, `height` | libvips | **display** dimensions — EXIF Orientation applied |
-| `orientation` | derived | `:landscape` / `:portrait` / `:square` / `nil` |
-| `rotated` | libvips | `true` when EXIF Orientation is 5–8 (stored pixels turned 90°) |
-| `content_type` | Marcel | sniffed from bytes, not the declared type |
-| `byte_size` | filesystem | size of the file the user selected (pre-conversion) |
-| `taken_at` | exifr | `DateTimeOriginal`, falls back to `DateTime` |
-| `latitude`, `longitude`, `altitude` | exifr | WGS84 / metres, from EXIF GPS IFD |
-| `camera_make`, `camera_model` | exifr | e.g. `"Google"`, `"Pixel 4a"` |
+| Field                               | Source     | Notes                                                          |
+|-------------------------------------|------------|----------------------------------------------------------------|
+| `width`, `height`                   | libvips    | **display** dimensions — EXIF Orientation applied              |
+| `orientation`                       | derived    | `:landscape` / `:portrait` / `:square` / `nil`                 |
+| `rotated`                           | libvips    | `true` when EXIF Orientation is 5–8 (stored pixels turned 90°) |
+| `content_type`                      | Marcel     | sniffed from bytes, not the declared type                      |
+| `byte_size`                         | filesystem | size of the file the user selected (pre-conversion)            |
+| `taken_at`                          | exifr      | `DateTimeOriginal`, falls back to `DateTime`                   |
+| `latitude`, `longitude`, `altitude` | exifr      | WGS84 / metres, from EXIF GPS IFD                              |
+| `camera_make`, `camera_model`       | exifr      | e.g. `"Google"`, `"Pixel 4a"`                                  |
 
 Helpers: `#landscape?/#portrait?/#square?`, `#gps?`, `#coordinates`,
 `#camera`, `#to_location_attributes` (`{lat:, long:}`), `#to_picture_attributes`.
 
 ### EXIF support by format
 
-| Format | Geometry | Orientation tag | EXIF timestamp / GPS / camera |
-|---|---|---|---|
-| **JPEG** | ✅ | ✅ | ✅ (via `EXIFR::JPEG`) |
-| **TIFF** | ✅ | ✅ | ✅ (via `EXIFR::TIFF`) |
-| PNG | ✅ | — | ❌ — PNG has no standard EXIF GPS; fields stay `nil` |
-| WebP | ✅ | ✅ (libvips) | ❌ — not read; rare in practice, and uploads are converted anyway |
-| GIF | ✅ | — | ❌ |
+| Format   | Geometry | Orientation tag | EXIF timestamp / GPS / camera                                    |
+|----------|----------|-----------------|------------------------------------------------------------------|
+| **JPEG** | ✅        | ✅               | ✅ (via `EXIFR::JPEG`)                                            |
+| **TIFF** | ✅        | ✅               | ✅ (via `EXIFR::TIFF`)                                            |
+| PNG      | ✅        | —               | ❌ — PNG has no standard EXIF GPS; fields stay `nil`              |
+| WebP     | ✅        | ✅ (libvips)     | ❌ — not read; rare in practice, and uploads are converted anyway |
+| GIF      | ✅        | —               | ❌                                                                |
 
 Only JPEG and TIFF carry GPS in the wild, so EXIF is read for those two only.
 
@@ -111,14 +115,14 @@ Output: an `ActiveStorage::Blob`, `image/webp`, filename
 
 Run against the **converted WebP**:
 
-| Validation | Rule |
-|---|---|
-| `attached` | a file is present |
-| `size` | `MIN_BYTE_SIZE..MAX_BYTE_SIZE` — message reports the **actual** size |
-| `content_type` | `image/{gif,jpeg,png,tiff,webp}` (post-conversion it is always webp) |
-| `dimension` | width & height each within `MIN_PIXEL..MAX_PIXEL` |
-| `latitude` / `longitude` | numeric, within ±90 / ±180 when present |
-| `exif_stripped` | boolean, not null |
+| Validation               | Rule                                                                 |
+|--------------------------|----------------------------------------------------------------------|
+| `attached`               | a file is present                                                    |
+| `size`                   | `MIN_BYTE_SIZE..MAX_BYTE_SIZE` — message reports the **actual** size |
+| `content_type`           | `image/{gif,jpeg,png,tiff,webp}` (post-conversion it is always webp) |
+| `dimension`              | width & height each within `MIN_PIXEL..MAX_PIXEL`                    |
+| `latitude` / `longitude` | numeric, within ±90 / ±180 when present                              |
+| `exif_stripped`          | boolean, not null                                                    |
 
 Messages come from `config/locales/active_storage_validations.en.yml`. That
 file's `file_size_*` keys were realigned to the gem's current interpolation
@@ -192,13 +196,13 @@ the EXIF ground-truth constants.
 
 ## Specs
 
-| File | Covers |
-|---|---|
-| `spec/services/images/metadata_extractor_spec.rb` | geometry, orientation, EXIF, GPS, per-format behaviour, bad input |
-| `spec/services/images/metadata_spec.rb` | the `Images::Metadata` value object |
+| File                                                    | Covers                                                                 |
+|---------------------------------------------------------|------------------------------------------------------------------------|
+| `spec/services/images/metadata_extractor_spec.rb`       | geometry, orientation, EXIF, GPS, per-format behaviour, bad input      |
+| `spec/services/images/metadata_spec.rb`                 | the `Images::Metadata` value object                                    |
 | `spec/services/image_upload_conversion_service_spec.rb` | WebP conversion, metadata strip, EXIF-rotation bake-in, min-size guard |
-| `spec/models/picture_spec.rb` | `assign_uploaded_file`, orientation/GPS/size helpers, validations |
-| `spec/requests/current_teams/pictures_request_spec.rb` | EXIF persisted on create, undersized → 422, show page renders metadata |
+| `spec/models/picture_spec.rb`                           | `assign_uploaded_file`, orientation/GPS/size helpers, validations      |
+| `spec/requests/current_teams/pictures_request_spec.rb`  | EXIF persisted on create, undersized → 422, show page renders metadata |
 
 ## Gems / system dependencies
 
