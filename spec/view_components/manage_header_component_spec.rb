@@ -72,12 +72,20 @@ RSpec.describe ManageHeaderComponent, type: :component do
     end
 
     it "does not link the title when already on the record's own show page" do
-      allow_any_instance_of(described_class).to receive(:action_name).and_return("show") # rubocop:disable RSpec/AnyInstance
+      allow_any_instance_of(described_class).to receive_messages(controller_name: "chronicles", action_name: "show") # rubocop:disable RSpec/AnyInstance
 
       rendered = render_inline(described_class.new(record: chronicle, team: team, actions_in_header: false))
 
       expect(rendered.to_html).to have_css("h4.yui-record-header__title", text: "Desert Journey")
       expect(rendered.to_html).to have_no_css("h4.yui-record-header__title a")
+    end
+
+    it "still links the title on the manage home feed — a 'show' action, but PagesController's, not this record's" do
+      allow_any_instance_of(described_class).to receive_messages(controller_name: "pages", action_name: "show") # rubocop:disable RSpec/AnyInstance
+
+      rendered = render_inline(described_class.new(record: chronicle, team: team, actions_in_header: false))
+
+      expect(rendered.to_html).to have_css("h4.yui-record-header__title a.yui-link--cover", text: "Desert Journey")
     end
   end
 end

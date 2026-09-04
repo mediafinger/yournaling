@@ -88,16 +88,23 @@ class ManageHeaderComponent < ApplicationComponent
 
   # Whether there's somewhere useful to send the viewer for this record —
   # renders as the "Open" button when actions_in_header?, or makes the title
-  # a link otherwise.
+  # a link otherwise. False when we're already on the record's own show page —
+  # checking action_name alone isn't enough: the manage home feed is also
+  # rendered by an action literally named "show" (PagesController#show), which
+  # isn't this record's own page at all.
   def show_open_button?
     return false if @hide_actions
     return false if @full
-    return false if action_name == "show"
+    return false if controller_name == @record.class.model_name.plural && action_name == "show"
 
     true
   end
 
   private
+
+  def controller_name
+    helpers.controller.controller_name
+  end
 
   def action_name
     helpers.controller.action_name
