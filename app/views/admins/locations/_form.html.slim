@@ -8,7 +8,8 @@
     = form.date_field :date
     = form.select :country_code, CountriesEnForSelectService.call.map { |k, v| [v, k] }, label: "Country"
     = form.text_field :address
-    = form.text_field :url, label: "URL"
+    = form.text_field :map_url, label: "Map Link (paste to extract coordinates)"
+    = form.text_field :url, label: "Website (optional)"
     .yui-grid-pair
       = form.text_field :lat, label: "Latitude"
       = form.text_field :long, label: "Longitude"

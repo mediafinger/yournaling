@@ -7,6 +7,23 @@ class Location < ApplicationRecordForContentAndPosts
 
   YID_CODE = "loc"
 
+  # Coordinates embedded in map links from the common providers.
+  # All patterns capture `lat` then `long` (WGS84, decimal degrees).
+  MAP_URL_COORDINATE_PATTERNS = [
+    /@(?<lat>-?\d{1,3}\.\d+),(?<long>-?\d{1,3}\.\d+)/, # google: /maps/@36.7,-2.2,15z or /place/X/@...
+    /[?&](?:q|query|ll|sll|center|destination)=(?:loc:)?(?<lat>-?\d{1,3}\.\d+),(?<long>-?\d{1,3}\.\d+)/, # ?q=36.7,-2.2
+    /[?&]mlat=(?<lat>-?\d{1,3}\.\d+)&mlon=(?<long>-?\d{1,3}\.\d+)/,  # openstreetmap.org/?mlat=..&mlon=..
+    %r{#map=\d+/(?<lat>-?\d{1,3}\.\d+)/(?<long>-?\d{1,3}\.\d+)},     # openstreetmap.org/#map=15/36.7/-2.2
+    /!3d(?<lat>-?\d{1,3}\.\d+)!4d(?<long>-?\d{1,3}\.\d+)/,           # google embed !3d..!4d..
+    %r{\bgeo:(?<lat>-?\d{1,3}\.\d+),(?<long>-?\d{1,3}\.\d+)},        # geo:36.7,-2.2 URI
+    %r{/maps/place/(?<lat>-?\d{1,3}\.\d+),(?<long>-?\d{1,3}\.\d+)},  # /maps/place/36.05,-5.64
+  ].freeze
+
+  # Transient input: a pasted map link (Google / Apple / OpenStreetMap …).
+  # We parse coordinates out of it on save and then discard it — the canonical
+  # map link is always derived from the stored coordinates (see `#gmaps_coordinates_url`).
+  attr_accessor :map_url
+
   belongs_to :team, inverse_of: :locations
   has_many :chronicle_entries, as: :entry, dependent: :destroy
   has_many :chronicles, -> { distinct.reorder("chronicles.created_at DESC") }, through: :chronicle_entries
@@ -26,7 +43,7 @@ class Location < ApplicationRecordForContentAndPosts
     ActionDispatch::Http::URL.full_url_for(host: url.strip, protocol: "https") if url.present?
   }, apply_to_nil: false
 
-  validate :address_or_coordinates_or_url_given
+  validate :locator_given
   validates :country_code, presence: true, inclusion: { in: CountriesEnForSelectService.call.keys }
   validates :lat, allow_nil: true,
     numericality: { greater_than_or_equal_to: BigDecimal("-90.0"), less_than_or_equal_to: BigDecimal("90.0") }
@@ -36,9 +53,9 @@ class Location < ApplicationRecordForContentAndPosts
   validates :team_id, uniqueness: { scope: :name }
   validates :visibility, presence: true, inclusion: { in: VISIBILITY_STATES }
 
+  before_validation :extract_coordinates_from_map_url
   after_validation :safe_geocode, if: ->(location) { calculate_coordinates?(location) }
   after_validation :safe_reverse_geocode, if: ->(location) { get_address?(location) }
-  after_validation :create_gmaps_url, if: ->(location) { location.url.nil? }
   after_validation :set_address, if: ->(location) { location.address.blank? }
 
   # NOTE: this adds the `geocode` method
@@ -80,8 +97,33 @@ class Location < ApplicationRecordForContentAndPosts
   # Geocoder.search(address, params: {bias: "countrycode:country_code" })
   # "https://api.geoapify.com/v1/geocode/search?text=#{address}&filter=countrycode:#{country_code}&apiKey=#{AppConf.geoapify_api_key}"
 
+  # Best-effort extraction of `[lat, long]` from a pasted map link, or nil.
+  def self.coordinates_from_map_url(url)
+    return if url.blank?
+
+    MAP_URL_COORDINATE_PATTERNS.each do |pattern|
+      match = url.match(pattern)
+      next unless match
+
+      lat = BigDecimal(match[:lat])
+      long = BigDecimal(match[:long])
+      next unless lat.between?(-90, 90) && long.between?(-180, 180)
+
+      return [lat, long]
+    end
+
+    nil
+  end
+
   def coordinates
     [lat, long]
+  end
+
+  # A location is "located" once it has usable coordinates — only then can we
+  # show a map and a reliable map link. Address-only locations stay valid but
+  # render in a degraded state until geocoding resolves them.
+  def located?
+    lat.present? && long.present?
   end
 
   def coordinates_changed?
@@ -122,14 +164,28 @@ class Location < ApplicationRecordForContentAndPosts
     [address, country_code&.upcase].compact.join(", ")
   end
 
-  def address_or_coordinates_or_url_given
-    return if address.present? || (lat.present? && long.present?) || url.present?
+  def extract_coordinates_from_map_url
+    return if map_url.blank? || located?
 
-    errors.add(:base, "Address, Coordinates, or URL must be provided")
+    coordinates = self.class.coordinates_from_map_url(map_url)
+    self.lat, self.long = coordinates if coordinates
   end
 
-  def create_gmaps_url
-    self.url = gmaps_coordinates_url
+  # A Location must point at a real spot: coordinates, or an address we can
+  # geocode, or a map link we can read coordinates from. A bare name + link
+  # with no map pin belongs in a Weblink instead.
+  def locator_given
+    return if address.present? || located?
+
+    if map_url.present?
+      errors.add(:map_url,
+        "could not be read — paste a Google Maps, Apple Maps, or OpenStreetMap link " \
+        "that points at a specific spot, or enter an address or GPS coordinates")
+    else
+      errors.add(:base,
+        "Add an address, GPS coordinates, or a map link. " \
+        "To bookmark a place that has no map pin, add a Weblink instead.")
+    end
   end
 
   # NOTE: calculate new coordinates when the address changes, unless the coordinates have been changed as well

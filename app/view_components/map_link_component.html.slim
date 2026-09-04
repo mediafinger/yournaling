@@ -1,2 +1,5 @@
-= link_to location.gmaps_coordinates_url, target: "_blank", rel: "noopener", class: "yui-media-link" do
-  = image_tag_for_map
+- if static_map_available?
+  = link_to location.gmaps_coordinates_url, target: "_blank", rel: "noopener", class: "yui-media-link" do
+    = image_tag_for_map
+- else
+  = render ExternalLinkComponent.new(url: location.gmaps_coordinates_url, text: "Open in Google Maps")

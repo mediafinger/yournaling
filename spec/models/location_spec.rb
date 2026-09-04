@@ -88,10 +88,72 @@ RSpec.describe Location, type: :model do
       expect(location.errors[:country_code]).to be_present
     end
 
-    it "requires address, coordinates, or url to be given" do
+    it "requires an address or coordinates and points to Weblink otherwise" do
       empty_loc = described_class.new(team: team, name: "Nowhere", country_code: "es", visibility: "internal")
       expect(empty_loc).not_to be_valid
-      expect(empty_loc.errors[:base]).to include("Address, Coordinates, or URL must be provided")
+      expect(empty_loc.errors[:base].first).to include("Weblink")
+    end
+
+    it "is not satisfied by a website url alone" do
+      loc = described_class.new(
+        team: team, name: "Website only", country_code: "es", url: "example.com", visibility: "internal"
+      )
+      expect(loc).not_to be_valid
+      expect(loc.errors[:base]).to be_present
+    end
+
+    it "reports an unreadable map link on the map_url attribute" do
+      loc = described_class.new(
+        team: team, name: "Bad link", country_code: "es",
+        map_url: "https://maps.google.com/no-coordinates-here", visibility: "internal"
+      )
+      expect(loc).not_to be_valid
+      expect(loc.errors[:map_url].first).to include("could not be read")
+    end
+  end
+
+  describe ".coordinates_from_map_url" do
+    {
+      "https://www.google.com/maps/@36.7491,-2.2425,15z" => [36.7491, -2.2425],
+      "https://www.google.com/maps/place/Fischmarkt/@53.5453,9.9622,17z" => [53.5453, 9.9622],
+      "https://www.google.com/maps?q=36.0523,-5.6487" => [36.0523, -5.6487],
+      "https://maps.google.com/?q=loc:53.5,9.9" => [53.5, 9.9],
+      "https://www.openstreetmap.org/?mlat=48.8584&mlon=2.2945" => [48.8584, 2.2945],
+      "https://www.openstreetmap.org/#map=15/40.4168/-3.7038" => [40.4168, -3.7038],
+      "geo:52.5200,13.4050" => [52.52, 13.405],
+    }.each do |url, expected|
+      it "extracts #{expected.inspect} from #{url}" do
+        expect(described_class.coordinates_from_map_url(url).map(&:to_f)).to eq(expected)
+      end
+    end
+
+    it "returns nil for a link without coordinates" do
+      expect(described_class.coordinates_from_map_url("https://example.com/place")).to be_nil
+    end
+
+    it "returns nil for blank input" do
+      expect(described_class.coordinates_from_map_url(nil)).to be_nil
+    end
+
+    it "rejects out-of-range coordinates" do
+      expect(described_class.coordinates_from_map_url("https://maps.example.com/@200.0,999.0")).to be_nil
+    end
+  end
+
+  describe "map_url input" do
+    it "populates coordinates from a pasted map link" do
+      loc = described_class.create!(
+        valid_attributes.except(:lat, :long, :address).merge(map_url: "https://www.google.com/maps/@36.0523,-5.6487,15z")
+      )
+      expect(loc.coordinates.map(&:to_f)).to eq([36.0523, -5.6487])
+      expect(loc).to be_located
+    end
+
+    it "does not override coordinates the user entered directly" do
+      loc = described_class.create!(
+        valid_attributes.merge(map_url: "https://www.google.com/maps/@1.0,1.0,15z")
+      )
+      expect(loc.coordinates.map(&:to_f)).to eq([36.7491, -2.2425])
     end
   end
 
@@ -155,9 +217,14 @@ RSpec.describe Location, type: :model do
   end
 
   describe "callbacks" do
-    it "creates a Google Maps URL if url is not provided" do
+    it "does not populate url with a map link (url is the optional website)" do
       loc = described_class.create!(valid_attributes.except(:url))
-      expect(loc.url).to eq("https://www.google.com/maps/place/36.7491,-2.2425")
+      expect(loc.url).to be_nil
+    end
+
+    it "keeps a user-provided website url" do
+      loc = described_class.create!(valid_attributes.merge(url: "campsite.example.com"))
+      expect(loc.url).to eq("https://campsite.example.com")
     end
   end
 

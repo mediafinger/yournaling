@@ -58,7 +58,7 @@ module Admins
 
     # switch to dry-validation / dry-contract
     def location_params
-      params.expect(location: %i[address country_code name date lat long url team_id])
+      params.expect(location: %i[address country_code name date lat long url map_url team_id])
     end
   end
 end

@@ -78,7 +78,7 @@ module CurrentTeams
 
     # switch to dry-validation / dry-contract
     def location_params
-      params.expect(location: %i[address country_code name date lat long url])
+      params.expect(location: %i[address country_code name date lat long url map_url])
     end
   end
 end
