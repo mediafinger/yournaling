@@ -39,7 +39,7 @@ RSpec.describe RecordFooterComponent, type: :component do
           member: member))
 
         expect(rendered).to have_link("Rewrite", href: "/current_team/chronicles/#{chronicle.to_param}/edit")
-        expect(rendered).to have_css(".yui-card-footer__owner-group", text: "Rewrite")
+        expect(rendered).to have_css(".yui-card-footer__owner-group a[aria-label='Rewrite']")
         expect(rendered).to have_css(".yui-card-footer__owner-group", text: "@RanTanVan")
       end
     end

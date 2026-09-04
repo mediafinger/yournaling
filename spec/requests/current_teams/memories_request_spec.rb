@@ -95,7 +95,7 @@ RSpec.describe "/current_team/memories", type: :request do
       get current_team_memory_url(memory.urlsafe_id)
 
       # Only the memory itself has a Rewrite button, not the embedded insights
-      expect(response.body.scan(">Rewrite<").count).to eq(1)
+      expect(response.body.scan('aria-label="Rewrite"').count).to eq(1)
 
       %w[picture thought location weblink].each do |type|
         expect(response.body).not_to include("Show this #{type}", "Edit this #{type}")

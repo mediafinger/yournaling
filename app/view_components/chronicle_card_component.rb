@@ -54,4 +54,10 @@ class ChronicleCardComponent < ApplicationComponent
   def show_more?
     scope == :browse && !expanded? && entries.any?
   end
+
+  # A fade at the bottom of the visible content (just above the footer) hints
+  # that a collapsed card isn't the whole chronicle — see .yui-chronicle-card--collapsed.
+  def card_class
+    ["yui-chronicle-card", ("yui-chronicle-card--collapsed" unless expanded?)].compact.join(" ")
+  end
 end

@@ -34,6 +34,15 @@ RSpec.describe MemoryCardComponent, type: :component do
     expect(rendered).to have_css(".yui-blockquote blockquote", text: "Some days keep themselves.")
   end
 
+  it "renders an attached picture above the memo text" do
+    memory.picture = FactoryBot.create(:picture, team: FactoryBot.create(:team, name: "The Coast Year"))
+
+    rendered = render_inline(described_class.new(memory: memory, scope: :browse, team: team))
+
+    html = rendered.to_html
+    expect(html.index("yui-lightbox-trigger")).to be < html.index("yui-memory-card__memo")
+  end
+
   it "renders an attached location as a chip" do
     memory.location = FactoryBot.build_stubbed(:location, name: "Ericeira", country_code: "pt")
 

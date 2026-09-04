@@ -2,8 +2,9 @@
 
 # A Memory rendered as a card: no header (Memory has no name and always shows
 # the whole memo, so there's nothing to open or link), a footer (date, Rewrite,
-# team/creator, and — manage scope — the visibility control), the memo in
-# full, and its attached insights (picture / thought / location / weblink).
+# team/creator, and — manage scope — the visibility control), an attached
+# picture (if any, shown above the memo), the memo in full, and any other
+# attached insights (thought / location / weblink).
 #
 #   = render MemoryCardComponent.new(memory: memory, scope: :browse, team: team)
 #   = render MemoryCardComponent.new(memory: memory, scope: :manage)
@@ -29,5 +30,10 @@ class MemoryCardComponent < ApplicationComponent
 
   def attachments
     ATTACHMENTS.filter_map { |name| memory.public_send(name) }
+  end
+
+  # The picture, if any, is shown above the memo; everything else stays below.
+  def other_attachments
+    attachments.reject { |attachment| attachment == memory.picture }
   end
 end

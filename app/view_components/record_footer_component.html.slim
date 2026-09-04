@@ -13,7 +13,8 @@
 
   .yui-card-footer__owner-group
     - if can_rewrite?
-      = render Yui::ButtonComponent.new("Rewrite", href: edit_path, variant: :ghost, size: :sm)
+      a.yui-btn.yui-btn--ghost.yui-btn--sm href=edit_path role="button" title="Rewrite" aria-label="Rewrite"
+        = render Yui::IconComponent.new("pencil", size: :sm)
     - if browse? && team.present?
       - if team_timeline_path
         = link_to team_handle, team_timeline_path, class: "yui-card-footer__owner"

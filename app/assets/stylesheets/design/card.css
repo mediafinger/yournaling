@@ -94,36 +94,42 @@
     border-top: var(--yui-border-hairline);
   }
 
-  /* RecordFooterComponent — up to three zones: date (left), a center slot
-     (the visibility control in manage scope, or a caller-supplied override
-     such as Chronicle's browse-mode "Show more"), and Rewrite + owner
-     (team handle / creator) on the right. */
+  /* RecordFooterComponent — up to three zones, laid out as fixed grid columns
+     so the center one (the visibility control in manage scope, or a
+     caller-supplied override such as Chronicle's browse-mode "Show more")
+     sits at the true center of the footer, not just "between" whichever of
+     the other two happen to be present: date (left), center, Rewrite + owner
+     (team handle / creator, right). */
   .yui-card-footer {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     gap: var(--yui-space-3xs) var(--yui-space-sm);
     align-items: baseline;
-    justify-content: space-between;
     width: 100%;
     font-size: var(--yui-text-sm);
     color: var(--yui-ink-faint);
   }
 
   .yui-card-footer__date {
+    grid-column: 1;
+    justify-self: start;
     font-variant-numeric: tabular-nums;
   }
 
   .yui-card-footer__center {
     display: flex;
+    grid-column: 2;
     align-items: center;
+    justify-self: center;
   }
 
   .yui-card-footer__owner-group {
     display: flex;
     flex-wrap: wrap;
+    grid-column: 3;
     gap: var(--yui-space-xs);
     align-items: center;
-    margin-inline-start: auto;
+    justify-self: end;
   }
 
   .yui-card-footer__owner {

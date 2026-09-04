@@ -14,7 +14,8 @@
       - if show_open_button?
         = render Yui::ButtonComponent.new("Open", href: show_path, variant: :secondary, size: :sm)
       - if can_rewrite?
-        = render Yui::ButtonComponent.new("Rewrite", href: edit_path, variant: :ghost, size: :sm)
+        a.yui-btn.yui-btn--ghost.yui-btn--sm href=edit_path role="button" title="Rewrite" aria-label="Rewrite"
+          = render Yui::IconComponent.new("pencil", size: :sm)
       - if can_change_visibility?
         = render ContentVisibilityModalComponent.new(record: @record, user: current_user, team: current_team, member: current_member)
       - elsif show_visibility?

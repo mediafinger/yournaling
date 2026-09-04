@@ -56,6 +56,14 @@ RSpec.describe ChronicleCardComponent, type: :component do
       expect(rendered).to have_no_css("[data-controller='card-expand']")
       expect(rendered).to have_no_text("Show more")
     end
+
+    it "fades the content above the footer when collapsed, not when full" do
+      collapsed = render_inline(described_class.new(chronicle: chronicle, scope: :browse, team: team, full: false))
+      full = render_inline(described_class.new(chronicle: chronicle, scope: :browse, team: team, full: true))
+
+      expect(collapsed).to have_css("article.yui-chronicle-card--collapsed")
+      expect(full).to have_no_css("article.yui-chronicle-card--collapsed")
+    end
   end
 
   describe "manage scope" do
@@ -72,6 +80,12 @@ RSpec.describe ChronicleCardComponent, type: :component do
 
       expect(rendered).to have_no_css(".yui-btn", text: "Rewrite")
       expect(rendered).to have_no_css(".yui-card-footer__center")
+    end
+
+    it "fades the content above the footer when collapsed (not full, not on the record's own show page)" do
+      rendered = render_inline(described_class.new(chronicle: chronicle, scope: :manage, team: team, full: false))
+
+      expect(rendered).to have_css("article.yui-chronicle-card--collapsed")
     end
   end
 

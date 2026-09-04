@@ -1,4 +1,4 @@
-= render Yui::CardComponent.new(id: helpers.dom_id(chronicle), variant: :elevated, accent: "accent", class: "yui-chronicle-card", data: (show_more? ? { controller: "card-expand" } : {})) do |card|
+= render Yui::CardComponent.new(id: helpers.dom_id(chronicle), variant: :elevated, accent: "accent", class: card_class, data: (show_more? ? { controller: "card-expand" } : {})) do |card|
   - card.with_header do
     = render header_component
 
@@ -19,7 +19,8 @@
           .yui-timeline__item
             = render ChronicleEntryComponent.new(chronicle_entry: chronicle_entry, scope: entry_scope, team: team)
   - elsif chronicle.first_picture.present?
-    = render partial: insight_partial_path(chronicle.first_picture), locals: insight_partial_locals(chronicle.first_picture)
+    .yui-chronicle-card__cover
+      = render partial: insight_partial_path(chronicle.first_picture), locals: insight_partial_locals(chronicle.first_picture)
 
   - if show_more?
     section.yui-stack.yui-stack--sm hidden=true data-card-expand-target="entries"

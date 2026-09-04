@@ -123,7 +123,7 @@ RSpec.describe "/current_team/chronicles", type: :request do
       expect(response.body.scan('id="picture_').count).to eq(2)
 
       # Insight individual action buttons should be suppressed in chronicle show
-      expect(response.body.scan(">Rewrite<").count).to eq(1)
+      expect(response.body.scan('aria-label="Rewrite"').count).to eq(1)
       expect(response.body).not_to include("Show this picture")
       expect(response.body).not_to include("Edit this picture")
     end

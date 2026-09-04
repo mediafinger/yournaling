@@ -46,8 +46,12 @@
     --yui-card-accent: var(--yui-accent);
   }
 
-  .yui-chronicle-card__cover {
-    aspect-ratio: 16 / 6;
+  /* The chronicle's first picture, shown as a cover teaser when collapsed
+     (no timeline). Bigger than the default .yui-lightbox-thumb — fills the
+     card's full content width at a taller ratio, not capped at 25rem. */
+  .yui-chronicle-card__cover .yui-lightbox-thumb {
+    max-width: none;
+    aspect-ratio: 16 / 9;
   }
 
   .yui-chronicle-card__summary {
@@ -64,5 +68,21 @@
     align-items: center;
     font-size: var(--yui-text-sm);
     color: var(--yui-ink-faint);
+  }
+
+  /* A collapsed card (not the full chronicle) fades its content out just
+     above the footer, hinting there's more than what's shown. */
+  .yui-chronicle-card--collapsed .yui-card__body {
+    position: relative;
+  }
+
+  .yui-chronicle-card--collapsed .yui-card__body::after {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    height: 2.5rem;
+    pointer-events: none;
+    content: "";
+    background: linear-gradient(to bottom, transparent, var(--yui-surface));
   }
 }
