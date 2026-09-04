@@ -25,10 +25,10 @@ RSpec.describe BrowseHeaderComponent, type: :component do
     expect(rendered.to_html).not_to include("Voyagers")
   end
 
-  it "renders the truncated memo as the memory title" do
+  it "renders no title for a memory — its memo already shows in full in the card body — but keeps the Open link" do
     rendered = render_inline(described_class.new(record: memory, team: team))
 
-    expect(rendered.to_html).to have_css("h4.yui-record-header__title", text: "A memorable moment on the hill")
+    expect(rendered.to_html).to have_no_css("h4.yui-record-header__title")
     expect(rendered.to_html).to have_link("Open", href: "/teams/#{team.to_param}/memories/#{memory.to_param}")
   end
 

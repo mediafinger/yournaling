@@ -47,12 +47,16 @@ class ManageHeaderComponent < ApplicationComponent
     respond_to?(:helpers) && helpers.respond_to?(:current_member) ? helpers.current_member : super
   end
 
+  # Memory has no name of its own — its memo is the record, shown in full in
+  # the card body right below the header, so a truncated repeat of it here is
+  # redundant. `title` returns blank for a Memory; the template skips the
+  # heading and the actions stay right-aligned.
   def title
     return @title if @title.present?
 
     case @record
     when Member then @record.user.name
-    when Memory then @record.memo.to_s.truncate(60)
+    when Memory then nil
     when Thought then @record.text.to_s.truncate(60)
     else
       @record.try(:name).presence || @record.class.model_name.human

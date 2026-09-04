@@ -2,10 +2,8 @@
   - card.with_header do
     - if actions?
       = render header_component
-    - else
-      = render Yui::HeadlineComponent.new(memory.memo.to_s.truncate(60), level: 4)
-      - if static_meta.present?
-        span.yui-meta = static_meta
+    - elsif static_meta.present?
+      span.yui-meta = static_meta
 
   - card.with_footer do
     = render RecordFooterComponent.new(record: memory, scope: scope, team: team)

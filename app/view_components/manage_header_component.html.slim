@@ -1,5 +1,6 @@
 .yui-record-header
-  = content_tag(heading_tag, title, class: "yui-record-header__title")
+  - if title.present?
+    = content_tag(heading_tag, title, class: "yui-record-header__title")
 
   - unless @hide_actions
     .yui-record-header__actions

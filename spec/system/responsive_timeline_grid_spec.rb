@@ -70,7 +70,8 @@ RSpec.describe "Responsive Timeline Grid & Card Redesign", type: :system do
       end
 
       within("article.yui-memory-card") do
-        expect(page).to have_css("h4.yui-record-header__title", text: "Sunset over Lake Geneva")
+        expect(page).to have_no_css(".yui-record-header__title")
+        expect(page).to have_text("Sunset over Lake Geneva")
         expect(page).to have_css(".yui-card-footer__owner", text: "@Globetrotters")
       end
     end

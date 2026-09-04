@@ -25,6 +25,9 @@
     flex-wrap: wrap;
     gap: var(--yui-space-3xs);
     align-items: flex-start;
+    /* Stay pinned to the right even with no title sibling (Memory has none —
+       see ManageHeaderComponent#title / BrowseHeaderComponent#title). */
+    margin-inline-start: auto;
   }
 
   /* ContentVisibilityModalComponent — a stack of full-width choice buttons. */

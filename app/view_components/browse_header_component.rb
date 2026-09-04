@@ -29,12 +29,15 @@ class BrowseHeaderComponent < ApplicationComponent
     respond_to?(:helpers) && helpers.respond_to?(:current_member) ? helpers.current_member : super
   end
 
+  # See ManageHeaderComponent#title — Memory's memo is shown in full in the
+  # card body right below, so a truncated repeat of it as the header title
+  # would be redundant.
   def title
     return @title if @title.present?
 
     case @record
     when Member then @record.user.name
-    when Memory then @record.memo.to_s.truncate(60)
+    when Memory then nil
     when Thought then @record.text.to_s.truncate(60)
     else
       @record.try(:name).presence || @record.class.model_name.human

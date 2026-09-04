@@ -30,10 +30,11 @@ RSpec.describe ManageHeaderComponent, type: :component do
     expect(rendered.to_html).not_to include("2024-01-01")
   end
 
-  it "renders the truncated memo as the memory title" do
+  it "renders no title for a memory — the memo already shows in full in the card body — but keeps the actions" do
     rendered = render_inline(described_class.new(record: memory, user: user, team: team, member: member))
 
-    expect(rendered.to_html).to have_css("h4.yui-record-header__title", text: "A sunny day by the shore")
+    expect(rendered.to_html).to have_no_css("h4.yui-record-header__title")
+    expect(rendered.to_html).not_to include("A sunny day by the shore")
     expect(rendered.to_html).to have_css("button[aria-label='Change visibility']", text: "Published")
   end
 
