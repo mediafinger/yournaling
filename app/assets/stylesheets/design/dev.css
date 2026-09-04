@@ -1,0 +1,38 @@
+@layer components {
+  /* Development-only diagnostics. Loaded like any other sheet — the component's
+     `render?` is the real guard — but styled to shout, and deliberately not
+     theme-aware: the warning must be unmissable in light and dark alike. */
+
+  .yui-toast-region--jobless {
+    top: auto;
+    bottom: var(--yui-space-sm);
+  }
+
+  .yui-toast--jobless {
+    color: #1a1200;
+    background-color: #f59e0b;
+    border-color: #b45309;
+  }
+
+  .yui-toast--jobless .yui-toast__icon,
+  .yui-toast--jobless .yui-toast__dismiss {
+    color: #1a1200;
+  }
+
+  .yui-toast--jobless .yui-toast__dismiss:hover {
+    color: #000;
+  }
+
+  .yui-toast__title {
+    margin: 0 0 0.15rem;
+    font-weight: 700;
+  }
+
+  .yui-toast--jobless code {
+    padding: 0.05rem 0.3rem;
+    font-family: var(--yui-font-mono, ui-monospace, monospace);
+    font-size: 0.85em;
+    background-color: rgb(0 0 0 / 12%);
+    border-radius: var(--yui-radius-sm);
+  }
+}
