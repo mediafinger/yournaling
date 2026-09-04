@@ -2,6 +2,10 @@
 
 require "rails_helper"
 
+# Used only by ChronicleCardComponent's browse header now — Memory has no
+# header at all, and the insight partials don't use this component. Just the
+# record name, rendered as a plain-looking link to its show page — actions
+# (Rewrite, visibility) live in the card footer, see RecordFooterComponent.
 RSpec.describe BrowseHeaderComponent, type: :component do
   let(:team) { FactoryBot.create(:team, name: "Voyagers") }
   let(:chronicle) do
@@ -14,42 +18,41 @@ RSpec.describe BrowseHeaderComponent, type: :component do
       visibility: "published"
     )
   end
-  let(:memory) { FactoryBot.create(:memory, team: team, memo: "A memorable moment on the hill", visibility: "published") }
 
-  it "renders the record name as an h4 and a link to the show page — no date, no team in the header" do
+  it "renders the record name as an h4, linked to the show page — no date, no team" do
     rendered = render_inline(described_class.new(record: chronicle, team: team))
 
-    expect(rendered.to_html).to have_css("h4.yui-record-header__title", text: "Alpine Trek")
-    expect(rendered.to_html).to have_link("Open", href: "/teams/#{team.to_param}/chronicles/#{chronicle.to_param}")
+    expect(rendered.to_html).to have_css("h4.yui-record-header__title a.yui-link--cover", text: "Alpine Trek")
+    expect(rendered.to_html).to have_link("Alpine Trek", href: "/teams/#{team.to_param}/chronicles/#{chronicle.to_param}")
     expect(rendered.to_html).not_to include("2026-07-01")
     expect(rendered.to_html).not_to include("Voyagers")
   end
 
-  it "renders no title for a memory — its memo already shows in full in the card body — but keeps the Open link" do
-    rendered = render_inline(described_class.new(record: memory, team: team))
-
-    expect(rendered.to_html).to have_no_css("h4.yui-record-header__title")
-    expect(rendered.to_html).to have_link("Open", href: "/teams/#{team.to_param}/memories/#{memory.to_param}")
-  end
-
-  it "renders in a guest context without raising on current_member (Lookbook / public browse)" do
-    expect { render_inline(described_class.new(record: chronicle, team: team)) }.not_to raise_error
-  end
-
-  it "does not render the Open link when full is true" do
+  it "does not link the title when full is true" do
     rendered = render_inline(described_class.new(record: chronicle, team: team, full: true))
 
-    expect(rendered.to_html).to have_no_link("Open")
+    expect(rendered.to_html).to have_css("h4.yui-record-header__title", text: "Alpine Trek")
+    expect(rendered.to_html).to have_no_link("Alpine Trek")
   end
 
-  context "when user has edit permission for the team" do
-    let(:user) { FactoryBot.create(:user) }
-    let!(:member) { Member.create!(team: team, user: user, roles: %w[owner publisher]) }
+  it "does not link the title when already on the record's own show page" do
+    allow_any_instance_of(described_class).to receive_messages(controller_name: "chronicles", action_name: "show") # rubocop:disable RSpec/AnyInstance
 
-    it "renders the Rewrite link for an authorized team member" do
-      rendered = render_inline(described_class.new(record: chronicle, team: team, user: user, member: member))
+    rendered = render_inline(described_class.new(record: chronicle, team: team))
 
-      expect(rendered.to_html).to have_link("Rewrite", href: "/current_team/chronicles/#{chronicle.to_param}/edit")
-    end
+    expect(rendered.to_html).to have_no_link("Alpine Trek")
+  end
+
+  it "renders in-memory records (e.g. /example) without raising — no route, so no link" do
+    unsaved_team = Team.new(name: "Unsaved")
+    unsaved_chronicle = Chronicle.new(name: "Draft", team: unsaved_team, start_date: Date.current)
+
+    rendered = nil
+    expect {
+      rendered = render_inline(described_class.new(record: unsaved_chronicle, team: unsaved_team))
+    }.not_to raise_error
+
+    expect(rendered.to_html).to have_css("h4.yui-record-header__title", text: "Draft")
+    expect(rendered.to_html).to have_no_css("a")
   end
 end

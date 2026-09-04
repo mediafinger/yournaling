@@ -2,22 +2,23 @@
 
 # @label Chronicle card
 #
-# Rendered with `actions: true` (real Browse/Manage header) — see
-# MemoryCardComponentPreview for the guest-context caveats.
+# Lookbook has no signed-in user, so the header/footer run in a guest
+# context: Rewrite and the visibility control stay hidden, the title still
+# links to the show page. The demo records are `build_stubbed` so they carry
+# ids and the path helpers (`team_chronicle_path`, …) resolve.
 class ChronicleCardComponentPreview < ViewComponent::Preview
   # @param scope select [browse, manage]
   # @param full toggle
   def playground(scope: :browse, full: true)
-    render ChronicleCardComponent.new(chronicle: demo_chronicle, scope: scope, full: full, actions: true)
+    render ChronicleCardComponent.new(chronicle: demo_chronicle, scope: scope, full: full)
   end
 
   def collapsed
-    render ChronicleCardComponent.new(chronicle: demo_chronicle, scope: :browse, full: false, actions: true)
+    render ChronicleCardComponent.new(chronicle: demo_chronicle, scope: :browse, full: false)
   end
 
   def with_timeline
-    render ChronicleCardComponent.new(chronicle: demo_chronicle(with_entries: true), scope: :browse, full: true,
-      actions: true)
+    render ChronicleCardComponent.new(chronicle: demo_chronicle(with_entries: true), scope: :browse, full: true)
   end
 
   private

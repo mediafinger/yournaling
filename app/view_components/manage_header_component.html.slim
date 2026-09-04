@@ -1,8 +1,15 @@
 .yui-record-header
   - if title.present?
-    = content_tag(heading_tag, title, class: "yui-record-header__title")
+    - if actions_in_header?
+      = content_tag(heading_tag, title, class: "yui-record-header__title")
+    - else
+      = content_tag(heading_tag, class: "yui-record-header__title") do
+        - if show_open_button?
+          = link_to title, show_path, class: "yui-link--cover"
+        - else
+          = title
 
-  - unless @hide_actions
+  - if actions_in_header? && !@hide_actions
     .yui-record-header__actions
       - if show_open_button?
         = render Yui::ButtonComponent.new("Open", href: show_path, variant: :secondary, size: :sm)

@@ -3,7 +3,7 @@
 - else
   = render Yui::CardComponent.new(id: dom_id(weblink)) do |card|
     - card.with_header do
-      = render ManageHeaderComponent.new(record: weblink)
+      = render ManageHeaderComponent.new(record: weblink, actions_in_header: false)
     - card.with_footer do
       = render RecordFooterComponent.new(record: weblink, scope: :manage)
     dl.yui-details

@@ -5,7 +5,7 @@
 - else
   = render Yui::CardComponent.new(id: dom_id(story)) do |card|
     - card.with_header do
-      = render ManageHeaderComponent.new(record: story)
+      = render ManageHeaderComponent.new(record: story, actions_in_header: false)
     - card.with_footer do
       = render RecordFooterComponent.new(record: story, scope: :manage)
     .yui-prose = markdown(story.content)

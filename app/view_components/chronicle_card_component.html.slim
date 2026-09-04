@@ -1,24 +1,30 @@
-= render Yui::CardComponent.new(id: helpers.dom_id(chronicle), variant: :elevated, accent: "accent", class: "yui-chronicle-card") do |card|
+= render Yui::CardComponent.new(id: helpers.dom_id(chronicle), variant: :elevated, accent: "accent", class: "yui-chronicle-card", data: (show_more? ? { controller: "card-expand" } : {})) do |card|
   - card.with_header do
-    - if actions?
-      = render header_component
-    - else
-      = render Yui::HeadlineComponent.new(chronicle.name, level: 4)
-      - if static_meta.present?
-        span.yui-meta = static_meta
+    = render header_component
 
   - card.with_footer do
-    = render RecordFooterComponent.new(record: chronicle, scope: scope, team: team)
+    = render RecordFooterComponent.new(record: chronicle, scope: scope, team: team, show_rewrite: !hide_actions, show_visibility: !hide_actions) do |footer|
+      - if show_more?
+        - footer.with_center do
+          a href="#" class="yui-link" data-action="click->card-expand#toggle" data-card-expand-target="label" Show more
 
   - if chronicle.notice.present?
     p.yui-chronicle-card__summary = chronicle.notice
 
-  - if expanded? && chronicle.entries.any?
+  - if expanded? && entries.any?
     section.yui-stack.yui-stack--sm
       = render Yui::HeadlineComponent.new("Entries", level: 4)
       .yui-timeline
-        - chronicle.entries.each do |chronicle_entry|
+        - entries.each do |chronicle_entry|
           .yui-timeline__item
             = render ChronicleEntryComponent.new(chronicle_entry: chronicle_entry, scope: entry_scope, team: team)
   - elsif chronicle.first_picture.present?
     = render partial: insight_partial_path(chronicle.first_picture), locals: insight_partial_locals(chronicle.first_picture)
+
+  - if show_more?
+    section.yui-stack.yui-stack--sm hidden=true data-card-expand-target="entries"
+      = render Yui::HeadlineComponent.new("Entries", level: 4)
+      .yui-timeline
+        - entries.each do |chronicle_entry|
+          .yui-timeline__item
+            = render ChronicleEntryComponent.new(chronicle_entry: chronicle_entry, scope: entry_scope, team: team)

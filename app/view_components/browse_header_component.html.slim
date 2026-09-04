@@ -1,10 +1,6 @@
-.yui-record-header
-  - if title.present?
-    = content_tag(:h4, title, class: "yui-record-header__title")
-
-  - if show_open_button? || can_rewrite?
-    .yui-record-header__actions
-      - if show_open_button?
-        = render Yui::ButtonComponent.new("Open", href: show_path, variant: :secondary, size: :sm)
-      - if can_rewrite?
-        = render Yui::ButtonComponent.new("Rewrite", href: edit_path, variant: :ghost, size: :sm)
+- if title.present?
+  h4.yui-record-header__title
+    - if linkable?
+      = link_to title, show_path, class: "yui-link--cover"
+    - else
+      = title

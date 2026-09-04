@@ -32,24 +32,14 @@ RSpec.describe "Card Open and Rewrite Links", type: :system do
   end
 
   context "in browse mode" do
-    it "keeps Open on the browse chronicle in browse mode" do
+    it "opens the browse chronicle by clicking its title (there is no Open button)" do
       visit team_chronicles_path(team)
 
       within "[id='#{dom_id(chronicle)}']" do
-        click_link "Open"
+        click_link "Mont Blanc Summit"
       end
 
       expect(page).to have_current_path(team_chronicle_path(team, chronicle))
-    end
-
-    it "keeps Open on the browse memory in browse mode" do
-      visit team_memories_path(team)
-
-      within "[id='#{dom_id(memory)}']" do
-        click_link "Open"
-      end
-
-      expect(page).to have_current_path(team_memory_path(team, memory))
     end
 
     it "sends Rewrite to the current_team (manage) edit view" do
@@ -62,6 +52,26 @@ RSpec.describe "Card Open and Rewrite Links", type: :system do
 
       expect(page).to have_current_path(edit_current_team_chronicle_path(chronicle))
     end
+
+    it "has no title link and no Open button on a memory card — the memo is always shown in full" do
+      visit team_memories_path(team)
+
+      within "[id='#{dom_id(memory)}']" do
+        expect(page).to have_no_link("Open")
+        expect(page).to have_text("Sunrise at Refugio")
+      end
+    end
+
+    it "sends Rewrite on a memory card to the current_team (manage) edit view" do
+      login_as(user)
+      visit team_memories_path(team)
+
+      within "[id='#{dom_id(memory)}']" do
+        click_link "Rewrite"
+      end
+
+      expect(page).to have_current_path(edit_current_team_memory_path(memory))
+    end
   end
 
   context "in manage (current_team) mode" do
@@ -69,27 +79,36 @@ RSpec.describe "Card Open and Rewrite Links", type: :system do
       login_as(user)
     end
 
-    it "keeps Open on the manage chronicle in current_team scope" do
+    it "opens the manage chronicle by clicking its title (there is no Open button)" do
       visit current_team_chronicles_path
 
       within "[id='#{dom_id(chronicle)}']" do
-        click_link "Open"
+        click_link "Mont Blanc Summit"
       end
 
       expect(page).to have_current_path(current_team_chronicle_path(chronicle))
     end
 
-    it "keeps Open on the manage memory in current_team scope" do
+    it "sends Rewrite on a manage chronicle to the edit view" do
+      visit current_team_chronicles_path
+
+      within "[id='#{dom_id(chronicle)}']" do
+        click_link "Rewrite"
+      end
+
+      expect(page).to have_current_path(edit_current_team_chronicle_path(chronicle))
+    end
+
+    it "has no title link and no Open button on a manage memory card" do
       visit current_team_memories_path
 
       within "[id='#{dom_id(memory)}']" do
-        click_link "Open"
+        expect(page).to have_no_link("Open")
+        expect(page).to have_text("Sunrise at Refugio")
       end
-
-      expect(page).to have_current_path(current_team_memory_path(memory))
     end
 
-    it "sends Rewrite to the current_team (manage) edit view" do
+    it "sends Rewrite on a manage memory to the edit view" do
       visit current_team_memories_path
 
       within "[id='#{dom_id(memory)}']" do
@@ -107,9 +126,9 @@ RSpec.describe "Card Open and Rewrite Links", type: :system do
   # page 1 as just a placeholder — Turbo only ever replaces a frame's inner
   # content, never the frame element's own attributes, so that placeholder's
   # `target="_top"` (not just the current-page frame's) is what actually
-  # matters. Without it on both, clicking Open/Rewrite on a page-2+ card
-  # rendered Turbo's "Content missing" instead of navigating, and further
-  # pagination broke too since that click destroyed the frame's content.
+  # matters. Without it on both, clicking Rewrite on a page-2+ card rendered
+  # Turbo's "Content missing" instead of navigating, and further pagination
+  # broke too since that click destroyed the frame's content.
   # rack_test doesn't run Turbo's client-side JS at all, so this needs a real
   # browser (js: true) to actually exercise page-2 lazy-loading + the bug.
   #
@@ -134,12 +153,12 @@ RSpec.describe "Card Open and Rewrite Links", type: :system do
       expect(page).to have_text(marker_text, wait: 10)
     end
 
-    it "navigates (not 'Content missing') when clicking Open on a page-2 browse card" do
+    it "navigates (not 'Content missing') when clicking a chronicle's title on a page-2 browse card" do
       visit root_path
       scroll_to_page_2("Mont Blanc Summit")
 
       within "[id='#{dom_id(chronicle)}']" do
-        click_link "Open"
+        click_link "Mont Blanc Summit"
       end
 
       expect(page).to have_current_path(team_chronicle_path(team, chronicle))
@@ -159,20 +178,7 @@ RSpec.describe "Card Open and Rewrite Links", type: :system do
       expect(page).to have_no_text("Content missing")
     end
 
-    it "navigates (not 'Content missing') when clicking Open on a page-2 manage card" do
-      login_as(user)
-      visit current_team_home_path
-      scroll_to_page_2("Sunrise at Refugio")
-
-      within "[id='#{dom_id(memory)}']" do
-        click_link "Open"
-      end
-
-      expect(page).to have_current_path(current_team_memory_path(memory))
-      expect(page).to have_no_text("Content missing")
-    end
-
-    it "navigates (not 'Content missing') when clicking Rewrite on a page-2 manage card" do
+    it "navigates (not 'Content missing') when clicking Rewrite on a page-2 manage memory card" do
       login_as(user)
       visit current_team_home_path
       scroll_to_page_2("Sunrise at Refugio")

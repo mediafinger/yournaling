@@ -8,49 +8,50 @@ RSpec.describe MemoryCardComponent, type: :component do
     FactoryBot.build_stubbed(:memory, weblink: nil, memo: "We found a whole sand dollar, unbroken.", team: team)
   }
 
-  context "with actions: false (previews / static)" do
-    def render_card(**)
-      render_inline(described_class.new(memory: memory, actions: false, **))
-    end
+  it "has no header at all — the memo is always shown in full, so there's nothing to open" do
+    rendered = render_inline(described_class.new(memory: memory, scope: :browse, team: team))
 
-    it "renders the memo body and a meta line, no title — no 'Memory' badge, no record-header" do
-      rendered = render_card(scope: :browse)
-
-      expect(rendered).to have_css("article.yui-card.yui-memory-card##{ActionView::RecordIdentifier.dom_id(memory)}")
-      expect(rendered).to have_no_css("h4")
-      expect(rendered).to have_css(".yui-memory-card__memo", text: "sand dollar")
-      expect(rendered).to have_no_css(".yui-badge")
-      expect(rendered).to have_css(".yui-meta", text: "The Coast Year")
-      expect(rendered).to have_no_css(".yui-record-header")
-      expect(rendered).to have_css(".yui-card-footer")
-    end
-
-    it "renders an attached thought as a blockquote" do
-      memory.thought = Thought.new(text: "Some days keep themselves.")
-
-      expect(render_card(scope: :browse)).to have_css(".yui-blockquote blockquote", text: "Some days keep themselves.")
-    end
-
-    it "renders an attached location as a chip" do
-      memory.location = FactoryBot.build_stubbed(:location, name: "Ericeira", country_code: "pt")
-
-      expect(render_card(scope: :browse)).to have_css("span.yui-tag", text: "Ericeira")
-    end
+    expect(rendered).to have_css("article.yui-card.yui-memory-card[id='#{ActionView::RecordIdentifier.dom_id(memory)}']")
+    expect(rendered).to have_no_css(".yui-record-header")
+    expect(rendered).to have_no_css("h4")
+    expect(rendered).to have_no_css(".yui-badge", text: "Memory")
+    expect(rendered).to have_no_css(".yui-btn", text: "Open")
+    expect(rendered).to have_css(".yui-memory-card__memo", text: "sand dollar")
   end
 
-  context "with the real header (actions: true)" do
-    it "renders the Browse header with no title (the memo is redundant with the body) and an @team footer link" do
-      rendered = render_inline(described_class.new(memory: memory, scope: :browse, team: team))
+  it "renders a footer with the date and an @team link" do
+    rendered = render_inline(described_class.new(memory: memory, scope: :browse, team: team))
 
-      expect(rendered).to have_css(".yui-record-header")
-      expect(rendered).to have_no_css(".yui-record-header__title")
-      expect(rendered).to have_link("@The Coast Year", href: "/teams/#{team.to_param}")
-    end
-
-    it "renders the Manage header for scope: :manage" do
-      rendered = render_inline(described_class.new(memory: memory, scope: :manage, hide_actions: true))
-
-      expect(rendered).to have_css(".yui-record-header")
-    end
+    expect(rendered).to have_css(".yui-card-footer")
+    expect(rendered).to have_link("@The Coast Year", href: "/teams/#{team.to_param}")
   end
+
+  it "renders an attached thought as a blockquote" do
+    memory.thought = Thought.new(text: "Some days keep themselves.")
+
+    rendered = render_inline(described_class.new(memory: memory, scope: :browse, team: team))
+
+    expect(rendered).to have_css(".yui-blockquote blockquote", text: "Some days keep themselves.")
+  end
+
+  it "renders an attached location as a chip" do
+    memory.location = FactoryBot.build_stubbed(:location, name: "Ericeira", country_code: "pt")
+
+    rendered = render_inline(described_class.new(memory: memory, scope: :browse, team: team))
+
+    expect(rendered).to have_css("span.yui-tag", text: "Ericeira")
+  end
+
+  it "wires the footer with show_rewrite / show_visibility off when hide_actions is true" do
+    rendered = render_inline(described_class.new(memory: memory, scope: :manage, team: team, hide_actions: true))
+
+    expect(rendered).to have_no_css(".yui-btn", text: "Rewrite")
+    expect(rendered).to have_no_css(".yui-card-footer__center")
+  end
+
+  # Rewrite / the visibility control appearing for an authorized viewer is
+  # RecordFooterComponent's own responsibility (see its spec); covered here
+  # end-to-end via a signed-in session in
+  # spec/requests/current_teams/memories_request_spec.rb and
+  # spec/requests/teams/memories_request_spec.rb.
 end

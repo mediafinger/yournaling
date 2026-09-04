@@ -94,7 +94,10 @@
     border-top: var(--yui-border-hairline);
   }
 
-  /* RecordFooterComponent — date on the left, owner (team / creator) on the right. */
+  /* RecordFooterComponent — up to three zones: date (left), a center slot
+     (the visibility control in manage scope, or a caller-supplied override
+     such as Chronicle's browse-mode "Show more"), and Rewrite + owner
+     (team handle / creator) on the right. */
   .yui-card-footer {
     display: flex;
     flex-wrap: wrap;
@@ -110,8 +113,20 @@
     font-variant-numeric: tabular-nums;
   }
 
-  .yui-card-footer__owner {
+  .yui-card-footer__center {
+    display: flex;
+    align-items: center;
+  }
+
+  .yui-card-footer__owner-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--yui-space-xs);
+    align-items: center;
     margin-inline-start: auto;
+  }
+
+  .yui-card-footer__owner {
     font-weight: var(--yui-weight-medium);
     color: var(--yui-ink-soft);
   }
