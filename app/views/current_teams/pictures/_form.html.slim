@@ -5,7 +5,7 @@
 
     .yui-field
       = form.label :file, "Image File", class: "yui-label"
-      = form.file_field :file, class: "yui-input", accept: Picture::ALLOWED_IMAGE_TYPES.map { |type| ".#{type}" }.join(", "), required: form.object.new_record?, data: { picture_select_target: "fileInput", action: "change->picture-select#updateFilePreview" }
+      = form.file_field :file, class: "yui-input", accept: Picture::ALLOWED_SUFFIXES, required: form.object.new_record?, data: { picture_select_target: "fileInput", action: "change->picture-select#updateFilePreview" }
       img.yui-file-preview data-picture-select-target="filePreview" hidden=true alt="Selected image preview"
 
     = form.text_field :name, label: "Picture Name (Optional)", placeholder: "Defaults to image file name", data: { picture_select_target: "pictureNameInput" }

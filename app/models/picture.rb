@@ -21,6 +21,7 @@ class Picture < ApplicationRecordForContentAndPosts
 
   ALLOWED_IMAGE_TYPES = %w[gif jpeg png tiff webp].freeze
   ALLOWED_CONTENT_TYPES = ALLOWED_IMAGE_TYPES.map { |type| "image/#{type}" }.freeze
+  ALLOWED_SUFFIXES = (ALLOWED_IMAGE_TYPES + ["jpg"]).map { |type| ".#{type}" }.join(", ").freeze
   MAX_BYTE_SIZE = AppConf.picture_max_byte_size.to_i
   MIN_BYTE_SIZE = AppConf.picture_min_byte_size.to_i
   MAX_PIXEL_HEIGHT = AppConf.picture_max_pixels.to_i
