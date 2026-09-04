@@ -35,3 +35,6 @@ app_conf.local.rb
 node_modules/
 
 spec/examples.txt
+
+# Playwright MCP scratch output (snapshots, console logs, screenshots)
+/.playwright-mcp/
