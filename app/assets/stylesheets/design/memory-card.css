@@ -4,12 +4,13 @@
     gap: var(--yui-space-sm);
   }
 
+  /* Matches .yui-chronicle-card__summary — the same kind of card-body copy. */
   .yui-memory-card__memo {
     margin: 0;
     font-family: var(--yui-font-serif);
-    font-size: var(--yui-text-md);
+    font-size: var(--yui-text-base);
     line-height: var(--yui-leading-relaxed);
-    color: var(--yui-ink);
+    color: var(--yui-ink-soft);
   }
 
   .yui-memory-card__quote {

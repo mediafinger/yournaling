@@ -1,13 +1,21 @@
 .yui-record-header
   - if title.present?
-    = content_tag(heading_tag, title, class: "yui-record-header__title")
+    - if actions_in_header?
+      = content_tag(heading_tag, title, class: "yui-record-header__title")
+    - else
+      = content_tag(heading_tag, class: "yui-record-header__title") do
+        - if show_open_button?
+          = link_to title, show_path, class: "yui-link--cover"
+        - else
+          = title
 
-  - unless @hide_actions
+  - if actions_in_header? && !@hide_actions
     .yui-record-header__actions
       - if show_open_button?
         = render Yui::ButtonComponent.new("Open", href: show_path, variant: :secondary, size: :sm)
       - if can_rewrite?
-        = render Yui::ButtonComponent.new("Rewrite", href: edit_path, variant: :ghost, size: :sm)
+        a.yui-btn.yui-btn--ghost.yui-btn--sm href=edit_path role="button" title="Rewrite" aria-label="Rewrite"
+          = render Yui::IconComponent.new("pencil", size: :sm)
       - if can_change_visibility?
         = render ContentVisibilityModalComponent.new(record: @record, user: current_user, team: current_team, member: current_member)
       - elsif show_visibility?

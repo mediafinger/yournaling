@@ -4,7 +4,7 @@
 - else
   = render Yui::CardComponent.new(id: dom_id(picture)) do |card|
     - card.with_header do
-      = render ManageHeaderComponent.new(record: picture)
+      = render ManageHeaderComponent.new(record: picture, actions_in_header: false)
     - card.with_footer do
       = render RecordFooterComponent.new(record: picture, scope: :manage)
 

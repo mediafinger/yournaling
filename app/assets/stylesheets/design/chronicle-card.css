@@ -41,13 +41,13 @@
     color: var(--yui-ink);
   }
 
-  /* Chronicle card */
+  /* Chronicle card. `container-type` so the collapsed body below can clamp
+     itself to a multiple of the *card's* width (cqw), which the responsive
+     grid keeps changing. */
   .yui-chronicle-card {
     --yui-card-accent: var(--yui-accent);
-  }
 
-  .yui-chronicle-card__cover {
-    aspect-ratio: 16 / 6;
+    container-type: inline-size;
   }
 
   .yui-chronicle-card__summary {
@@ -64,5 +64,25 @@
     align-items: center;
     font-size: var(--yui-text-sm);
     color: var(--yui-ink-faint);
+  }
+
+  /* A collapsed card (not the full chronicle) shows the notice and as many
+     entries as fit in 1.5× the card's own width, then fades the cut-off edge
+     out into the card surface just above the footer. "Show more" (browse)
+     drops this class to lift the clip — see card_expand_controller.js. */
+  .yui-chronicle-card--collapsed .yui-card__body {
+    position: relative;
+    max-height: 150cqw;
+    overflow: hidden;
+  }
+
+  .yui-chronicle-card--collapsed .yui-card__body::after {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    height: 6rem;
+    pointer-events: none;
+    content: "";
+    background: linear-gradient(to bottom, transparent, var(--yui-surface) 70%);
   }
 }

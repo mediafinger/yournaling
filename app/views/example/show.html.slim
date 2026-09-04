@@ -286,13 +286,13 @@ nav.yui-showcase__toc aria-label="Sections"
           = render(Yui::AvatarComponent.new(name: "The Coast Year", size: :xl))
 
 / ------------------------------------------------------------------ Records
-- records_desc = "The primitives, assembled. MemoryCardComponent and ChronicleCardComponent — the same components the app renders, here with actions: false (no auth context)."
+- records_desc = "The primitives, assembled. MemoryCardComponent and ChronicleCardComponent — the same components the app renders, here in a guest context (no signed-in user, so Rewrite and the visibility control stay hidden)."
 = render(Example::SectionComponent.new(number: "11", title: "Records", anchor: "records", description: records_desc)) do
   .yui-grid.yui-grid--wide style="align-items: start"
-    = render(MemoryCardComponent.new(memory: example_memory, scope: :browse, actions: false))
-    = render(MemoryCardComponent.new(memory: example_memory, scope: :manage, actions: false))
+    = render(MemoryCardComponent.new(memory: example_memory, scope: :browse))
+    = render(MemoryCardComponent.new(memory: example_memory, scope: :manage))
   .yui-stack style="margin-top: 1.5rem"
-    = render(ChronicleCardComponent.new(chronicle: example_chronicle, scope: :browse, full: true, actions: false))
+    = render(ChronicleCardComponent.new(chronicle: example_chronicle, scope: :browse, full: true))
 
 footer.yui-section style="border-bottom: 0"
   .yui-container.yui-container--narrow.yui-align-center

@@ -1,47 +1,26 @@
 # frozen_string_literal: true
 
+# The header of a record card in the browse (public) area: just the record
+# name, rendered as a plain-looking link to its show page — underlines only
+# on hover (see .yui-link--cover) — unless we're already on that page, or
+# there's nowhere to link to. Actions (Rewrite, visibility) live in the card
+# footer now — see RecordFooterComponent.
+#
+# Used by ChronicleCardComponent only; Memory has no header at all, and the
+# browse insight partials (teams/*) don't use this component.
 class BrowseHeaderComponent < ApplicationComponent
-  def initialize(record:, team: nil, user: nil, member: nil, title: nil, date: nil, full: false)
+  def initialize(record:, team: nil, title: nil, full: false)
     super()
     @record = record
     @team = team || record.try(:team)
-    @user = user
-    @member = member
     @title = title
-    @date = date
     @full = full
   end
 
-  def current_user
-    @user.presence || (respond_to?(:helpers) && helpers.respond_to?(:current_user) ? helpers.current_user : super)
-  end
-
-  def current_team
-    @team.presence || (respond_to?(:helpers) && helpers.respond_to?(:current_team) ? helpers.current_team : super)
-  end
-
-  def current_member
-    return @member if @member.present?
-    # No persisted user (guest browsing, or a Lookbook preview) => no membership
-    # to look up. Guard the DB fallback so `current_member` never raises here.
-    return nil unless current_user&.persisted?
-
-    respond_to?(:helpers) && helpers.respond_to?(:current_member) ? helpers.current_member : super
-  end
-
-  # See ManageHeaderComponent#title — Memory's memo is shown in full in the
-  # card body right below, so a truncated repeat of it as the header title
-  # would be redundant.
   def title
     return @title if @title.present?
 
-    case @record
-    when Member then @record.user.name
-    when Memory then nil
-    when Thought then @record.text.to_s.truncate(60)
-    else
-      @record.try(:name).presence || @record.class.model_name.human
-    end
+    @record.try(:name).presence || @record.class.model_name.human
   end
 
   def show_path
@@ -55,24 +34,23 @@ class BrowseHeaderComponent < ApplicationComponent
     end
   end
 
-  def edit_path
-    helpers.edit_polymorphic_path([:current_team, @record])
-  end
-
-  def can_rewrite?
-    return false unless current_user.present?
-    return false unless current_team.present? && current_team == @record.try(:team)
-
-    allowed_to?(:update?, @record)
-  end
-
-  def show_open_button?
+  def linkable?
     return false if @full
-    return false if helpers.respond_to?(:controller_name) &&
-                    helpers.controller_name == @record.class.model_name.plural &&
-                    helpers.action_name == "show"
-    return false if show_path.blank?
+    # In-memory records (e.g. /example, which is reachable in production and
+    # so can't use FactoryBot's build_stubbed to fake an id) have no route.
+    return false unless @record.persisted? && @team&.persisted?
+    return false if controller_name == @record.class.model_name.plural && action_name == "show"
 
-    true
+    show_path.present?
+  end
+
+  private
+
+  def controller_name
+    helpers.controller.controller_name
+  end
+
+  def action_name
+    helpers.controller.action_name
   end
 end

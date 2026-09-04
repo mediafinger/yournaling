@@ -1,11 +1,25 @@
 .yui-card-footer
   - if date.present?
     span.yui-card-footer__date = date
-  - if browse? && team.present?
-    - if team_timeline_path
-      = link_to team_handle, team_timeline_path, class: "yui-card-footer__owner"
-    - else
-      span.yui-card-footer__owner = team_handle
-  - elsif !browse?
-    span.yui-card-footer__owner title="Created by"
-      = creator_name
+
+  - if center?
+    .yui-card-footer__center = center
+  - elsif show_visibility_control?
+    .yui-card-footer__center
+      - if can_change_visibility?
+        = render ContentVisibilityModalComponent.new(record: record, user: current_user, team: current_team, member: current_member)
+      - else
+        = render Yui::BadgeComponent.new(visibility_label, variant: visibility_badge_variant)
+
+  .yui-card-footer__owner-group
+    - if can_rewrite?
+      a.yui-btn.yui-btn--ghost.yui-btn--sm href=edit_path role="button" title="Rewrite" aria-label="Rewrite"
+        = render Yui::IconComponent.new("pencil", size: :sm)
+    - if browse? && team.present?
+      - if team_timeline_path
+        = link_to team_handle, team_timeline_path, class: "yui-card-footer__owner"
+      - else
+        span.yui-card-footer__owner = team_handle
+    - elsif manage?
+      span.yui-card-footer__owner title="Created by"
+        = creator_name

@@ -1,20 +1,25 @@
 @layer components {
   /* Picture lightbox — thumbnail trigger + enlarged image inside a Yui::Modal. */
 
+  /* Block, not inline-block: an inline-block button shrink-wraps to the
+     image's intrinsic width, which left thumbnails narrower than the chips,
+     quotes and prose they sit next to inside a card. */
   .yui-lightbox-trigger {
-    display: inline-block;
+    display: block;
+    width: 100%;
     padding: 0;
     cursor: zoom-in;
     background: none;
     border: 0;
   }
 
+  /* Fills the card's content width, like every other insight, and keeps the
+     picture's own aspect ratio — so it grows taller as it grows wider,
+     rather than being cropped to a fixed ratio. */
   .yui-lightbox-thumb {
     display: block;
     width: 100%;
-    max-width: 25rem;
-    aspect-ratio: 3 / 2;
-    object-fit: cover;
+    height: auto;
     border-radius: var(--yui-radius-md);
     box-shadow: var(--yui-shadow-sm);
     transition:

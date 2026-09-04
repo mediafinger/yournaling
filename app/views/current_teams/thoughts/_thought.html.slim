@@ -3,7 +3,7 @@
 - else
   = render Yui::CardComponent.new(id: dom_id(thought)) do |card|
     - card.with_header do
-      = render ManageHeaderComponent.new(record: thought)
+      = render ManageHeaderComponent.new(record: thought, actions_in_header: false)
     - card.with_footer do
       = render RecordFooterComponent.new(record: thought, scope: :manage)
     = render Yui::BlockquoteComponent.new(thought.text, variant: :card)

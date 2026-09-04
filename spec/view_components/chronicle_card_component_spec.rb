@@ -3,61 +3,102 @@
 require "rails_helper"
 
 RSpec.describe ChronicleCardComponent, type: :component do
-  let(:team) { FactoryBot.build_stubbed(:team, name: "The Coast Year") }
+  let(:team) { FactoryBot.create(:team, name: "The Coast Year") }
   let(:chronicle) do
-    FactoryBot.build_stubbed(:chronicle, name: "A year on the coast", notice: "Twelve months of small tides.", team: team,
-      start_date: Date.new(2024, 1, 1))
+    FactoryBot.create(:chronicle, name: "A year on the coast", notice: "Twelve months of small tides on the coast.",
+      team: team, start_date: Date.new(2024, 1, 1), visibility: "published")
   end
 
-  context "with actions: false (previews / static)" do
-    def render_card(chronicle: nil, **)
-      render_inline(described_class.new(chronicle: chronicle || self.chronicle, actions: false, **))
-    end
+  describe "browse scope" do
+    it "renders the name as a linked h4 title, the notice, and a footer with the @team handle — no eyebrow" do
+      rendered = render_inline(described_class.new(chronicle: chronicle, scope: :browse, team: team))
 
-    it "renders an h4 title, the notice, a meta line and a footer — no eyebrow, no record-header" do
-      rendered = render_card(scope: :browse)
-
-      expect(rendered).to have_css("article.yui-card.yui-chronicle-card##{ActionView::RecordIdentifier.dom_id(chronicle)}")
+      expect(rendered).to have_css("article.yui-card.yui-chronicle-card[id='#{ActionView::RecordIdentifier.dom_id(chronicle)}']")
       expect(rendered).to have_no_css(".yui-eyebrow")
-      expect(rendered).to have_css("h4", text: "A year on the coast")
-      expect(rendered).to have_css(".yui-chronicle-card__summary", text: "Twelve months of small tides.")
-      expect(rendered).to have_css(".yui-meta", text: "The Coast Year")
-      expect(rendered).to have_no_css(".yui-record-header")
-      expect(rendered).to have_css(".yui-card-footer")
+      expect(rendered).to have_css("h4.yui-record-header__title a.yui-link--cover", text: "A year on the coast")
+      expect(rendered).to have_css(".yui-chronicle-card__summary", text: "Twelve months of small tides on the coast.")
+      expect(rendered).to have_link("@The Coast Year", href: "/teams/#{team.to_param}")
+      expect(rendered).to have_no_css(".yui-btn", text: "Open")
     end
 
-    context "with entries (built in memory)" do
-      let(:with_entries) do
-        Chronicle.new(
-          name: "A year on the coast", notice: "n", start_date: Date.new(2024, 1, 1), team: team,
-          entries: [
-            ChronicleEntry.new(entry: Thought.new(text: "First swim of the year.")),
-            ChronicleEntry.new(entry: Thought.new(text: "Storm week.")),
-          ]
-        )
+    context "with entries" do
+      let!(:entries) do
+        [
+          ChronicleEntry.create!(chronicle: chronicle, team: team,
+            entry: Thought.create!(team: team, text: "First swim of the year."), position: 1),
+          ChronicleEntry.create!(chronicle: chronicle, team: team, entry: Thought.create!(team: team, text: "Storm week."),
+            position: 2),
+        ]
       end
 
-      it "renders a timeline of entries when full" do
-        rendered = render_card(chronicle: with_entries, scope: :browse, full: true)
+      it "renders the timeline once, clipped by the collapsed modifier, with a 'Show more' toggle" do
+        rendered = render_inline(described_class.new(chronicle: chronicle, scope: :browse, team: team, full: false))
 
         expect(rendered).to have_css(".yui-timeline .yui-timeline__item", count: 2)
-        expect(rendered).to have_css(".yui-timeline", text: "First swim of the year.")
+        expect(rendered).to have_css("article.yui-chronicle-card--collapsed")
+        expect(rendered).to have_css("[data-controller='card-expand']")
+        expect(rendered).to have_css(".yui-card-footer__center a", text: "Show more")
       end
 
-      it "does not render the timeline when not full" do
-        expect(render_card(chronicle: with_entries, scope: :browse, full: false)).to have_no_css(".yui-timeline")
+      it "renders the timeline unclipped, with no 'Show more', when full" do
+        rendered = render_inline(described_class.new(chronicle: chronicle, scope: :browse, team: team, full: true))
+
+        expect(rendered).to have_css(".yui-timeline .yui-timeline__item", count: 2)
+        expect(rendered).to have_no_css("article.yui-chronicle-card--collapsed")
+        expect(rendered).to have_no_css("[data-controller='card-expand']")
+        expect(rendered).to have_no_text("Show more")
       end
+
+      it "renders no 'Entries' subheadline and no repeated first picture" do
+        rendered = render_inline(described_class.new(chronicle: chronicle, scope: :browse, team: team, full: false))
+
+        expect(rendered).to have_no_text("Entries")
+        expect(rendered).to have_no_css(".yui-chronicle-card__cover")
+      end
+    end
+
+    it "does not offer 'Show more' when there are no entries" do
+      rendered = render_inline(described_class.new(chronicle: chronicle, scope: :browse, team: team, full: false))
+
+      expect(rendered).to have_no_css("[data-controller='card-expand']")
+      expect(rendered).to have_no_text("Show more")
+    end
+
+    it "fades the content above the footer when collapsed, not when full" do
+      collapsed = render_inline(described_class.new(chronicle: chronicle, scope: :browse, team: team, full: false))
+      full = render_inline(described_class.new(chronicle: chronicle, scope: :browse, team: team, full: true))
+
+      expect(collapsed).to have_css("article.yui-chronicle-card--collapsed")
+      expect(full).to have_no_css("article.yui-chronicle-card--collapsed")
     end
   end
 
-  it "renders the Browse header (h4 name, no buttons for a guest) and an @team footer link when actions: true" do
-    chronicle = FactoryBot.create(:chronicle, team: FactoryBot.create(:team, name: "The Coast Year"),
-      visibility: "published")
+  describe "manage scope" do
+    it "renders the name as a linked h4 title with no Open button in the header" do
+      rendered = render_inline(described_class.new(chronicle: chronicle, scope: :manage, team: team))
 
-    rendered = render_inline(described_class.new(chronicle: chronicle, scope: :browse, team: chronicle.team))
+      expect(rendered).to have_css(".yui-record-header h4.yui-record-header__title a.yui-link--cover",
+        text: "A year on the coast")
+      expect(rendered).to have_no_css(".yui-record-header .yui-btn", text: "Open")
+    end
 
-    expect(rendered).to have_css(".yui-record-header h4.yui-record-header__title", text: chronicle.name)
-    expect(rendered).to have_css(".yui-record-header", text: chronicle.name)
-    expect(rendered).to have_link("@The Coast Year", href: "/teams/#{chronicle.team.to_param}")
+    it "wires the footer with show_rewrite / show_visibility off when hide_actions is true" do
+      rendered = render_inline(described_class.new(chronicle: chronicle, scope: :manage, team: team, hide_actions: true))
+
+      expect(rendered).to have_no_css(".yui-btn", text: "Rewrite")
+      expect(rendered).to have_no_css(".yui-card-footer__center")
+    end
+
+    it "fades the content above the footer when collapsed (not full, not on the record's own show page)" do
+      rendered = render_inline(described_class.new(chronicle: chronicle, scope: :manage, team: team, full: false))
+
+      expect(rendered).to have_css("article.yui-chronicle-card--collapsed")
+    end
   end
+
+  # Rewrite / the visibility control appearing for an authorized viewer is
+  # RecordFooterComponent's own responsibility (see its spec); covered here
+  # end-to-end via a signed-in session in
+  # spec/requests/current_teams/chronicles_request_spec.rb and
+  # spec/requests/teams/chronicles_request_spec.rb.
 end

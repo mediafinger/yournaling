@@ -1,14 +1,11 @@
 = render Yui::CardComponent.new(id: helpers.dom_id(memory), accent: "gold", class: "yui-memory-card") do |card|
-  - card.with_header do
-    - if actions?
-      = render header_component
-    - elsif static_meta.present?
-      span.yui-meta = static_meta
-
   - card.with_footer do
-    = render RecordFooterComponent.new(record: memory, scope: scope, team: team)
+    = render RecordFooterComponent.new(record: memory, scope: scope, team: team, show_rewrite: !hide_actions, show_visibility: !hide_actions)
+
+  - if memory.picture.present?
+    = render partial: insight_partial_path(memory.picture), locals: insight_partial_locals(memory.picture)
 
   p.yui-memory-card__memo = memory.memo
 
-  - attachments.each do |attachment|
+  - other_attachments.each do |attachment|
     = render partial: insight_partial_path(attachment), locals: insight_partial_locals(attachment)

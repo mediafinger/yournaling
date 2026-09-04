@@ -1,25 +1,20 @@
 # frozen_string_literal: true
 
-# The header row of a record card in the manage area: the record name on the
-# left (always an <h4>), and the action buttons grouped on the right —
-# Open, Rewrite, and the visibility control.
+# The header row of a record card in the manage area.
 #
-# The visibility control replaces the old "Visibility: <state>" meta text plus
-# pencil icon: when the current user may change visibility it is the primary
-# button that opens ContentVisibilityModalComponent; otherwise it is a static
-# badge showing the state. The record's date and creator live in the card
-# footer now (see RecordFooterComponent), not here.
+# actions_in_header: true (default) — the original layout: the record name on
+#   the left as plain text, Open / Rewrite / the visibility control grouped on
+#   the right. Still used by Member, which this redesign leaves untouched.
+# actions_in_header: false — used by Chronicle and the manage insight cards
+#   (Story, Thought, Location, Weblink, Picture): just the record name,
+#   rendered as a plain-looking link to its show page (underlines only on
+#   hover — see .yui-link--cover). Rewrite and the visibility control live in
+#   the card footer instead — see RecordFooterComponent.
 class ManageHeaderComponent < ApplicationComponent
-  VISIBILITY_BADGE_VARIANTS = {
-    "draft" => :neutral,
-    "internal" => :info,
-    "published" => :success,
-    "archived" => :warning,
-    "blocked" => :danger,
-  }.freeze
+  include VisibilityControl
 
   def initialize(record:, user: nil, team: nil, member: nil, title: nil,
-                 hide_actions: false, full: false, heading_tag: nil)
+                 hide_actions: false, full: false, heading_tag: nil, actions_in_header: true)
     @record = record
     @user = user
     @team = team
@@ -28,6 +23,11 @@ class ManageHeaderComponent < ApplicationComponent
     @hide_actions = hide_actions
     @full = full
     @heading_tag = heading_tag
+    @actions_in_header = actions_in_header
+  end
+
+  def actions_in_header?
+    @actions_in_header
   end
 
   def current_user
@@ -47,16 +47,11 @@ class ManageHeaderComponent < ApplicationComponent
     respond_to?(:helpers) && helpers.respond_to?(:current_member) ? helpers.current_member : super
   end
 
-  # Memory has no name of its own — its memo is the record, shown in full in
-  # the card body right below the header, so a truncated repeat of it here is
-  # redundant. `title` returns blank for a Memory; the template skips the
-  # heading and the actions stay right-aligned.
   def title
     return @title if @title.present?
 
     case @record
     when Member then @record.user.name
-    when Memory then nil
     when Thought then @record.text.to_s.truncate(60)
     else
       @record.try(:name).presence || @record.class.model_name.human
@@ -91,30 +86,27 @@ class ManageHeaderComponent < ApplicationComponent
     allowed_to?(:update?, @record)
   end
 
+  # Whether there's somewhere useful to send the viewer for this record —
+  # renders as the "Open" button when actions_in_header?, or makes the title
+  # a link otherwise. False when we're already on the record's own show page —
+  # checking action_name alone isn't enough: the manage home feed is also
+  # rendered by an action literally named "show" (PagesController#show), which
+  # isn't this record's own page at all.
   def show_open_button?
     return false if @hide_actions
     return false if @full
-    return false if helpers.respond_to?(:action_name) && helpers.action_name == "show"
+    return false if controller_name == @record.class.model_name.plural && action_name == "show"
 
     true
   end
 
-  def show_visibility?
-    !@hide_actions && @record.respond_to?(:visibility) && @record.visibility.present?
+  private
+
+  def controller_name
+    helpers.controller.controller_name
   end
 
-  def can_change_visibility?
-    return false unless show_visibility?
-    return false unless current_user.present?
-
-    allowed_to?(:update?, @record, with: ContentVisibilityPolicy)
-  end
-
-  def visibility_badge_variant
-    VISIBILITY_BADGE_VARIANTS.fetch(@record.visibility.to_s, :neutral)
-  end
-
-  def visibility_label
-    @record.visibility.to_s.capitalize
+  def action_name
+    helpers.controller.action_name
   end
 end
