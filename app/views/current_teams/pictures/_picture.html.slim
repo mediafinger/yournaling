@@ -2,8 +2,11 @@
   div id= dom_id(picture)
     = render PictureLightboxComponent.new(picture: picture, team: current_team)
 - else
-  = render Yui::CardComponent.new(id: dom_id(picture)) do
-    = render ManageHeaderComponent.new(record: picture, hide_actions: false)
+  = render Yui::CardComponent.new(id: dom_id(picture)) do |card|
+    - card.with_header do
+      = render ManageHeaderComponent.new(record: picture)
+    - card.with_footer do
+      = render RecordFooterComponent.new(record: picture, scope: :manage)
 
     - is_picture_show = (controller_name == "pictures" || controller_path.to_s.end_with?("pictures")) && action_name == "show"
     - if is_picture_show

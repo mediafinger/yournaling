@@ -29,29 +29,18 @@ class BrowseHeaderComponent < ApplicationComponent
     respond_to?(:helpers) && helpers.respond_to?(:current_member) ? helpers.current_member : super
   end
 
+  # See ManageHeaderComponent#title — Memory's memo is shown in full in the
+  # card body right below, so a truncated repeat of it as the header title
+  # would be redundant.
   def title
     return @title if @title.present?
 
-    if @record.respond_to?(:name) && @record.name.present?
-      @record.name
+    case @record
+    when Member then @record.user.name
+    when Memory then nil
+    when Thought then @record.text.to_s.truncate(60)
     else
-      @record.class.model_name.human
-    end
-  end
-
-  def date
-    return @date if @date.present?
-
-    if @record.is_a?(Chronicle)
-      if @record.end_date.present?
-        "#{@record.start_date} – #{@record.end_date}"
-      else
-        @record.start_date.to_s
-      end
-    elsif @record.respond_to?(:date) && @record.date.present?
-      @record.date.to_s
-    elsif @record.respond_to?(:created_at) && @record.created_at.present?
-      @record.created_at.to_date.to_s
+      @record.try(:name).presence || @record.class.model_name.human
     end
   end
 

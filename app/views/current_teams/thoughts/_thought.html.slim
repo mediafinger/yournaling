@@ -1,6 +1,9 @@
 - if local_assigns[:hide_actions]
   = render Yui::BlockquoteComponent.new(thought.text, variant: :card, id: dom_id(thought))
 - else
-  = render Yui::CardComponent.new(id: dom_id(thought)) do
-    = render ManageHeaderComponent.new(record: thought, hide_actions: false)
+  = render Yui::CardComponent.new(id: dom_id(thought)) do |card|
+    - card.with_header do
+      = render ManageHeaderComponent.new(record: thought)
+    - card.with_footer do
+      = render RecordFooterComponent.new(record: thought, scope: :manage)
     = render Yui::BlockquoteComponent.new(thought.text, variant: :card)

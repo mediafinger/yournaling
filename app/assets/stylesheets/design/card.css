@@ -94,6 +94,32 @@
     border-top: var(--yui-border-hairline);
   }
 
+  /* RecordFooterComponent — date on the left, owner (team / creator) on the right. */
+  .yui-card-footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--yui-space-3xs) var(--yui-space-sm);
+    align-items: baseline;
+    justify-content: space-between;
+    width: 100%;
+    font-size: var(--yui-text-sm);
+    color: var(--yui-ink-faint);
+  }
+
+  .yui-card-footer__date {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .yui-card-footer__owner {
+    margin-inline-start: auto;
+    font-weight: var(--yui-weight-medium);
+    color: var(--yui-ink-soft);
+  }
+
+  a.yui-card-footer__owner:hover {
+    color: var(--yui-accent);
+  }
+
   .yui-card--pad-sm {
     --_pad: var(--yui-space-sm);
   }

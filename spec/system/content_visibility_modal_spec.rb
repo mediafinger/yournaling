@@ -22,8 +22,7 @@ RSpec.describe "Content Visibility Modal Dialog", type: :system do
     draft_chronicle = FactoryBot.create(:chronicle, team: team, name: "Draft Expedition", visibility: "draft")
     visit current_team_chronicle_url(draft_chronicle.urlsafe_id)
 
-    expect(page).to have_text("Visibility: draft")
-    expect(page).to have_button("Change visibility")
+    expect(page).to have_button("Change visibility", text: "Draft")
     expect(page).to have_css("dialog[data-yui-modal-target='dialog']", visible: :all)
 
     dialog = find("dialog[data-yui-modal-target='dialog']", visible: :all)
@@ -35,15 +34,14 @@ RSpec.describe "Content Visibility Modal Dialog", type: :system do
     find_button("Published", visible: :all).click
 
     expect(page).to have_text("Chronicle was successfully updated.")
-    expect(page).to have_text("Visibility: published")
+    expect(page).to have_button("Change visibility", text: "Published")
     expect(draft_chronicle.reload.visibility).to eq("published")
   end
 
   it "renders the visibility icon-button that connects to the modal dialog on chronicle view" do
     visit current_team_chronicle_url(chronicle.urlsafe_id)
 
-    expect(page).to have_text("Visibility: internal")
-    expect(page).to have_button("Change visibility")
+    expect(page).to have_button("Change visibility", text: "Internal")
     expect(page).to have_css("div[data-controller='yui-modal']")
     expect(page).to have_css("[data-action='click->yui-modal#open']")
     expect(page).to have_css("dialog[data-yui-modal-target='dialog']", visible: :all)
@@ -59,37 +57,35 @@ RSpec.describe "Content Visibility Modal Dialog", type: :system do
     find_button("Published", visible: :all).click
 
     expect(page).to have_text("Chronicle was successfully updated.")
-    expect(page).to have_text("Visibility: published")
+    expect(page).to have_button("Change visibility", text: "Published")
     expect(chronicle.reload.visibility).to eq("published")
   end
 
   it "renders the modal dialog on insight show view and allows updating visibility" do
     visit current_team_picture_url(picture.urlsafe_id)
 
-    expect(page).to have_text("Visibility: internal")
-    expect(page).to have_button("Change visibility")
+    expect(page).to have_button("Change visibility", text: "Internal")
     expect(page).to have_css("[data-action='click->yui-modal#open']")
     expect(page).to have_css("dialog[data-yui-modal-target='dialog']", visible: :all)
 
     find_button("Published", visible: :all).click
 
     expect(page).to have_text("Picture was successfully updated.")
-    expect(page).to have_text("Visibility: published")
+    expect(page).to have_button("Change visibility", text: "Published")
     expect(picture.reload.visibility).to eq("published")
   end
 
   it "renders the modal dialog on member show view and allows updating visibility" do
     visit current_team_member_url(member.urlsafe_id)
 
-    expect(page).to have_text("Visibility: published")
-    expect(page).to have_button("Change visibility")
+    expect(page).to have_button("Change visibility", text: "Published")
     expect(page).to have_css("[data-action='click->yui-modal#open']")
     expect(page).to have_css("dialog[data-yui-modal-target='dialog']", visible: :all)
 
     find_button("Internal", visible: :all).click
 
     expect(page).to have_text("Member was successfully updated.")
-    expect(page).to have_text("Visibility: internal")
+    expect(page).to have_button("Change visibility", text: "Internal")
     expect(member.reload.visibility).to eq("internal")
   end
 end

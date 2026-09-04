@@ -1,11 +1,12 @@
 = render Yui::CardComponent.new(id: helpers.dom_id(memory), accent: "gold", class: "yui-memory-card") do |card|
   - card.with_header do
-    .yui-cluster.yui-cluster--between
-      = render Yui::BadgeComponent.new("Memory", icon: "feather")
-      - if actions?
-        = render header_component
-      - elsif static_meta.present?
-        span.yui-meta = static_meta
+    - if actions?
+      = render header_component
+    - elsif static_meta.present?
+      span.yui-meta = static_meta
+
+  - card.with_footer do
+    = render RecordFooterComponent.new(record: memory, scope: scope, team: team)
 
   p.yui-memory-card__memo = memory.memo
 

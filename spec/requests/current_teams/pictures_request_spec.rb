@@ -57,7 +57,7 @@ RSpec.describe "/current_team/pictures", type: :request do
       get current_team_picture_url(picture.urlsafe_id)
 
       expect(response).to be_successful
-      expect(response.body).to include("Visibility:")
+      expect(response.body).to include("Change visibility")
       expect(response.body).to include("Rewrite")
     end
   end

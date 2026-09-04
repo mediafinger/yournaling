@@ -1,0 +1,11 @@
+.yui-card-footer
+  - if date.present?
+    span.yui-card-footer__date = date
+  - if browse? && team.present?
+    - if team_timeline_path
+      = link_to team_handle, team_timeline_path, class: "yui-card-footer__owner"
+    - else
+      span.yui-card-footer__owner = team_handle
+  - elsif !browse?
+    span.yui-card-footer__owner title="Created by"
+      = creator_name

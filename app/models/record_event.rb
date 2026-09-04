@@ -43,5 +43,25 @@ class RecordEvent < ApplicationRecord
     def get_history_for_user_events(event:, record_type_id_code:, user:)
       where(name: event, record_type: record_type_id_code, user_id: user.id)
     end
+
+    # Who created this record, read back from its `created` event.
+    #
+    # NOTE: this is one query per record. Rendering a grid of N cards is N+1.
+    # Options if it shows up in profiling:
+    #   (a) batch-load in the card-list component:
+    #       RecordEvent.where(name: "created", record_type: code, record_id: ids)
+    #       and index by record_id (needs a (record_type, record_id, name) index —
+    #       the closest existing one is (team_id, record_type, record_id));
+    #   (b) denormalise a `created_by_id` column onto the records themselves,
+    #       written by the *_with_event helpers.
+    # Left as an N+1 for now, deliberately.
+    def creator_for(record)
+      return nil if record.blank?
+
+      where(name: "created", record_type: record.class::YID_CODE, record_id: record.id)
+        .reorder(created_at: :asc)
+        .first
+        &.user
+    end
   end
 end

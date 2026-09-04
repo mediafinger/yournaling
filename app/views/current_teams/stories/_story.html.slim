@@ -3,6 +3,9 @@
     = render Yui::HeadlineComponent.new(story.name, level: 4)
     .yui-prose = markdown(story.content)
 - else
-  = render Yui::CardComponent.new(id: dom_id(story)) do
-    = render ManageHeaderComponent.new(record: story, hide_actions: false)
+  = render Yui::CardComponent.new(id: dom_id(story)) do |card|
+    - card.with_header do
+      = render ManageHeaderComponent.new(record: story)
+    - card.with_footer do
+      = render RecordFooterComponent.new(record: story, scope: :manage)
     .yui-prose = markdown(story.content)

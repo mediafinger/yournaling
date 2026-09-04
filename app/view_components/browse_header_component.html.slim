@@ -1,9 +1,6 @@
 .yui-record-header
-  .yui-record-header__meta
-    - if date.present?
-      span = date
-    - if @team.present?
-      span = @team.name
+  - if title.present?
+    = content_tag(:h4, title, class: "yui-record-header__title")
 
   - if show_open_button? || can_rewrite?
     .yui-record-header__actions

@@ -1,16 +1,6 @@
 .yui-record-header
-  div
+  - if title.present?
     = content_tag(heading_tag, title, class: "yui-record-header__title")
-    .yui-record-header__meta
-      - if date.present?
-        span
-          strong = "#{date_label}: "
-          = date
-      span
-        strong Visibility:&nbsp;
-        = @record.visibility
-        - unless @hide_actions
-          = render ContentVisibilityModalComponent.new(record: @record, user: current_user, team: current_team, member: current_member)
 
   - unless @hide_actions
     .yui-record-header__actions
@@ -18,3 +8,7 @@
         = render Yui::ButtonComponent.new("Open", href: show_path, variant: :secondary, size: :sm)
       - if can_rewrite?
         = render Yui::ButtonComponent.new("Rewrite", href: edit_path, variant: :ghost, size: :sm)
+      - if can_change_visibility?
+        = render ContentVisibilityModalComponent.new(record: @record, user: current_user, team: current_team, member: current_member)
+      - elsif show_visibility?
+        = render Yui::BadgeComponent.new(visibility_label, variant: visibility_badge_variant)
