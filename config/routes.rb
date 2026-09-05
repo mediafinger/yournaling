@@ -13,7 +13,12 @@ Rails.application.routes.draw do
   get "check_newer", to: "pages#check_newer", as: :check_newer_pages
   get "newer", to: "pages#newer", as: :newer_pages
 
+  # /up is a full readiness check (it queries the DB and 503s until the app has
+  # data). /alive is a bare liveness check — the process is up and can render —
+  # used by the Kamal proxy so a fresh deploy against an empty database still
+  # goes live. See config/deploy.yml.
   get "up" => "health#show", as: :rails_health_check
+  get "alive" => proc { [200, { "content-type" => "text/plain" }, ["ok\n"]] }
 
   # Design-language showcase (see app/view_components/yui + app/assets/stylesheets/design/)
   get "example", to: "example#show", as: :example

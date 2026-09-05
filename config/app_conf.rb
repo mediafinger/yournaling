@@ -44,8 +44,15 @@ class AppConf
     # sets value from ENV variable
     #   or `default` value
     # will raise a KeyError on boot when `required: true` but ENV variable not set
+    #
+    # During `assets:precompile` in the Docker build the real ENV (DB URL, S3
+    # credentials, ...) is not available. Rails signals this with
+    # SECRET_KEY_BASE_DUMMY; when it is set we fall back to defaults instead of
+    # raising, exactly like Rails does for `secret_key_base`.
     def register(var_name, default: nil, prefix: nil, required: false)
       define_singleton_method(var_name) { instance_variable_get(:"@#{var_name}") }
+
+      required = false if ENV["SECRET_KEY_BASE_DUMMY"]
 
       env_name = [prefix, var_name].compact.join("_").upcase
       value = required ? ENV.fetch(env_name) : ENV.fetch(env_name, default)
@@ -88,16 +95,21 @@ class AppConf
   register :yournaling_version, default: env_and_version
 
   # Database setup
+  #
+  # In production/staging supply either the full YOURNALING_DB_URL (+ the _cable
+  # / _cache / _queue variants) or just the parts — YOURNALING_DB_HOST,
+  # YOURNALING_DB_NAME, YOURNALING_DB_USERNAME, YOURNALING_DB_PASSWORD — and let
+  # the four URLs below compose themselves. Only the DB name is mandatory.
   register :yournaling_db_host, default: "localhost"
   register :yournaling_db_name, default: "yournaling", required: production_env
   register :yournaling_db_password, default: ""
   register :yournaling_db_port, default: 5432
   register :yournaling_db_timeout_seconds, default: 5, required: production_env
   register :yournaling_db_username, default: "postgres"
-  register :yournaling_db_url, default: "postgres://#{yournaling_db_username}:#{yournaling_db_password}@#{yournaling_db_host}:#{yournaling_db_port}/#{yournaling_db_name}", required: production_env
-  register :yournaling_cable_db_url, default: "postgres://#{yournaling_db_username}:#{yournaling_db_password}@#{yournaling_db_host}:#{yournaling_db_port}/#{yournaling_db_name}_cable", required: production_env
-  register :yournaling_cache_db_url, default: "postgres://#{yournaling_db_username}:#{yournaling_db_password}@#{yournaling_db_host}:#{yournaling_db_port}/#{yournaling_db_name}_cache", required: production_env
-  register :yournaling_queue_db_url, default: "postgres://#{yournaling_db_username}:#{yournaling_db_password}@#{yournaling_db_host}:#{yournaling_db_port}/#{yournaling_db_name}_queue", required: production_env
+  register :yournaling_db_url, default: "postgres://#{yournaling_db_username}:#{yournaling_db_password}@#{yournaling_db_host}:#{yournaling_db_port}/#{yournaling_db_name}"
+  register :yournaling_cable_db_url, default: "postgres://#{yournaling_db_username}:#{yournaling_db_password}@#{yournaling_db_host}:#{yournaling_db_port}/#{yournaling_db_name}_cable"
+  register :yournaling_cache_db_url, default: "postgres://#{yournaling_db_username}:#{yournaling_db_password}@#{yournaling_db_host}:#{yournaling_db_port}/#{yournaling_db_name}_cache"
+  register :yournaling_queue_db_url, default: "postgres://#{yournaling_db_username}:#{yournaling_db_password}@#{yournaling_db_host}:#{yournaling_db_port}/#{yournaling_db_name}_queue"
 
   # determines the size of the DB connection pool and the puma threads
   register :rails_max_threads, default: 6
@@ -157,6 +169,15 @@ class AppConf
   # Geoapify API
   register :geoapify_api_key, default: "secret_key", required: production_env
   register :geoapify_api_url, default: "https://api.geoapify.com", required: production_env
+
+  # SMTP (ActionMailer delivery in production/staging — see config/environments/production.rb).
+  # Leave SMTP_ADDRESS unset to keep mail delivery disabled without breaking boot.
+  register :smtp_address, default: nil
+  register :smtp_port, default: 587
+  register :smtp_user_name, default: nil
+  register :smtp_password, default: nil
+  register :smtp_domain, default: nil
+  register :mailer_from, default: "no-reply@yournaling.com"
 
   # Don't add secrets as 'default' values in this file!
   #

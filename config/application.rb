@@ -95,7 +95,7 @@ module Yournaling
     # # set rack-timeout / test in production to not set it to low
     config.middleware.insert_after(
       ActionDispatch::RequestId,
-      Rack::Timeout, service_timeout: AppConf.rack_timeout # seconds
+      Rack::Timeout, service_timeout: AppConf.rack_timeout.to_i # seconds; ENV gives a String
     )
     Rack::Timeout::Logger.disable # we only log the errors, not the verbose status messages
 

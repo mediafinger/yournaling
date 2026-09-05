@@ -29,6 +29,13 @@
 # Ignore local settings file (which might contain secrets)
 app_conf.local.rb
 
+# Kamal: keep the committed template `.kamal/secrets`, ignore resolved variants.
+/.kamal/secrets.*
+/.kamal/secrets-*
+.env
+.env.*
+!.env.example
+
 /app/assets/builds/*
 !/app/assets/builds/.keep
 

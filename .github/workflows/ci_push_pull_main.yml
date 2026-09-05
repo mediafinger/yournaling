@@ -25,7 +25,7 @@ jobs:
         env:
           BUNDLE_GITHUB__COM: x-access-token:${{ secrets.REPO_SCOPED_TOKEN }}
           BUNDLE_WITH: test
-          BUNDLE_WITHOUT: development:staging:production
+          BUNDLE_WITHOUT: development:staging:production:deploy
         with:
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
           cache-version: 1 # increment this number when you have to empty the cache manually

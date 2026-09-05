@@ -1,0 +1,72 @@
+name: deploy-staging
+
+# Manual trigger only for now. Once staging is proven, uncomment the `push`
+# block below to auto-deploy every merge to main.
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Git ref to build & deploy
+        required: false
+        default: main
+  # push:
+  #   branches: [ main ]
+
+concurrency:
+  group: deploy-staging
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Build, push & deploy to staging
+    runs-on: ubuntu-latest
+    environment: staging
+
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+
+    env:
+      # Kamal reads these via .kamal/secrets (NAME=$NAME fallthrough).
+      KAMAL_REGISTRY_USERNAME: ${{ github.actor }}
+      KAMAL_REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+      RAILS_SECRET_KEY_BASE: ${{ secrets.RAILS_SECRET_KEY_BASE }}
+      YOURNALING_DB_PASSWORD: ${{ secrets.YOURNALING_DB_PASSWORD }}
+      POSTGRES_PASSWORD: ${{ secrets.YOURNALING_DB_PASSWORD }}
+      AMAZON_S3_ACCESS_KEY_ID: ${{ secrets.AMAZON_S3_ACCESS_KEY_ID }}
+      AMAZON_S3_SECRET_ACCESS_KEY: ${{ secrets.AMAZON_S3_SECRET_ACCESS_KEY }}
+      GEOAPIFY_API_KEY: ${{ secrets.GEOAPIFY_API_KEY }}
+      STAGING_HOST: ${{ vars.STAGING_HOST }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.ref || github.ref }}
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        env:
+          BUNDLE_WITH: deploy
+          BUNDLE_WITHOUT: development:test:staging:production
+        with:
+          bundler-cache: true
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Add SSH key
+        uses: webfactory/ssh-agent@v0.9.1
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy
+        run: bin/kamal deploy -d staging
