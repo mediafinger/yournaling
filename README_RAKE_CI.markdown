@@ -95,7 +95,9 @@ ENVs:
 Prerequisites (all handled by `bin/setup`, except where noted):
 
 - **Ruby + gems** - `bundle install`
-- **Node + npm packages** - for `bin/css_lint` (`npm ci`); `bin/setup` runs it
+- **JS packages** - for `bin/css_lint`; installed with `bin/bun install`, which
+  `bin/setup` runs. Bun ships as the `bundlebun` gem, so there is no Node/npm
+  to install — `bundle install` is the only prerequisite
 - **PostgreSQL** - for `db:doctor`, `factory_bot:awesome_lint`, `ci:rspec`
 - **actionlint** - optional locally (`brew install actionlint`). The gate
   skips with a notice if the binary is absent, CI installs it, so on CI it always runs.
@@ -104,7 +106,7 @@ Prerequisites (all handled by `bin/setup`, except where noted):
 
 [.github/workflows/ci_push_pull_main.yml](.github/workflows/ci_push_pull_main.yml) runs on every push to `main` and every PR targeting `main`. One `tests` job:
 
-1. checkout, `ruby/setup-ruby` (bundler cache), `actions/setup-node` + `npm ci`
+1. checkout, `ruby/setup-ruby` (bundler cache), `bin/bun install --frozen-lockfile`
 2. `libvips` / `libpoppler` for ActiveStorage variants
 3. Postgres service container; `db:drop db:create db:migrate` + `parallel:setup[4]`
 4. install `actionlint`

@@ -19,13 +19,11 @@ FileUtils.chdir APP_ROOT do
   puts "== Installing dependencies =="
   system("bundle check") || system!("bundle install")
 
-  # Dev-only Node toolchain for linting/formatting the CSS design system
+  # Dev-only JS toolchain for linting/formatting the CSS design system
   # (see TODO_UI_DESIGN.md §4). Does not touch importmap / Propshaft / runtime.
-  if system("npm --version", out: File::NULL, err: File::NULL)
-    system! "npm install"
-  else
-    puts "!! npm not found — skipping. `bin/css_lint` / `rake ci` need it; install Node ≥ 22."
-  end
+  # Bun ships as the `bundlebun` gem, so `bundle install` above is the only
+  # prerequisite — no Node, no npm.
+  system! "bin/bun install"
 
   # puts "\n== Copying sample files =="
   # unless File.exist?("config/database.yml")

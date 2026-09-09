@@ -1,7 +1,7 @@
 node_modules/
 app/assets/builds/
 Gemfile.lock
-package-lock.json
+bun.lock
 
 # Only the design system (app/assets/stylesheets/design/) is formatted; the
 # legacy Pico-era stylesheets are removed in the Phase 6 teardown.

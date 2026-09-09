@@ -149,9 +149,10 @@ The `design/*.css` files are **scoped** (`.ex-scope` / `.ex-body`) and their
 - **CSP**: when re-enabled (Phase 6), no external style/script host is needed if
   fonts are self-hosted. The `csp_meta_tag` is already in the layouts.
 - ✅ **CI / tests**: no runtime build artefact. `rake ci` gained one step — the
-  Prettier + Stylelint `css` task (§4), with `actions/setup-node` + `npm ci`
-  added to the CI tests job and `npm install` to `bin/setup`; still no asset
-  compilation. (Contrast with §9.)
+  Prettier + Stylelint `css` task (§4), with a JS-package install added to the
+  CI tests job and to `bin/setup`; still no asset compilation. (Contrast with
+  §9.) Originally `actions/setup-node` + `npm ci`; now `bin/bun install`, with
+  Bun supplied by the `bundlebun` gem — no Node toolchain at all (§4).
 
 ---
 
@@ -331,7 +332,7 @@ As shipped (`.stylelintrc.json`, extends `stylelint-config-standard` +
 **Scope**: only the hand-authored design system is linted/formatted —
 `bin/css_lint` (add `-a` to auto-correct) globs `app/assets/stylesheets/design/**/*.css`, and
 `.prettierignore` excludes `app/assets/stylesheets/*.css` (the legacy Pico-era
-sheets, gone in Phase 6) plus `builds/`, `Gemfile.lock`, `package-lock.json`.
+sheets, gone in Phase 6) plus `builds/`, `Gemfile.lock`, `bun.lock`.
 (The plan originally said `stylesheets/**` — narrowing to `design/` is the right
 call and what shipped.)
 
@@ -343,15 +344,22 @@ call and what shipped.)
   (the `bin/mcp_rubocop -A` equivalent).
 - `Rakefile`: a `css` task in the `ci` chain (`zeitwerk:check rubocop slim_lint
 css factory_bot:awesome_lint db:doctor rspec …`).
-- CI: `actions/setup-node@v4` (`node-version: "22"`, `cache: "npm"`) + `npm ci`
-  in the tests job; `package-lock.json` committed. `bin/setup` runs
-  `npm install`.
+- CI: `bin/bun install --frozen-lockfile` in the tests job (the `npm ci`
+  equivalent); `bun.lock` committed. `bin/setup` runs `bin/bun install`.
 
-If avoiding `node_modules` ever becomes a hard requirement, the only alternative
-is Biome as a single vendored binary (`npx --yes @biomejs/biome` in CI, or the
-release binary in `bin/`) — zero committed deps, but you lose property ordering
-and the naming-pattern rule, which is most of the reason to lint a design
-system. Not worth that trade here.
+**Runtime**: stylelint and prettier run on **Bun**, which ships as the
+`bundlebun` gem (`bin/bun`) — so `bundle install` is the whole toolchain and
+there is no Node/npm to install, pin or set up in CI. The gem pins the Bun
+version in `Gemfile.lock` like any other dependency; bumping Bun means bumping
+the gem. Cost is a ~24 MB (arm64-darwin) / ~34 MB (x86_64-linux-gnu) platform
+gem.
+
+This does **not** remove `node_modules` — Bun installs the same dependency tree
+(123 packages, ~28 MB), it just replaces Node as the runtime and npm as the
+installer. If dropping `node_modules` itself ever becomes a hard requirement,
+the only alternative is Biome as a single vendored binary — zero committed deps,
+but you lose property ordering and the naming-pattern rule, which is most of the
+reason to lint a design system. Not worth that trade here.
 
 ---
 
@@ -538,7 +546,8 @@ layer to maintain, no coverage lost.
 - [x] Add **Prettier + Stylelint** (§4): `package.json` (devDeps only),
       `.stylelintrc.json`, `.prettierignore`, `bin/css_lint` (`-a` to
       auto-correct), a `css` task in the `rake ci` chain, and the
-      `actions/setup-node` + `npm ci` step in CI. Run `bin/css_lint -a` once and
+      JS-package install step in CI (originally `actions/setup-node` + `npm ci`,
+      now `bin/bun install` via the `bundlebun` gem — see §4). Run `bin/css_lint -a` once and
       commit the reformat + any rule disables as a standalone commit. (scoped to `example.css`; the legacy
       Pico-era stylesheets are `ignoreFiles`'d — they go in Phase 6.)
 - [x] Add Lookbook (§5); previews for the existing ~20 primitives in
