@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Yui
   # Inline emphasis — semantic <strong>, styled as a confident bold.
   #

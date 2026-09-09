@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # A Memory rendered as a card: a Browse / Manage header (no title — Memory
 # has no name, and repeating the memo there would just duplicate the body —
 # actions only), a footer (date + team/creator), the memo, and its attached

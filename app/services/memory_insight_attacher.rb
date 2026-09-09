@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class MemoryInsightAttacher
   class << self
     def call(memory:, params:, user: nil)

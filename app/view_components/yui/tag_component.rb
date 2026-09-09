@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Yui
   # Pill-shaped tag / chip. Renders an <a> when `href:` is given, otherwise a
   # <span>. Set `removable: true` for a trailing ✕ affordance (presentational).

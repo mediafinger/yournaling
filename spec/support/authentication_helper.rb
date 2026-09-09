@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Does what Devise::Test::IntegrationHelpers `sign_in(user)` would normally do
 #
 #

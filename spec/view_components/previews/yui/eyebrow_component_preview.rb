@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Yui
   # @label Eyebrow
   class EyebrowComponentPreview < ViewComponent::Preview

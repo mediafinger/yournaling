@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Yui
   # One item in a Yui::Navbar group — an `<li>` wrapping a link.
   #

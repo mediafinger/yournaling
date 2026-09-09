@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # This app has 4 databases (1 Postgres primary + 3 SQLite for SolidCable/Cache/Queue,
 # see config/database.yml). `db:schema:dump` dumps each database's schema.rb through
 # ActiveRecord::Tasks::DatabaseTasks#with_temporary_pool, which isolates a single

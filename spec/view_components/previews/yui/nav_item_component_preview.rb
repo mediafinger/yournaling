@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Yui
   # @label Nav item
   class NavItemComponentPreview < ViewComponent::Preview

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Yui
   # Horizontal rule. Plain by default, or with a centered uppercase label.
   #

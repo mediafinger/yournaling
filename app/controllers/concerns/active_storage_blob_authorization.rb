@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module ActiveStorageBlobAuthorization
   extend ActiveSupport::Concern
 

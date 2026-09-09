@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # type: PostEntry
 #
 class ChronicleEntry < ApplicationRecordYidEnabled

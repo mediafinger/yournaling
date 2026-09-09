@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class ContentVisibilityPolicy < ApplicationPolicy
   def update?
     return false unless current_team_owns_record?

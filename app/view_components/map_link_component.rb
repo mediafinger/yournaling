@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # A static map thumbnail that links out to Google Maps.
 #
 # When no usable Geoapify key is configured (e.g. local development) the static

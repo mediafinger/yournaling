@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "rails_helper"
 require Rails.root.join("lib/tasks/support/ci_gate")
 

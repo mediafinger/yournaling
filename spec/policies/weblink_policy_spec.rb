@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 RSpec.describe WeblinkPolicy do
   let(:user) { FactoryBot.create(:user) }
   let(:team) { FactoryBot.create(:team) }

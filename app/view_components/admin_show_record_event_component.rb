@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class AdminShowRecordEventComponent < ApplicationComponent
   def initialize(record_event:)
     @record_event = record_event

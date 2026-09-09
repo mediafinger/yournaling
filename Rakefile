@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Suppress upstream constant redefinition warnings across subprocesses on Ruby 4.0+
 # NOTE
 #   This does also suppress deprecation and other warnings, therefore it should probably be

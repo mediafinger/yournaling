@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # View helpers for the /example design-language showcase only. The records are
 # built in memory (no DB, no FactoryBot — /example is reachable in production)
 # and rendered with `actions: false` so no auth/policy context is needed.

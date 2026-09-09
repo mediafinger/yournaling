@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Yui
   # @label Emphasis
   class EmphasisComponentPreview < ViewComponent::Preview

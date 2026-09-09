@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class TeamArtefactPolicy < ApplicationPolicy
   scope_for :relation do |relation|
     return relation.none unless team.present? && member.present? && member.team == team && member.user == user

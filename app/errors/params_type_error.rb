@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class ParamsTypeError < CustomError
   def initialize(key:, got:, expected:)
     message = ":#{key} contained '#{got}' expected '#{expected}'"

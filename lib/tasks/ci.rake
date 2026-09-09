@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # `rake ci` — the quality-gate suite.
 #
 # See README_RAKE_CI.markdown for the full reference. Each `ci:<step>` runs its

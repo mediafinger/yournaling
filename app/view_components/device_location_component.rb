@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # One-line "City 🇨🇨 Country" from a geolocated IP address.
 class DeviceLocationComponent < ApplicationComponent
   attr_reader :infos

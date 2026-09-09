@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module CurrentTeams
   class ChroniclesController < AppCurrentTeamController
     include ChronicleFormHandling

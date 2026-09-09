@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # This table stores :created, :updated and other events for records owned by teams
 #
 # It has indices to allow for fast queries, using the get_ methods below

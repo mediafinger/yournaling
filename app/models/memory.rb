@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # type: Post
 #
 # Memory.memo and an optional Thought feel like basically the same thing.

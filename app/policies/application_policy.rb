@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Base class for application policies
 class ApplicationPolicy < ActionPolicy::Base
   NON_TEAM_OWNED_RECORD_CLASSES = %w[

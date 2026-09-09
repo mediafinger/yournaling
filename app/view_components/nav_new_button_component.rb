@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # The "+ New" nav control. Emits a bare <li> for a Yui::Navbar group, wrapping
 # a Yui::Menu (or a plain CTA nav item when there is only one target).
 class NavNewButtonComponent < ApplicationComponent

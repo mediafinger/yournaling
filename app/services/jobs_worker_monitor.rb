@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Answers one question for development-time diagnostics: is a Solid Queue worker
 # actually running and claiming jobs right now?
 #

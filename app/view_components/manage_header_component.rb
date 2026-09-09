@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # The header row of a record card in the manage area: the record name on the
 # left (always an <h4>), and the action buttons grouped on the right —
 # Open, Rewrite, and the visibility control.

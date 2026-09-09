@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Requests
   class GeoapifyIpLocationService < BaseConnectionService
     class << self

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # rubocop:disable Rails/Output
 # rubocop:disable Style/Alias
 Rails.application.console do

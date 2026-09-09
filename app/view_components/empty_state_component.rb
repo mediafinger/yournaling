@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class EmptyStateComponent < ApplicationComponent
   attr_reader :icon, :title, :description, :cta_label, :cta_path
 

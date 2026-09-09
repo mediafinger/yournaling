@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Yui
   # Round avatar. Shows the image when `src:` is given, otherwise falls back to
   # the initials derived from `name:`.

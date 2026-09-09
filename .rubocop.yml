@@ -12,6 +12,7 @@ AllCops:
   TargetRubyVersion: 4.0
   DisplayCopNames: true
   NewCops: enable
+  StringLiteralsFrozenByDefault: true # set in config/bootsnap.rb
   Exclude:
     - "**/*.yml"
     - "**/bin/*"
@@ -130,6 +131,9 @@ Rails/Blank:
   Enabled: false
 
 Rails/Delegate:
+  Enabled: false
+
+Rails/HttpStatus:
   Enabled: false
 
 Rails/I18nLocaleTexts:
@@ -264,7 +268,7 @@ Style/FormatStringToken:
 
 Style/FrozenStringLiteralComment:
   Enabled: true
-  EnforcedStyle: always_true
+  EnforcedStyle: never
 
 Style/HashSyntax:
   Exclude:

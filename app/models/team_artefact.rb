@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Based on team_artefacts VIEW (not a table)
 
 class TeamArtefact < ApplicationRecord

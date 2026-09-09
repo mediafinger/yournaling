@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "rails_helper"
 
 # The CSP is enabled outside development (Phase 6). It is enforced in test, so

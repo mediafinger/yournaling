@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Yui
   # A disclosure menu — a native <details> so it works without JS; the
   # `yui-menu` controller adds outside-click / Escape close and aria wiring.

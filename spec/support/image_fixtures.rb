@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Test images live in spec/support/images/. They were all derived from the one
 # real smartphone photo (spec/support/macbookair_stickered.jpg — a Google
 # Pixel 4a JPEG taken 2022-04-12 in Cologne with full GPS EXIF):

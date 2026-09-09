@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 RSpec.shared_examples_for "guest user" do
   # expects the following variables to be defined in the calling spec:
   # (let() and values only examples!)

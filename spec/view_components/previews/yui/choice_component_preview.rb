@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Yui
   # @label Choice
   class ChoiceComponentPreview < ViewComponent::Preview

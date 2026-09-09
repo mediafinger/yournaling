@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class SearchResultsComponent < ApplicationComponent
   attr_reader :results, :query
 

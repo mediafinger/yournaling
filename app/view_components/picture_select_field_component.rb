@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class PictureSelectFieldComponent < ApplicationComponent
   # NOTE: as of the Warm Editorial migration this component is not rendered by
   # any view — InsightAttachmentManagerComponent covers picture attachment.

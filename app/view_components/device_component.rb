@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # One-line human summary of a device parsed from a User-Agent string.
 class DeviceComponent < ApplicationComponent
   attr_reader :infos

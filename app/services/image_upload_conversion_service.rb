@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Converts an uploaded image into the canonical stored form:
 #   * auto-rotated so the pixels are upright (EXIF Orientation is honoured by
 #     libvips' thumbnail step, then dropped)

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # A Chronicle rendered as a card: a Browse / Manage header (name + actions),
 # the notice, a footer (date + team/creator), and — when expanded — a vertical
 # timeline of its entries (or its first picture as a fallback).

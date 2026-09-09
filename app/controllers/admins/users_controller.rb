@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Admins
   class UsersController < AdminController
     def index

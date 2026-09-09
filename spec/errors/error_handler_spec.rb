@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 RSpec.describe ErrorHandler do
   describe "MAP_RAILS_ERRORS" do
     # ErrorHandler installs a `rescue_from ::StandardError`, which runs *before* ActionDispatch's

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class BrowseHeaderComponent < ApplicationComponent
   def initialize(record:, team: nil, user: nil, member: nil, title: nil, date: nil, full: false)
     super()

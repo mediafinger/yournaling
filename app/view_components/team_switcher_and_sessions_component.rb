@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Right-hand nav group: admin-area link, team switcher, account + logout.
 # Emits bare <li>s for a Yui::Navbar group (no wrapping <ul>).
 class TeamSwitcherAndSessionsComponent < ApplicationComponent

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # TODO: let Ahoy handle this?!
 
 class RecordEventService

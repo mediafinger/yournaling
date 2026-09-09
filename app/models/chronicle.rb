@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # type: Post
 #
 class Chronicle < ApplicationRecordForContentAndPosts

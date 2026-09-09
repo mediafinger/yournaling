@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # @label Empty state
 class EmptyStateComponentPreview < ViewComponent::Preview
   # @param icon text

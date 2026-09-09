@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class ChronicleEntryComponent < ApplicationComponent
   def initialize(chronicle_entry:, scope: "current_team", team: nil)
     @chronicle_entry = chronicle_entry

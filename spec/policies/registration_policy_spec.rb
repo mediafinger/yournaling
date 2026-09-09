@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 RSpec.describe RegistrationPolicy do
   subject(:allowed_to?) { described_class.new(record, user: user, team: nil, member: nil).apply(rule) }
 

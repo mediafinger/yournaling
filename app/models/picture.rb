@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # type: Content
 #
 # Upload pipeline (see README_PICTURES.md):

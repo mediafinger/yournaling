@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module ErrorHandler
   ERROR_DEFAULTS = { code: :internal_server_error, status: 500, message: "Sorry, something went wrong." }.freeze
 

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Yui
   # A CSS-only loading indicator. Pure presentation — no timers, no state.
   #

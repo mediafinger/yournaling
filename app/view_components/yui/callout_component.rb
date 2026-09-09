@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Yui
   # A bordered, tinted notice for inline guidance, confirmations and warnings.
   #

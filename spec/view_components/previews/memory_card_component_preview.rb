@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # @label Memory card
 #
 # Rendered with `actions: true` — the real Browse/Manage header component.

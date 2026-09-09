@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 RSpec.describe MemberPolicy do
   # the following variables are used by the shared_examples:
   #

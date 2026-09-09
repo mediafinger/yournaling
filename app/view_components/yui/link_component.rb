@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Yui
   # Text link in the design-language style.
   #

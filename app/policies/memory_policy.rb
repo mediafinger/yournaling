@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class MemoryPolicy < ApplicationPolicy
   def read?
     return true if current_team_owns_record?

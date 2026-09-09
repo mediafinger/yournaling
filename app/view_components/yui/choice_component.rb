@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Yui
   # A single checkbox or radio option with a label and optional helper text.
   #

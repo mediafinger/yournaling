@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class InsightAttachmentManagerComponent < ApplicationComponent
   def initialize(form:, scope: "current_team", mode: "single")
     @form = form

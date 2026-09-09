@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Store a few per-request attributes here (globally), instead of passing them around everywhere
 #
 # https://api.rubyonrails.org/classes/ActiveSupport/CurrentAttributes.html

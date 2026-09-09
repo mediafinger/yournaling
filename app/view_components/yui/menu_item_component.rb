@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Yui
   # One item in a Yui::Menu panel. A link by default; pass `as: :button` for a
   # non-navigating action (e.g. a form submit / JS action).

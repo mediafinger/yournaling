@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Teams
   class PagesController < AppTeamsController
     # The public "team home" — `GET /teams/:team_id` — a timeline scoped to this

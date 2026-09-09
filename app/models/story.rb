@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # type: Content
 #
 # A long-form, Markdown-formatted narrative. Like Thought, but for prose:

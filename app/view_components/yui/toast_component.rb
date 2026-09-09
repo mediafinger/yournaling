@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Yui
   # A dismissible flash notification. Rendered into a fixed-position stack by
   # shared_partials/_flash_notifications; auto-dismisses (yui-toast controller).

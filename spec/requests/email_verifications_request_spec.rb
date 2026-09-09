@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 RSpec.describe "Email Verifications", type: :request do
   let(:user) { FactoryBot.create(:user) }
 

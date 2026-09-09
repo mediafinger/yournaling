@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class PasswordsMailer < ApplicationMailer
   def password_reset(user)
     @user = user

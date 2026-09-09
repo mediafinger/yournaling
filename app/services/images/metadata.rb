@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Images
   # Immutable result of reading an uploaded image's pixel geometry and EXIF
   # metadata. Produced by Images::MetadataExtractor, consumed when building a

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class UsersController < ApplicationController
   def index
     authorize! current_user, to: :index?, with: UserPolicy

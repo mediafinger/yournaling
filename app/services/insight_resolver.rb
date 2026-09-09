@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class InsightResolver
   def initialize(parent:, team:, date:, visibility:, user: nil)
     @parent = parent

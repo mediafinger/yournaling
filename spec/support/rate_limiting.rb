@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Rate limiting is backed by `config.action_controller.cache_store`, which the test environment
 # deliberately points at an in-memory store so that rate limits are actually exercised. (The
 # general `config.cache_store` stays a :null_store, against which every limiter silently passes.)

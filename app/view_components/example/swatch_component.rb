@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Example
   # A single colour swatch for the palette documentation.
   #

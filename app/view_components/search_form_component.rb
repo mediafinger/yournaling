@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # The search form: a query input (Stimulus-validated) + a record-type select.
 class SearchFormComponent < ApplicationComponent
   attr_reader :url, :klass_options, :query, :selected_klass, :form_legend

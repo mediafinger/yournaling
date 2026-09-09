@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Yui
   # Framed picture with an optional italic caption and a fixed aspect ratio.
   #

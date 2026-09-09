@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Form builder that renders each field through `Yui::FieldComponent` (and
 # check boxes through `Yui::ChoiceComponent`) so a form picks up the design
 # language without touching its markup.

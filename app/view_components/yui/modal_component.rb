@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Yui
   # A modal dialog built on native <dialog> (Escape + focus trap for free).
   # The `yui-modal` controller wires the trigger, backdrop-click and close.

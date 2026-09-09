@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class CountriesEnForSelectService
   class << self
     # ISO3166::Country.translations.each.map do |k, v|

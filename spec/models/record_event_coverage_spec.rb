@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "rails_helper"
 
 # Regression net for the RecordEvent mechanism: every team-owned record that is

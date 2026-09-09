@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Redeems email verification tokens, and re-issues them when the original mail never arrived.
 #
 # Both actions are open to guests by design: the bearer of a valid, unexpired token *is* the

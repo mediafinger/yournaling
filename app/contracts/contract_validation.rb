@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module ContractValidation
   def self.validate!(contract, params)
     result = contract.call(**params)

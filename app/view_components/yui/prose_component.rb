@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Yui
   # Wraps a block of rich HTML content (headings, paragraphs, lists, links,
   # <em>/<strong>, inline code) and gives it coherent editorial typography.

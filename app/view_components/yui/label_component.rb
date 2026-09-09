@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Yui
   # Standalone form label with an optional required/optional marker.
   #

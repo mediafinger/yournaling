@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class AdminShowUserTeamsComponent < ApplicationComponent
   def initialize(user:)
     @user = user

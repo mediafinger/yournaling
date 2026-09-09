@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Yui
   # The primary navigation bar. Add one or more groups of items; groups are
   # spaced apart (brand left … account right).

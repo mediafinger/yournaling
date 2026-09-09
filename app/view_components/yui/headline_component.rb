@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Yui
   # Display headline, levels 1–4, with an optional eyebrow and alignment.
   #

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Governs self-service account creation.
 #
 # Distinct from UserPolicy on purpose: UserPolicy#create? answers "may this actor create a User

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # @label Form (YuiFormBuilder)
 #
 # `form_with(builder: YuiFormBuilder)` routes every field through

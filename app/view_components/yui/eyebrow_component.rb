@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Yui
   # Small uppercase kicker/label that sits above a headline.
   #

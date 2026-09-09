@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Yui
   # The one button. Renders a <button> by default, or an <a role="button">
   # when `href:` is given.

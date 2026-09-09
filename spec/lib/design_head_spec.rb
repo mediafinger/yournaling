@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "rails_helper"
 
 # Guard: every stylesheet in app/assets/stylesheets/design/ must be listed in

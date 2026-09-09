@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Example
   # A demonstration tile used on the showcase page: a hatched frame with a
   # small monospace caption and the live component(s) inside.

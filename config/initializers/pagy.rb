@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "pagy"
 require "pagy/toolbox/paginators/method"
 

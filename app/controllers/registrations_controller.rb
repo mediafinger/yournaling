@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # The public signup funnel. Thin by construction: everything that must hold true for a new account
 # lives in UserRegistrationService, so that this controller cannot drift away from it.
 #

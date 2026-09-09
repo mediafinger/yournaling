@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module CurrentTeams
   class WeblinksController < AppCurrentTeamController
     skip_before_action :authenticate, only: %i[index show] # allow everyone to see the weblinks

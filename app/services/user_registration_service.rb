@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Registers a new User from untrusted input and sends the email verification mail.
 #
 # Deliberately does NOT create a Team or a Member: team creation is a separate, explicit user

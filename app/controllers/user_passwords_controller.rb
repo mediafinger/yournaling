@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class UserPasswordsController < ApplicationController
   skip_before_action :authenticate, only: %i[new create edit update]
   skip_verify_authorized only: %i[new create edit update]

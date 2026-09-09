@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Primary nav for the public / default layout.
 class ApplicationNavComponent < ApplicationComponent
   def initialize(params: {})

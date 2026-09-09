@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Marksmith Markdown editor (Story insight).
 #
 # The engine is mounted explicitly in config/routes.rb (above the "*path"

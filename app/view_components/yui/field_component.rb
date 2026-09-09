@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Yui
   # A complete form field: label, control, hint and/or error message.
   #

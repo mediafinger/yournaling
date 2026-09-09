@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Shared by MemoryCardComponent / ChronicleCardComponent: render a nested
 # insight (picture / thought / location / weblink) through the right per-area
 # partial for the card's `scope`.

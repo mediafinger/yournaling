@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # @label Chronicle card
 #
 # Rendered with `actions: true` (real Browse/Manage header) — see

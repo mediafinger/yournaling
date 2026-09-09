@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Renders a plain-Markdown string (GitHub Flavored Markdown) to sanitized HTML.
 #
 # This is the single renderer for both the Marksmith editor preview

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # The footer row of a record card: the record's date on the left, and on the
 # right either the owning team (browse) or the user who created the record
 # (manage). Rendered inside `Yui::CardComponent`'s footer slot.

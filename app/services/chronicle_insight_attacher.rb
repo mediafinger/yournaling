@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class ChronicleInsightAttacher
   INSIGHT_PARAM_KEYS = %i[
     entry_ids

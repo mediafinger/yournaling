@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class AdminActionsComponent < ApplicationComponent
   def initialize(record:, name:)
     @record = record

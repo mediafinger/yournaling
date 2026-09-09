@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class OrphanedInsightsCleanupService
   class << self
     def call(post:, team:, user:)

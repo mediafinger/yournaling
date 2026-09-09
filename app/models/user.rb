@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class User < ApplicationRecordYidEnabled
   USER_ROLES = [
     "admin", # can access the jobs interface and other internal UIs, is also editor, moderator and account_manager

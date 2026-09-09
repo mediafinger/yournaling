@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Teams
   class MemoriesController < AppTeamsController
     def index

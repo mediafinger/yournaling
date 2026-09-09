@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 RSpec.shared_examples_for "current user is logged in" do
   # expects the following variables to be defined in the calling spec:
   # (let() and values only examples!)

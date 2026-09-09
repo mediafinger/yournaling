@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # type: actually neither Content nor Post, but is treated very similar
 #
 # When creating a new User, create a Team for them.

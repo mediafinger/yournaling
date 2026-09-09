@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 RSpec.describe StoryPolicy do
   let(:user) { FactoryBot.create(:user) }
   let(:team) { FactoryBot.create(:team) }

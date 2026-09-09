@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Run using `bin/ci`. This mirrors `rake ci` (see README_RAKE_CI.markdown) —
 # same four steps, same order, same fail-fast — with the Rails 8 CI runner's
 # step framing and the optional GitHub sign-off hook below. GitHub Actions

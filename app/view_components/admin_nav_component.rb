@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Primary nav for the admin area layout.
 class AdminNavComponent < ApplicationComponent
   def teams_active?

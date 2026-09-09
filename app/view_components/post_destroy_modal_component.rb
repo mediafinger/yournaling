@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Destroy confirmation for a Memory or Chronicle, offering two paths: destroy
 # the post only, or destroy it and delete any insights left orphaned by it.
 class PostDestroyModalComponent < ApplicationComponent

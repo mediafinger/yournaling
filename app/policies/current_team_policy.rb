@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class CurrentTeamPolicy < ApplicationPolicy
   def index?
     logged_in?

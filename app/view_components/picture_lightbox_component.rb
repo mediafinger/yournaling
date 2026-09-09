@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # A picture thumbnail that opens the enlarged image in a Yui::Modal, with a
 # link out to the full original.
 class PictureLightboxComponent < ApplicationComponent

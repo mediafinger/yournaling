@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # A read-only "CSS" inspector panel in Lookbook that shows the stylesheet for
 # the previewed primitive (TODO_UI_DESIGN.md Phase 2). The mapping lives here
 # (not env-guarded, so it is spec-able); the panel is only registered in

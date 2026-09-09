@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Example
   # A titled section on the showcase page.
   #

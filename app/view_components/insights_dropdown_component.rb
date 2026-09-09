@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # The "Insights" nav menu (pictures / locations / thoughts / weblinks).
 class InsightsDropdownComponent < ApplicationComponent
   SECTIONS = {

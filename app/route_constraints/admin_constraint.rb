@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # NOTE: used in config/routes.rb to ensure only Admins can access certain areas
 #
 class AdminConstraint

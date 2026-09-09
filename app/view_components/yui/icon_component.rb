@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Yui
   # Inline SVG icon from a small curated, stroke-based set (24×24, 1.75 stroke).
   #

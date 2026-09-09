@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Yui
   # Inline quoted / italic phrase — semantic <em>, set in the serif face.
   #

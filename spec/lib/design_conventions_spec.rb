@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "rails_helper"
 
 # Guards the "Component & template conventions" from TODO_UI_DESIGN.md §7 so a

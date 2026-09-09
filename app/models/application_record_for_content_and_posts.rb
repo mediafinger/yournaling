@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class ApplicationRecordForContentAndPosts < ApplicationRecordYidEnabled
   self.abstract_class = true
 

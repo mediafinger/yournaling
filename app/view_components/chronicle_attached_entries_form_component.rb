@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class ChronicleAttachedEntriesFormComponent < ApplicationComponent
   def initialize(form:, scope: "current_team")
     @form = form

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Yui
   # An ARIA tab set. Each panel slot carries its own tab label; the
   # `yui-tabs` controller toggles `aria-selected` / `hidden` and supports

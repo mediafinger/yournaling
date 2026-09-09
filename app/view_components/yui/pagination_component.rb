@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Yui
   # A classic numbered pager for a Pagy result. Presentational: it reads page
   # numbers off the `pagy` object and builds hrefs with `url` (defaults to

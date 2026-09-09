@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 RSpec.describe "Registrations", type: :request do
   let(:name) { Faker::Name.unique.name }
   let(:email) { "#{name.parameterize.underscore}@example.com" }

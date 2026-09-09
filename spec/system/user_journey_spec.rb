@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "rails_helper"
 
 RSpec.describe "User Journey: Sign in, switch team, upload photo, create memory, and view timeline", type: :system do

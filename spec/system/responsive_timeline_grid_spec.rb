@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "rails_helper"
 
 RSpec.describe "Responsive Timeline Grid & Card Redesign", type: :system do

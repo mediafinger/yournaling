@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Yui
   # A pulled quotation with optional attribution.
   #

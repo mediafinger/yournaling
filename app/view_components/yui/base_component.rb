@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Yui
   # Shared superclass for every primitive in the "Warm Editorial" design language.
   #

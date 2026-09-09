@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Development-only warning bubble, shown when the app runs without a Solid Queue
 # worker — typically because it was started with `bin/rails server` instead of
 # `bin/dev`. Background jobs are then enqueued but never executed.

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Yui
   # The general-purpose card surface. Compose it with slots:
   #

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "rails_helper"
 
 RSpec.describe "Multi-Tenant Cross-Team Isolation", type: :request do
