@@ -5,11 +5,15 @@
 #   bin/css_lint          lint + format-check (read-only)
 #   bin/css_lint -a       auto-correct (stylelint --fix + prettier --write)
 #   bin/css_lint autocorrect   same as -a
+#
+# stylelint and prettier run on Bun, which ships as the `bundlebun` gem — see
+# bin/bun. No Node install, no `npm`; `bin/bun install` populates node_modules
+# from bun.lock.
 
 # A personal BASH_ENV (e.g. ~/.bash_antigravity that auto-switches chruby) is
-# re-sourced by every child bash — the asdf `node` shim included — and under
-# `bundle exec` chruby then floods stderr with Bundler warnings. This script is
-# pure Node; unset it so nothing it spawns re-runs that setup.
+# re-sourced by every non-interactive bash, and under `bundle exec` chruby then
+# floods stderr with Bundler warnings. Unset it so nothing this script spawns
+# re-runs that setup.
 unset BASH_ENV
 
 set -eo pipefail
@@ -26,23 +30,25 @@ case "${1:-}" in
     ;;
 esac
 
-if [ ! -x node_modules/.bin/stylelint ]; then
-  echo "node_modules missing — run 'npm ci' (or 'npm install') first." >&2
+if [ ! -e node_modules/.bin/stylelint ]; then
+  echo "node_modules missing — run 'bin/bun install' first." >&2
   exit 1
 fi
 
 CSS_GLOB="app/assets/stylesheets/design/**/*.css"
 
+# `bin/bun run <path>` rather than `bin/bun x <name>`: it resolves the locally
+# installed binary deterministically and never reaches for the network.
 if [ -n "$autocorrect" ]; then
   echo "stylelint --fix ${CSS_GLOB}"
-  node_modules/.bin/stylelint --fix "${CSS_GLOB}" || true
+  bin/bun run node_modules/.bin/stylelint --fix "${CSS_GLOB}" || true
 
   echo "prettier --write ${CSS_GLOB}"
-  node_modules/.bin/prettier --write "${CSS_GLOB}"
+  bin/bun run node_modules/.bin/prettier --write "${CSS_GLOB}"
 else
   echo "stylelint ${CSS_GLOB}"
-  node_modules/.bin/stylelint "${CSS_GLOB}"
+  bin/bun run node_modules/.bin/stylelint "${CSS_GLOB}"
 
   echo "prettier --check ${CSS_GLOB}"
-  node_modules/.bin/prettier --check "${CSS_GLOB}"
+  bin/bun run node_modules/.bin/prettier --check "${CSS_GLOB}"
 fi

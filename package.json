@@ -1,7 +1,7 @@
 {
   "name": "yournaling",
   "private": true,
-  "description": "Dev-only toolchain for linting and formatting the hand-authored CSS design system. Does not touch importmap / Propshaft / runtime.",
+  "description": "Dev-only toolchain for linting and formatting the hand-authored CSS design system. Runs on Bun (the bundlebun gem, see bin/bun) — no Node install needed. Does not touch importmap / Propshaft / runtime.",
   "scripts": {
     "lint:css": "bin/css_lint",
     "fix:css": "bin/css_lint -a"

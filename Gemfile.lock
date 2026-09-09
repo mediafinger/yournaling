@@ -111,6 +111,12 @@ GEM
     brakeman (8.0.6)
       racc
     builder (3.3.0)
+    bundlebun (0.5.1.1.4.2-arm64-darwin)
+      json (~> 2.0)
+    bundlebun (0.5.1.1.4.2-x86_64-darwin)
+      json (~> 2.0)
+    bundlebun (0.5.1.1.4.2-x86_64-linux-gnu)
+      json (~> 2.0)
     bundler-audit (0.9.3)
       bundler (>= 1.2.0)
       thor (~> 1.0)
@@ -589,6 +595,7 @@ PLATFORMS
   arm64-darwin-25
   x86_64-darwin-24
   x86_64-linux
+  x86_64-linux-gnu
 
 DEPENDENCIES
   action_policy (~> 0.6)
@@ -601,6 +608,7 @@ DEPENDENCIES
   blazer (~> 3.1)
   bootsnap
   brakeman
+  bundlebun
   bundler-audit (~> 0.9)
   capybara (~> 3.19)
   chimera_http_client (~> 1.6)

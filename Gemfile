@@ -60,6 +60,7 @@ group :development, :test do
   gem "amazing_print", "~> 2.0"
   gem "archspec"
   gem "brakeman", require: false
+  gem "bundlebun" # bundles the Bun runtime as a gem — powers bin/css_lint, replaces a Node install
   gem "bundler-audit", "~> 0.9"
   gem "capybara", "~> 3.19"
   gem "factory_bot-awesome_linter", "~> 1.0"
