@@ -22,13 +22,9 @@ RSpec.configure do |config|
   end
 
   # Add configuration for your /system specs here, when the tests need JavaScript
-  # selenium_chrome_headless needs chromedriver installed
-  # bin/setup_chrome contains a script to install it in a Docker container or on GitHub-CI
-
+  #
   config.before(:each, js: true, type: :system) do
-    driven_by :selenium, using: :headless_chrome, screen_size: [1400, 1400] do |driver_option|
-      driver_option.add_argument("--no-sandbox")
-    end
+    driven_by :playwright
 
     page.driver.header "User-Agent", "Rails System Test" if page.driver.respond_to?(:header)
   end

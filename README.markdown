@@ -33,10 +33,11 @@ Also foreman, which installs itself automagically.
 
 When you have the dependencies installed:
 
-* clone the repo to your machine: `git clone git@github.com:mediafinger/yournaling.git`
+* clone the repo to your machine: `git clone git@github.com:mediafinger/yournaling.git` 
 * in the new directory, using the correct ruby version: `bundle install`
 * create the database: `bin/rails db:create && db:migrate && db:seed`
 * setup multiple databases for testing: `RAILS_ENV=test bundle exec rake parallel[4]`
+* `bin/setup` to install `bun` and `playwright` and some other JS dependencies
 * run the test suite (same is run on CI): `bundle exec rake ci`
 * open a console: `bin/rails c`
 * start the server: `bin/dev` (to run solid queue as well)

@@ -83,7 +83,7 @@ group :development, :test do
 end
 
 group :test do
+  gem "capybara-playwright-driver"
   gem "parallel_tests"
-  gem "selenium-webdriver", "~> 4.14"
   gem "webmock", "~> 3.14"
 end
