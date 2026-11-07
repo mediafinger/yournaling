@@ -1,22 +1,16 @@
 {
   "name": "yournaling",
   "private": true,
-  "description": "Dev-only toolchain for linting and formatting the hand-authored CSS design system. Does not touch importmap / Propshaft / runtime.",
+  "description": "Dev-only toolchain for linting and formatting the hand-authored CSS design system and for Playwright browser tests. Does not touch importmap / Propshaft / runtime.",
   "scripts": {
     "lint:css": "bin/css_lint",
     "fix:css": "bin/css_lint -a"
   },
   "devDependencies": {
-    "@types/bun": "latest",
     "playwright": "1.63.0",
     "prettier": "^3.6.2",
     "stylelint": "^16.25.0",
     "stylelint-config-recess-order": "^7.4.0",
     "stylelint-config-standard": "^39.0.1"
-  },
-  "module": "index.ts",
-  "type": "module",
-  "peerDependencies": {
-    "typescript": "^7"
   }
 }
