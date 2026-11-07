@@ -58,10 +58,10 @@ RSpec.describe "Chronicle Creation, Multiple Insights & Entry Reordering", type:
     # Step B: Drag & Drop - Move Picture (index 0, position 1) to the end
     # Step C: Button click - Move Location down
     # Resulting order: [Thought, Weblink, Location, Picture] -> positions: [1, 2, 3, 4]
-    find(:field, "chronicle_entries_attributes_2_position", type: :hidden).set(1) # Thought
-    find(:field, "chronicle_entries_attributes_3_position", type: :hidden).set(2) # Weblink
-    find(:field, "chronicle_entries_attributes_1_position", type: :hidden).set(3) # Location
-    find(:field, "chronicle_entries_attributes_0_position", type: :hidden).set(4) # Picture
+    find_field("chronicle_entries_attributes_2_position", type: :hidden).set(1) # Thought
+    find_field("chronicle_entries_attributes_3_position", type: :hidden).set(2) # Weblink
+    find_field("chronicle_entries_attributes_1_position", type: :hidden).set(3) # Location
+    find_field("chronicle_entries_attributes_0_position", type: :hidden).set(4) # Picture
 
     click_button "Update Chronicle"
 
@@ -81,9 +81,9 @@ RSpec.describe "Chronicle Creation, Multiple Insights & Entry Reordering", type:
     visit edit_current_team_chronicle_url(chronicle.urlsafe_id)
 
     # Mark Location (e2) for removal, and swap Thought (e3) to position 1 and Picture (e1) to position 2
-    find(:field, "chronicle_entries_attributes_1__destroy", type: :checkbox).check
-    find(:field, "chronicle_entries_attributes_2_position", type: :hidden).set(1) # Thought -> 1
-    find(:field, "chronicle_entries_attributes_0_position", type: :hidden).set(2) # Picture -> 2
+    find_field("chronicle_entries_attributes_1__destroy", type: :checkbox).check
+    find_field("chronicle_entries_attributes_2_position", type: :hidden).set(1) # Thought -> 1
+    find_field("chronicle_entries_attributes_0_position", type: :hidden).set(2) # Picture -> 2
 
     click_button "Update Chronicle"
 

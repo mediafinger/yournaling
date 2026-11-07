@@ -35,7 +35,7 @@ RSpec.describe "User Journey: Sign in, switch team, upload photo, create memory,
     visit new_current_team_memory_url
     fill_in "memory[memo]", with: "Wild camping at 2000m with breathtaking sunset views over the valley"
     picture = Picture.find_by(name: "Sierra Nevada Ridge")
-    find(:field, "memory_picture_id", type: :hidden).set(picture.id)
+    find_field("memory_picture_id", type: :hidden).set(picture.id)
     click_button "Create Memory"
 
     expect(page).to have_text("Memory was successfully created.")

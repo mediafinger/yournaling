@@ -23,8 +23,8 @@ RSpec.describe "Memory Form Picture Upload & Insight Management", type: :system 
     visit new_current_team_memory_url
 
     fill_in "memory[memo]", with: "Camping under the stars on the edge of the canyon."
-    find(:field, "memory_picture_id", type: :hidden).set(picture.id)
-    find(:field, "memory_location_id", type: :hidden).set(location.id)
+    find_field("memory_picture_id", type: :hidden).set(picture.id)
+    find_field("memory_location_id", type: :hidden).set(location.id)
     click_button "Create Memory"
 
     expect(page).to have_text("Memory was successfully created.")
@@ -45,9 +45,9 @@ RSpec.describe "Memory Form Picture Upload & Insight Management", type: :system 
     visit new_current_team_memory_url
 
     fill_in "memory[memo]", with: "Hiking high in the Pyrenees with majestic mountain peaks."
-    find(:field, "memory_location_id", type: :hidden).set(location.id)
-    find(:field, "memory_thought_id", type: :hidden).set(thought.id)
-    find(:field, "memory_weblink_id", type: :hidden).set(weblink.id)
+    find_field("memory_location_id", type: :hidden).set(location.id)
+    find_field("memory_thought_id", type: :hidden).set(thought.id)
+    find_field("memory_weblink_id", type: :hidden).set(weblink.id)
     click_button "Create Memory"
 
     expect(page).to have_text("Memory was successfully created.")
@@ -77,8 +77,8 @@ RSpec.describe "Memory Form Picture Upload & Insight Management", type: :system 
     visit edit_current_team_memory_url(memory)
 
     fill_in "memory[memo]", with: "Updated memory with replaced insights"
-    find(:field, "memory_picture_id", type: :hidden).set(new_picture.id)
-    find(:field, "memory_location_id", type: :hidden).set("")
+    find_field("memory_picture_id", type: :hidden).set(new_picture.id)
+    find_field("memory_location_id", type: :hidden).set("")
     click_button "Update Memory"
 
     expect(page).to have_text("Memory was successfully updated.")
@@ -97,6 +97,6 @@ RSpec.describe "Memory Form Picture Upload & Insight Management", type: :system 
     click_button "Create Memory"
 
     expect(page).to have_text("Memo is too short")
-    expect(find_field("memory[memo]").value).to eq("A")
+    expect(page).to have_field("memory[memo]", with: "A")
   end
 end
