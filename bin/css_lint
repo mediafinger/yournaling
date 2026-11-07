@@ -7,9 +7,9 @@
 #   bin/css_lint autocorrect   same as -a
 
 # A personal BASH_ENV (e.g. ~/.bash_antigravity that auto-switches chruby) is
-# re-sourced by every child bash — the asdf `node` shim included — and under
-# `bundle exec` chruby then floods stderr with Bundler warnings. This script is
-# pure Node; unset it so nothing it spawns re-runs that setup.
+# re-sourced by every child bash and under `bundle exec` chruby then floods
+# stderr with Bundler warnings. This script is pure JS (run by Bun); unset it so
+# nothing it spawns re-runs that setup.
 unset BASH_ENV
 
 set -eo pipefail
@@ -27,7 +27,7 @@ case "${1:-}" in
 esac
 
 if [ ! -x node_modules/.bin/stylelint ]; then
-  echo "node_modules missing — run 'npm ci' (or 'npm install') first." >&2
+  echo "node_modules missing — run 'bun install' first." >&2
   exit 1
 fi
 
@@ -35,14 +35,14 @@ CSS_GLOB="app/assets/stylesheets/design/**/*.css"
 
 if [ -n "$autocorrect" ]; then
   echo "stylelint --fix ${CSS_GLOB}"
-  node_modules/.bin/stylelint --fix "${CSS_GLOB}" || true
+  bun --bun x stylelint --fix "${CSS_GLOB}" || true
 
   echo "prettier --write ${CSS_GLOB}"
-  node_modules/.bin/prettier --write "${CSS_GLOB}"
+  bun --bun x prettier --write "${CSS_GLOB}"
 else
   echo "stylelint ${CSS_GLOB}"
-  node_modules/.bin/stylelint "${CSS_GLOB}"
+  bun --bun x stylelint "${CSS_GLOB}"
 
   echo "prettier --check ${CSS_GLOB}"
-  node_modules/.bin/prettier --check "${CSS_GLOB}"
+  bun --bun x prettier --check "${CSS_GLOB}"
 fi

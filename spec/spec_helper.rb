@@ -24,7 +24,8 @@ RSpec.configure do |config|
   # Add configuration for your /system specs here, when the tests need JavaScript
   #
   config.before(:each, js: true, type: :system) do
-    driven_by :playwright
+    # the driver defaults to `npx playwright`, we use Bun instead
+    driven_by :playwright, options: { playwright_cli_executable_path: "bunx playwright" }
 
     page.driver.header "User-Agent", "Rails System Test" if page.driver.respond_to?(:header)
   end

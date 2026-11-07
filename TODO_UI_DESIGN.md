@@ -149,8 +149,8 @@ The `design/*.css` files are **scoped** (`.ex-scope` / `.ex-body`) and their
 - **CSP**: when re-enabled (Phase 6), no external style/script host is needed if
   fonts are self-hosted. The `csp_meta_tag` is already in the layouts.
 - ✅ **CI / tests**: no runtime build artefact. `rake ci` gained one step — the
-  Prettier + Stylelint `css` task (§4), with `actions/setup-node` + `npm ci`
-  added to the CI tests job and `npm install` to `bin/setup`; still no asset
+  Prettier + Stylelint `css` task (§4), with `oven-sh/setup-bun` + `bun install`
+  added to the CI tests job and `bun install` to `bin/setup`; still no asset
   compilation. (Contrast with §9.)
 
 ---
@@ -331,7 +331,7 @@ As shipped (`.stylelintrc.json`, extends `stylelint-config-standard` +
 **Scope**: only the hand-authored design system is linted/formatted —
 `bin/css_lint` (add `-a` to auto-correct) globs `app/assets/stylesheets/design/**/*.css`, and
 `.prettierignore` excludes `app/assets/stylesheets/*.css` (the legacy Pico-era
-sheets, gone in Phase 6) plus `builds/`, `Gemfile.lock`, `package-lock.json`.
+sheets, gone in Phase 6) plus `builds/` and `Gemfile.lock`.
 (The plan originally said `stylesheets/**` — narrowing to `design/` is the right
 call and what shipped.)
 
@@ -343,12 +343,12 @@ call and what shipped.)
   (the `bin/mcp_rubocop -A` equivalent).
 - `Rakefile`: a `css` task in the `ci` chain (`zeitwerk:check rubocop slim_lint
 css factory_bot:awesome_lint db:doctor rspec …`).
-- CI: `actions/setup-node@v4` (`node-version: "22"`, `cache: "npm"`) + `npm ci`
-  in the tests job; `package-lock.json` committed. `bin/setup` runs
-  `npm install`.
+- CI: `oven-sh/setup-bun` + `bun install --frozen-lockfile` in the tests job;
+  `bun.lock` committed. `bin/setup` runs `bun install`. The linters run on the
+  Bun runtime (`bun --bun x stylelint` / `prettier`).
 
 If avoiding `node_modules` ever becomes a hard requirement, the only alternative
-is Biome as a single vendored binary (`npx --yes @biomejs/biome` in CI, or the
+is Biome as a single vendored binary (`bunx @biomejs/biome` in CI, or the
 release binary in `bin/`) — zero committed deps, but you lose property ordering
 and the naming-pattern rule, which is most of the reason to lint a design
 system. Not worth that trade here.
@@ -538,7 +538,7 @@ layer to maintain, no coverage lost.
 - [x] Add **Prettier + Stylelint** (§4): `package.json` (devDeps only),
       `.stylelintrc.json`, `.prettierignore`, `bin/css_lint` (`-a` to
       auto-correct), a `css` task in the `rake ci` chain, and the
-      `actions/setup-node` + `npm ci` step in CI. Run `bin/css_lint -a` once and
+      `oven-sh/setup-bun` + `bun install` step in CI. Run `bin/css_lint -a` once and
       commit the reformat + any rule disables as a standalone commit. (scoped to `example.css`; the legacy
       Pico-era stylesheets are `ignoreFiles`'d — they go in Phase 6.)
 - [x] Add Lookbook (§5); previews for the existing ~20 primitives in
