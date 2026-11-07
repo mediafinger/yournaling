@@ -102,7 +102,7 @@ Both controllers duplicate: `SEARCHABLE_KLASSES`, `query_params`, the validation
 
 ### Automated Tests
 ```bash
-source /opt/homebrew/share/chruby/chruby.sh && chruby 4.0.6 && rake ci
+source /opt/homebrew/share/chruby/chruby.sh && chruby 4.0.9 && rake ci
 ```
 
 ### Specs written first (TDD)

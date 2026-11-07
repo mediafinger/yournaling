@@ -19,12 +19,12 @@ RSpec.describe ChronicleAttachedEntriesFormComponent, type: :component do
 
     rendered = render_inline(described_class.new(form: form, scope: "current_team"))
 
-    expect(rendered.to_html).to include('data-controller="sortable"')
-    expect(rendered.to_html).to include('data-sortable-target="item"')
-    expect(rendered.to_html).to include('data-sortable-target="handle"')
-    expect(rendered.to_html).to include('data-sortable-target="position"')
-    expect(rendered.to_html).to include('data-action="click->sortable#moveUp"')
-    expect(rendered.to_html).to include('data-action="click->sortable#moveDown"')
+    expect(rendered).to have_css('[data-controller="sortable"]')
+    expect(rendered).to have_css('[data-sortable-target="item"]')
+    expect(rendered).to have_css('[data-sortable-target="handle"]')
+    expect(rendered).to have_css('[data-sortable-target="position"]', visible: :all)
+    expect(rendered).to have_css('[data-action*="click->sortable#moveUp"]')
+    expect(rendered).to have_css('[data-action*="click->sortable#moveDown"]')
   end
 
   it "renders attached entry content titles and texts" do

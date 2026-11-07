@@ -4,7 +4,9 @@ require "rails_helper"
 
 RSpec.describe Requests::GeoapifyIpLocationService, type: :service do
   let(:ip_address) { "80.58.67.250" }
-  let(:endpoint_url) { "#{AppConf.geoapify_api_url}/v1/ipinfo?apiKey=#{AppConf.geoapify_api_key}&ip=#{ip_address}" }
+  let(:endpoint_url) {
+    "#{AppConf.geoapify_api_url.chomp('/')}/v1/ipinfo?apiKey=#{AppConf.geoapify_api_key}&ip=#{ip_address}"
+  }
 
   describe ".call" do
     context "when API response is successful" do

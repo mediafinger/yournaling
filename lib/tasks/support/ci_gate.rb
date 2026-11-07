@@ -27,14 +27,13 @@ module CIGate
 
   class << self
     # gates: { "name" => %w[command arg ...], ... } — returns true iff all exit 0.
-    # rubocop:disable Naming/PredicateMethod -- runs the group; the boolean is its result, not a query
+    # rubocop:disable-next Naming/PredicateMethod -- runs the group; the boolean is its result, not a query
     def run_group(title, gates)
       started = monotonic
       results = Parallel.map(gates.to_a, in_threads: workers(gates.size)) { |name, argv| run_one(name, argv) }
       report(title, results, monotonic - started)
       results.all?(&:ok)
     end
-    # rubocop:enable Naming/PredicateMethod
 
     private
 

@@ -65,7 +65,7 @@ class AppConf
       is?(:environment, :production) || is?(:environment, :staging)
     end
 
-    # rubocop:disable Style/RescueStandardError
+    # rubocop:disable-next Style/RescueStandardError
     def env_and_version
       return [environment, `git rev-parse --short HEAD`.strip].compact.join("-") if production_env
 
@@ -73,7 +73,6 @@ class AppConf
     rescue
       environment
     end
-    # rubocop:enable Style/RescueStandardError
   end
 
   # keep this register on top of all other commands
@@ -156,7 +155,7 @@ class AppConf
 
   # Geoapify API
   register :geoapify_api_key, default: "secret_key", required: production_env
-  register :geoapify_api_url, default: "https://api.geoapify.com", required: production_env
+  register :geoapify_api_url, default: "https://api-eu.geoapify.com", required: production_env
 
   # Don't add secrets as 'default' values in this file!
   #

@@ -24,7 +24,7 @@ module Requests
       private
 
       def base_url
-        AppConf.geoapify_api_url
+        AppConf.geoapify_api_url.chomp("/")
       end
     end
   end

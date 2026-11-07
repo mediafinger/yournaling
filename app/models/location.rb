@@ -95,7 +95,7 @@ class Location < ApplicationRecordForContentAndPosts
   end
 
   # Geocoder.search(address, params: {bias: "countrycode:country_code" })
-  # "https://api.geoapify.com/v1/geocode/search?text=#{address}&filter=countrycode:#{country_code}&apiKey=#{AppConf.geoapify_api_key}"
+  # "https://api-eu.geoapify.com/v1/geocode/search?text=#{address}&filter=countrycode:#{country_code}&apiKey=#{AppConf.geoapify_api_key}"
 
   # Best-effort extraction of `[lat, long]` from a pasted map link, or nil.
   def self.coordinates_from_map_url(url)
