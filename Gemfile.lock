@@ -688,7 +688,7 @@ DEPENDENCIES
   webmock (~> 3.14)
 
 RUBY VERSION
-  ruby 4.0.9
+  ruby 4.0.10
 
 BUNDLED WITH
   4.1.0.beta2
